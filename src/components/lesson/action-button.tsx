@@ -9,15 +9,18 @@ type Props = Omit<PressableProps, 'children'> & {
   kind?: 'primary' | 'secondary';
 };
 
-/** A full-width button with its pressed, focus and disabled states drawn from the tokens. */
-export function ActionButton({ label, kind = 'primary', disabled, style, ...rest }: Props) {
+/**
+ * A full-width button with its pressed, focus and disabled states drawn from the tokens.
+ * Inside `<Link asChild>` it receives role "link" and an href, so it navigates like a link.
+ */
+export function ActionButton({ label, kind = 'primary', disabled, style, role = 'button', ...rest }: Props) {
   const theme = useTheme();
   const primary = kind === 'primary';
 
   return (
     <Pressable
-      role="button"
-      accessibilityRole="button"
+      role={role}
+      accessibilityRole={role === 'link' ? 'link' : 'button'}
       aria-disabled={disabled ?? undefined}
       accessibilityState={{ disabled: disabled ?? false }}
       disabled={disabled}
