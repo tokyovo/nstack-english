@@ -1,0 +1,160 @@
+{
+  "id": "work-a0-u1",
+  "track": "work",
+  "level": "a0",
+  "number": 1,
+  "title": "Chào hỏi nơi làm việc",
+  "goals": [
+    "Có thể chào đồng nghiệp vào buổi sáng và buổi chiều",
+    "Có thể tự giới thiệu và giới thiệu một đồng nghiệp",
+    "Có thể chào tạm biệt khi hết giờ làm"
+  ],
+  "note_vi": "Ở nơi làm việc, người ta thường gọi nhau bằng tên riêng: “Hello, Anna.” Với khách hoặc cấp trên, dùng “Mr.” (ông, anh) hoặc “Ms.” (bà, chị) trước họ: “Mr. Brown”, “Ms. Hoa”. “I'm” là cách nói ngắn của “I am” (tôi là).",
+  "source": "original",
+  "names": ["Lan", "Nam", "Anna", "Tom", "Mr. Brown", "Ms. Hoa"],
+  "words": [
+    {
+      "id": "work-a0-u1-hello",
+      "en": "Hello",
+      "vi": "Xin chào",
+      "example": { "en": "Hello, Anna.", "vi": "Chào Anna." }
+    },
+    {
+      "id": "work-a0-u1-good-morning",
+      "en": "Good morning",
+      "vi": "Chào buổi sáng",
+      "example": { "en": "Good morning, Mr. Brown.", "vi": "Chào ông Brown." }
+    },
+    {
+      "id": "work-a0-u1-good-afternoon",
+      "en": "Good afternoon",
+      "vi": "Chào buổi chiều",
+      "example": { "en": "Good afternoon, Ms. Hoa.", "vi": "Chào chị Hoa." }
+    },
+    {
+      "id": "work-a0-u1-im",
+      "en": "I'm ...",
+      "vi": "Tôi là ...",
+      "audio": "I'm",
+      "example": { "en": "Hello, I'm Lan.", "vi": "Xin chào, tôi là Lan." }
+    },
+    {
+      "id": "work-a0-u1-this-is",
+      "en": "This is ...",
+      "vi": "Đây là ...",
+      "audio": "This is",
+      "example": { "en": "This is Tom.", "vi": "Đây là Tom." }
+    },
+    {
+      "id": "work-a0-u1-my-colleague",
+      "en": "my colleague",
+      "vi": "đồng nghiệp của tôi",
+      "example": { "en": "This is my colleague, Nam.", "vi": "Đây là anh Nam, đồng nghiệp của tôi." }
+    },
+    {
+      "id": "work-a0-u1-nice-to-meet-you",
+      "en": "Nice to meet you",
+      "vi": "Rất vui được gặp anh/chị",
+      "example": { "en": "Hello, Anna. Nice to meet you.", "vi": "Chào Anna. Rất vui được gặp chị." }
+    },
+    {
+      "id": "work-a0-u1-see-you-tomorrow",
+      "en": "See you tomorrow",
+      "vi": "Hẹn gặp lại ngày mai",
+      "example": { "en": "Goodbye, Tom. See you tomorrow.", "vi": "Tạm biệt Tom. Mai gặp lại nhé." }
+    },
+    {
+      "id": "work-a0-u1-goodbye",
+      "en": "Goodbye",
+      "vi": "Tạm biệt",
+      "example": { "en": "Goodbye, Ms. Hoa.", "vi": "Chào chị Hoa, em về nhé." }
+    }
+  ],
+  "exercises": [
+    {
+      "id": "work-a0-u1-e01",
+      "type": "choose_meaning",
+      "prompt": "work-a0-u1-good-morning",
+      "options": ["Chào buổi sáng", "Chào buổi chiều", "Tạm biệt"],
+      "answer": "Chào buổi sáng"
+    },
+    {
+      "id": "work-a0-u1-e02",
+      "type": "choose_english",
+      "prompt": "Chào buổi chiều",
+      "options": ["Good morning", "Good afternoon", "Goodbye"],
+      "answer": "Good afternoon"
+    },
+    {
+      "id": "work-a0-u1-e03",
+      "type": "listen_choose",
+      "audio": "This is my colleague",
+      "options": ["This is my colleague", "Nice to meet you", "See you tomorrow"],
+      "answer": "This is my colleague"
+    },
+    {
+      "id": "work-a0-u1-e04",
+      "type": "choose_meaning",
+      "prompt": "work-a0-u1-my-colleague",
+      "options": ["đồng nghiệp của tôi", "Đây là ...", "Tôi là ..."],
+      "answer": "đồng nghiệp của tôi"
+    },
+    {
+      "id": "work-a0-u1-e05",
+      "type": "build_sentence",
+      "prompt": "Xin chào, tôi là Nam.",
+      "tiles": ["I'm", "Hello", "Nam", "This"],
+      "answer": ["Hello", "I'm", "Nam"]
+    },
+    {
+      "id": "work-a0-u1-e06",
+      "type": "choose_english",
+      "prompt": "Rất vui được gặp anh/chị",
+      "options": ["See you tomorrow", "Nice to meet you", "Good afternoon"],
+      "answer": "Nice to meet you"
+    },
+    {
+      "id": "work-a0-u1-e07",
+      "type": "listen_choose",
+      "audio": "See you tomorrow",
+      "options": ["Good morning", "See you tomorrow", "Nice to meet you"],
+      "answer": "See you tomorrow"
+    },
+    {
+      "id": "work-a0-u1-e08",
+      "type": "build_sentence",
+      "prompt": "Đây là chị Anna, đồng nghiệp của tôi.",
+      "tiles": ["colleague", "is", "This", "Anna", "my", "I'm"],
+      "answer": ["This", "is", "my", "colleague", "Anna"],
+      "hint_vi": "Tiếng Anh nói “This is my colleague, Anna.”: đồng nghiệp đứng trước tên."
+    },
+    {
+      "id": "work-a0-u1-e09",
+      "type": "choose_meaning",
+      "prompt": "work-a0-u1-see-you-tomorrow",
+      "options": ["Chào buổi sáng", "Hẹn gặp lại ngày mai", "Rất vui được gặp anh/chị"],
+      "answer": "Hẹn gặp lại ngày mai"
+    },
+    {
+      "id": "work-a0-u1-e10",
+      "type": "type_answer",
+      "prompt": "Chào buổi sáng",
+      "answer": "Good morning",
+      "accepted": ["Morning"]
+    },
+    {
+      "id": "work-a0-u1-e11",
+      "type": "listen_choose",
+      "audio": "Good afternoon, Ms. Hoa.",
+      "options": ["Good afternoon, Ms. Hoa.", "Good morning, Ms. Hoa.", "Goodbye, Ms. Hoa."],
+      "answer": "Good afternoon, Ms. Hoa."
+    },
+    {
+      "id": "work-a0-u1-e12",
+      "type": "type_answer",
+      "prompt": "Tạm biệt",
+      "answer": "Goodbye",
+      "accepted": ["Good-bye", "Bye"]
+    }
+  ]
+}
