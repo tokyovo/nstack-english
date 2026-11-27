@@ -1,0 +1,175 @@
+{
+  "id": "everyday-a0-u2",
+  "track": "everyday",
+  "level": "a0",
+  "number": 2,
+  "title": "Số 1-10",
+  "goals": [
+    "Có thể đếm từ 1 đến 10",
+    "Có thể nghe và nhận ra các số từ 1 đến 10"
+  ],
+  "note_vi": "Số trong tiếng Anh không đổi theo đồ vật: “two” luôn là hai, dù là hai người hay hai quyển sách. Chú ý phát âm: “three” (ba) đặt đầu lưỡi giữa hai hàm răng; “five” (năm) và “nine” (chín) nghe gần giống nhau, “five” có âm “v” ở cuối, “nine” có âm “n” ở cuối.",
+  "source": "original",
+  "names": ["Lan", "Nam"],
+  "words": [
+    {
+      "id": "everyday-a0-u2-one",
+      "en": "one",
+      "vi": "một",
+      "example": { "en": "One, two, three!", "vi": "Một, hai, ba!" }
+    },
+    {
+      "id": "everyday-a0-u2-two",
+      "en": "two",
+      "vi": "hai",
+      "example": { "en": "One, two.", "vi": "Một, hai." }
+    },
+    {
+      "id": "everyday-a0-u2-three",
+      "en": "three",
+      "vi": "ba",
+      "example": { "en": "One, two, three!", "vi": "Một, hai, ba!" }
+    },
+    {
+      "id": "everyday-a0-u2-four",
+      "en": "four",
+      "vi": "bốn",
+      "example": { "en": "Two, four, six.", "vi": "Hai, bốn, sáu." }
+    },
+    {
+      "id": "everyday-a0-u2-five",
+      "en": "five",
+      "vi": "năm",
+      "example": { "en": "Four, five, six.", "vi": "Bốn, năm, sáu." }
+    },
+    {
+      "id": "everyday-a0-u2-six",
+      "en": "six",
+      "vi": "sáu",
+      "example": { "en": "Five, six, seven.", "vi": "Năm, sáu, bảy." }
+    },
+    {
+      "id": "everyday-a0-u2-seven",
+      "en": "seven",
+      "vi": "bảy",
+      "example": { "en": "Six, seven, eight.", "vi": "Sáu, bảy, tám." }
+    },
+    {
+      "id": "everyday-a0-u2-eight",
+      "en": "eight",
+      "vi": "tám",
+      "example": { "en": "Seven, eight, nine.", "vi": "Bảy, tám, chín." }
+    },
+    {
+      "id": "everyday-a0-u2-nine",
+      "en": "nine",
+      "vi": "chín",
+      "example": { "en": "Eight, nine, ten.", "vi": "Tám, chín, mười." }
+    },
+    {
+      "id": "everyday-a0-u2-ten",
+      "en": "ten",
+      "vi": "mười",
+      "example": { "en": "Eight, nine, ten!", "vi": "Tám, chín, mười!" }
+    }
+  ],
+  "exercises": [
+    {
+      "id": "everyday-a0-u2-e01",
+      "type": "choose_meaning",
+      "prompt": "everyday-a0-u2-one",
+      "options": ["một", "hai", "mười"],
+      "answer": "một"
+    },
+    {
+      "id": "everyday-a0-u2-e02",
+      "type": "choose_english",
+      "prompt": "Số ba (3)",
+      "options": ["two", "three", "ten"],
+      "answer": "three"
+    },
+    {
+      "id": "everyday-a0-u2-e03",
+      "type": "listen_choose",
+      "audio": "five",
+      "options": ["five", "nine", "four"],
+      "answer": "five",
+      "hint_vi": "“five” có âm “v” ở cuối, “nine” có âm “n” ở cuối."
+    },
+    {
+      "id": "everyday-a0-u2-e04",
+      "type": "choose_meaning",
+      "prompt": "everyday-a0-u2-seven",
+      "options": ["sáu", "bảy", "tám", "chín"],
+      "answer": "bảy"
+    },
+    {
+      "id": "everyday-a0-u2-e05",
+      "type": "choose_english",
+      "prompt": "Số tám (8)",
+      "options": ["eight", "six", "seven"],
+      "answer": "eight"
+    },
+    {
+      "id": "everyday-a0-u2-e06",
+      "type": "build_sentence",
+      "prompt": "Một, hai, ba!",
+      "tiles": ["two", "three", "One", "ten"],
+      "answer": ["One", "two", "three"]
+    },
+    {
+      "id": "everyday-a0-u2-e07",
+      "type": "listen_choose",
+      "audio": "nine",
+      "options": ["five", "nine", "ten"],
+      "answer": "nine"
+    },
+    {
+      "id": "everyday-a0-u2-e08",
+      "type": "type_answer",
+      "prompt": "Số mười (10)",
+      "answer": "ten"
+    },
+    {
+      "id": "everyday-a0-u2-e09",
+      "type": "choose_meaning",
+      "prompt": "everyday-a0-u2-four",
+      "options": ["bốn", "năm", "ba"],
+      "answer": "bốn"
+    },
+    {
+      "id": "everyday-a0-u2-e10",
+      "type": "listen_choose",
+      "audio": "six",
+      "options": ["six", "seven", "two"],
+      "answer": "six"
+    },
+    {
+      "id": "everyday-a0-u2-e11",
+      "type": "build_sentence",
+      "prompt": "Hai, bốn, sáu, tám, mười.",
+      "tiles": ["four", "Two", "eight", "six", "ten", "five"],
+      "answer": ["Two", "four", "six", "eight", "ten"]
+    },
+    {
+      "id": "everyday-a0-u2-e12",
+      "type": "type_answer",
+      "prompt": "Số hai (2)",
+      "answer": "two"
+    },
+    {
+      "id": "everyday-a0-u2-e13",
+      "type": "choose_english",
+      "prompt": "Số chín (9)",
+      "options": ["nine", "five", "one", "seven"],
+      "answer": "nine"
+    },
+    {
+      "id": "everyday-a0-u2-e14",
+      "type": "listen_choose",
+      "audio": "Thank you",
+      "options": ["Thank you", "three", "ten"],
+      "answer": "Thank you"
+    }
+  ]
+}
