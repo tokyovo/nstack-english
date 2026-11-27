@@ -9,7 +9,7 @@
     "Có thể tự giới thiệu và giới thiệu một đồng nghiệp",
     "Có thể chào tạm biệt khi hết giờ làm"
   ],
-  "note_vi": "Ở nơi làm việc, người ta thường gọi nhau bằng tên riêng: “Hello, Anna.” Với khách hoặc cấp trên, dùng “Mr.” (ông, anh) hoặc “Ms.” (bà, chị) trước họ của người nước ngoài: “Mr. Brown”. Với người Việt thường dùng tên: “Ms. Hoa”. “I'm” là cách nói ngắn của “I am” (tôi là).",
+  "note_vi": "Ở nơi làm việc, người ta thường gọi nhau bằng tên riêng: “Hello, Anna.” Với khách hoặc cấp trên, dùng “Mr.” (ông, anh) hoặc “Ms.” (bà, chị) trước họ của người nước ngoài: “Mr. Brown”. Với người Việt, thường đặt “Mr.”/“Ms.” trước tên: “Ms. Hoa”. “I'm” là cách nói ngắn của “I am” (tôi là).",
   "source": "original",
   "names": ["Lan", "Nam", "Anna", "Tom", "Mr. Brown", "Ms. Hoa"],
   "words": [
@@ -29,7 +29,7 @@
       "id": "work-a0-u1-good-afternoon",
       "en": "Good afternoon",
       "vi": "Chào buổi chiều",
-      "example": { "en": "Good afternoon, Ms. Hoa.", "vi": "Chào chị Hoa." }
+      "example": { "en": "Good afternoon, Ms. Hoa.", "vi": "Chào buổi chiều, chị Hoa." }
     },
     {
       "id": "work-a0-u1-im",
@@ -123,9 +123,9 @@
     {
       "id": "work-a0-u1-e08",
       "type": "build_sentence",
-      "prompt": "Đây là đồng nghiệp của tôi, chị Anna.",
-      "tiles": ["colleague", "is", "This", "Anna", "my", "I'm"],
-      "answer": ["This", "is", "my", "colleague", "Anna"]
+      "prompt": "Đây là đồng nghiệp của tôi.",
+      "tiles": ["colleague", "is", "This", "my", "I'm"],
+      "answer": ["This", "is", "my", "colleague"]
     },
     {
       "id": "work-a0-u1-e09",

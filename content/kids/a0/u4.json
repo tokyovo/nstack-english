@@ -18,7 +18,7 @@
     { "id": "kids-a0-u4-grapes", "en": "grapes", "vi": "quả nho", "picture": "🍇" },
     { "id": "kids-a0-u4-watermelon", "en": "watermelon", "vi": "quả dưa hấu", "picture": "🍉" },
     { "id": "kids-a0-u4-strawberry", "en": "strawberry", "vi": "quả dâu tây", "picture": "🍓" },
-    { "id": "kids-a0-u4-pineapple", "en": "pineapple", "vi": "quả dứa (quả thơm)", "picture": "🍍" }
+    { "id": "kids-a0-u4-pineapple", "en": "pineapple", "vi": "quả dứa (trái thơm)", "picture": "🍍" }
   ],
   "exercises": [
     {
@@ -46,7 +46,7 @@
       "id": "kids-a0-u4-e04",
       "type": "choose_meaning",
       "prompt": "kids-a0-u4-pear",
-      "options": ["quả chuối", "quả lê", "quả dứa (quả thơm)"],
+      "options": ["quả chuối", "quả lê", "quả dứa (trái thơm)"],
       "answer": "quả lê"
     },
     {
@@ -75,8 +75,8 @@
       "id": "kids-a0-u4-e08",
       "type": "choose_meaning",
       "prompt": "kids-a0-u4-pineapple",
-      "options": ["quả dưa hấu", "quả dâu tây", "quả dứa (quả thơm)"],
-      "answer": "quả dứa (quả thơm)"
+      "options": ["quả dưa hấu", "quả dâu tây", "quả dứa (trái thơm)"],
+      "answer": "quả dứa (trái thơm)"
     },
     {
       "id": "kids-a0-u4-e09",

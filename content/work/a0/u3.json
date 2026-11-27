@@ -9,7 +9,7 @@
     "Có thể hỏi một thứ ở đâu",
     "Có thể trả lời đơn giản khi được hỏi đồ ở đâu"
   ],
-  "note_vi": "Để hỏi một đồ vật ở đâu, nói “Where is the ...?”: “Where is the printer?” (Máy in ở đâu?) “the” đứng trước đồ vật mà cả hai người đều biết là cái nào. Trả lời ngắn: “It's here.” (Ở đây) hoặc “It's there.” (Ở kia).",
+  "note_vi": "Để hỏi một đồ vật ở đâu, nói “Where is the ...?”: “Where is the printer?” (Máy in ở đâu?). Từ “the” đứng trước đồ vật mà cả hai người đều biết là cái nào. Trả lời ngắn: “It's here.” (Ở đây) hoặc “It's there.” (Ở kia).",
   "source": "original",
   "words": [
     {
@@ -152,7 +152,7 @@
       "type": "type_answer",
       "prompt": "máy tính",
       "answer": "computer",
-      "accepted": ["a computer", "the computer", "PC"]
+      "accepted": ["a computer", "the computer", "PC", "laptop", "a laptop"]
     }
   ]
 }
