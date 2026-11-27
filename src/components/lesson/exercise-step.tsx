@@ -86,7 +86,9 @@ export function ExerciseStep({ exercise, onAnswer, onContinue }: Props) {
     case 'listen_choose':
       instruction = canSpeak ? t('lesson.listenChoose') : t('lesson.readChoose');
       prompt = canSpeak ? (
-        <ListenButton text={exercise.audio} testID="listen-exercise" />
+        <GridCard>
+          <ListenButton text={exercise.audio} testID="listen-exercise" />
+        </GridCard>
       ) : (
         <EnglishPrompt text={exercise.audio} testID="listen-text" />
       );

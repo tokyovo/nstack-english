@@ -37,8 +37,7 @@ export function ChoiceList({ options, answer, english, onCheck }: Props) {
           key={option}
           role="button"
           accessibilityRole="button"
-          accessibilityState={{ selected: option === chosen, disabled: chosen !== null }}
-          aria-selected={option === chosen}
+          accessibilityState={{ disabled: chosen !== null }}
           disabled={chosen !== null}
           onPress={() => choose(option)}
           testID={`option-${index}`}
