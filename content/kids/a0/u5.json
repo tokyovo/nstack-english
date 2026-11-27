@@ -11,21 +11,21 @@
   "note_vi": "Chơi trò “Touch your ...!” (Chạm vào ...!): bố mẹ nói “Touch your nose!”, con chạm vào mũi. Sau đó đổi vai cho con nói.",
   "source": "original",
   "words": [
-    { "id": "kids-a0-u5-eye", "en": "eye", "vi": "mắt", "picture": "👁️" },
+    { "id": "kids-a0-u5-eye", "en": "eye", "vi": "mắt", "picture": "👀" },
     { "id": "kids-a0-u5-ear", "en": "ear", "vi": "tai", "picture": "👂" },
     { "id": "kids-a0-u5-nose", "en": "nose", "vi": "mũi", "picture": "👃" },
     { "id": "kids-a0-u5-mouth", "en": "mouth", "vi": "miệng", "picture": "👄" },
-    { "id": "kids-a0-u5-tooth", "en": "tooth", "vi": "răng", "picture": "🦷" },
+    { "id": "kids-a0-u5-face", "en": "face", "vi": "khuôn mặt", "picture": "🙂" },
     { "id": "kids-a0-u5-hand", "en": "hand", "vi": "bàn tay", "picture": "✋" },
-    { "id": "kids-a0-u5-leg", "en": "leg", "vi": "chân", "picture": "🦵" },
-    { "id": "kids-a0-u5-foot", "en": "foot", "vi": "bàn chân", "picture": "🦶" },
+    { "id": "kids-a0-u5-arm", "en": "arm", "vi": "cánh tay", "picture": "💪" },
+    { "id": "kids-a0-u5-foot", "en": "foot", "vi": "bàn chân", "picture": "👣" },
     {
       "id": "kids-a0-u5-touch-your",
       "en": "Touch your ...!",
-      "vi": "Chạm vào ... của con!",
+      "vi": "Chạm vào ...!",
       "audio": "Touch your",
       "picture": "👆",
-      "example": { "en": "Touch your nose!", "vi": "Chạm vào mũi của con!" }
+      "example": { "en": "Touch your nose!", "vi": "Chạm vào mũi!" }
     }
   ],
   "exercises": [
@@ -40,21 +40,21 @@
       "id": "kids-a0-u5-e02",
       "type": "listen_choose",
       "audio": "ear",
-      "options": ["eye", "ear", "leg"],
+      "options": ["eye", "ear", "arm"],
       "answer": "ear"
     },
     {
       "id": "kids-a0-u5-e03",
       "type": "choose_english",
       "prompt": "miệng",
-      "options": ["mouth", "tooth", "nose"],
+      "options": ["mouth", "face", "nose"],
       "answer": "mouth"
     },
     {
       "id": "kids-a0-u5-e04",
       "type": "choose_meaning",
       "prompt": "kids-a0-u5-hand",
-      "options": ["bàn chân", "bàn tay", "răng"],
+      "options": ["bàn chân", "bàn tay", "cánh tay"],
       "answer": "bàn tay"
     },
     {
@@ -67,7 +67,7 @@
     {
       "id": "kids-a0-u5-e06",
       "type": "build_sentence",
-      "prompt": "Chạm vào tai của con!",
+      "prompt": "Chạm vào tai!",
       "tiles": ["ear", "Touch", "your", "eye"],
       "answer": ["Touch", "your", "ear"]
     },
@@ -75,27 +75,27 @@
       "id": "kids-a0-u5-e07",
       "type": "choose_english",
       "prompt": "bàn chân",
-      "options": ["leg", "foot", "hand"],
+      "options": ["arm", "foot", "hand"],
       "answer": "foot"
     },
     {
       "id": "kids-a0-u5-e08",
       "type": "choose_meaning",
-      "prompt": "kids-a0-u5-tooth",
-      "options": ["răng", "mắt", "chân"],
-      "answer": "răng"
+      "prompt": "kids-a0-u5-face",
+      "options": ["khuôn mặt", "mắt", "cánh tay"],
+      "answer": "khuôn mặt"
     },
     {
       "id": "kids-a0-u5-e09",
       "type": "listen_choose",
-      "audio": "leg",
-      "options": ["leg", "hand", "foot"],
-      "answer": "leg"
+      "audio": "arm",
+      "options": ["arm", "hand", "foot"],
+      "answer": "arm"
     },
     {
       "id": "kids-a0-u5-e10",
       "type": "build_sentence",
-      "prompt": "Chạm vào miệng của con!",
+      "prompt": "Chạm vào miệng!",
       "tiles": ["your", "mouth", "Touch", "nose"],
       "answer": ["Touch", "your", "mouth"]
     },

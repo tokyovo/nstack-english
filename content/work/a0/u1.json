@@ -9,7 +9,7 @@
     "Có thể tự giới thiệu và giới thiệu một đồng nghiệp",
     "Có thể chào tạm biệt khi hết giờ làm"
   ],
-  "note_vi": "Ở nơi làm việc, người ta thường gọi nhau bằng tên riêng: “Hello, Anna.” Với khách hoặc cấp trên, dùng “Mr.” (ông, anh) hoặc “Ms.” (bà, chị) trước họ: “Mr. Brown”, “Ms. Hoa”. “I'm” là cách nói ngắn của “I am” (tôi là).",
+  "note_vi": "Ở nơi làm việc, người ta thường gọi nhau bằng tên riêng: “Hello, Anna.” Với khách hoặc cấp trên, dùng “Mr.” (ông, anh) hoặc “Ms.” (bà, chị) trước họ của người nước ngoài: “Mr. Brown”. Với người Việt thường dùng tên: “Ms. Hoa”. “I'm” là cách nói ngắn của “I am” (tôi là).",
   "source": "original",
   "names": ["Lan", "Nam", "Anna", "Tom", "Mr. Brown", "Ms. Hoa"],
   "words": [
@@ -23,7 +23,7 @@
       "id": "work-a0-u1-good-morning",
       "en": "Good morning",
       "vi": "Chào buổi sáng",
-      "example": { "en": "Good morning, Mr. Brown.", "vi": "Chào ông Brown." }
+      "example": { "en": "Good morning, Mr. Brown.", "vi": "Chào buổi sáng, ông Brown." }
     },
     {
       "id": "work-a0-u1-good-afternoon",
@@ -49,7 +49,7 @@
       "id": "work-a0-u1-my-colleague",
       "en": "my colleague",
       "vi": "đồng nghiệp của tôi",
-      "example": { "en": "This is my colleague, Nam.", "vi": "Đây là anh Nam, đồng nghiệp của tôi." }
+      "example": { "en": "This is my colleague, Nam.", "vi": "Đây là đồng nghiệp của tôi, anh Nam." }
     },
     {
       "id": "work-a0-u1-nice-to-meet-you",
@@ -67,7 +67,7 @@
       "id": "work-a0-u1-goodbye",
       "en": "Goodbye",
       "vi": "Tạm biệt",
-      "example": { "en": "Goodbye, Ms. Hoa.", "vi": "Chào chị Hoa, em về nhé." }
+      "example": { "en": "Goodbye, Ms. Hoa.", "vi": "Tạm biệt chị Hoa." }
     }
   ],
   "exercises": [
@@ -123,10 +123,9 @@
     {
       "id": "work-a0-u1-e08",
       "type": "build_sentence",
-      "prompt": "Đây là chị Anna, đồng nghiệp của tôi.",
+      "prompt": "Đây là đồng nghiệp của tôi, chị Anna.",
       "tiles": ["colleague", "is", "This", "Anna", "my", "I'm"],
-      "answer": ["This", "is", "my", "colleague", "Anna"],
-      "hint_vi": "Tiếng Anh nói “This is my colleague, Anna.”: đồng nghiệp đứng trước tên."
+      "answer": ["This", "is", "my", "colleague", "Anna"]
     },
     {
       "id": "work-a0-u1-e09",
@@ -154,7 +153,7 @@
       "type": "type_answer",
       "prompt": "Tạm biệt",
       "answer": "Goodbye",
-      "accepted": ["Good-bye", "Bye"]
+      "accepted": ["Good-bye", "Good bye", "Bye"]
     }
   ]
 }

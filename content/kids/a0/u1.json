@@ -17,7 +17,7 @@
     { "id": "kids-a0-u1-fish", "en": "fish", "vi": "con cá", "picture": "🐟" },
     { "id": "kids-a0-u1-duck", "en": "duck", "vi": "con vịt", "picture": "🦆" },
     { "id": "kids-a0-u1-cow", "en": "cow", "vi": "con bò", "picture": "🐮" },
-    { "id": "kids-a0-u1-pig", "en": "pig", "vi": "con lợn", "picture": "🐷" },
+    { "id": "kids-a0-u1-pig", "en": "pig", "vi": "con lợn (con heo)", "picture": "🐷" },
     { "id": "kids-a0-u1-chicken", "en": "chicken", "vi": "con gà", "picture": "🐔" },
     {
       "id": "kids-a0-u1-its-a",
@@ -82,7 +82,7 @@
       "id": "kids-a0-u1-e08",
       "type": "choose_meaning",
       "prompt": "kids-a0-u1-chicken",
-      "options": ["con gà", "con lợn", "con bò"],
+      "options": ["con gà", "con lợn (con heo)", "con bò"],
       "answer": "con gà"
     },
     {

@@ -14,11 +14,11 @@
     { "id": "kids-a0-u4-apple", "en": "apple", "vi": "quả táo", "picture": "🍎" },
     { "id": "kids-a0-u4-banana", "en": "banana", "vi": "quả chuối", "picture": "🍌" },
     { "id": "kids-a0-u4-orange", "en": "orange", "vi": "quả cam", "picture": "🍊" },
-    { "id": "kids-a0-u4-mango", "en": "mango", "vi": "quả xoài", "picture": "🥭" },
+    { "id": "kids-a0-u4-pear", "en": "pear", "vi": "quả lê", "picture": "🍐" },
     { "id": "kids-a0-u4-grapes", "en": "grapes", "vi": "quả nho", "picture": "🍇" },
     { "id": "kids-a0-u4-watermelon", "en": "watermelon", "vi": "quả dưa hấu", "picture": "🍉" },
     { "id": "kids-a0-u4-strawberry", "en": "strawberry", "vi": "quả dâu tây", "picture": "🍓" },
-    { "id": "kids-a0-u4-pineapple", "en": "pineapple", "vi": "quả dứa", "picture": "🍍" }
+    { "id": "kids-a0-u4-pineapple", "en": "pineapple", "vi": "quả dứa (quả thơm)", "picture": "🍍" }
   ],
   "exercises": [
     {
@@ -32,7 +32,7 @@
       "id": "kids-a0-u4-e02",
       "type": "listen_choose",
       "audio": "banana",
-      "options": ["banana", "mango", "apple"],
+      "options": ["banana", "pear", "apple"],
       "answer": "banana"
     },
     {
@@ -45,9 +45,9 @@
     {
       "id": "kids-a0-u4-e04",
       "type": "choose_meaning",
-      "prompt": "kids-a0-u4-mango",
-      "options": ["quả chuối", "quả xoài", "quả dứa"],
-      "answer": "quả xoài"
+      "prompt": "kids-a0-u4-pear",
+      "options": ["quả chuối", "quả lê", "quả dứa (quả thơm)"],
+      "answer": "quả lê"
     },
     {
       "id": "kids-a0-u4-e05",
@@ -68,21 +68,21 @@
       "id": "kids-a0-u4-e07",
       "type": "choose_english",
       "prompt": "quả dâu tây",
-      "options": ["strawberry", "banana", "mango"],
+      "options": ["strawberry", "banana", "pear"],
       "answer": "strawberry"
     },
     {
       "id": "kids-a0-u4-e08",
       "type": "choose_meaning",
       "prompt": "kids-a0-u4-pineapple",
-      "options": ["quả dưa hấu", "quả dâu tây", "quả dứa"],
-      "answer": "quả dứa"
+      "options": ["quả dưa hấu", "quả dâu tây", "quả dứa (quả thơm)"],
+      "answer": "quả dứa (quả thơm)"
     },
     {
       "id": "kids-a0-u4-e09",
       "type": "listen_choose",
       "audio": "It's a yellow banana.",
-      "options": ["It's a yellow banana.", "It's a green banana.", "It's a yellow mango."],
+      "options": ["It's a yellow banana.", "It's a green banana.", "It's a yellow pear."],
       "answer": "It's a yellow banana."
     },
     {
@@ -96,7 +96,7 @@
       "id": "kids-a0-u4-e11",
       "type": "build_sentence",
       "prompt": "Đó là quả chuối vàng.",
-      "tiles": ["yellow", "It's", "banana", "a", "mango"],
+      "tiles": ["yellow", "It's", "banana", "a", "pear"],
       "answer": ["It's", "a", "yellow", "banana"]
     },
     {
