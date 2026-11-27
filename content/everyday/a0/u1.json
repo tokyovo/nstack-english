@@ -1,0 +1,173 @@
+{
+  "id": "everyday-a0-u1",
+  "track": "everyday",
+  "level": "a0",
+  "number": 1,
+  "title": "Chào hỏi",
+  "goals": [
+    "Có thể chào hỏi và chào tạm biệt",
+    "Có thể nói tên mình",
+    "Có thể hỏi thăm sức khỏe và trả lời đơn giản"
+  ],
+  "note_vi": "Trong tiếng Anh, “you” dùng cho mọi người: bạn, anh, chị, cô, chú, ông, bà. Không cần đổi cách xưng hô theo tuổi. “Hi” thân mật hơn “Hello”, hay dùng với bạn bè. Khi được hỏi “How are you?”, người ta thường đáp “I'm fine, thank you.”",
+  "source": "original",
+  "names": ["Lan", "Nam"],
+  "words": [
+    {
+      "id": "everyday-a0-u1-hello",
+      "en": "Hello",
+      "vi": "Xin chào",
+      "example": { "en": "Hello, Nam!", "vi": "Chào Nam!" }
+    },
+    {
+      "id": "everyday-a0-u1-hi",
+      "en": "Hi",
+      "vi": "Chào (thân mật)",
+      "example": { "en": "Hi, Lan!", "vi": "Chào Lan!" }
+    },
+    {
+      "id": "everyday-a0-u1-good-morning",
+      "en": "Good morning",
+      "vi": "Chào buổi sáng",
+      "example": { "en": "Good morning, Lan.", "vi": "Chào buổi sáng, Lan." }
+    },
+    {
+      "id": "everyday-a0-u1-goodbye",
+      "en": "Goodbye",
+      "vi": "Tạm biệt",
+      "example": { "en": "Goodbye, Nam.", "vi": "Tạm biệt Nam." }
+    },
+    {
+      "id": "everyday-a0-u1-thank-you",
+      "en": "Thank you",
+      "vi": "Cảm ơn",
+      "example": { "en": "Thank you, Lan.", "vi": "Cảm ơn Lan." }
+    },
+    {
+      "id": "everyday-a0-u1-my-name-is",
+      "en": "My name is ...",
+      "vi": "Tên tôi là ...",
+      "audio": "My name is",
+      "example": { "en": "My name is Nam.", "vi": "Tên tôi là Nam." }
+    },
+    {
+      "id": "everyday-a0-u1-how-are-you",
+      "en": "How are you?",
+      "vi": "Bạn khỏe không?",
+      "example": { "en": "Hello, Lan! How are you?", "vi": "Chào Lan! Lan khỏe không?" }
+    },
+    {
+      "id": "everyday-a0-u1-im-fine",
+      "en": "I'm fine",
+      "vi": "Tôi khỏe",
+      "example": { "en": "I'm fine, thank you.", "vi": "Tôi khỏe, cảm ơn bạn." }
+    },
+    {
+      "id": "everyday-a0-u1-nice-to-meet-you",
+      "en": "Nice to meet you",
+      "vi": "Rất vui được gặp bạn",
+      "example": { "en": "Hi, Nam. Nice to meet you.", "vi": "Chào Nam. Rất vui được gặp bạn." }
+    }
+  ],
+  "exercises": [
+    {
+      "id": "everyday-a0-u1-e01",
+      "type": "choose_meaning",
+      "prompt": "everyday-a0-u1-hello",
+      "options": ["Xin chào", "Tạm biệt", "Cảm ơn"],
+      "answer": "Xin chào"
+    },
+    {
+      "id": "everyday-a0-u1-e02",
+      "type": "choose_meaning",
+      "prompt": "everyday-a0-u1-goodbye",
+      "options": ["Cảm ơn", "Tạm biệt", "Tôi khỏe", "Chào buổi sáng"],
+      "answer": "Tạm biệt"
+    },
+    {
+      "id": "everyday-a0-u1-e03",
+      "type": "listen_choose",
+      "audio": "Hi",
+      "options": ["Hi", "Goodbye", "Thank you"],
+      "answer": "Hi"
+    },
+    {
+      "id": "everyday-a0-u1-e04",
+      "type": "choose_english",
+      "prompt": "Chào buổi sáng",
+      "options": ["Good morning", "Goodbye", "Thank you"],
+      "answer": "Good morning"
+    },
+    {
+      "id": "everyday-a0-u1-e05",
+      "type": "choose_meaning",
+      "prompt": "everyday-a0-u1-thank-you",
+      "options": ["Rất vui được gặp bạn", "Xin chào", "Cảm ơn"],
+      "answer": "Cảm ơn"
+    },
+    {
+      "id": "everyday-a0-u1-e06",
+      "type": "build_sentence",
+      "prompt": "Tên tôi là Lan.",
+      "tiles": ["name", "Lan", "My", "you", "is"],
+      "answer": ["My", "name", "is", "Lan"],
+      "hint_vi": "Tiếng Anh nói “My name is ...”, giống “Tên tôi là ...”."
+    },
+    {
+      "id": "everyday-a0-u1-e07",
+      "type": "listen_choose",
+      "audio": "How are you?",
+      "options": ["Hello", "How are you?", "Goodbye"],
+      "answer": "How are you?"
+    },
+    {
+      "id": "everyday-a0-u1-e08",
+      "type": "choose_english",
+      "prompt": "Tôi khỏe",
+      "options": ["How are you?", "I'm fine", "Nice to meet you"],
+      "answer": "I'm fine"
+    },
+    {
+      "id": "everyday-a0-u1-e09",
+      "type": "type_answer",
+      "prompt": "Tạm biệt",
+      "answer": "Goodbye",
+      "accepted": ["Good bye", "Bye"]
+    },
+    {
+      "id": "everyday-a0-u1-e10",
+      "type": "choose_meaning",
+      "prompt": "everyday-a0-u1-nice-to-meet-you",
+      "options": ["Bạn khỏe không?", "Rất vui được gặp bạn", "Tên tôi là ..."],
+      "answer": "Rất vui được gặp bạn"
+    },
+    {
+      "id": "everyday-a0-u1-e11",
+      "type": "listen_choose",
+      "audio": "Nice to meet you",
+      "options": ["Thank you", "Good morning", "Nice to meet you"],
+      "answer": "Nice to meet you"
+    },
+    {
+      "id": "everyday-a0-u1-e12",
+      "type": "build_sentence",
+      "prompt": "Tôi khỏe, cảm ơn bạn.",
+      "tiles": ["fine", "you", "I'm", "hello", "thank"],
+      "answer": ["I'm", "fine", "thank", "you"]
+    },
+    {
+      "id": "everyday-a0-u1-e13",
+      "type": "choose_english",
+      "prompt": "Bạn khỏe không?",
+      "options": ["My name is ...", "How are you?", "I'm fine"],
+      "answer": "How are you?"
+    },
+    {
+      "id": "everyday-a0-u1-e14",
+      "type": "type_answer",
+      "prompt": "Cảm ơn",
+      "answer": "Thank you",
+      "accepted": ["Thanks", "Thank you very much"]
+    }
+  ]
+}
