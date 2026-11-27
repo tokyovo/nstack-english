@@ -47,7 +47,7 @@ describe('Word card', () => {
     voices.mockResolvedValue([englishVoice]);
     await renderCard(myNameIs);
 
-    fireEvent.press(screen.getByRole('button', { name: 'Nghe' }));
+    await fireEvent.press(screen.getByRole('button', { name: 'Nghe' }));
 
     expect(Speech.speak).toHaveBeenCalledWith('My name is', expect.objectContaining({ language: 'en-US' }));
   });
@@ -56,7 +56,7 @@ describe('Word card', () => {
     voices.mockResolvedValue([englishVoice]);
     await renderCard({ id: 'everyday-a0-u1-hello', en: 'Hello', vi: 'Xin chào' });
 
-    fireEvent.press(screen.getByRole('button', { name: 'Nghe' }));
+    await fireEvent.press(screen.getByRole('button', { name: 'Nghe' }));
 
     expect(Speech.speak).toHaveBeenCalledWith('Hello', expect.objectContaining({ language: 'en-US' }));
   });
