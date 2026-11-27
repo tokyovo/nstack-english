@@ -13,3 +13,5 @@
 - (unscored) Triage 3 moderate npm audit advisories (prod deps). Evidence: T2 builder; secure slice check
 - (unscored) Remove template deps nothing uses (expo-device, expo-web-browser, expo-symbols, expo-glass-effect, @expo/ui, expo-image). Evidence: T1 builder
 - (unscored) Replace Expo-branded icon and splash artwork with the app's own. Evidence: T1 builder
+- (unscored) Restore progress from the `.unreadable.<time>` backup key after an app downgrade. Evidence: T7 builder; research need 2
+- (unscored) Add a formatter (prettier) config; style is only enforced by lint. Evidence: T7 builder

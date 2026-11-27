@@ -85,3 +85,24 @@
 - [x] 5. Prove it yourself. Merged with T2 (conflicts in package.json/tsconfig resolved keeping both; typecheck now chains tsc -p server). typecheck 0, lint 0, jest 15 pass, test:server 13 pass. Planted "Planted text" in src/app/index.tsx: string test 1 failed; reverted.
 - [x] 6. Record. this entry; backlog lines added
 - [x] Done when: committed on nstack/foundation, items ticked.
+
+## 2026-11-27 build T7
+- Read: build/SKILL.md a069840
+- [x] 1. Branch. nstack/learn-core (from nstack/foundation 93d5aed, rebased onto main after foundation ships)
+- [x] 2. Starting state. fast checks pass at 93d5aed
+- [x] 3. Dispatch. builder in worktree (parallel with T3, T5)
+- [x] 4. Read the reply. done, 00a4d79
+- [x] 5. Prove it yourself. merged: typecheck 0, lint 0, jest 32 pass
+- [x] 6. Record. this entry, backlog
+- [x] Done when: committed on nstack/learn-core, items ticked.
+- Decision: learn-core is built on top of the unshipped foundation branch to save time; it is synced with main before its PR.
+
+## 2026-11-27 build T5
+- Read: build/SKILL.md a069840
+- [x] 1. Branch. nstack/learn-core
+- [x] 2. Starting state. fast checks pass after T7 merge
+- [x] 3. Dispatch. builder in worktree
+- [x] 4. Read the reply. done, d5a3820; native reader "pass with fixes", 1 fix (e09 accepted "Good-bye") plus 2 suggestions applied
+- [x] 5. Prove it yourself. merged: typecheck 0, lint 0, jest 47 pass; broken fixture copied to content/everyday/a0/u2.json -> content test 1 failed, removed
+- [x] 6. Record. this entry, plan note on build_sentence alternatives for T8
+- [x] Done when: committed on nstack/learn-core, items ticked.
