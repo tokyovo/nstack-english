@@ -1,0 +1,177 @@
+{
+  "id": "everyday-a0-u3",
+  "track": "everyday",
+  "level": "a0",
+  "number": 3,
+  "title": "Gia đình",
+  "goals": [
+    "Có thể gọi tên người trong gia đình",
+    "Có thể giới thiệu người thân: “This is my mother.”",
+    "Có thể nói tuổi của người thân: “My son is five.”"
+  ],
+  "note_vi": "“My” (của tôi) đứng trước người hoặc vật: “my mother” là mẹ tôi. “Brother” dùng cho cả anh trai và em trai, “sister” dùng cho cả chị gái và em gái. Nói tuổi rất đơn giản: “My son is five.” (Con trai tôi năm tuổi.)",
+  "source": "original",
+  "names": ["Lan", "Nam"],
+  "words": [
+    {
+      "id": "everyday-a0-u3-family",
+      "en": "family",
+      "vi": "gia đình",
+      "example": { "en": "This is my family.", "vi": "Đây là gia đình tôi." }
+    },
+    {
+      "id": "everyday-a0-u3-mother",
+      "en": "mother",
+      "vi": "mẹ",
+      "example": { "en": "This is my mother.", "vi": "Đây là mẹ tôi." }
+    },
+    {
+      "id": "everyday-a0-u3-father",
+      "en": "father",
+      "vi": "bố",
+      "example": { "en": "This is my father.", "vi": "Đây là bố tôi." }
+    },
+    {
+      "id": "everyday-a0-u3-husband",
+      "en": "husband",
+      "vi": "chồng",
+      "example": { "en": "This is my husband, Nam.", "vi": "Đây là Nam, chồng tôi." }
+    },
+    {
+      "id": "everyday-a0-u3-wife",
+      "en": "wife",
+      "vi": "vợ",
+      "example": { "en": "This is my wife, Lan.", "vi": "Đây là Lan, vợ tôi." }
+    },
+    {
+      "id": "everyday-a0-u3-brother",
+      "en": "brother",
+      "vi": "anh trai, em trai",
+      "example": { "en": "My brother is ten.", "vi": "Em trai tôi mười tuổi." }
+    },
+    {
+      "id": "everyday-a0-u3-sister",
+      "en": "sister",
+      "vi": "chị gái, em gái",
+      "example": { "en": "My sister is nine.", "vi": "Em gái tôi chín tuổi." }
+    },
+    {
+      "id": "everyday-a0-u3-son",
+      "en": "son",
+      "vi": "con trai",
+      "example": { "en": "My son is five.", "vi": "Con trai tôi năm tuổi." }
+    },
+    {
+      "id": "everyday-a0-u3-daughter",
+      "en": "daughter",
+      "vi": "con gái",
+      "example": { "en": "My daughter is three.", "vi": "Con gái tôi ba tuổi." }
+    },
+    {
+      "id": "everyday-a0-u3-this-is",
+      "en": "This is ...",
+      "vi": "Đây là ...",
+      "audio": "This is",
+      "example": { "en": "This is Lan.", "vi": "Đây là Lan." }
+    }
+  ],
+  "exercises": [
+    {
+      "id": "everyday-a0-u3-e01",
+      "type": "choose_meaning",
+      "prompt": "everyday-a0-u3-mother",
+      "options": ["mẹ", "bố", "vợ"],
+      "answer": "mẹ"
+    },
+    {
+      "id": "everyday-a0-u3-e02",
+      "type": "choose_english",
+      "prompt": "bố",
+      "options": ["mother", "father", "brother"],
+      "answer": "father"
+    },
+    {
+      "id": "everyday-a0-u3-e03",
+      "type": "listen_choose",
+      "audio": "daughter",
+      "options": ["daughter", "father", "mother"],
+      "answer": "daughter"
+    },
+    {
+      "id": "everyday-a0-u3-e04",
+      "type": "build_sentence",
+      "prompt": "Đây là mẹ tôi.",
+      "tiles": ["mother", "This", "my", "is", "father"],
+      "answer": ["This", "is", "my", "mother"],
+      "hint_vi": "“my” đứng trước “mother”: “my mother” là mẹ tôi."
+    },
+    {
+      "id": "everyday-a0-u3-e05",
+      "type": "choose_meaning",
+      "prompt": "everyday-a0-u3-brother",
+      "options": ["anh trai, em trai", "chị gái, em gái", "con trai"],
+      "answer": "anh trai, em trai"
+    },
+    {
+      "id": "everyday-a0-u3-e06",
+      "type": "type_answer",
+      "prompt": "vợ",
+      "answer": "wife"
+    },
+    {
+      "id": "everyday-a0-u3-e07",
+      "type": "listen_choose",
+      "audio": "husband",
+      "options": ["husband", "son", "sister"],
+      "answer": "husband"
+    },
+    {
+      "id": "everyday-a0-u3-e08",
+      "type": "choose_english",
+      "prompt": "con gái",
+      "options": ["son", "daughter", "sister", "wife"],
+      "answer": "daughter"
+    },
+    {
+      "id": "everyday-a0-u3-e09",
+      "type": "build_sentence",
+      "prompt": "Con trai tôi năm tuổi.",
+      "tiles": ["son", "five", "My", "is", "nine"],
+      "answer": ["My", "son", "is", "five"]
+    },
+    {
+      "id": "everyday-a0-u3-e10",
+      "type": "choose_meaning",
+      "prompt": "everyday-a0-u3-family",
+      "options": ["con trai", "gia đình", "chồng"],
+      "answer": "gia đình"
+    },
+    {
+      "id": "everyday-a0-u3-e11",
+      "type": "type_answer",
+      "prompt": "gia đình",
+      "answer": "family"
+    },
+    {
+      "id": "everyday-a0-u3-e12",
+      "type": "listen_choose",
+      "audio": "This is my sister.",
+      "options": ["This is my sister.", "This is my son.", "This is my father."],
+      "answer": "This is my sister."
+    },
+    {
+      "id": "everyday-a0-u3-e13",
+      "type": "choose_english",
+      "prompt": "chồng",
+      "options": ["wife", "husband", "brother"],
+      "answer": "husband"
+    },
+    {
+      "id": "everyday-a0-u3-e14",
+      "type": "build_sentence",
+      "prompt": "Đây là gia đình tôi.",
+      "tiles": ["is", "family", "This", "my", "name"],
+      "answer": ["This", "is", "my", "family"]
+    }
+  ]
+}

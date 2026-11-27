@@ -1,0 +1,176 @@
+{
+  "id": "everyday-a0-u5",
+  "track": "everyday",
+  "level": "a0",
+  "number": 5,
+  "title": "Màu sắc và đồ vật",
+  "goals": [
+    "Có thể gọi tên sáu màu cơ bản",
+    "Có thể gọi tên một số đồ vật mang theo hằng ngày",
+    "Có thể nói màu của đồ vật: “My bag is red.”"
+  ],
+  "note_vi": "Trong tiếng Anh, màu đứng trước đồ vật, ngược với tiếng Việt: “black phone” là điện thoại màu đen. Tiếng Việt dùng “xanh” cho cả hai màu, tiếng Anh thì tách ra: xanh dương là “blue”, xanh lá là “green”.",
+  "source": "original",
+  "names": ["Lan", "Nam"],
+  "words": [
+    {
+      "id": "everyday-a0-u5-red",
+      "en": "red",
+      "vi": "màu đỏ",
+      "example": { "en": "My bag is red.", "vi": "Túi của tôi màu đỏ." }
+    },
+    {
+      "id": "everyday-a0-u5-blue",
+      "en": "blue",
+      "vi": "màu xanh dương",
+      "example": { "en": "My phone is blue.", "vi": "Điện thoại của tôi màu xanh dương." }
+    },
+    {
+      "id": "everyday-a0-u5-green",
+      "en": "green",
+      "vi": "màu xanh lá",
+      "example": { "en": "This is my green book.", "vi": "Đây là quyển sách màu xanh lá của tôi." }
+    },
+    {
+      "id": "everyday-a0-u5-yellow",
+      "en": "yellow",
+      "vi": "màu vàng",
+      "example": { "en": "My pen is yellow.", "vi": "Bút của tôi màu vàng." }
+    },
+    {
+      "id": "everyday-a0-u5-black",
+      "en": "black",
+      "vi": "màu đen",
+      "example": { "en": "My phone is black.", "vi": "Điện thoại của tôi màu đen." }
+    },
+    {
+      "id": "everyday-a0-u5-white",
+      "en": "white",
+      "vi": "màu trắng",
+      "example": { "en": "This is my white bag.", "vi": "Đây là cái túi màu trắng của tôi." }
+    },
+    {
+      "id": "everyday-a0-u5-book",
+      "en": "book",
+      "vi": "quyển sách",
+      "example": { "en": "This is my book.", "vi": "Đây là sách của tôi." }
+    },
+    {
+      "id": "everyday-a0-u5-bag",
+      "en": "bag",
+      "vi": "cái túi",
+      "example": { "en": "This is my bag.", "vi": "Đây là túi của tôi." }
+    },
+    {
+      "id": "everyday-a0-u5-phone",
+      "en": "phone",
+      "vi": "điện thoại",
+      "example": { "en": "This is my phone.", "vi": "Đây là điện thoại của tôi." }
+    },
+    {
+      "id": "everyday-a0-u5-pen",
+      "en": "pen",
+      "vi": "cái bút",
+      "example": { "en": "This is my red pen.", "vi": "Đây là cái bút màu đỏ của tôi." }
+    }
+  ],
+  "exercises": [
+    {
+      "id": "everyday-a0-u5-e01",
+      "type": "choose_meaning",
+      "prompt": "everyday-a0-u5-red",
+      "options": ["màu vàng", "màu đỏ", "màu đen"],
+      "answer": "màu đỏ"
+    },
+    {
+      "id": "everyday-a0-u5-e02",
+      "type": "choose_english",
+      "prompt": "màu xanh lá",
+      "options": ["blue", "green", "yellow"],
+      "answer": "green",
+      "hint_vi": "Xanh lá là “green”, xanh dương là “blue”."
+    },
+    {
+      "id": "everyday-a0-u5-e03",
+      "type": "listen_choose",
+      "audio": "black",
+      "options": ["black", "bag", "blue"],
+      "answer": "black"
+    },
+    {
+      "id": "everyday-a0-u5-e04",
+      "type": "build_sentence",
+      "prompt": "Túi của tôi màu đỏ.",
+      "tiles": ["bag", "red", "My", "is", "pen"],
+      "answer": ["My", "bag", "is", "red"]
+    },
+    {
+      "id": "everyday-a0-u5-e05",
+      "type": "choose_meaning",
+      "prompt": "everyday-a0-u5-phone",
+      "options": ["quyển sách", "điện thoại", "cái bút"],
+      "answer": "điện thoại"
+    },
+    {
+      "id": "everyday-a0-u5-e06",
+      "type": "type_answer",
+      "prompt": "quyển sách",
+      "answer": "book"
+    },
+    {
+      "id": "everyday-a0-u5-e07",
+      "type": "listen_choose",
+      "audio": "My pen is yellow.",
+      "options": ["My pen is white.", "My bag is yellow.", "My pen is yellow."],
+      "answer": "My pen is yellow."
+    },
+    {
+      "id": "everyday-a0-u5-e08",
+      "type": "choose_english",
+      "prompt": "màu trắng",
+      "options": ["black", "white", "red", "green"],
+      "answer": "white"
+    },
+    {
+      "id": "everyday-a0-u5-e09",
+      "type": "build_sentence",
+      "prompt": "Đây là điện thoại màu đen của tôi.",
+      "tiles": ["black", "phone", "This", "my", "is", "blue"],
+      "answer": ["This", "is", "my", "black", "phone"],
+      "hint_vi": "Màu đứng trước đồ vật: “black phone”."
+    },
+    {
+      "id": "everyday-a0-u5-e10",
+      "type": "choose_meaning",
+      "prompt": "everyday-a0-u5-blue",
+      "options": ["màu xanh lá", "màu xanh dương", "màu trắng"],
+      "answer": "màu xanh dương"
+    },
+    {
+      "id": "everyday-a0-u5-e11",
+      "type": "type_answer",
+      "prompt": "màu vàng",
+      "answer": "yellow"
+    },
+    {
+      "id": "everyday-a0-u5-e12",
+      "type": "choose_english",
+      "prompt": "cái túi",
+      "options": ["book", "pen", "bag"],
+      "answer": "bag"
+    },
+    {
+      "id": "everyday-a0-u5-e13",
+      "type": "listen_choose",
+      "audio": "green",
+      "options": ["red", "green", "yellow"],
+      "answer": "green"
+    },
+    {
+      "id": "everyday-a0-u5-e14",
+      "type": "type_answer",
+      "prompt": "Đây là cái bút của tôi.",
+      "answer": "This is my pen."
+    }
+  ]
+}

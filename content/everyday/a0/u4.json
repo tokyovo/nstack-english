@@ -1,0 +1,177 @@
+{
+  "id": "everyday-a0-u4",
+  "track": "everyday",
+  "level": "a0",
+  "number": 4,
+  "title": "Đồ ăn và đồ uống",
+  "goals": [
+    "Có thể gọi tên một số đồ ăn và đồ uống hằng ngày",
+    "Có thể nói mình thích gì: “I like coffee.”",
+    "Có thể gọi món đơn giản: “Tea, please.”"
+  ],
+  "note_vi": "Khi gọi món hay xin thứ gì, chỉ cần nói tên món rồi thêm “please” ở cuối: “Coffee, please.” (Cho tôi cà phê.) “Please” làm câu nói lịch sự hơn. “Rice” vừa là gạo vừa là cơm.",
+  "source": "original",
+  "names": ["Lan", "Nam"],
+  "words": [
+    {
+      "id": "everyday-a0-u4-water",
+      "en": "water",
+      "vi": "nước",
+      "example": { "en": "Water, please.", "vi": "Cho tôi nước." }
+    },
+    {
+      "id": "everyday-a0-u4-tea",
+      "en": "tea",
+      "vi": "trà",
+      "example": { "en": "I like tea.", "vi": "Tôi thích trà." }
+    },
+    {
+      "id": "everyday-a0-u4-coffee",
+      "en": "coffee",
+      "vi": "cà phê",
+      "example": { "en": "Coffee, please.", "vi": "Cho tôi cà phê." }
+    },
+    {
+      "id": "everyday-a0-u4-milk",
+      "en": "milk",
+      "vi": "sữa",
+      "example": { "en": "I like milk.", "vi": "Tôi thích sữa." }
+    },
+    {
+      "id": "everyday-a0-u4-rice",
+      "en": "rice",
+      "vi": "cơm",
+      "example": { "en": "I like rice and chicken.", "vi": "Tôi thích cơm và thịt gà." }
+    },
+    {
+      "id": "everyday-a0-u4-bread",
+      "en": "bread",
+      "vi": "bánh mì",
+      "example": { "en": "Bread and milk, please.", "vi": "Cho tôi bánh mì và sữa." }
+    },
+    {
+      "id": "everyday-a0-u4-chicken",
+      "en": "chicken",
+      "vi": "thịt gà",
+      "example": { "en": "I like chicken.", "vi": "Tôi thích thịt gà." }
+    },
+    {
+      "id": "everyday-a0-u4-and",
+      "en": "and",
+      "vi": "và",
+      "example": { "en": "Tea and coffee.", "vi": "Trà và cà phê." }
+    },
+    {
+      "id": "everyday-a0-u4-i-like",
+      "en": "I like ...",
+      "vi": "Tôi thích ...",
+      "audio": "I like",
+      "example": { "en": "I like coffee.", "vi": "Tôi thích cà phê." }
+    },
+    {
+      "id": "everyday-a0-u4-please",
+      "en": "please",
+      "vi": "làm ơn, vui lòng",
+      "example": { "en": "Tea, please.", "vi": "Cho tôi trà." }
+    }
+  ],
+  "exercises": [
+    {
+      "id": "everyday-a0-u4-e01",
+      "type": "choose_meaning",
+      "prompt": "everyday-a0-u4-water",
+      "options": ["nước", "trà", "sữa"],
+      "answer": "nước"
+    },
+    {
+      "id": "everyday-a0-u4-e02",
+      "type": "listen_choose",
+      "audio": "coffee",
+      "options": ["coffee", "tea", "milk"],
+      "answer": "coffee"
+    },
+    {
+      "id": "everyday-a0-u4-e03",
+      "type": "choose_english",
+      "prompt": "bánh mì",
+      "options": ["bread", "rice", "chicken"],
+      "answer": "bread"
+    },
+    {
+      "id": "everyday-a0-u4-e04",
+      "type": "build_sentence",
+      "prompt": "Tôi thích trà.",
+      "tiles": ["like", "tea", "I", "milk"],
+      "answer": ["I", "like", "tea"]
+    },
+    {
+      "id": "everyday-a0-u4-e05",
+      "type": "choose_meaning",
+      "prompt": "everyday-a0-u4-milk",
+      "options": ["cơm", "sữa", "nước"],
+      "answer": "sữa"
+    },
+    {
+      "id": "everyday-a0-u4-e06",
+      "type": "type_answer",
+      "prompt": "trà",
+      "answer": "tea"
+    },
+    {
+      "id": "everyday-a0-u4-e07",
+      "type": "listen_choose",
+      "audio": "Water, please.",
+      "options": ["Water, please.", "Tea, please.", "Milk, please."],
+      "answer": "Water, please."
+    },
+    {
+      "id": "everyday-a0-u4-e08",
+      "type": "choose_english",
+      "prompt": "Tôi thích thịt gà.",
+      "options": ["I like rice.", "I like chicken.", "I like bread."],
+      "answer": "I like chicken."
+    },
+    {
+      "id": "everyday-a0-u4-e09",
+      "type": "build_sentence",
+      "prompt": "Tôi thích bánh mì.",
+      "tiles": ["bread", "I", "coffee", "like"],
+      "answer": ["I", "like", "bread"]
+    },
+    {
+      "id": "everyday-a0-u4-e10",
+      "type": "choose_meaning",
+      "prompt": "everyday-a0-u4-chicken",
+      "options": ["bánh mì", "cơm", "thịt gà"],
+      "answer": "thịt gà"
+    },
+    {
+      "id": "everyday-a0-u4-e11",
+      "type": "type_answer",
+      "prompt": "cà phê",
+      "answer": "coffee"
+    },
+    {
+      "id": "everyday-a0-u4-e12",
+      "type": "choose_english",
+      "prompt": "Cho tôi trà.",
+      "options": ["Coffee, please.", "Tea, please.", "Water, please."],
+      "answer": "Tea, please.",
+      "hint_vi": "Gọi món: tên món rồi thêm “please”."
+    },
+    {
+      "id": "everyday-a0-u4-e13",
+      "type": "listen_choose",
+      "audio": "rice",
+      "options": ["bread", "tea", "rice"],
+      "answer": "rice"
+    },
+    {
+      "id": "everyday-a0-u4-e14",
+      "type": "choose_meaning",
+      "prompt": "everyday-a0-u4-please",
+      "options": ["cảm ơn", "làm ơn, vui lòng", "xin chào"],
+      "answer": "làm ơn, vui lòng"
+    }
+  ]
+}

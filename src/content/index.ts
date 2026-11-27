@@ -2,6 +2,9 @@
 // Add each new unit file to `files`; the content test fails on one left out.
 import everydayA0U1 from '../../content/everyday/a0/u1.json';
 import everydayA0U2 from '../../content/everyday/a0/u2.json';
+import everydayA0U3 from '../../content/everyday/a0/u3.json';
+import everydayA0U4 from '../../content/everyday/a0/u4.json';
+import everydayA0U5 from '../../content/everyday/a0/u5.json';
 
 import { inTeachingOrder } from './check';
 import { parseUnit, tracks, type Track, type Unit } from './schema';
@@ -9,7 +12,13 @@ import { parseUnit, tracks, type Track, type Unit } from './schema';
 export type { Exercise, ExerciseType, Level, Track, Unit, Word } from './schema';
 export { levels, tracks } from './schema';
 
-const files: unknown[] = [everydayA0U1, everydayA0U2];
+const files: unknown[] = [
+  everydayA0U1,
+  everydayA0U2,
+  everydayA0U3,
+  everydayA0U4,
+  everydayA0U5,
+];
 
 function load(data: unknown): Unit {
   const result = parseUnit(data);
