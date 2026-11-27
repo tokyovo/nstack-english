@@ -106,3 +106,13 @@
 - [x] 5. Prove it yourself. merged: typecheck 0, lint 0, jest 47 pass; broken fixture copied to content/everyday/a0/u2.json -> content test 1 failed, removed
 - [x] 6. Record. this entry, plan note on build_sentence alternatives for T8
 - [x] Done when: committed on nstack/learn-core, items ticked.
+
+## 2026-11-27 build T9
+- Read: build/SKILL.md a069840
+- [x] 1. Branch. nstack/learn-core
+- [x] 2. Starting state. fast checks pass at 076cadf
+- [x] 3. Dispatch. builder in worktree (parallel with T3, T6, T8, T10)
+- [x] 4. Read the reply. done, 49c5b5e; native reader "pass with fixes", required fix (five/nine sound cue) and optional Southern variants applied
+- [x] 5. Prove it yourself. merged: typecheck 0, lint 0, jest 55 pass (content test covers u2-u5)
+- [x] 6. Record. this entry
+- [x] Done when: committed on nstack/learn-core, items ticked.
