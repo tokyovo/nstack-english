@@ -47,3 +47,10 @@ example
 
 # local API database
 /data/
+
+# drive tool state (pids, urls)
+/.drive/
+
+# Playwright
+/test-results/
+/playwright-report/
