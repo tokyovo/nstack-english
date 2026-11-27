@@ -15,3 +15,4 @@
 - (unscored) Replace Expo-branded icon and splash artwork with the app's own. Evidence: T1 builder
 - (unscored) Restore progress from the `.unreadable.<time>` backup key after an app downgrade. Evidence: T7 builder; research need 2
 - (unscored) Add a formatter (prettier) config; style is only enforced by lint. Evidence: T7 builder
+- (unscored) Content test: sanity assertions per track (work, kids), not only everyday ids. Evidence: T10 builder

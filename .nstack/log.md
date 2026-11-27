@@ -116,3 +116,14 @@
 - [x] 5. Prove it yourself. merged: typecheck 0, lint 0, jest 55 pass (content test covers u2-u5)
 - [x] 6. Record. this entry
 - [x] Done when: committed on nstack/learn-core, items ticked.
+
+## 2026-11-27 build T10
+- Read: build/SKILL.md a069840
+- [x] 1. Branch. nstack/learn-core
+- [x] 2. Starting state. fast checks pass at 076cadf
+- [x] 3. Dispatch. builder in worktree
+- [x] 4. Read the reply. done, 17969db; native reader 2 rounds: round 1 one must-fix, round 2 two must-fix (ambiguous word order, wrong colour picture), all fixed; no third pass on round-2 fixes
+- [x] 5. Prove it yourself. merged (index.ts conflict, kept both sides): typecheck 0, lint 0, jest pass (count below)
+- [x] 6. Record. this entry, backlog
+- [x] Done when: committed on nstack/learn-core, items ticked.
+- Decision: kids emoji limited to Unicode 9 for older Android; kids addressed as "con", Northern words with Southern in brackets.

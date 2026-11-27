@@ -1,0 +1,110 @@
+{
+  "id": "kids-a0-u4",
+  "track": "kids",
+  "level": "a0",
+  "number": 4,
+  "title": "Hoa quả",
+  "goals": [
+    "Con gọi được tên tám loại quả",
+    "Con nói được màu của một loại quả: “It's a yellow banana.”"
+  ],
+  "note_vi": "Khi đi chợ hay ăn hoa quả, bố mẹ hỏi con “Apple?”, “Banana?” để con nói tên quả bằng tiếng Anh.",
+  "source": "original",
+  "words": [
+    { "id": "kids-a0-u4-apple", "en": "apple", "vi": "quả táo", "picture": "🍎" },
+    { "id": "kids-a0-u4-banana", "en": "banana", "vi": "quả chuối", "picture": "🍌" },
+    { "id": "kids-a0-u4-orange", "en": "orange", "vi": "quả cam", "picture": "🍊" },
+    { "id": "kids-a0-u4-pear", "en": "pear", "vi": "quả lê", "picture": "🍐" },
+    { "id": "kids-a0-u4-grapes", "en": "grapes", "vi": "quả nho", "picture": "🍇" },
+    { "id": "kids-a0-u4-watermelon", "en": "watermelon", "vi": "quả dưa hấu", "picture": "🍉" },
+    { "id": "kids-a0-u4-strawberry", "en": "strawberry", "vi": "quả dâu tây", "picture": "🍓" },
+    { "id": "kids-a0-u4-pineapple", "en": "pineapple", "vi": "quả dứa (trái thơm)", "picture": "🍍" }
+  ],
+  "exercises": [
+    {
+      "id": "kids-a0-u4-e01",
+      "type": "choose_meaning",
+      "prompt": "kids-a0-u4-apple",
+      "options": ["quả táo", "quả cam", "quả nho"],
+      "answer": "quả táo"
+    },
+    {
+      "id": "kids-a0-u4-e02",
+      "type": "listen_choose",
+      "audio": "banana",
+      "options": ["banana", "pear", "apple"],
+      "answer": "banana"
+    },
+    {
+      "id": "kids-a0-u4-e03",
+      "type": "choose_english",
+      "prompt": "quả dưa hấu",
+      "options": ["pineapple", "watermelon", "strawberry"],
+      "answer": "watermelon"
+    },
+    {
+      "id": "kids-a0-u4-e04",
+      "type": "choose_meaning",
+      "prompt": "kids-a0-u4-pear",
+      "options": ["quả chuối", "quả lê", "quả dứa (trái thơm)"],
+      "answer": "quả lê"
+    },
+    {
+      "id": "kids-a0-u4-e05",
+      "type": "listen_choose",
+      "audio": "grapes",
+      "options": ["grapes", "orange", "apple"],
+      "answer": "grapes"
+    },
+    {
+      "id": "kids-a0-u4-e06",
+      "type": "build_sentence",
+      "prompt": "Đó là quả táo đỏ.",
+      "tiles": ["apple", "red", "a", "It's", "green"],
+      "answer": ["It's", "a", "red", "apple"],
+      "hint_vi": "Màu đứng trước tên quả: “red apple”."
+    },
+    {
+      "id": "kids-a0-u4-e07",
+      "type": "choose_english",
+      "prompt": "quả dâu tây",
+      "options": ["strawberry", "banana", "pear"],
+      "answer": "strawberry"
+    },
+    {
+      "id": "kids-a0-u4-e08",
+      "type": "choose_meaning",
+      "prompt": "kids-a0-u4-pineapple",
+      "options": ["quả dưa hấu", "quả dâu tây", "quả dứa (trái thơm)"],
+      "answer": "quả dứa (trái thơm)"
+    },
+    {
+      "id": "kids-a0-u4-e09",
+      "type": "listen_choose",
+      "audio": "It's a yellow banana.",
+      "options": ["It's a yellow banana.", "It's a green banana.", "It's a yellow pear."],
+      "answer": "It's a yellow banana."
+    },
+    {
+      "id": "kids-a0-u4-e10",
+      "type": "choose_meaning",
+      "prompt": "kids-a0-u4-orange",
+      "options": ["quả cam", "quả táo", "quả chuối"],
+      "answer": "quả cam"
+    },
+    {
+      "id": "kids-a0-u4-e11",
+      "type": "build_sentence",
+      "prompt": "Đó là quả chuối vàng.",
+      "tiles": ["yellow", "It's", "banana", "a", "pear"],
+      "answer": ["It's", "a", "yellow", "banana"]
+    },
+    {
+      "id": "kids-a0-u4-e12",
+      "type": "type_answer",
+      "prompt": "quả táo",
+      "answer": "apple",
+      "accepted": ["an apple"]
+    }
+  ]
+}

@@ -53,7 +53,7 @@ Acceptance criteria:
 - [x] T7 Progress store (local, versioned, per profile id "local"). Proof: Jest `src/progress/*.test.ts`. Needs: foundation
 - [ ] T8 Lesson player: word cards with speech, the five exercise types, feedback, result screen, saving to the progress store. Proof: Jest per exercise, e2e `e2e/lesson.spec.ts` (complete, reload, completed), Maestro `.maestro/lesson.yaml` (Android, parked without KVM). Access: public. Needs: T5, T7. Note: a build_sentence can have more than one correct order (e.g. "My name is Lan" / "Lan is my name"): add an optional `accepted` list of alternative orders to build_sentence in the schema and accept any of them.
 - [x] T9 Content: everyday A0 u2-u5. Proof: content test, native reader verdict. Content: yes. Needs: T5
-- [ ] T10 Content: work A0 u1-u3 and kids A0 u1-u5. Proof: content test, native reader verdict. Content: yes. Needs: T5
+- [x] T10 Content: work A0 u1-u3 and kids A0 u1-u5. Proof: content test, native reader verdict. Content: yes. Needs: T5
 
 Later slices (in order, planned in full when reached): review-speak (spaced repetition review, speaking practice), accounts-sync (sign up, sign in, sync progress across devices), family (parent account, child profiles, parent gate, per-child progress), plans (free/premium entitlements, server-served premium lessons, payments parked), content-a1, content-a2.
 
