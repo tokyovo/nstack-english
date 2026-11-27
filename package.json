@@ -65,13 +65,16 @@
     "testPathIgnorePatterns": [
       "/node_modules/",
       "<rootDir>/server/",
+      "<rootDir>/scripts/",
       "<rootDir>/e2e/",
       "<rootDir>/.claude/",
       "<rootDir>/dist/"
     ],
     "modulePathIgnorePatterns": [
       "<rootDir>/.claude/",
-      "<rootDir>/dist/"
+      "<rootDir>/dist/",
+      "<rootDir>/android/",
+      "<rootDir>/ios/"
     ]
   },
   "overrides": {
