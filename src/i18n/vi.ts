@@ -6,4 +6,8 @@ export const vi = {
   // English is the content being taught; it is shown in the purple ink.
   'welcome.sampleWord': 'Hello',
   'welcome.sampleMeaning': 'Xin chào',
+  'lesson.newWord': 'Từ mới',
+  'lesson.example': 'Ví dụ',
+  'lesson.listen': 'Nghe',
+  'lesson.listenHint': 'Phát âm tiếng Anh',
 } as const;

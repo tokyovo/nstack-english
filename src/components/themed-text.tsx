@@ -4,12 +4,12 @@ import { Fonts, FontSize } from '@/constants/theme';
 import { useTheme } from '@/hooks/use-theme';
 
 export type ThemedTextProps = TextProps & {
-  type?: 'body' | 'lead' | 'title' | 'word';
+  type?: 'body' | 'lead' | 'title' | 'heading' | 'label' | 'word';
 };
 
 export function ThemedText({ style, type = 'body', ...rest }: ThemedTextProps) {
   const theme = useTheme();
-  const color = type === 'word' ? theme.accent : theme.text;
+  const color = type === 'word' ? theme.accent : type === 'label' ? theme.muted : theme.text;
 
   return <Text style={[{ color }, styles[type], style]} {...rest} />;
 }
@@ -30,6 +30,18 @@ const styles = StyleSheet.create({
     fontFamily: Fonts.bold,
     fontSize: FontSize.title,
     lineHeight: 44,
+  },
+  heading: {
+    fontFamily: Fonts.semiBold,
+    fontSize: FontSize.h3,
+    lineHeight: 32,
+  },
+  /** Metadata such as a step count or the "Ví dụ" label; never content the learner came to read. */
+  label: {
+    fontFamily: Fonts.semiBold,
+    fontSize: FontSize.small,
+    lineHeight: 20,
+    fontVariant: ['tabular-nums'],
   },
   word: {
     fontFamily: Fonts.semiBold,
