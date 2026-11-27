@@ -1,57 +1,39 @@
-import { Platform, StyleSheet, Text, type TextProps } from 'react-native';
+import { StyleSheet, Text, type TextProps } from 'react-native';
 
-import { Fonts, ThemeColor } from '@/constants/theme';
+import { Fonts, FontSize } from '@/constants/theme';
 import { useTheme } from '@/hooks/use-theme';
 
 export type ThemedTextProps = TextProps & {
-  type?: 'default' | 'title' | 'small' | 'smallBold' | 'subtitle' | 'link' | 'linkPrimary' | 'code';
-  themeColor?: ThemeColor;
+  type?: 'body' | 'lead' | 'title' | 'word';
 };
 
-export function ThemedText({ style, type = 'default', themeColor, ...rest }: ThemedTextProps) {
+export function ThemedText({ style, type = 'body', ...rest }: ThemedTextProps) {
   const theme = useTheme();
+  const color = type === 'word' ? theme.accent : theme.text;
 
-  return <Text style={[{ color: theme[themeColor ?? 'text'] }, styles[type], style]} {...rest} />;
+  return <Text style={[{ color }, styles[type], style]} {...rest} />;
 }
 
+// Line heights are generous so Vietnamese stacked diacritics never clip.
 const styles = StyleSheet.create({
-  small: {
-    fontSize: 14,
-    lineHeight: 20,
-    fontWeight: 500,
-  },
-  smallBold: {
-    fontSize: 14,
-    lineHeight: 20,
-    fontWeight: 700,
-  },
-  default: {
-    fontSize: 16,
+  body: {
+    fontFamily: Fonts.regular,
+    fontSize: FontSize.body,
     lineHeight: 24,
-    fontWeight: 500,
+  },
+  lead: {
+    fontFamily: Fonts.regular,
+    fontSize: FontSize.large,
+    lineHeight: 29,
   },
   title: {
-    fontSize: 48,
-    fontWeight: 600,
-    lineHeight: 52,
-  },
-  subtitle: {
-    fontSize: 32,
+    fontFamily: Fonts.bold,
+    fontSize: FontSize.title,
     lineHeight: 44,
-    fontWeight: 600,
   },
-  link: {
-    lineHeight: 30,
-    fontSize: 14,
-  },
-  linkPrimary: {
-    lineHeight: 30,
-    fontSize: 14,
-    color: '#3c87f7',
-  },
-  code: {
-    fontFamily: Fonts.mono,
-    fontWeight: Platform.select({ android: 700 }) ?? 500,
-    fontSize: 12,
+  word: {
+    fontFamily: Fonts.semiBold,
+    fontSize: FontSize.word,
+    lineHeight: 52,
   },
 });

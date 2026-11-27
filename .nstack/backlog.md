@@ -9,3 +9,7 @@
 - (unscored) Reliability: no crashes, no login loops, layouts that never hide controls on small or large screens. Evidence: 4 sources, research.md #7
 - (unscored) Fair daily streak/goal that motivates without punishing and cannot be lost to a bug. Evidence: 3 sources, research.md #8
 - (unscored) Parent view of each child's progress, several children under one plan. Evidence: 4 sources, research.md #9
+- (unscored) Server HOST setting so a physical phone on the LAN can reach a dev API (emulator uses 10.0.2.2). Evidence: T2 builder
+- (unscored) Triage 3 moderate npm audit advisories (prod deps). Evidence: T2 builder; secure slice check
+- (unscored) Remove template deps nothing uses (expo-device, expo-web-browser, expo-symbols, expo-glass-effect, @expo/ui, expo-image). Evidence: T1 builder
+- (unscored) Replace Expo-branded icon and splash artwork with the app's own. Evidence: T1 builder

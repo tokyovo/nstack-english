@@ -64,3 +64,24 @@
   - [x] 5.3. Slice in plan.md with branch nstack/foundation.
 - [x] Done when: every criterion has a proof, the fresh reader's questions are answered in the plan, and the slice is in plan.md.
 - Decision: app name "Học Tiếng Anh", package app.hocenglish.
+
+## 2026-11-27 build T2
+- Read: build/SKILL.md a069840
+- [x] 1. Branch. nstack/foundation
+- [x] 2. Starting state. n/a: no fast checks existed yet (template tsc errors are T1's)
+- [x] 3. Dispatch. builder in worktree, parallel with T1
+- [x] 4. Read the reply. done, commit 0a190d8
+- [x] 5. Prove it yourself. After merge: test:server 13 pass 0 fail; typecheck:server exit 0; eslint server exit 0
+- [x] 6. Record. this entry; backlog lines added
+- [x] Done when: committed on nstack/foundation (merge), items ticked.
+- Decision: server binds 127.0.0.1; T3 tightens CSP when serving dist/.
+
+## 2026-11-27 build T1
+- Read: build/SKILL.md a069840
+- [x] 1. Branch. nstack/foundation
+- [x] 2. Starting state. n/a: template tsc failed; T1 is the ticket that creates the checks
+- [x] 3. Dispatch. builder in worktree, parallel with T2
+- [x] 4. Read the reply. done, commit 4e1426f
+- [x] 5. Prove it yourself. Merged with T2 (conflicts in package.json/tsconfig resolved keeping both; typecheck now chains tsc -p server). typecheck 0, lint 0, jest 15 pass, test:server 13 pass. Planted "Planted text" in src/app/index.tsx: string test 1 failed; reverted.
+- [x] 6. Record. this entry; backlog lines added
+- [x] Done when: committed on nstack/foundation, items ticked.

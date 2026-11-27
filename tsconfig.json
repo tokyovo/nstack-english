@@ -2,6 +2,7 @@
   "extends": "expo/tsconfig.base",
   "compilerOptions": {
     "strict": true,
+    "types": ["jest", "node"],
     "paths": {
       "@/*": [
         "./src/*"
@@ -21,6 +22,8 @@
     "node_modules",
     "android",
     "ios",
+    ".claude",
+    "dist",
     "server"
   ]
 }
