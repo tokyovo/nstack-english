@@ -6,6 +6,7 @@
     "@expo-google-fonts/be-vietnam-pro": "^0.4.1",
     "@expo/ui": "~58.0.30",
     "@hono/node-server": "^2.1.11",
+    "@react-native-async-storage/async-storage": "2.2.0",
     "expo": "~58.1.0",
     "expo-constants": "~58.0.16",
     "expo-device": "~58.0.5",
