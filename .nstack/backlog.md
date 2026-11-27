@@ -13,3 +13,5 @@
 - (unscored) Triage 3 moderate npm audit advisories (prod deps). Evidence: T2 builder; secure slice check
 - (unscored) Remove template deps nothing uses (expo-device, expo-web-browser, expo-symbols, expo-glass-effect, @expo/ui, expo-image). Evidence: T1 builder
 - (unscored) Replace Expo-branded icon and splash artwork with the app's own. Evidence: T1 builder
+- (unscored) android-build: build only x86_64 for the emulator (reactNativeArchitectures) to cut the 23 min first build. Evidence: T3 builder
+- (unscored) Jest timeout under CPU load (one flaky failure during gradle). Evidence: T3 builder

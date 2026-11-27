@@ -31,9 +31,9 @@ Answers for builders (from the plan check):
 - Console errors in `drive check`: `console.error`, `pageerror` and failed requests to the app's own origin count; warnings and favicon do not. axe tags: wcag2a, wcag2aa, wcag21aa; fail on serious or critical.
 - Lint and typecheck cover `src/`, `server/`, `scripts/` and `e2e/` with `--max-warnings 0`; server tsconfig uses `allowImportingTsExtensions`, `erasableSyntaxOnly`, `noEmit`. Jest ignores `server/`, `e2e/`, `.claude/`, `dist/`.
 
-- [ ] T1 Clean template, tokens, font, i18n and the UI-string test; Vietnamese welcome screen. Proof: `npm run typecheck && npm run lint && npm test` (string test seen failing on a planted literal). Needs: none
-- [ ] T2 API server skeleton: Hono app, `node:sqlite` with an idempotent migrator, `/api/health`, `node --test` tests. Proof: `npm run test:server`. Access: public (health). Needs: none. Migration: yes
-- [ ] T3 Drive tool and Playwright e2e with axe: `scripts/drive.mjs` (start/seed/screens/check/stop plus android-* subcommands), server serves `dist/`. Proof: `npm run drive -- check`, `npm run e2e`. Needs: T1, T2
+- [x] T1 Clean template, tokens, font, i18n and the UI-string test; Vietnamese welcome screen. Proof: `npm run typecheck && npm run lint && npm test` (string test seen failing on a planted literal). Needs: none
+- [x] T2 API server skeleton: Hono app, `node:sqlite` with an idempotent migrator, `/api/health`, `node --test` tests. Proof: `npm run test:server`. Access: public (health). Needs: none. Migration: yes
+- [x] T3 Drive tool and Playwright e2e with axe: `scripts/drive.mjs` (start/seed/screens/check/stop plus android-* subcommands), server serves `dist/`. Proof: `npm run drive -- check`, `npm run e2e`. Needs: T1, T2
 - [ ] T4 CI workflow (ubuntu checks plus macOS iOS simulator build). Proof: the workflow run on the PR. Needs: T3
 
 ## Slice: learn-core (branch nstack/learn-core)

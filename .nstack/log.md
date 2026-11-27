@@ -85,3 +85,14 @@
 - [x] 5. Prove it yourself. Merged with T2 (conflicts in package.json/tsconfig resolved keeping both; typecheck now chains tsc -p server). typecheck 0, lint 0, jest 15 pass, test:server 13 pass. Planted "Planted text" in src/app/index.tsx: string test 1 failed; reverted.
 - [x] 6. Record. this entry; backlog lines added
 - [x] Done when: committed on nstack/foundation, items ticked.
+
+## 2026-11-27 build T3
+- Read: build/SKILL.md a069840
+- [x] 1. Branch. nstack/foundation
+- [x] 2. Starting state. fast checks pass at 93d5aed
+- [x] 3. Dispatch. builder in worktree
+- [x] 4. Read the reply. done, 2868f89; axe seen failing on planted low contrast, drive screens seen failing on planted 404
+- [x] 5. Prove it yourself. merged: typecheck 0, lint 0, jest 15, test:server 21, test:drive 5, drive check exit 0 (4 screenshots, db deleted), e2e 3 passed; check-features exit 0
+- [x] 6. Record. verify.md Drive and Features sections, backlog
+- [x] Done when: committed on nstack/foundation, items ticked.
+- Decision: @playwright/test pinned to 1.65.0 to match the cached browser; CI installs chromium.
