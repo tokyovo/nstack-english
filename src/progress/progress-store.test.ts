@@ -84,6 +84,20 @@ describe('progress store', () => {
     });
   });
 
+  it('loses no answer when several are saved at the same moment', async () => {
+    const store = createProgressStore({ now: clockAt('2026-11-27T08:00:00.000Z') });
+
+    await Promise.all([
+      store.recordAnswer(LOCAL_PROFILE_ID, { itemId: 'everyday-a0-u1-1', correct: true }),
+      store.recordAnswer(LOCAL_PROFILE_ID, { itemId: 'everyday-a0-u1-2', correct: false }),
+      store.completeLesson(LOCAL_PROFILE_ID, { unitId: 'everyday-a0-u1', correct: 1, total: 2 }),
+    ]);
+
+    const progress = await createProgressStore().load(LOCAL_PROFILE_ID);
+    expect(Object.keys(progress.answers).sort()).toEqual(['everyday-a0-u1-1', 'everyday-a0-u1-2']);
+    expect(isLessonCompleted(progress, 'everyday-a0-u1')).toBe(true);
+  });
+
   it('keeps each profile separate', async () => {
     const store = createProgressStore();
     await store.completeLesson('child-1', { unitId: 'kids-a0-u2', correct: 10, total: 10 });

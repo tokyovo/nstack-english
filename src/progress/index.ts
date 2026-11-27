@@ -69,6 +69,16 @@ function withAnswer(progress: Progress, answer: Answer, at: string): Progress {
   };
 }
 
+/** The last pending write per profile; every change waits for it, so none overwrites another. */
+const pendingWrites = new Map<string, Promise<unknown>>();
+
+function inWriteOrder<T>(profileId: string, write: () => Promise<T>): Promise<T> {
+  const previous = pendingWrites.get(profileId) ?? Promise.resolve();
+  const next = previous.then(write, write);
+  pendingWrites.set(profileId, next.catch(() => undefined));
+  return next;
+}
+
 export function createProgressStore({ now = () => new Date() }: StoreOptions = {}) {
   async function load(profileId: string): Promise<Progress> {
     const raw = await AsyncStorage.getItem(KEY_PREFIX + profileId);
@@ -80,13 +90,18 @@ export function createProgressStore({ now = () => new Date() }: StoreOptions = {
     return progress;
   }
 
+  function update(profileId: string, change: (progress: Progress, at: string) => Progress) {
+    const at = now().toISOString();
+    return inWriteOrder(profileId, async () => save(change(await load(profileId), at)));
+  }
+
   return {
     load,
-    async recordAnswer(profileId: string, answer: Answer): Promise<Progress> {
-      return save(withAnswer(await load(profileId), answer, now().toISOString()));
+    recordAnswer(profileId: string, answer: Answer): Promise<Progress> {
+      return update(profileId, (progress, at) => withAnswer(progress, answer, at));
     },
-    async completeLesson(profileId: string, result: LessonResult): Promise<Progress> {
-      return save(withCompletion(await load(profileId), result, now().toISOString()));
+    completeLesson(profileId: string, result: LessonResult): Promise<Progress> {
+      return update(profileId, (progress, at) => withCompletion(progress, result, at));
     },
   };
 }
