@@ -9,7 +9,7 @@
     "Có thể nói tên mình",
     "Có thể hỏi thăm sức khỏe và trả lời đơn giản"
   ],
-  "note_vi": "Trong tiếng Anh, “you” dùng cho mọi người: bạn, anh, chị, cô, chú, ông, bà. Không cần đổi cách xưng hô theo tuổi. “Hi” thân mật hơn “Hello”, hay dùng với bạn bè. Khi được hỏi “How are you?”, người ta thường đáp “I'm fine, thank you.”",
+  "note_vi": "Trong tiếng Anh, “you” dùng cho mọi người: bạn, anh, chị, cô, chú, ông, bà. Không cần đổi cách xưng hô theo tuổi. “Hi” thân mật hơn “Hello”, hay dùng với bạn bè. “Good morning” dùng vào buổi sáng (trước 12 giờ trưa). “I'm” là cách nói ngắn của “I am” (tôi là, tôi thì). Khi được hỏi “How are you?”, người ta thường đáp “I'm fine, thank you.”",
   "source": "original",
   "names": ["Lan", "Nam"],
   "words": [
@@ -29,7 +29,7 @@
       "id": "everyday-a0-u1-good-morning",
       "en": "Good morning",
       "vi": "Chào buổi sáng",
-      "example": { "en": "Good morning, Lan.", "vi": "Chào buổi sáng, Lan." }
+      "example": { "en": "Good morning, Lan.", "vi": "Lan, chào buổi sáng!" }
     },
     {
       "id": "everyday-a0-u1-goodbye",
@@ -132,7 +132,7 @@
       "type": "type_answer",
       "prompt": "Tạm biệt",
       "answer": "Goodbye",
-      "accepted": ["Good bye", "Bye"]
+      "accepted": ["Good-bye", "Bye"]
     },
     {
       "id": "everyday-a0-u1-e10",
