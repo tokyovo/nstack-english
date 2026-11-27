@@ -44,3 +44,6 @@ example
 
 # nstack / agents
 .claude/worktrees/
+
+# local API database
+/data/
