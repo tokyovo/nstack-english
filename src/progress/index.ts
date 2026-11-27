@@ -1,31 +1,19 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
+import { emptyProgress, parseProgress, type LessonCompletion, type Progress } from './schema';
+
+export {
+  PROGRESS_SCHEMA_VERSION,
+  upgradeProgress,
+  type AnswerRecord,
+  type LessonCompletion,
+  type Progress,
+} from './schema';
+
 /** The only profile until accounts and child profiles exist. */
 export const LOCAL_PROFILE_ID = 'local';
 
-export const PROGRESS_SCHEMA_VERSION = 1;
-
 const KEY_PREFIX = 'hocenglish.progress.';
-
-export type LessonCompletion = {
-  firstCompletedAt: string;
-  lastCompletedAt: string;
-  bestCorrect: number;
-  total: number;
-  timesCompleted: number;
-};
-
-export type Progress = {
-  schemaVersion: typeof PROGRESS_SCHEMA_VERSION;
-  profileId: string;
-  /** Keyed by unit id, e.g. `everyday-a0-u1`. */
-  lessons: Record<string, LessonCompletion>;
-  /** Keyed by item id, e.g. `everyday-a0-u1-3`; each list is oldest first. */
-  answers: Record<string, AnswerRecord[]>;
-};
-
-/** One answer to an exercise; review scheduling will read this history. */
-export type AnswerRecord = { at: string; correct: boolean };
 
 export type Answer = { itemId: string; correct: boolean };
 
@@ -35,10 +23,6 @@ type StoreOptions = { now?: () => Date };
 
 export function isLessonCompleted(progress: Progress, unitId: string): boolean {
   return unitId in progress.lessons;
-}
-
-function emptyProgress(profileId: string): Progress {
-  return { schemaVersion: PROGRESS_SCHEMA_VERSION, profileId, lessons: {}, answers: {} };
 }
 
 function withCompletion(progress: Progress, result: LessonResult, at: string): Progress {
@@ -69,34 +53,50 @@ function withAnswer(progress: Progress, answer: Answer, at: string): Progress {
   };
 }
 
-/** The last pending write per profile; every change waits for it, so none overwrites another. */
-const pendingWrites = new Map<string, Promise<unknown>>();
+function parseJson(text: string): unknown {
+  try {
+    return JSON.parse(text);
+  } catch {
+    return undefined;
+  }
+}
 
-function inWriteOrder<T>(profileId: string, write: () => Promise<T>): Promise<T> {
-  const previous = pendingWrites.get(profileId) ?? Promise.resolve();
-  const next = previous.then(write, write);
-  pendingWrites.set(profileId, next.catch(() => undefined));
+/** The last pending task per profile; each read and write waits for it, so none overwrites another. */
+const queues = new Map<string, Promise<unknown>>();
+
+function inOrder<T>(profileId: string, task: () => Promise<T>): Promise<T> {
+  const previous = queues.get(profileId) ?? Promise.resolve();
+  const next = previous.then(task, task);
+  queues.set(profileId, next.catch(() => undefined));
   return next;
 }
 
 export function createProgressStore({ now = () => new Date() }: StoreOptions = {}) {
-  async function load(profileId: string): Promise<Progress> {
-    const raw = await AsyncStorage.getItem(KEY_PREFIX + profileId);
-    return raw === null ? emptyProgress(profileId) : (JSON.parse(raw) as Progress);
-  }
-
   async function save(progress: Progress): Promise<Progress> {
     await AsyncStorage.setItem(KEY_PREFIX + progress.profileId, JSON.stringify(progress));
     return progress;
   }
 
+  /** Unreadable progress is copied aside, never silently overwritten, then the profile starts fresh. */
+  async function read(profileId: string): Promise<Progress> {
+    const key = KEY_PREFIX + profileId;
+    const saved = await AsyncStorage.getItem(key);
+    if (saved === null) return emptyProgress(profileId);
+    const progress = parseProgress(parseJson(saved), profileId);
+    if (progress) return progress;
+    await AsyncStorage.setItem(`${key}.unreadable.${now().toISOString()}`, saved);
+    return save(emptyProgress(profileId));
+  }
+
   function update(profileId: string, change: (progress: Progress, at: string) => Progress) {
     const at = now().toISOString();
-    return inWriteOrder(profileId, async () => save(change(await load(profileId), at)));
+    return inOrder(profileId, async () => save(change(await read(profileId), at)));
   }
 
   return {
-    load,
+    load(profileId: string): Promise<Progress> {
+      return inOrder(profileId, () => read(profileId));
+    },
     recordAnswer(profileId: string, answer: Answer): Promise<Progress> {
       return update(profileId, (progress, at) => withAnswer(progress, answer, at));
     },

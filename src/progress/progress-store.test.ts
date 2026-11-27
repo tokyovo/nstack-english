@@ -1,6 +1,12 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
-import { createProgressStore, isLessonCompleted, LOCAL_PROFILE_ID } from '@/progress';
+import {
+  createProgressStore,
+  isLessonCompleted,
+  LOCAL_PROFILE_ID,
+  PROGRESS_SCHEMA_VERSION,
+  upgradeProgress,
+} from '@/progress';
 
 jest.mock('@react-native-async-storage/async-storage', () =>
   jest.requireActual('@react-native-async-storage/async-storage/jest/async-storage-mock')
@@ -104,5 +110,68 @@ describe('progress store', () => {
 
     expect(isLessonCompleted(await store.load('child-1'), 'kids-a0-u2')).toBe(true);
     expect(isLessonCompleted(await store.load(LOCAL_PROFILE_ID), 'kids-a0-u2')).toBe(false);
+  });
+
+  it('saves the schema version with the progress', async () => {
+    await createProgressStore().completeLesson(LOCAL_PROFILE_ID, {
+      unitId: 'everyday-a0-u1',
+      correct: 10,
+      total: 10,
+    });
+
+    const saved = JSON.parse((await AsyncStorage.getItem('hocenglish.progress.local')) ?? 'null');
+    expect(saved.schemaVersion).toBe(1);
+    expect(PROGRESS_SCHEMA_VERSION).toBe(1);
+  });
+
+  it.each([
+    ['not JSON', '{"lessons": {'],
+    ['the wrong shape', '{"schemaVersion":1,"profileId":"local","lessons":[],"answers":{}}'],
+    ['no schema version', '{"profileId":"local","lessons":{},"answers":{}}'],
+    ['a newer schema version', '{"schemaVersion":99,"profileId":"local","lessons":{},"answers":{}}'],
+  ])('starts fresh but keeps a backup copy when the saved progress is %s', async (_, saved) => {
+    await AsyncStorage.setItem('hocenglish.progress.local', saved);
+    const store = createProgressStore({
+      now: clockAt('2026-11-27T08:00:00.000Z', '2026-11-27T08:05:00.000Z'),
+    });
+
+    const progress = await store.load(LOCAL_PROFILE_ID);
+    await store.completeLesson(LOCAL_PROFILE_ID, { unitId: 'work-a0-u1', correct: 7, total: 10 });
+
+    expect(progress.lessons).toEqual({});
+    expect(await AsyncStorage.getItem('hocenglish.progress.local.unreadable.2026-11-27T08:00:00.000Z')).toBe(saved);
+    expect(isLessonCompleted(await store.load(LOCAL_PROFILE_ID), 'work-a0-u1')).toBe(true);
+  });
+});
+
+describe('upgradeProgress', () => {
+  const steps = {
+    1: (doc: Record<string, unknown>) => ({ ...doc, streak: 0 }),
+    2: (doc: Record<string, unknown>) => ({ ...doc, streakDays: doc.streak, streak: undefined }),
+  };
+
+  it('runs each step from the saved version up to the current one', () => {
+    expect(upgradeProgress({ schemaVersion: 1, lessons: {} }, steps, 3)).toEqual({
+      schemaVersion: 3,
+      lessons: {},
+      streakDays: 0,
+      streak: undefined,
+    });
+  });
+
+  it('returns progress already at the current version unchanged', () => {
+    expect(upgradeProgress({ schemaVersion: 3, lessons: {} }, steps, 3)).toEqual({
+      schemaVersion: 3,
+      lessons: {},
+    });
+  });
+
+  it.each([
+    ['newer than the app', { schemaVersion: 4 }],
+    ['missing a step', { schemaVersion: 0 }],
+    ['without a version', { lessons: {} }],
+    ['not an object', 'local'],
+  ])('refuses progress %s', (_, saved) => {
+    expect(upgradeProgress(saved, steps, 3)).toBeNull();
   });
 });
