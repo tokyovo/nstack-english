@@ -52,7 +52,7 @@
     {
       "id": "everyday-a0-u5-book",
       "en": "book",
-      "vi": "quyển sách",
+      "vi": "quyển sách, cuốn sách",
       "example": { "en": "This is my book.", "vi": "Đây là sách của tôi." }
     },
     {
@@ -70,7 +70,7 @@
     {
       "id": "everyday-a0-u5-pen",
       "en": "pen",
-      "vi": "cái bút",
+      "vi": "cái bút, cây viết",
       "example": { "en": "This is my red pen.", "vi": "Đây là cái bút màu đỏ của tôi." }
     }
   ],
@@ -108,7 +108,7 @@
       "id": "everyday-a0-u5-e05",
       "type": "choose_meaning",
       "prompt": "everyday-a0-u5-phone",
-      "options": ["quyển sách", "điện thoại", "cái bút"],
+      "options": ["quyển sách, cuốn sách", "điện thoại", "cái bút, cây viết"],
       "answer": "điện thoại"
     },
     {

@@ -9,7 +9,7 @@
     "Có thể nói mình thích gì: “I like coffee.”",
     "Có thể gọi món đơn giản: “Tea, please.”"
   ],
-  "note_vi": "Khi gọi món hay xin thứ gì, chỉ cần nói tên món rồi thêm “please” ở cuối: “Coffee, please.” (Cho tôi cà phê.) “Please” làm câu nói lịch sự hơn. “Rice” vừa là gạo vừa là cơm.",
+  "note_vi": "Khi gọi món hay xin thứ gì, chỉ cần nói tên món rồi thêm “please” ở cuối: “Coffee, please.” (Cho tôi xin cà phê.) “Please” làm câu nói lịch sự hơn. “Rice” vừa là gạo vừa là cơm.",
   "source": "original",
   "names": ["Lan", "Nam"],
   "words": [
@@ -17,7 +17,7 @@
       "id": "everyday-a0-u4-water",
       "en": "water",
       "vi": "nước",
-      "example": { "en": "Water, please.", "vi": "Cho tôi nước." }
+      "example": { "en": "Water, please.", "vi": "Cho tôi xin nước." }
     },
     {
       "id": "everyday-a0-u4-tea",
@@ -29,7 +29,7 @@
       "id": "everyday-a0-u4-coffee",
       "en": "coffee",
       "vi": "cà phê",
-      "example": { "en": "Coffee, please.", "vi": "Cho tôi cà phê." }
+      "example": { "en": "Coffee, please.", "vi": "Cho tôi xin cà phê." }
     },
     {
       "id": "everyday-a0-u4-milk",
@@ -40,14 +40,14 @@
     {
       "id": "everyday-a0-u4-rice",
       "en": "rice",
-      "vi": "cơm",
+      "vi": "cơm, gạo",
       "example": { "en": "I like rice and chicken.", "vi": "Tôi thích cơm và thịt gà." }
     },
     {
       "id": "everyday-a0-u4-bread",
       "en": "bread",
       "vi": "bánh mì",
-      "example": { "en": "Bread and milk, please.", "vi": "Cho tôi bánh mì và sữa." }
+      "example": { "en": "Bread and milk, please.", "vi": "Cho tôi xin bánh mì và sữa." }
     },
     {
       "id": "everyday-a0-u4-chicken",
@@ -72,7 +72,7 @@
       "id": "everyday-a0-u4-please",
       "en": "please",
       "vi": "làm ơn, vui lòng",
-      "example": { "en": "Tea, please.", "vi": "Cho tôi trà." }
+      "example": { "en": "Tea, please.", "vi": "Cho tôi xin trà." }
     }
   ],
   "exercises": [
@@ -108,7 +108,7 @@
       "id": "everyday-a0-u4-e05",
       "type": "choose_meaning",
       "prompt": "everyday-a0-u4-milk",
-      "options": ["cơm", "sữa", "nước"],
+      "options": ["cơm, gạo", "sữa", "nước"],
       "answer": "sữa"
     },
     {
@@ -142,7 +142,7 @@
       "id": "everyday-a0-u4-e10",
       "type": "choose_meaning",
       "prompt": "everyday-a0-u4-chicken",
-      "options": ["bánh mì", "cơm", "thịt gà"],
+      "options": ["bánh mì", "cơm, gạo", "thịt gà"],
       "answer": "thịt gà"
     },
     {
@@ -154,7 +154,7 @@
     {
       "id": "everyday-a0-u4-e12",
       "type": "choose_english",
-      "prompt": "Cho tôi trà.",
+      "prompt": "Cho tôi xin trà.",
       "options": ["Coffee, please.", "Tea, please.", "Water, please."],
       "answer": "Tea, please.",
       "hint_vi": "Gọi món: tên món rồi thêm “please”."

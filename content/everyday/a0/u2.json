@@ -8,7 +8,7 @@
     "Có thể đếm từ 1 đến 10",
     "Có thể nghe và nhận ra các số từ 1 đến 10"
   ],
-  "note_vi": "Số trong tiếng Anh không đổi theo đồ vật: “two” luôn là hai, dù là hai người hay hai quyển sách. Chú ý phát âm: “three” (ba) đặt đầu lưỡi giữa hai hàm răng; “five” (năm) và “nine” (chín) nghe gần giống nhau, “five” có âm “v” ở cuối, “nine” có âm “n” ở cuối.",
+  "note_vi": "Số trong tiếng Anh không đổi theo đồ vật: “two” luôn là hai, dù là hai người hay hai quyển sách. Chú ý phát âm: “three” (ba) đặt đầu lưỡi giữa răng trên và răng dưới; “five” (năm) và “nine” (chín) có vần giống nhau, chỉ khác âm đầu và âm cuối: “five” bắt đầu bằng “f”, kết thúc bằng “v”; “nine” bắt đầu và kết thúc bằng “n”.",
   "source": "original",
   "names": ["Lan", "Nam"],
   "words": [
@@ -94,7 +94,7 @@
       "audio": "five",
       "options": ["five", "nine", "four"],
       "answer": "five",
-      "hint_vi": "“five” có âm “v” ở cuối, “nine” có âm “n” ở cuối."
+      "hint_vi": "“five” bắt đầu bằng âm “f”, kết thúc bằng âm “v”; “nine” bắt đầu và kết thúc bằng âm “n”."
     },
     {
       "id": "everyday-a0-u2-e04",
