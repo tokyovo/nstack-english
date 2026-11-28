@@ -45,6 +45,8 @@ export function SpeakAnswer({ exercise, canListen, answered, onCheck }: Props) {
   );
   const stopListening = useRef<(() => void) | null>(null);
   const mounted = useRef(true);
+  /** Set from the first tap until listening ends, so a quick second tap cannot start a second recogniser. */
+  const busy = useRef(false);
 
   useEffect(() => {
     mounted.current = true;
@@ -61,6 +63,7 @@ export function SpeakAnswer({ exercise, canListen, answered, onCheck }: Props) {
     stopListening.current = listening.stop;
     const hearing = await listening.heard;
     stopListening.current = null;
+    busy.current = false;
     if (!mounted.current) return;
     switch (hearing.kind) {
       case 'heard': {
@@ -79,18 +82,30 @@ export function SpeakAnswer({ exercise, canListen, answered, onCheck }: Props) {
   }
 
   async function speak() {
+    if (busy.current) return;
+    busy.current = true;
     const permission = await microphonePermission();
     if (!mounted.current) return;
-    if (permission === 'granted') listen();
-    else if (permission === 'ask') setPhase({ kind: 'explain' });
+    if (permission === 'granted') {
+      void listen();
+      return;
+    }
+    busy.current = false;
+    if (permission === 'ask') setPhase({ kind: 'explain' });
     else setPhase({ kind: 'selfCheck', reason: 'denied' });
   }
 
   async function allow() {
+    if (busy.current) return;
+    busy.current = true;
     const granted = await askForMicrophone();
     if (!mounted.current) return;
-    if (granted) listen();
-    else setPhase({ kind: 'selfCheck', reason: 'denied' });
+    if (granted) {
+      void listen();
+      return;
+    }
+    busy.current = false;
+    setPhase({ kind: 'selfCheck', reason: 'denied' });
   }
 
   const decline = (

@@ -1,0 +1,21 @@
+#!/bin/bash
+# Usage: scripts/check-sync <shipped-tip>... [--base origin/main]
+# After a stacked work branch is synced with the default branch (whose slices were
+# squash-merged), lists files that differ from the base although no commit of this
+# branch made after the shipped tips changed them: a merge resolution undid a change
+# the base already has. Pass the head commit of every PR squash-merged since this
+# branch forked (gh pr view <n> --json headRefOid -q .headRefOid). Exit 1 if any.
+base=origin/main; tips=()
+while [ $# -gt 0 ]; do
+  case "$1" in --base) base=$2; shift 2 ;; *) tips+=("$1"); shift ;; esac
+done
+[ ${#tips[@]} -gt 0 ] || { echo "usage: check-sync <shipped-tip>... [--base origin/main]" >&2; exit 2; }
+excl=(); for t in "${tips[@]}"; do excl+=("^$t"); done
+own=$(git log --no-merges --format= --name-only HEAD "${excl[@]}" "^$base" | sort -u)
+bad=0
+for f in $(git diff --name-only "$base" HEAD); do
+  case "$f" in .nstack/*) continue ;; esac
+  if ! printf '%s\n' "$own" | grep -qxF -- "$f"; then echo "reverted by a merge: $f"; bad=1; fi
+done
+[ $bad = 0 ] && echo "ok: every difference from $base comes from this branch's own commits"
+exit $bad
