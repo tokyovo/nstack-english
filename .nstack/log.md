@@ -206,3 +206,14 @@
 - [x] 3. Act on every finding. important + pid nit: fresh builder, merged (red 5 failed -> green 14; drive pid test red -> green); lang nit: moved to learn-core where the English content screens are (builder dispatched)
 - [ ] 4. Review the fixes. fix is 101+/19- lines: new reviewer round dispatched
 - [ ] Done when: the latest round has no important findings, verify passed after the last fix, and nits are fixed or in backlog.md.
+
+## 2026-11-28 build T16
+- Read: build/SKILL.md a069840
+- [x] 1. Branch. nstack/accounts-sync (from nstack/review-speak)
+- [x] 2. Starting state. fast checks pass at fe19242
+- [x] 3. Dispatch. builder in worktree
+- [x] 4. Read the reply. done eea7568; deny proofs red with auth checks removed (requireUser, expiry, rate limit); migrate checks 1 and 4 run, 2 and 5 n/a, 6 revertable (tables unused)
+- [x] 5. Prove it yourself. merged: test:server 46 pass 0 fail; jest 157; typecheck 0
+- [x] 6. Record. this entry, backlog
+- [x] Done when: committed on nstack/accounts-sync, items ticked.
+- Decision: sign-in failures stored in a table (limit survives restarts); sessions 90 days; error bodies are codes the app maps to Vietnamese.
