@@ -233,14 +233,13 @@ describe('Lesson screen', () => {
 
   // Android back from the screen a result leads to must never reopen the finished lesson.
   describe('leaving the result', () => {
-    it('"Về danh sách bài" takes the lesson\'s place, so back goes to the track it was opened from', async () => {
+    it('"Về danh sách bài" returns to the track it was opened from, so back then goes home, not to a second copy of the track', async () => {
       await openLessonFromTrack('everyday-a0-u1');
       await playToResult(unit);
 
       await fireEvent.press(screen.getByRole('link', { name: 'Về danh sách bài' }));
       expect(routerScreen).toHavePathname('/track/everyday');
 
-      await testRouter.back('/track/everyday');
       await testRouter.back('/');
     });
 

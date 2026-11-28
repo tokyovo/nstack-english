@@ -131,7 +131,7 @@ function Result({ unit, correct }: { unit: Unit; correct: number }) {
       </View>
       <View style={styles.footer}>
         {next ? <NextUnitButton next={next} /> : null}
-        <Link href={`/track/${unit.track}`} replace asChild>
+        <Link href={`/track/${unit.track}`} dismissTo asChild>
           <ActionButton
             label={t('lesson.backToTrack')}
             kind={next ? 'secondary' : 'primary'}
