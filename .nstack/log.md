@@ -304,6 +304,6 @@
 - Read: review/SKILL.md c151f88
 - [x] 1. Dispatch. reviewer at 49fd51e: fix-needed. Important: review uses template words ("My name is ...") for speak and type_answer, marking correct sentences wrong. Nit: joined digits ("123") fail counting speak items.
 - [x] 2. Second reviewer. n/a: no auth, payments, migrations, concurrency or public API
-- [ ] 3. Act on every finding. fix builder dispatched for both
-- [ ] 4. Review the fixes
+- [x] 3. Act on every finding. builder fixed both (89fea76): session red 9 failed, check red 1, score red 3 -> green; after merge jest 248, e2e 23 passed
+- [ ] 4. Review the fixes. fix > 20 lines: round 2 dispatched
 - [ ] Done when: the latest round has no important findings, verify passed after the last fix, and nits are fixed or in backlog.md.
