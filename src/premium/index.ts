@@ -53,9 +53,9 @@ export async function loadPremiumUnit(id: string): Promise<PremiumUnitResult> {
 
 /**
  * The units whose words the learner reviews, in teaching order: every bundled unit, and each
- * finished premium unit whose body is on the device or, for a Premium learner online, fetched now.
- * A finished premium unit with neither (finished on another device, then offline or no longer
- * Premium) is left out until it can be had.
+ * finished premium unit the learner may open now (`loadPremiumUnit`: the server decides, the device
+ * copy serves only offline). A finished premium unit the server refuses, or with no copy while
+ * offline, is left out.
  */
 export async function reviewUnits(progress: Progress): Promise<Unit[]> {
   const units = await Promise.all(tracks.flatMap(unitsOf).map((summary) => reviewUnit(summary, progress)));
@@ -65,8 +65,6 @@ export async function reviewUnits(progress: Progress): Promise<Unit[]> {
 async function reviewUnit(summary: UnitSummary, progress: Progress): Promise<Unit | undefined> {
   if (summary.access === 'free') return getUnit(summary.id);
   if (!isLessonCompleted(progress, summary.id)) return undefined;
-  const kept = await keptUnit(summary.id);
-  if (kept) return kept;
   const loaded = await loadPremiumUnit(summary.id);
   return loaded.status === 'ready' ? loaded.unit : undefined;
 }
