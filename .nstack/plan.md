@@ -34,7 +34,7 @@ Answers for builders (from the plan check):
 - [x] T1 Clean template, tokens, font, i18n and the UI-string test; Vietnamese welcome screen. Proof: `npm run typecheck && npm run lint && npm test` (string test seen failing on a planted literal). Needs: none
 - [x] T2 API server skeleton: Hono app, `node:sqlite` with an idempotent migrator, `/api/health`, `node --test` tests. Proof: `npm run test:server`. Access: public (health). Needs: none. Migration: yes
 - [x] T3 Drive tool and Playwright e2e with axe: `scripts/drive.mjs` (start/seed/screens/check/stop plus android-* subcommands), server serves `dist/`. Proof: `npm run drive -- check`, `npm run e2e`. Needs: T1, T2
-- [ ] T4 CI workflow (ubuntu checks plus macOS iOS simulator build). Proof: the workflow run on the PR. Needs: T3
+- [x] T4 CI workflow (ubuntu checks plus macOS iOS simulator build). Proof: the workflow run on the PR. Needs: T3
 
 ## Slice: learn-core (branch nstack/learn-core)
 A learner with no account opens the app, picks a track (Đời sống, Công việc, Trẻ em), sees the units of that track by level, opens a lesson, meets each new word on a card and hears it spoken, answers the lesson's exercises with immediate Vietnamese feedback, and finishes on a result screen. Completed lessons and answers stay after the app is closed and opened again. No energy, hearts or per-day limits (research need 4). Every unit from A1 carries a short Vietnamese usage note (research need 3).
