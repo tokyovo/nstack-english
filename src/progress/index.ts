@@ -1,5 +1,6 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
+import { mergeProgress } from './merge';
 import { emptyProgress, parseProgress, type LessonCompletion, type Progress } from './schema';
 
 export {
@@ -20,6 +21,17 @@ export type Answer = { itemId: string; correct: boolean };
 export type LessonResult = { unitId: string; correct: number; total: number };
 
 type StoreOptions = { now?: () => Date };
+
+/** Who changed a profile's saved progress: this device (an answer, a lesson) or the account (a sync). */
+export type ProgressChange = { profileId: string; source: 'device' | 'account' };
+
+const changeListeners = new Set<(change: ProgressChange) => void>();
+
+/** Calls `listener` after every saved change to any profile's progress; returns the unsubscribe. */
+export function onProgressChange(listener: (change: ProgressChange) => void): () => void {
+  changeListeners.add(listener);
+  return () => changeListeners.delete(listener);
+}
 
 export function isLessonCompleted(progress: Progress, unitId: string): boolean {
   return unitId in progress.lessons;
@@ -88,9 +100,17 @@ export function createProgressStore({ now = () => new Date() }: StoreOptions = {
     return save(emptyProgress(profileId));
   }
 
-  function update(profileId: string, change: (progress: Progress, at: string) => Progress) {
+  function update(
+    profileId: string,
+    source: ProgressChange['source'],
+    change: (progress: Progress, at: string) => Progress
+  ) {
     const at = now().toISOString();
-    return inOrder(profileId, async () => save(change(await read(profileId), at)));
+    return inOrder(profileId, async () => {
+      const saved = await save(change(await read(profileId), at));
+      for (const listener of changeListeners) listener({ profileId, source });
+      return saved;
+    });
   }
 
   return {
@@ -98,10 +118,14 @@ export function createProgressStore({ now = () => new Date() }: StoreOptions = {
       return inOrder(profileId, () => read(profileId));
     },
     recordAnswer(profileId: string, answer: Answer): Promise<Progress> {
-      return update(profileId, (progress, at) => withAnswer(progress, answer, at));
+      return update(profileId, 'device', (progress, at) => withAnswer(progress, answer, at));
     },
     completeLesson(profileId: string, result: LessonResult): Promise<Progress> {
-      return update(profileId, (progress, at) => withCompletion(progress, result, at));
+      return update(profileId, 'device', (progress, at) => withCompletion(progress, result, at));
+    },
+    /** Adds another copy of the profile's progress (the account's) to the saved one; nothing saved is lost. */
+    mergeIn(profileId: string, other: Progress): Promise<Progress> {
+      return update(profileId, 'account', (progress) => mergeProgress(progress, other));
     },
   };
 }

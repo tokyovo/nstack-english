@@ -7,10 +7,12 @@ import { useFonts } from 'expo-font';
 import * as SplashScreen from 'expo-splash-screen';
 import { StatusBar } from 'expo-status-bar';
 import { useEffect } from 'react';
-import { useColorScheme } from 'react-native';
+import { StyleSheet, useColorScheme, View } from 'react-native';
 
+import { OfflineNotice } from '@/components/offline-notice';
 import { Colors } from '@/constants/theme';
 import { t } from '@/i18n';
+import { useProgressSync } from '@/sync/use-sync';
 
 SplashScreen.preventAutoHideAsync();
 
@@ -37,6 +39,7 @@ export default function RootLayout() {
     BeVietnamPro_700Bold,
   });
   const ready = fontsLoaded || fontError !== null;
+  useProgressSync();
 
   useEffect(() => {
     if (ready) SplashScreen.hideAsync();
@@ -47,9 +50,16 @@ export default function RootLayout() {
   return (
     <ThemeProvider value={navigationTheme}>
       <StatusBar style="auto" />
-      <Stack screenOptions={{ headerShown: false }}>
-        <Stack.Screen name="index" options={{ title: t('app.name') }} />
-      </Stack>
+      <View style={[styles.app, { backgroundColor: colors.background }]}>
+        <OfflineNotice />
+        <Stack screenOptions={{ headerShown: false }}>
+          <Stack.Screen name="index" options={{ title: t('app.name') }} />
+        </Stack>
+      </View>
     </ThemeProvider>
   );
 }
+
+const styles = StyleSheet.create({
+  app: { flex: 1 },
+});

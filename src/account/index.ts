@@ -32,6 +32,21 @@ export type AccountResult = { ok: true; user: User; profiles: Profile[] } | { ok
 
 type Session = { token: string; user: User; profiles: Profile[] };
 
+/** What progress sync needs: the session token and the account profile this device learns as. */
+export type SyncSession = { token: string; profileId: string };
+
+const sessionListeners = new Set<() => void>();
+
+/** Calls `listener` after a sign-in, sign-up or sign-out on this device; returns the unsubscribe. */
+export function onSessionChange(listener: () => void): () => void {
+  sessionListeners.add(listener);
+  return () => sessionListeners.delete(listener);
+}
+
+function sessionChanged() {
+  for (const listener of sessionListeners) listener();
+}
+
 const fieldOf: Partial<Record<AccountErrorCode, AccountField>> = {
   invalid_email: 'email',
   email_taken: 'email',
@@ -53,7 +68,15 @@ export async function signOut(): Promise<void> {
   const session = await savedSession();
   if (!session) return;
   await deleteSession();
+  sessionChanged();
   await callApi('/api/auth/signout', { method: 'POST', token: session.token });
+}
+
+/** The saved session's token and owner profile, read on the device without asking the server. */
+export async function syncSession(): Promise<SyncSession | undefined> {
+  const session = await savedSession();
+  const owner = session?.profiles.find((profile) => profile.kind === 'owner');
+  return session && owner && { token: session.token, profileId: owner.id };
 }
 
 /**
@@ -66,6 +89,7 @@ export async function loadAccount(): Promise<AccountState> {
   const reply = await callApi('/api/me', { token: session.token });
   if (reply.status === 401) {
     await deleteSession();
+    sessionChanged();
     return { status: 'signedOut' };
   }
   const fresh = reply.status === 200 ? parseAccount(reply.body) : undefined;
@@ -79,6 +103,7 @@ async function startSession(path: `/api/${string}`, email: string, password: str
   const session = reply.status === 200 || reply.status === 201 ? parseSession(reply.body) : undefined;
   if (!session) return { ok: false, error: errorOf(reply) };
   await writeSession(JSON.stringify(session));
+  sessionChanged();
   return { ok: true, user: session.user, profiles: session.profiles };
 }
 
