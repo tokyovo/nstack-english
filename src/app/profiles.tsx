@@ -76,6 +76,7 @@ type ChildFormProps = {
   clearOnSuccess?: boolean;
   onSubmit: (input: ChildInput) => Promise<ProfileResult>;
   onDone: () => void;
+  /** Editing an existing child: the form opens with the nickname focused and can be closed. */
   onCancel?: () => void;
 };
 
@@ -122,6 +123,7 @@ function ChildForm(props: ChildFormProps) {
         maxLength={MAX_NICKNAME}
         autoComplete="off"
         autoCorrect={false}
+        autoFocus={onCancel !== undefined}
         returnKeyType="done"
         submitBehavior="blurAndSubmit"
         testID={`${nativeID}-name`}

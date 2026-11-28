@@ -42,7 +42,7 @@ export const vi = {
 
   'profiles.title': 'Hồ sơ học',
   'profiles.back': 'Về tài khoản',
-  'profiles.intro': 'Mỗi người học có hồ sơ riêng, tiến độ không lẫn vào nhau. Hồ sơ của bé chỉ có tên gọi và một hình con vật.',
+  'profiles.intro': 'Mỗi người học có hồ sơ riêng, tiến độ không lẫn vào nhau.',
   'profiles.loading': 'Đang tải hồ sơ...',
   'profiles.signedOut': 'Đăng nhập để thêm hồ sơ cho con và xem bé học đến đâu.',
   'profiles.signIn': 'Đăng nhập',

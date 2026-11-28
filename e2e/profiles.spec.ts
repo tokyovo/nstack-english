@@ -71,6 +71,7 @@ test('a parent adds, renames and deletes a child profile', async ({ page, reques
   await expect(page.getByText('Bi', { exact: true })).toBeVisible();
   await button(page, 'Sửa hồ sơ Bi').click();
   const newName = page.getByLabel('Tên gọi mới của Bi', { exact: true });
+  await expect(newName).toBeFocused();
   await expect(newName).toHaveValue('Bi');
   await newName.fill('Bin');
   await button(page, 'Lưu').click();
