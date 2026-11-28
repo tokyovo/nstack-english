@@ -50,6 +50,12 @@ function finishLessonAgo(ago: number) {
   });
 }
 
+/** Answers every word of everyday A0 u1 right, as a review session `ago` milliseconds before now does. */
+async function reviewAllAgo(ago: number) {
+  const store = createProgressStore({ now: () => new Date(Date.now() - ago) });
+  for (const word of unit.words) await store.recordAnswer(LOCAL_PROFILE_ID, { itemId: word.id, correct: true });
+}
+
 async function press(name: string | RegExp) {
   await fireEvent.press(await screen.findByRole('button', { name }));
 }
@@ -86,8 +92,17 @@ describe('Review (/review)', () => {
     expect(screen.getByRole('link', { name: 'Về trang chủ' })).toHaveProp('href', '/');
   });
 
-  it('says to come back later when the learned words are not due yet', async () => {
+  it('says the words just learned come up for review soon, before any of them was reviewed', async () => {
     await finishLessonAgo(0);
+    await openApp('/review');
+
+    expect(await screen.findByText('Chưa có từ cần ôn')).toBeOnTheScreen();
+    expect(screen.getByText('Từ bạn vừa học sẽ đến lúc ôn sau ít phút. Hãy quay lại sau nhé.')).toBeOnTheScreen();
+  });
+
+  it('says to come back later once the due words are reviewed', async () => {
+    await finishLessonAgo(DAY);
+    await reviewAllAgo(0);
     await openApp('/review');
 
     expect(await screen.findByText('Chưa có từ cần ôn')).toBeOnTheScreen();
@@ -188,8 +203,17 @@ describe('Review on home (/)', () => {
     expect(screen.queryByRole('link', { name: /^Ôn tập/ })).toBeNull();
   });
 
-  it('says to come back later when the learned words are not due yet', async () => {
+  it('says the words just learned come up for review soon, before any of them was reviewed', async () => {
     await finishLessonAgo(0);
+    await openApp('/');
+
+    expect(await screen.findByText('Chưa có từ cần ôn')).toBeOnTheScreen();
+    expect(screen.getByText('Từ bạn vừa học sẽ đến lúc ôn sau ít phút. Hãy quay lại sau nhé.')).toBeOnTheScreen();
+  });
+
+  it('says to come back later once the due words are reviewed', async () => {
+    await finishLessonAgo(DAY);
+    await reviewAllAgo(0);
     await openApp('/');
 
     expect(await screen.findByText('Chưa có từ cần ôn')).toBeOnTheScreen();

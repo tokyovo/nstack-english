@@ -9,9 +9,10 @@ import { ThemedText } from '@/components/themed-text';
 import { Space } from '@/constants/theme';
 import { units } from '@/content';
 import { useTheme } from '@/hooks/use-theme';
-import { t } from '@/i18n';
+import { t, type MessageKey } from '@/i18n';
 import { LOCAL_PROFILE_ID, type createProgressStore } from '@/progress';
 import { useAnswerSaver } from '@/progress/use-answer-saver';
+import { whyNothingDue, type NothingDue } from '@/review/schedule';
 import { reviewSession, type ReviewItem } from '@/review/session';
 import { canRecognise } from '@/speech/recognition';
 
@@ -20,8 +21,7 @@ type ProgressStore = ReturnType<typeof createProgressStore>;
 type Phase =
   | { kind: 'loading' }
   | { kind: 'loadFailed' }
-  /** Nothing due; `learned` tells whether any lesson has been finished. */
-  | { kind: 'nothing'; learned: boolean }
+  | { kind: 'nothing'; why: NothingDue }
   | { kind: 'step'; items: ReviewItem[]; index: number }
   | { kind: 'saving'; total: number }
   | { kind: 'saveFailed'; total: number }
@@ -43,14 +43,21 @@ function HomeButton() {
   );
 }
 
-function Nothing({ learned }: { learned: boolean }) {
+/** What to do when nothing is due, shown here and on home. */
+export const nothingDueHint: Record<NothingDue, MessageKey> = {
+  notLearned: 'review.noneHint',
+  firstReviewSoon: 'review.firstSoon',
+  allReviewed: 'review.allDone',
+};
+
+function Nothing({ why }: { why: NothingDue }) {
   return (
     <View style={styles.fill}>
       <View style={styles.section}>
         <ThemedText type="title" role="heading" aria-level={1}>
           {t('review.none')}
         </ThemedText>
-        <ThemedText>{t(learned ? 'review.allDone' : 'review.noneHint')}</ThemedText>
+        <ThemedText>{t(nothingDueHint[why])}</ThemedText>
       </View>
       <View style={styles.footer}>
         <HomeButton />
@@ -95,7 +102,7 @@ export function ReviewSession({ store, now = systemClock, random = Math.random }
         setPhase(
           items.length > 0
             ? { kind: 'step', items, index: 0 }
-            : { kind: 'nothing', learned: Object.keys(progress.lessons).length > 0 }
+            : { kind: 'nothing', why: whyNothingDue(progress, units) }
         );
       },
       () => current && setPhase({ kind: 'loadFailed' })
@@ -135,7 +142,7 @@ export function ReviewSession({ store, now = systemClock, random = Math.random }
         </View>
       );
     case 'nothing':
-      return <Nothing learned={phase.learned} />;
+      return <Nothing why={phase.why} />;
     case 'step': {
       const { items, index } = phase;
       const item = items[index];

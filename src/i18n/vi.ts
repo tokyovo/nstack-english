@@ -94,6 +94,7 @@ export const vi = {
   'review.start': 'Ôn tập ngay',
   'review.none': 'Chưa có từ cần ôn',
   'review.noneHint': 'Học xong một bài để có từ ôn tập.',
+  'review.firstSoon': 'Từ bạn vừa học sẽ đến lúc ôn sau ít phút. Hãy quay lại sau nhé.',
   'review.allDone': 'Bạn đã ôn hết từ đến hạn. Hãy quay lại sau nhé.',
   'review.loading': 'Đang tải từ cần ôn...',
   'review.loadError': 'Không đọc được tiến độ học của bạn. Hãy thử lại sau.',

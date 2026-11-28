@@ -4,6 +4,7 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 
 import { ActionButton } from '@/components/lesson/action-button';
 import { ListRow } from '@/components/list-row';
+import { nothingDueHint } from '@/components/review/review-session';
 import { ThemedText } from '@/components/themed-text';
 import { Border, MaxContentWidth, Radius, Space } from '@/constants/theme';
 import { tracks, units, unitsOf, type Track } from '@/content';
@@ -11,7 +12,7 @@ import { useTheme } from '@/hooks/use-theme';
 import { t } from '@/i18n';
 import { isLessonCompleted } from '@/progress';
 import { useProgress, type ProgressState } from '@/progress/use-progress';
-import { dueWords } from '@/review/schedule';
+import { dueWords, whyNothingDue } from '@/review/schedule';
 
 /** "Đã học xong 1/5 bài" once progress is read; nothing while it loads or when it cannot be read. */
 function progressLine(track: Track, state: ProgressState): string | null {
@@ -27,7 +28,6 @@ function ReviewPanel({ state }: { state: ProgressState }) {
   const theme = useTheme();
   if (state.status !== 'ready') return null;
   const due = dueWords(state.progress, units, new Date()).length;
-  const learned = Object.keys(state.progress.lessons).length > 0;
 
   return (
     <View style={[styles.panel, { backgroundColor: theme.surface, borderColor: theme.line }]} testID="review-panel">
@@ -46,7 +46,7 @@ function ReviewPanel({ state }: { state: ProgressState }) {
       ) : (
         <>
           <ThemedText type="label">{t('review.none')}</ThemedText>
-          <ThemedText>{t(learned ? 'review.allDone' : 'review.noneHint')}</ThemedText>
+          <ThemedText>{t(nothingDueHint[whyNothingDue(state.progress, units)])}</ThemedText>
         </>
       )}
     </View>

@@ -76,7 +76,7 @@ test('a learner reviews the words of a lesson a day later and sees the due count
 
   await finishLesson(page);
   await page.goto('/');
-  await expect(panel).toContainText('Bạn đã ôn hết từ đến hạn. Hãy quay lại sau nhé.');
+  await expect(panel).toContainText('Từ bạn vừa học sẽ đến lúc ôn sau ít phút. Hãy quay lại sau nhé.');
 
   await page.clock.setSystemTime(new Date(START.getTime() + DAY));
   await page.reload();
