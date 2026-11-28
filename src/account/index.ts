@@ -63,7 +63,10 @@ export function signIn(email: string, password: string): Promise<AccountResult> 
   return startSession('/api/auth/signin', email, password);
 }
 
-/** Forgets the session on this device; the server is told when it can be reached. */
+/**
+ * Forgets the session on this device; the server is told when it can be reached. Screens sign out
+ * through signOutOfDevice (src/sync), which also saves and clears the device progress.
+ */
 export async function signOut(): Promise<void> {
   const session = await savedSession();
   if (!session) return;

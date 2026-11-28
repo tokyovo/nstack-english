@@ -2,7 +2,7 @@
 // copy is sent to the account's profile, the server merges it with what it has (server/progress.ts)
 // and the merged copy comes back and is merged into the device's. One PUT both pushes and pulls,
 // and the merge is a union, so retries and several devices converge.
-import { onSessionChange, syncSession } from '@/account';
+import { onSessionChange, signOut, syncSession } from '@/account';
 import { callApi } from '@/api/client';
 import { createProgressStore, LOCAL_PROFILE_ID, onProgressChange } from '@/progress';
 import { parseProgress } from '@/progress/schema';
@@ -80,6 +80,26 @@ async function syncOnce(): Promise<SyncState> {
   if (!merged) return 'failed';
   await store.mergeIn(LOCAL_PROFILE_ID, { ...merged, profileId: LOCAL_PROFILE_ID });
   return 'synced';
+}
+
+/** `signedOut` when the device's progress is gone with the session; otherwise why it could not be sent. */
+export type SignOutResult = 'signedOut' | 'offline' | 'failed';
+
+/**
+ * Signs out so the next person on this device finds none of this learner's progress: the device
+ * copy is sent to the account first, then cleared. When it cannot be sent the learner stays signed
+ * in with nothing lost, unless they chose `discardUnsynced`.
+ */
+export async function signOutOfDevice({ discardUnsynced = false } = {}): Promise<SignOutResult> {
+  const synced = await syncProgress();
+  if (synced !== 'synced' && synced !== 'signedOut' && !discardUnsynced) {
+    return synced === 'offline' ? 'offline' : 'failed';
+  }
+  // The session goes first, and any sync still running is waited for, so none refills the device.
+  await signOut();
+  await syncProgress();
+  await store.clear(LOCAL_PROFILE_ID);
+  return 'signedOut';
 }
 
 function setState(next: SyncState) {

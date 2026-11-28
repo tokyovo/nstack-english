@@ -29,6 +29,13 @@ export const vi = {
   'account.signedInAs': 'Bạn đã đăng nhập bằng {email}.',
   'account.signOut': 'Đăng xuất',
   'account.signingOut': 'Đang đăng xuất...',
+  'account.signOutHint': 'Khi đăng xuất, tiến độ được lưu vào tài khoản rồi xoá khỏi thiết bị này.',
+  'account.signOutUnsaved.offline':
+    'Đang ngoại tuyến nên chưa lưu được tiến độ vào tài khoản. Nếu đăng xuất bây giờ, những bài học và câu trả lời chưa lưu trên thiết bị này sẽ bị xoá.',
+  'account.signOutUnsaved.failed':
+    'Chưa lưu được tiến độ vào tài khoản. Nếu đăng xuất bây giờ, những bài học và câu trả lời chưa lưu trên thiết bị này sẽ bị xoá.',
+  'account.signOutDiscard': 'Vẫn đăng xuất và xoá tiến độ chưa lưu',
+  'account.signOutStay': 'Ở lại, lưu tiến độ sau',
   'account.error.invalid_email': 'Email chưa đúng. Hãy kiểm tra lại, ví dụ: lan@gmail.com.',
   'account.error.email_taken': 'Email này đã có tài khoản. Hãy đăng nhập.',
   'account.error.weak_password': 'Mật khẩu cần ít nhất 8 ký tự.',

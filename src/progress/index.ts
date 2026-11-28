@@ -127,5 +127,9 @@ export function createProgressStore({ now = () => new Date() }: StoreOptions = {
     mergeIn(profileId: string, other: Progress): Promise<Progress> {
       return update(profileId, 'account', (progress) => mergeProgress(progress, other));
     },
+    /** Deletes the profile's saved progress, so the next learner on this device starts with none. */
+    clear(profileId: string): Promise<Progress> {
+      return update(profileId, 'account', () => emptyProgress(profileId));
+    },
   };
 }
