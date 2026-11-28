@@ -636,3 +636,11 @@
 - [x] 9. Access is enforced. check-security exit 0, 12 deny proofs (after correcting three proof names in verify.md)
 - [x] Done when: all ticked. Not verified: Android (no KVM); real store and card payments (parked).
 - Lesson: check-sync missed intentional conflict resolutions made while merging a shipped PR head; it now counts files a sync merge changed against both parents, and still reports the original -X ours revert (checked at 1fa46b3).
+
+## 2026-11-28 review plans
+- Read: review/SKILL.md c151f88
+- [x] 1. Dispatch. reviewer at 31f4680: fix-needed. Important: /profiles words due counts bundled units only (regression: parent sees 0 while the child's home shows 10). Nit: "next lesson" button leads to the paywall without saying Premium.
+- [x] 2. Second reviewer. focus security and failure modes, at 31f4680: fix-needed. Important: review uses a kept premium copy without asking the server, so words keep coming after Premium ends. Nits: choose_meaning prompt only searched in the unit's words (latent); grant --ref "" and unmigrated db crash; callApi has no timeout (review waits on a stalled fetch).
+- [ ] 3. Act on every finding. one fix builder for both important findings and all nits
+- [ ] 4. Review the fixes
+- [ ] Done when: the latest round has no important findings, verify passed after the last fix, and nits are fixed or in backlog.md.
