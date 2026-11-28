@@ -42,3 +42,4 @@
 - (unscored) Content test: at least 2 speak items per unit. Evidence: T14 builder
 - (unscored) Review speak phrase: skip words with a placeholder ("My name is ..."). Evidence: T15 builder
 - (unscored) Speech scoring: "12" heard for "One, two" reads as twelve. Evidence: review-speak fix builder
+- (unscored) After a forced sign-out, guest answers made before a different account signs in are cleared with the previous account's copy. Evidence: accounts-sync fix builder
