@@ -151,7 +151,8 @@
       "type": "build_sentence",
       "prompt": "Tôi làm việc từ thứ Hai đến thứ Sáu.",
       "tiles": ["Friday", "work", "to", "I", "Monday", "from", "at"],
-      "answer": ["I", "work", "from", "Monday", "to", "Friday"]
+      "answer": ["I", "work", "from", "Monday", "to", "Friday"],
+      "accepted": [["from", "Monday", "to", "Friday", "I", "work"]]
     },
     {
       "id": "work-a1-u4-e12",

@@ -102,6 +102,7 @@
       "prompt": "Tôi sống ở Hà Nội.",
       "tiles": ["live", "Hanoi", "I", "in", "lives"],
       "answer": ["I", "live", "in", "Hanoi"],
+      "fixedOrder": "\"in Hanoi\" completes \"live\"; \"In Hanoi I live\" sounds unfinished",
       "hint_vi": "Sau “I”, động từ giữ nguyên: “I live”."
     },
     {
@@ -138,7 +139,8 @@
       "type": "build_sentence",
       "prompt": "Anh ấy làm việc ở Hà Nội.",
       "tiles": ["works", "in", "He", "Hanoi", "work"],
-      "answer": ["He", "works", "in", "Hanoi"]
+      "answer": ["He", "works", "in", "Hanoi"],
+      "fixedOrder": "\"in Hanoi\" is the point of the sentence; \"In Hanoi he works\" sounds unfinished"
     },
     {
       "id": "everyday-a1-u6-e10",

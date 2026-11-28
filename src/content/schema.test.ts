@@ -91,6 +91,18 @@ describe('parseUnit', () => {
     expect(result.ok ? [] : result.errors).toEqual(['everyday-a0-u9-e04: accepted tile "my" is not among the tiles']);
   });
 
+  it('keeps the reason a build_sentence order is fixed, and reports an empty one', () => {
+    const unit = validUnit();
+    const withFixedOrder = (fixedOrder: string) => ({
+      ...unit,
+      exercises: unit.exercises.map((e, i) => (i === 3 ? { ...e, fixedOrder } : e)),
+    });
+    const kept = parseUnit(withFixedOrder('“Lan” không đứng đầu câu được.'));
+    expect(kept.ok ? kept.unit.exercises[3] : kept.errors).toMatchObject({ fixedOrder: '“Lan” không đứng đầu câu được.' });
+    const empty = parseUnit(withFixedOrder(' '));
+    expect(empty.ok ? [] : empty.errors).toEqual(['everyday-a0-u9-e04.fixedOrder: missing or empty']);
+  });
+
   it('reads a speak item: the English to say and its Vietnamese meaning', () => {
     const unit = validUnit();
     const speak = { id: 'everyday-a0-u9-e11', type: 'speak', text: "I'm fine, thank you.", vi: 'Tôi khỏe, cảm ơn bạn.' };

@@ -137,7 +137,8 @@
       "type": "build_sentence",
       "prompt": "Đến nhà ga thì rẽ phải.",
       "tiles": ["right", "Turn", "station", "the", "at", "left"],
-      "answer": ["Turn", "right", "at", "the", "station"]
+      "answer": ["Turn", "right", "at", "the", "station"],
+      "accepted": [["at", "the", "station", "Turn", "right"]]
     },
     {
       "id": "everyday-a1-u9-e10",

@@ -103,7 +103,11 @@
       "prompt": "Tôi thức dậy lúc sáu giờ.",
       "tiles": ["up", "I", "at", "six", "get", "on", "o'clock"],
       "answer": ["I", "get", "up", "at", "six", "o'clock"],
-      "accepted": [["I", "get", "up", "at", "six"]]
+      "accepted": [
+        ["I", "get", "up", "at", "six"],
+        ["at", "six", "o'clock", "I", "get", "up"],
+        ["at", "six", "I", "get", "up"]
+      ]
     },
     {
       "id": "everyday-a1-u8-e05",
@@ -148,7 +152,8 @@
       "prompt": "Hôm nay là thứ mấy?",
       "tiles": ["day", "What", "it", "is", "today", "time"],
       "answer": ["What", "day", "is", "it", "today"],
-      "accepted": [["What", "day", "is", "today"]]
+      "accepted": [["What", "day", "is", "today"]],
+      "fixedOrder": "in this question \"today\" stays at the end; \"Today what day is it\" is not natural"
     },
     {
       "id": "everyday-a1-u8-e11",

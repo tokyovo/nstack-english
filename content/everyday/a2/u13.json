@@ -103,7 +103,10 @@
       "prompt": "Thời tiết ở Hà Nội thế nào?",
       "tiles": ["the", "What's", "like", "weather", "in", "Hanoi", "is"],
       "answer": ["What's", "the", "weather", "like", "in", "Hanoi"],
-      "accepted": [["What's", "the", "weather", "in", "Hanoi", "like"]]
+      "accepted": [
+        ["What's", "the", "weather", "in", "Hanoi", "like"],
+        ["in", "Hanoi", "What's", "the", "weather", "like"]
+      ]
     },
     {
       "id": "everyday-a2-u13-e05",
