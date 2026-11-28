@@ -1,0 +1,185 @@
+{
+  "id": "everyday-a2-u13",
+  "track": "everyday",
+  "level": "a2",
+  "number": 13,
+  "title": "Thời tiết",
+  "goals": [
+    "Có thể hỏi thời tiết: “What's the weather like today?”",
+    "Có thể nói trời nóng, lạnh, nắng hay đang mưa: “It's very hot.”",
+    "Có thể nói thời tiết theo mùa: “It's cold in winter.”"
+  ],
+  "note_vi": "Tiếng Việt nói “Trời nóng” hoặc chỉ “Nóng quá!”, không cần chủ ngữ. Tiếng Anh luôn cần chủ ngữ, nên khi nói về thời tiết dùng “It” (giống như “trời”): “It's hot.” (It's = It is). Không nói “Is hot.” Hỏi thời tiết: “What's the weather like?” (Thời tiết thế nào?). “very” (rất) đứng trước từ chỉ tính chất, giống tiếng Việt: “very hot” (rất nóng). “It's raining.” nghĩa là trời đang mưa ngay lúc này. Nói theo mùa dùng “in”: “in summer” (vào mùa hè), “in winter” (vào mùa đông).",
+  "source": "original",
+  "names": ["Lan", "Nam", "Hanoi", "Da Nang"],
+  "words": [
+    {
+      "id": "everyday-a2-u13-weather",
+      "en": "weather",
+      "vi": "thời tiết",
+      "example": { "en": "The weather is nice today.", "vi": "Hôm nay thời tiết đẹp." }
+    },
+    {
+      "id": "everyday-a2-u13-whats-the-weather-like",
+      "en": "What's the weather like?",
+      "vi": "Thời tiết thế nào?",
+      "example": { "en": "What's the weather like in Hanoi?", "vi": "Thời tiết ở Hà Nội thế nào?" }
+    },
+    {
+      "id": "everyday-a2-u13-hot",
+      "en": "hot",
+      "vi": "nóng",
+      "example": { "en": "It's hot today.", "vi": "Hôm nay trời nóng." }
+    },
+    {
+      "id": "everyday-a2-u13-cold",
+      "en": "cold",
+      "vi": "lạnh",
+      "example": { "en": "It's cold in the morning.", "vi": "Buổi sáng trời lạnh." }
+    },
+    {
+      "id": "everyday-a2-u13-warm",
+      "en": "warm",
+      "vi": "ấm",
+      "example": { "en": "It's warm in Da Nang.", "vi": "Ở Đà Nẵng trời ấm." }
+    },
+    {
+      "id": "everyday-a2-u13-sunny",
+      "en": "sunny",
+      "vi": "có nắng",
+      "example": { "en": "It's sunny today.", "vi": "Hôm nay trời nắng." }
+    },
+    {
+      "id": "everyday-a2-u13-raining",
+      "en": "It's raining",
+      "vi": "Trời đang mưa",
+      "example": { "en": "It's raining. Take an umbrella.", "vi": "Trời đang mưa. Mang theo ô nhé." }
+    },
+    {
+      "id": "everyday-a2-u13-very",
+      "en": "very",
+      "vi": "rất",
+      "example": { "en": "It's very hot today.", "vi": "Hôm nay trời rất nóng." }
+    },
+    {
+      "id": "everyday-a2-u13-summer",
+      "en": "summer",
+      "vi": "mùa hè",
+      "example": { "en": "It's very hot in summer.", "vi": "Mùa hè trời rất nóng." }
+    },
+    {
+      "id": "everyday-a2-u13-winter",
+      "en": "winter",
+      "vi": "mùa đông",
+      "example": { "en": "It's cold in Hanoi in winter.", "vi": "Mùa đông ở Hà Nội trời lạnh." }
+    }
+  ],
+  "exercises": [
+    {
+      "id": "everyday-a2-u13-e01",
+      "type": "choose_meaning",
+      "prompt": "everyday-a2-u13-weather",
+      "options": ["thời tiết", "mùa hè", "hôm nay"],
+      "answer": "thời tiết"
+    },
+    {
+      "id": "everyday-a2-u13-e02",
+      "type": "choose_english",
+      "prompt": "Hôm nay trời nóng.",
+      "options": ["Is hot today.", "It's hot today.", "It's cold today."],
+      "answer": "It's hot today.",
+      "hint_vi": "Nói về thời tiết luôn bắt đầu bằng “It”."
+    },
+    {
+      "id": "everyday-a2-u13-e03",
+      "type": "listen_choose",
+      "audio": "It's raining.",
+      "options": ["It's raining.", "It's sunny.", "It's warm."],
+      "answer": "It's raining."
+    },
+    {
+      "id": "everyday-a2-u13-e04",
+      "type": "build_sentence",
+      "prompt": "Thời tiết ở Hà Nội thế nào?",
+      "tiles": ["the", "What's", "like", "weather", "in", "Hanoi", "is"],
+      "answer": ["What's", "the", "weather", "like", "in", "Hanoi"],
+      "accepted": [["What's", "the", "weather", "in", "Hanoi", "like"]]
+    },
+    {
+      "id": "everyday-a2-u13-e05",
+      "type": "choose_meaning",
+      "prompt": "everyday-a2-u13-cold",
+      "options": ["nóng", "lạnh", "ấm"],
+      "answer": "lạnh"
+    },
+    {
+      "id": "everyday-a2-u13-e06",
+      "type": "type_answer",
+      "prompt": "Hôm nay trời nắng.",
+      "answer": "It's sunny today.",
+      "accepted": ["It is sunny today.", "Today it's sunny.", "Today it is sunny.", "Today, it's sunny.", "Today, it is sunny."]
+    },
+    {
+      "id": "everyday-a2-u13-e07",
+      "type": "listen_choose",
+      "audio": "It's very cold in winter.",
+      "options": ["It's very hot in summer.", "It's very cold in winter.", "It's cold in the morning."],
+      "answer": "It's very cold in winter."
+    },
+    {
+      "id": "everyday-a2-u13-e08",
+      "type": "choose_english",
+      "prompt": "mùa hè",
+      "options": ["winter", "summer", "weather"],
+      "answer": "summer"
+    },
+    {
+      "id": "everyday-a2-u13-e09",
+      "type": "build_sentence",
+      "prompt": "Mùa hè trời rất nóng.",
+      "tiles": ["very", "It's", "in", "hot", "summer", "cold"],
+      "answer": ["It's", "very", "hot", "in", "summer"],
+      "accepted": [["in", "summer", "It's", "very", "hot"]]
+    },
+    {
+      "id": "everyday-a2-u13-e10",
+      "type": "choose_meaning",
+      "prompt": "everyday-a2-u13-warm",
+      "options": ["lạnh", "có nắng", "ấm"],
+      "answer": "ấm"
+    },
+    {
+      "id": "everyday-a2-u13-e11",
+      "type": "choose_english",
+      "prompt": "Trời đang mưa. Mang theo ô nhé.",
+      "options": ["It's raining. Take an umbrella.", "It's sunny. Take an umbrella.", "It's raining. Take a umbrella."],
+      "answer": "It's raining. Take an umbrella."
+    },
+    {
+      "id": "everyday-a2-u13-e12",
+      "type": "type_answer",
+      "prompt": "Hôm nay trời rất lạnh.",
+      "answer": "It's very cold today.",
+      "accepted": ["It is very cold today.", "Today it's very cold.", "Today it is very cold.", "Today, it's very cold.", "Today, it is very cold."]
+    },
+    {
+      "id": "everyday-a2-u13-e13",
+      "type": "speak",
+      "text": "What's the weather like today?",
+      "vi": "Hôm nay thời tiết thế nào?"
+    },
+    {
+      "id": "everyday-a2-u13-e14",
+      "type": "choose_english",
+      "prompt": "Thời tiết thế nào?",
+      "options": ["What's the matter?", "What's the weather like?", "What would you like?"],
+      "answer": "What's the weather like?"
+    },
+    {
+      "id": "everyday-a2-u13-e15",
+      "type": "speak",
+      "text": "It's very hot in summer.",
+      "vi": "Mùa hè trời rất nóng."
+    }
+  ]
+}

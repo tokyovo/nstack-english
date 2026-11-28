@@ -10,6 +10,11 @@ import everydayA1U7 from '../../content/everyday/a1/u7.json';
 import everydayA1U8 from '../../content/everyday/a1/u8.json';
 import everydayA1U9 from '../../content/everyday/a1/u9.json';
 import everydayA1U10 from '../../content/everyday/a1/u10.json';
+import everydayA2U11 from '../../content/everyday/a2/u11.json';
+import everydayA2U12 from '../../content/everyday/a2/u12.json';
+import everydayA2U13 from '../../content/everyday/a2/u13.json';
+import everydayA2U14 from '../../content/everyday/a2/u14.json';
+import everydayA2U15 from '../../content/everyday/a2/u15.json';
 import workA0U1 from '../../content/work/a0/u1.json';
 import workA0U2 from '../../content/work/a0/u2.json';
 import workA0U3 from '../../content/work/a0/u3.json';
@@ -47,6 +52,11 @@ const files: unknown[] = [
   everydayA1U8,
   everydayA1U9,
   everydayA1U10,
+  everydayA2U11,
+  everydayA2U12,
+  everydayA2U13,
+  everydayA2U14,
+  everydayA2U15,
   workA0U1,
   workA0U2,
   workA0U3,
