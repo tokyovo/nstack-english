@@ -821,3 +821,43 @@
   - [x] 5.2. fresh Plan agent: 12 questions, all answered in plan.md
   - [x] 5.3. colour slice in plan.md
 - [x] Done when: criteria have proofs, questions answered, slice in plan.md.
+
+## 2026-11-28 build T40
+- Read: build/SKILL.md a069840
+- [x] 1. Branch. nstack/colour from origin/main 7aae365
+- [x] 2. Starting state. main fast checks pass (ship plans entry)
+- [x] 3. Dispatch. builder in worktree, Parallel: 3
+- [ ] 4. Read the reply
+- [ ] 5. Prove it yourself.
+- [ ] 6. Record.
+- [ ] Done when: the ticket is committed on the slice's branch with items 1-6 ticked in its log entry, or is parked in `plan.md`.
+## 2026-11-28 build T41
+- Read: build/SKILL.md a069840
+- [x] 1. Branch. nstack/colour from origin/main 7aae365
+- [x] 2. Starting state. main fast checks pass (ship plans entry)
+- [x] 3. Dispatch. builder in worktree, Parallel: 3
+- [ ] 4. Read the reply
+- [ ] 5. Prove it yourself.
+- [ ] 6. Record.
+- [ ] Done when: the ticket is committed on the slice's branch with items 1-6 ticked in its log entry, or is parked in `plan.md`.
+
+## 2026-11-28 verify hardening
+- Read: verify/SKILL.md adc6a8a
+- [x] 1. Clean tree. 0a81f05 (later commits only .nstack/)
+- [x] 2. Project checks. typecheck 0, lint 0 warnings, jest 486 pass, test:server pass, test:drive pass, e2e 52 passed (1.2 m), drive check passed, android-build 579 s, Maestro lesson + review pass on emulator-5554
+- [x] 3. Every acceptance criterion in scope has a passing check. 1 sliding expiry: server tests; 2 sign-up limits: server tests (concurrent); 3 artwork: brand Jest test + launcher screenshot; 4 replace on results: Jest + Maestro lesson back step; 5 native config: native-config Jest + build; check-features ok
+- [x] 4. Every new check bites. T33/T34/T36/T37 seen red by their builders (build entries); T35: allowBackup flipped -> 1 failed, restored -> 4 pass, tree clean
+- [x] 5. The real thing runs. APK installed and both Maestro flows completed on the emulator; drive check served the web app
+- [x] 6. Every changed screen looks right. /tmp/launcher.png: own "a" ô-ly icon on purple, label "Học Tiếng A..." (1-9 pass: an icon only, no layout); favicon/splash seen in T36 previews; result-screen navigation unchanged visually
+- [x] 7. Nothing got weaker. one test renamed and strengthened ("a session expires after 90 days" -> "an unused session works until 90 days and answers 401 from then on": spec change T33); no skips, ignores or disables added
+- [x] 8. No new warnings or errors. lint 0, e2e no console errors (drive screens exit 0)
+- [x] 9. Access is enforced. check-security exit 0 (12 deny proofs, no secrets in bundle, headers ok, 0 high/critical)
+- [x] Done when: all ticked; Not verified: none.
+
+| Claim | Command | Result |
+|---|---|---|
+| Android flows run | npm run drive -- android-test (lesson; review alone) | lesson Passed 9m06s; review completed, exit 0 |
+| build faster | npm run drive -- android-build | 579 s (was 1371 s) |
+| backup rule bites | allowBackup 'true' in plugin, jest native-config | 1 failed -> restored 4 pass |
+| security | check-security . <drive url> | 4 ok, exit 0 |
+| screens | /tmp/launcher.png | own icon on the launcher |
