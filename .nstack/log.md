@@ -867,8 +867,8 @@
 - [x] 1. Dispatch. reviewer in worktree at 837c791
 - [x] 2. Second reviewer. auth changes (T33, T34): second reviewer, Focus: security and failure modes, in parallel
 - [x] 3. Act on every finding. reviewer 1: pass, nits: verify.md server/drive rows stale (fixed now: test:server 128), per-address 30 vs 5 (logged decision, kept). reviewer 2: important: merged release manifest has USE_BIOMETRIC/USE_FINGERPRINT (androidx.biometric via expo-secure-store) and the introspect test cannot see library manifests -> fixer builder; nit: no test proves counting before scrypt -> same fixer. Fixer aa0fff4/a59a340 merged (6e6333b): new `drive android-permissions` check run by android-build (red on the old manifest: USE_BIOMETRIC, USE_FINGERPRINT), app.json blocks both, APK permissions INTERNET, RECORD_AUDIO and the app's own receiver permission; hash-count test red with scrypt moved first; typecheck 0, lint 0, jest 486, test:server 129, test:drive pass
-- [ ] 4. Review the fixes. round 2 reviewer dispatched at 6e6333b (fix is over 20 lines)
-- [ ] Done when: the latest round has no important findings, `verify` passed after the last fix, and nits are fixed or in `backlog.md`.
+- [x] 4. Review the fixes. round 2 at 6e6333b: pass, no findings (mutations: count after hash, renewal off, renew always: all red); lesson flow on the fixed APK exit 0
+- [x] Done when: the latest round has no important findings, `verify` passed after the last fix, and nits are fixed or in `backlog.md`.
 ## 2026-11-28 build T42
 - Read: build/SKILL.md a069840
 - [x] 1. Branch. nstack/colour at 1b36d41
@@ -896,3 +896,14 @@
 - [ ] 5. Prove it yourself.
 - [ ] 6. Record.
 - [ ] Done when: the ticket is committed on the slice's branch with items 1-6 ticked in its log entry, or is parked in `plan.md`.
+
+## 2026-11-28 ship hardening
+- Read: ship/SKILL.md b51cd2a
+- [x] 1. Commit. slice commits on nstack/hardening
+- [x] 2. Sync. origin/main has nothing new (7aae365 is the base)
+- [x] 3. Push. nstack/hardening
+- [ ] 4. Open the PR
+- [ ] 5. Wait for CI
+- [ ] 6. Merge
+- [ ] 7. Confirm and clean up.
+- [ ] Done when: the PR is merged, CI is green on the default branch, and the fast checks pass there, or the PR is parked with a reason.
