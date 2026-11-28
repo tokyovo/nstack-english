@@ -18,7 +18,7 @@ Answers for builders (plan check):
 - T37: result screens use `router.replace` for "Về danh sách bài" (track), "Học bài tiếp theo" and the /premium link; home links from results use `router.dismissTo('/')` where available, else replace. Hardware back on a result screen goes to the screen under it (the track or home), never to the finished lesson steps. Maestro: syntax check plus a back-navigation step in lesson.yaml (not run: no KVM).
 - Proof of android-build time: log the measured time; `--all-abis` passes no -PreactNativeArchitectures.
 
-- [ ] T33 Sliding session expiry. Proof: `npm run test:server`. Access: signed-in. Needs: none
+- [x] T33 Sliding session expiry. Proof: `npm run test:server`. Access: signed-in. Needs: none
 - [ ] T34 Sign-up rate limit. Proof: `npm run test:server` (concurrent test seen failing). Access: public. Needs: none
 - [ ] T35 Native config: unused deps, permissions, secure-store plugin and backup rules, android-build x86_64. Proof: config test, `npm run drive -- android-build` time logged. Needs: none
 - [ ] T36 Original icon, adaptive icon, splash and favicon from an SVG source and a render script. Proof: asset test, screenshots of the web favicon and splash colours. Needs: none

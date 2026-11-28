@@ -691,3 +691,13 @@
 - [x] 6. Merge. squash 7aae365 (tree equal to the PR head)
 - [x] 7. Confirm and clean up. main: typecheck 0, lint 0, jest 475, test:server 117, test:drive 6; branch deleted
 - [x] Done when: PR #7 merged, fast checks pass on main.
+
+## 2026-11-28 build T33
+- Read: build/SKILL.md a069840
+- [x] 1. Branch. nstack/hardening
+- [x] 2. Starting state. fast checks pass at 32f107b
+- [x] 3. Dispatch. builder in worktree (parallel with T34-T37)
+- [x] 4. Read the reply. done f96615d; 3 sliding tests red first; mutation (renew every use) red
+- [x] 5. Prove it yourself. merged: test:server pass (below)
+- [x] 6. Record. this entry
+- [x] Done when: committed, items ticked.
