@@ -124,6 +124,25 @@ describe('returning to the parent', () => {
     expect(await syncSession()).toBeUndefined();
   });
 
+  it('stays with the parent when an account check that started during child mode answers late', async () => {
+    fakeServer();
+    await signIn('demo@hocenglish.test', 'hoc-english-demo');
+    await startChildSession('c1');
+    const realFetch = global.fetch;
+    let answerMe: () => void = () => undefined;
+    jest.spyOn(global, 'fetch').mockImplementationOnce(
+      (input, init) => new Promise((resolve) => (answerMe = () => resolve(realFetch(input, init))))
+    );
+    const checking = loadAccount();
+    await new Promise((resolve) => setTimeout(resolve, 0));
+
+    await endChildSession();
+    answerMe();
+    await checking;
+
+    expect(await activeChild()).toBeUndefined();
+  });
+
   it('forgets an active child that the account no longer has (deleted on another device)', async () => {
     const server = fakeServer();
     await signIn('demo@hocenglish.test', 'hoc-english-demo');
