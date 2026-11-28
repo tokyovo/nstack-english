@@ -1,6 +1,7 @@
 // Rules that span all units: unique ids, listed sources, and that every English
 // word an exercise or example shows was taught in its unit or an earlier one.
-import { levels, type Exercise, type Unit, type Word } from './schema';
+// Imports by path with the extension, so Node (server, manifest script) can load it too.
+import { levels, type Exercise, type Unit, type Word } from './schema.ts';
 
 /** Lowercased English words of a text; apostrophes kept ("i'm"), punctuation and digits dropped. */
 export function englishTokens(text: string): string[] {

@@ -6,7 +6,7 @@ import { BackLink } from '@/components/back-link';
 import { ListRow } from '@/components/list-row';
 import { ThemedText } from '@/components/themed-text';
 import { Fonts, MaxContentWidth, Space } from '@/constants/theme';
-import { levels, tracks, unitsOf, type Track, type Unit } from '@/content';
+import { levels, tracks, unitsOf, type Track, type UnitSummary } from '@/content';
 import { useTheme } from '@/hooks/use-theme';
 import { t } from '@/i18n';
 import { isLessonCompleted } from '@/progress';
@@ -16,7 +16,7 @@ function isTrack(value: unknown): value is Track {
   return tracks.some((track) => track === value);
 }
 
-function UnitRow({ unit, progress }: { unit: Unit; progress: ProgressState }) {
+function UnitRow({ unit, progress }: { unit: UnitSummary; progress: ProgressState }) {
   const theme = useTheme();
   const number = t('unit.number', { number: unit.number });
   const completed = progress.status === 'ready' && isLessonCompleted(progress.progress, unit.id);

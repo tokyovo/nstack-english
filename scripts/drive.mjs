@@ -241,7 +241,7 @@ async function requireInstance() {
 function buildIfNeeded() {
   const built = join(DIST, 'index.html');
   const builtAt = existsSync(built) ? statSync(built).mtimeMs : 0;
-  const sources = ['src', 'assets', 'app.json', 'package.json', 'package-lock.json'].map((p) => join(ROOT, p));
+  const sources = ['src', 'content', 'assets', 'app.json', 'package.json', 'package-lock.json'].map((p) => join(ROOT, p));
   if (builtAt > 0 && sources.every((source) => newestMtime(source) < builtAt)) return;
   process.stderr.write('Exporting the web app to dist/ ...\n');
   const result = spawnSync('npx', ['expo', 'export', '--platform', 'web', '--output-dir', 'dist'], {
