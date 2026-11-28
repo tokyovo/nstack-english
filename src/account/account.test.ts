@@ -14,7 +14,7 @@ const demo = { email: 'demo@hocenglish.test', password: 'hoc-english-demo' };
 const signedInBody = {
   token: 'tok-1',
   user: { id: 'u1', email: 'demo@hocenglish.test' },
-  profiles: [{ id: 'p1', kind: 'owner', name: '' }],
+  profiles: [{ id: 'p1', kind: 'owner', name: '', picture: null }],
 };
 
 type Reply = { status: number; body?: unknown } | 'offline';
