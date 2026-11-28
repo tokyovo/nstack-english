@@ -732,3 +732,48 @@
 - [x] 5. Prove it yourself. merged; looked at /tmp/t36-preview/icons-192.png and splash-dark.png: white "a" on the purple ô-ly grid, legible at 48 px, round/adaptive/monochrome variants correct
 - [x] 6. Record. this entry
 - [x] Done when: committed, items ticked.
+
+## 2026-11-28 build T35
+- Read: build/SKILL.md a069840
+- [x] 1. Branch. nstack/hardening
+- [x] 2. Starting state. fast checks passed at 32f107b (previous session)
+- [x] 3. Dispatch. builder in worktree agent-aae984b5 (previous session; it committed cd7fdaa, 7b91e7a, eec5774 before that session ended)
+- [x] 4. Read the reply. no reply survived the session end; read the three commits instead: native-config test, no-backup plugin, android-build x86_64 with --all-abis and --dry-run, 5 unused deps removed
+- [ ] 5. Prove it yourself.
+- [ ] 6. Record.
+- [ ] Done when: the ticket is committed on the slice's branch with items 1-6 ticked in its log entry, or is parked in `plan.md`.
+
+## 2026-11-28 research design bar: leading language-learning apps
+- Read: research/SKILL.md efb9ece
+- [ ] 1. Frame the search
+- [ ] 2. Gather
+  - [ ] 2.1. Communities.
+  - [ ] 2.2. Hacker News.
+  - [ ] 2.3. Similar products.
+  - [ ] 2.4. Open-source alternatives.
+  - [ ] 2.5. Reviews.
+  - [ ] 2.6. This project's own feedback
+  - [ ] 2.7. Walk through the leading products.
+- [ ] 3. Synthesize
+  - [ ] 3.1. Group findings into needs: one line each, in the user's words ("assign a task to sev...
+  - [ ] 3.2. For each need, count independent sources: different people, different sites. Note da...
+  - [ ] 3.3. Mark each need: missing (we don't have it), weak (we have it but people comp...
+  - [ ] 3.4. Keep a need when it has 3 or more independent sources, or one source describing a se...
+- [ ] 4. Record
+- [ ] Done when: `research.md` lists the needs with sources, at least three kinds of source were tried (or the log says why not), a new product has walkthroughs of at least three leading alternatives, and each kept need is in `backlog.md`.
+
+## 2026-11-28 plan voices and colour slices
+- Read: plan/SKILL.md e056824
+- [x] 1. Learn the ground truth. src/lesson/speech.ts (expo-speech only), listen-button/word-card/exercise-step call sites, src/content/manifest.ts bundles free units only, e2e/bundle.spec.ts guards premium ids; spike in /tmp/kspike: kokoro-js 1.2.1 renders 2.3-2.6 s clips at 8-18 s each on CPU (q8), needs --onnxruntime-node-install-cuda=skip
+- [x] 2. Interrogate the goal yourself
+  - [x] 2.1. questions: where premium audio lives, how keys avoid leaking premium text, which voices, how CI checks without the model, Python vs Node
+  - [x] 2.2. answered from code: bundle test, manifest pattern, system ffmpeg; no pip on the machine -> Node
+  - [x] 2.3. Decisions in plan.md (bundle all audio keyed by hash; kokoro-js; devDependencies only)
+- [x] 3. Write the spec. voices slice, criteria 1-5
+- [x] 4. Cut tickets. T38 (generation + checks, riskiest), T39 (playback, Needs T38)
+- [x] 5. Check the plan
+  - [x] 5.1. criteria 1-3,5 -> T38 proof; 4 -> T39 proof
+  - [x] 5.2. fresh Plan agent asked 12 questions; all answered in plan.md
+  - [x] 5.3. voices slice written; colour slice waits for the design-bar research (planned in a later plan step)
+- [x] Done when: voices criteria have proofs, questions answered, slice in plan.md.
+- Decision: generated audio is bundled for every unit (~12 MB), keyed by FNV-1a hash of the text, so premium units play offline and the bundle holds no premium text.

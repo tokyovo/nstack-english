@@ -24,7 +24,40 @@ Answers for builders (plan check):
 - [x] T36 Original icon, adaptive icon, splash and favicon from an SVG source and a render script. Proof: asset test, screenshots of the web favicon and splash colours. Needs: none
 - [x] T37 Result screens replace instead of push. Proof: Jest, Maestro flow syntax. Needs: none
 
-Later slices (from the backlog, in order): habit (Học tiếp on home and a fair daily goal/streak, score 9), polish (score-8 items: focus outlines, profiles focus, self-check wording, "12" scoring, kids type_answer), pronunciation drills (score 8).
+## Slice: voices (branch nstack/voices)
+Owner request 2026-11-28: the device text-to-speech sounds terrible. Learners hear every English word, example and exercise sentence in a natural neural voice, the same on every phone and browser, offline; the device voice is used only when a file cannot play. New and changed content cannot ship without its audio.
+
+Acceptance criteria:
+1. `npm run audio -- generate` renders every distinct English audio text in content/ (word `audio` or `en`, example `en`, every exercise text a learner hears: listen_choose audio, speak text, and any other field the player passes to speech today) with Kokoro-82M (kokoro-js, Apache-2.0, model `onnx-community/Kokoro-82M-v1.0-ONNX` at a pinned revision, cached under ~/.cache/hoc-english, never in git) to mono MP3 64 kbps at speed 0.85, two voices (US female `af_heart`, US male `am_michael`) chosen deterministically per text; it skips texts whose file is current and is idempotent (second run renders nothing).
+2. `content/audio/manifest.json` (not bundled into the app) records per key: text, voice, speed, model revision, file name; files are `content/audio/<key>.mp3`, key = 16 hex chars of FNV-1a 64 over the NFC-normalised trimmed text (`src/audio/key.ts`, used by the script, the test and the app). The content test fails on a text with no manifest entry, an entry whose voice/speed/model differ from the current settings (stale), a missing file, a file not in the manifest (orphan), or a key collision.
+3. `npm run audio -- check [--sample 0.1]` transcribes a random sample (seeded, printed) back with Whisper (transformers.js `onnx-community/whisper-base.en`, Apache-2.0/MIT) and compares normalised words with the text (case, punctuation, number words); exits 1 on a mismatch. The whole catalogue is checked once in this slice; each mismatch is fixed by re-rendering (other voice or the word inside a carrier text is not allowed: the file must say exactly the text) or, when Whisper itself is wrong on an isolated short word, listed with the reason in `content/audio/check-exceptions.json` (each listed key re-checked by ear is impossible here, so the list stays under 5% of keys and the review reads it).
+4. The app plays the file for a text through expo-audio from a generated require map (`src/audio/files.ts`, key -> asset, covering every key, so premium units also play offline; the map holds keys only, never the English text, so `e2e/bundle.spec.ts` stays green); `playEnglish(text)` falls back to `speakEnglish` when the text has no file or playback fails; "Nghe" shows when the text has a file or the device can speak English. Jest proves file, missing-file fallback and error fallback; e2e proves pressing Nghe in a lesson loads an `.mp3` with status 200 and logs no console error.
+5. `content/SOURCES.md` lists the Kokoro model and voices and the Whisper model with licences; design.md "Sources" says generated audio, device speech as fallback.
+
+Answers for builders (plan check):
+- Decision: bundle every audio file (about 590 texts, ~2.5 s each at 64 kbps, ~12 MB) instead of streaming premium audio from the server: one mechanism on all platforms, offline for premium too, keys reveal no premium text. Reversible: serve premium keys from the server later if app size matters.
+- Decision: kokoro-js through Node (no pip on this machine; same model as kokoro-onnx). Install with `--onnxruntime-node-install-cuda=skip` (the CUDA binary download 404s); record that flag where `npm ci` runs (CI and README) or set it in `.npmrc`. kokoro-js and @huggingface/transformers are devDependencies: generation and checking run on a developer machine; CI only runs the content test against committed files.
+- Rendering about 590 texts takes over an hour single-threaded (spike: 8-18 s per phrase on q8 CPU); run several worker processes (at most 4) and log the time.
+- MP3 encoding through the system ffmpeg (present at /usr/bin/ffmpeg); the script exits with a clear message when ffmpeg is missing.
+
+- Fresh reader's questions, answered:
+  1. T39 adds a small "Nghe" for the word card's example sentence too (examples are rendered and played).
+  2. Voice = lowest bit of the key: even `af_heart`, odd `am_michael`; a word and its example are chosen independently.
+  3. `npm run audio -- generate` also writes `src/audio/files.ts`; a Jest test fails when it disagrees with the manifest (like the content manifest test).
+  4. Red-first tests run on `src/content/__fixtures__` (a tiny manifest and a few tiny committed mp3s); the real catalogue is checked by the same function in the content test.
+  5. Stale = any of voice (from the rule), speed, model revision, bitrate or sample rate differs from the script's current settings, all stored per entry.
+  6. The 5% limit counts all keys; listed keys are still transcribed and reported as "excepted" but do not fail. Equal after: lower case, punctuation removed, contractions expanded on both sides, digits 0-100 = number words, "o'clock" kept as a word.
+  7. `check` uses the same limit of 4 workers; no time budget, log the time.
+  8. The no-voice text path remains for texts without a file (covered in Jest); e2e specs that assert "no Nghe without a device voice" are rewritten: Nghe now shows from the file (spec change, logged).
+  9. e2e: the mp3 response is 200, no console error, and the page's media element reports it started (`!paused` or a `playing` event); no faking.
+  10. Yes: the speak exercise's listen wording follows "has a file or the device can speak".
+  11. A second press restarts the clip; leaving the step stops it; playback stops before the recogniser starts; iOS plays in silent mode (`playsInSilentMode: true`).
+  12. expo-audio is native: T39's proof rebuilds with `drive android-build` and adds taps on `listen-word`/`listen-exercise` to `.maestro/steps/answer-step.yaml`. MP3s go in plain git (~12 MB). The CUDA skip goes in `.npmrc` (`onnxruntime-node-install-cuda=skip`).
+
+- [ ] T38 Generated audio for every text, manifest, content test, transcription check. Proof: `npm test` (content test red first on a missing file, a stale entry and an orphan), `npm run audio -- generate` twice (second renders 0), `npm run audio -- check --sample 1` exit 0. Content: yes. Needs: none
+- [ ] T39 Play generated audio with device speech as fallback. Proof: Jest (file, no file, error), `npm run e2e` (mp3 200 on Nghe), Android flow taps Nghe on the emulator without a crash. Platforms: web, Android. Needs: T38
+
+Later slices (from the backlog, in order): colour (owner's taste redesign, planned after the design-bar research), habit (Học tiếp on home and a fair daily goal/streak, score 9), polish (score-8 items: focus outlines, profiles focus, self-check wording, "12" scoring, kids type_answer), pronunciation drills (score 8).
 
 
 
