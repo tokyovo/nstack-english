@@ -184,22 +184,31 @@ async function startInstance({ build }) {
 
 /** The demo learner `drive seed` creates; a throwaway account in a temporary database. */
 const DEMO_ACCOUNT = { email: 'demo@hocenglish.test', password: 'hoc-english-demo' };
+const DEMO_CHILD = { name: 'Bé Na', picture: '🐱' };
 
 /**
- * Seeds demo data through the app's own API and returns what was seeded.
- * Seeding again is fine: an existing demo account (409) counts as seeded.
+ * Seeds demo data through the app's own API and returns what was seeded: the demo account
+ * with one child profile. Seeding again is fine: what exists already counts as seeded.
  * @param {Instance} instance @returns {Promise<string[]>}
  */
 async function seedInstance(instance) {
-  const response = await fetch(`${instance.url}/api/auth/signup`, {
-    method: 'POST',
-    headers: { 'content-type': 'application/json' },
-    body: JSON.stringify(DEMO_ACCOUNT),
-  });
-  if (response.status !== 201 && response.status !== 409) {
-    throw new UsageError(`seeding the demo account failed: ${response.status} ${await response.text()}`);
+  const signedUp = await post(instance, '/api/auth/signup', DEMO_ACCOUNT);
+  const session = signedUp.status === 409 ? await post(instance, '/api/auth/signin', DEMO_ACCOUNT) : signedUp;
+  if (!session.ok) throw new UsageError(`seeding the demo account failed: ${session.status} ${await session.text()}`);
+  const { token, profiles } = await session.json();
+  if (!profiles.some((/** @type {{ kind: string, name: string }} */ p) => p.kind === 'child' && p.name === DEMO_CHILD.name)) {
+    const child = await post(instance, '/api/profiles', DEMO_CHILD, token);
+    if (!child.ok) throw new UsageError(`seeding the demo child failed: ${child.status} ${await child.text()}`);
   }
-  return [`account ${DEMO_ACCOUNT.email}`];
+  return [`account ${DEMO_ACCOUNT.email}`, `child profile ${DEMO_CHILD.name}`];
+}
+
+/** @param {Instance} instance @param {string} path @param {unknown} body @param {string} [token] */
+function post(instance, path, body, token) {
+  /** @type {Record<string, string>} */
+  const headers = { 'content-type': 'application/json' };
+  if (token) headers.authorization = `Bearer ${token}`;
+  return fetch(`${instance.url}${path}`, { method: 'POST', headers, body: JSON.stringify(body) });
 }
 
 /** @param {Instance} instance */
