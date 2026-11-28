@@ -206,3 +206,13 @@
 - [x] 3. Act on every finding. important + pid nit: fresh builder, merged (red 5 failed -> green 14; drive pid test red -> green); lang nit: moved to learn-core where the English content screens are (builder dispatched)
 - [ ] 4. Review the fixes. fix is 101+/19- lines: new reviewer round dispatched
 - [ ] Done when: the latest round has no important findings, verify passed after the last fix, and nits are fixed or in backlog.md.
+
+## 2026-11-28 build T12
+- Read: build/SKILL.md a069840
+- [x] 1. Branch. nstack/review-speak
+- [x] 2. Starting state. fast checks pass at 7e4dd49
+- [x] 3. Dispatch. builder in worktree
+- [x] 4. Read the reply. done 825a0a0; mutations red (distractors from all tracks, home counting learned words, answers not recorded); Maestro syntax only (no KVM)
+- [x] 5. Prove it yourself. merged; UI-string test flagged t(cond ? 'a' : 'b') keys: checker taught that conditional branches of a t() key are keys (test red 2 failed -> green). jest 172 pass, drive check passed, e2e 21 passed
+- [x] 6. Record. this entry, backlog
+- [x] Done when: committed on nstack/review-speak, items ticked.

@@ -24,3 +24,5 @@
 - (unscored) Kids colour pictures use one consistent set (hearts vs circles) once older-Android emoji support allows. Evidence: native reader 2026-11-28
 - (unscored) lang="en" on the type_answer English input. Evidence: learn-core fix builder
 - (unscored) UI-string checker: options as a function, tabBarLabel, navigation.setOptions titles. Evidence: review fix builder
+- (unscored) Result screens link to "/" by push, so Android back returns to the finished lesson/review; use replace/dismiss. Evidence: T12 builder
+- (unscored) Share the answer saver and step bar between lesson-player and review-session; share e2e learner helpers. Evidence: T12 builder
