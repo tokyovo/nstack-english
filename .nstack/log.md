@@ -130,3 +130,14 @@
 - [x] 8. No new warnings or errors. lint 0 warnings
 - [x] 9. Access is enforced. check-security exit 0 at c24cb0d; no route changed since
 - [x] Done when: all ticked. Not verified: iOS (CI job on the PR), Android flows (no KVM, parked).
+
+## 2026-11-28 ship foundation
+- Read: ship/SKILL.md b51cd2a
+- [x] 1. Commit. slice commits on nstack/foundation
+- [x] 2. Sync. origin/main is the initial commit (65220f0), already in the branch
+- [x] 3. Push. nstack/foundation
+- [x] 4. Open the PR. #1 with verification table, merge danger, decisions
+- [x] 5. Wait for CI. run 46088263694 at d4a607a: ubuntu checks pass, iOS simulator build pass (18m35s)
+- [ ] 6. Merge
+- [ ] 7. Confirm and clean up.
+- [ ] Done when: the PR is merged, CI is green on the default branch, and the fast checks pass there, or the PR is parked with a reason.
