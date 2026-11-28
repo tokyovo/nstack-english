@@ -658,3 +658,36 @@
 - [x] 2. Score. 32 candidates in backlog.md, sorted by scripts/score; done items removed; 5 rejected with reasons
 - [x] 3. Decide. bar 8: slice hardening planned (scores 12, 10, 10, 10, 9, 9, 9); habit, polish and pronunciation queued as later slices
 - [x] Done when: every source checked, candidates scored or rejected, slice planned.
+
+## 2026-11-28 ship accounts-sync
+- Read: ship/SKILL.md b51cd2a
+- [x] 1. Commit. slice commits on nstack/accounts-sync
+- [x] 2. Sync. merged PR #4's head (real ancestry), then `merge -s ours origin/main`; check-sync ok; verify re-run (jest 394, e2e 33, drive check)
+- [x] 3. Push. nstack/accounts-sync
+- [x] 4. Open the PR. #5
+- [x] 5. Wait for CI. run at 3e43e0e: ubuntu success, iOS success
+- [x] 6. Merge. squash 4fe57cb (tree equal to the PR head)
+- [x] 7. Confirm and clean up. main: typecheck 0, lint 0, jest 394, test:server 64; branch deleted; CI on main success
+- [x] Done when: PR #5 merged, CI green on main.
+
+## 2026-11-28 ship family
+- Read: ship/SKILL.md b51cd2a
+- [x] 1. Commit. slice commits on nstack/family
+- [x] 2. Sync. PR #5 head merged, `-s ours` main; check-sync ok (after teaching it about work-branch merges)
+- [x] 3. Push. nstack/family
+- [x] 4. Open the PR. #6
+- [x] 5. Wait for CI. run at f1c28fa: ubuntu success, iOS success
+- [x] 6. Merge. squash beaa4ca (tree equal to the PR head)
+- [x] 7. Confirm and clean up. main: typecheck 0, jest 451, test:server 92; branch deleted
+- [x] Done when: PR #6 merged.
+
+## 2026-11-28 ship plans
+- Read: ship/SKILL.md b51cd2a
+- [x] 1. Commit. slice commits on nstack/plans
+- [x] 2. Sync. PR #6 head merged, `-s ours` main; check-sync ok (counts resolutions that differ from both parents; still reports the old -X ours revert)
+- [x] 3. Push. nstack/plans
+- [x] 4. Open the PR. #7
+- [x] 5. Wait for CI. run at 471f1af: ubuntu success, iOS success
+- [x] 6. Merge. squash 7aae365 (tree equal to the PR head)
+- [x] 7. Confirm and clean up. main: typecheck 0, lint 0, jest 475, test:server 117, test:drive 6; branch deleted
+- [x] Done when: PR #7 merged, fast checks pass on main.
