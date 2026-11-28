@@ -68,6 +68,75 @@ describe('findUiStringLiterals', () => {
     expect(check(source)).toEqual(['Trang chủ', 'Học ${…}']);
   });
 
+  it('reports title in screenOptions on a navigator', () => {
+    expect(check('const A = () => <Stack screenOptions={{ title: "Trang chủ" }} />;')).toEqual(['Trang chủ']);
+  });
+
+  it('reports title returned by an options function', () => {
+    expect(check('const A = () => <Stack.Screen options={() => ({ title: "Trang chủ" })} />;')).toEqual([
+      'Trang chủ',
+    ]);
+  });
+
+  it('reports values of quoted object keys', () => {
+    expect(check('const A = () => <Stack.Screen options={{ "title": "Trang chủ" }} />;')).toEqual(['Trang chủ']);
+  });
+
+  it('reports tabBarLabel and any other unknown option key', () => {
+    const source = 'const A = () => <Tabs.Screen options={{ tabBarLabel: "Học", tabBarBadge: `Mới` }} />;';
+    expect(check(source)).toEqual(['Học', 'Mới']);
+  });
+
+  it('reports literals wrapped in as, satisfies or parentheses', () => {
+    const source = 'const A = () => <Text>{"Xin chào" as string}{("Tạm biệt" satisfies string)}</Text>;';
+    expect(check(source)).toEqual(['Xin chào', 'Tạm biệt']);
+  });
+
+  it('reports every element of array children', () => {
+    expect(check('const A = () => <Text>{["Xin", "chào"]}</Text>;')).toEqual(['Xin', 'chào']);
+  });
+
+  it('reports literals in render callbacks and nested objects of unknown props', () => {
+    const source = `const A = () => (
+      <List
+        empty={{ message: { text: "Trống" } }}
+        renderItem={({ item }) => (item.done ? <Text>Xong</Text> : null)}
+        format={(n) => { return "Còn " + n; }}
+      />
+    );`;
+    expect(check(source)).toEqual(['Trống', 'Xong', 'Còn']);
+  });
+
+  it('reports values passed to t() as substitutions, but not the message key', () => {
+    expect(check('const A = () => <Text>{t("greet", { who: "Bạn" })}</Text>;')).toEqual(['Bạn']);
+  });
+
+  it('ignores the props and option keys on the allowlist, including their nested values', () => {
+    const source = `const A = () => (
+      <View testID="welcome-card" nativeID="card" role="header" accessibilityRole="button"
+        accessibilityLanguage="en" lang="en" style={{ fontFamily: "BeVietnamPro_400Regular" }}
+        pointerEvents="none" importantForAccessibility="no-hide-descendants" key={\`v\${left}\`}>
+        <ThemedText type="word">{t("welcome.sampleWord")}</ThemedText>
+        <Link href="/learn" />
+        <Pressable onPress={() => router.push({ pathname: "/track/[id]", params: { id } })} />
+        <TextInput keyboardType="default" autoComplete="off" autoCapitalize="none" textContentType="none"
+          inputMode="text" returnKeyType="done" enterKeyHint="done" />
+        <Image resizeMode="cover" />
+        <Icon name="home" />
+        <Stack.Screen name="index" options={{ animation: "fade", presentation: "modal", "animation": "none" }} />
+        <Stack screenOptions={{ headerTitleStyle: { fontFamily: "BeVietnamPro_700Bold" } }} />
+        <StatusBar style="auto" />
+      </View>
+    );`;
+    expect(check(source)).toEqual([]);
+  });
+
+  it('ignores strings compared against or used as an index, not rendered', () => {
+    expect(check('const A = () => <Text>{mode !== "dark" && x["label"]}{typeof n === "string" ? n : ""}</Text>;')).toEqual(
+      []
+    );
+  });
+
   it('allows children that come from t() or variables', () => {
     expect(check('const A = () => <Text>{t("app.name")}{`${count}`}{name}</Text>;')).toEqual([]);
   });
@@ -94,7 +163,20 @@ describe('findUiStringLiterals', () => {
 
   it('reports the literals planted in the fixture', () => {
     const fixture = readFileSync(join(__dirname, '__fixtures__', 'planted.tsx.txt'), 'utf8');
-    expect(check(fixture)).toEqual(['Trang chủ', 'Chào mừng bạn', 'Bắt đầu học', 'Còn ${…} bài', 'Xin chào']);
+    expect(check(fixture)).toEqual([
+      'Trang chủ',
+      'Chào mừng bạn',
+      'Bắt đầu học',
+      'Còn ${…} bài',
+      'Xin chào',
+      'Bài học',
+      'Tiếp',
+      'Hồ sơ',
+      'Học',
+      'Chào',
+      'bạn',
+      'Đóng',
+    ]);
   });
 });
 

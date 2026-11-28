@@ -1,66 +1,77 @@
 // Finds interface text written straight into JSX instead of coming from the
 // messages file through t(). Used by ui-strings.test.ts; not part of the app.
+//
+// The rule is inverted on purpose: inside a JSX element every string with a
+// letter is reported, wherever it sits (children, props, nested objects,
+// arrays, callbacks, conditionals), unless it is the value of a prop or object
+// key in NON_UI_KEYS or the message key passed to t(). An unknown prop or key
+// is reported, so a new way of showing text cannot slip through unnoticed.
 import ts from 'typescript';
 
 export type UiStringFinding = { file: string; line: number; text: string };
 
-/** Props whose value a user sees or hears. */
-const TEXT_PROPS = new Set([
-  'accessibilityLabel',
-  'accessibilityHint',
-  'placeholder',
-  'title',
-  'alt',
-  'aria-label',
-  'label',
+/** Props and object keys whose values are never shown or read out to a user. */
+const NON_UI_KEYS = new Set([
+  // identity, keys and routes
+  'key',
+  'testID',
+  'nativeID',
+  'name',
+  'href',
+  'pathname',
+  // accessibility semantics (not labels or hints)
+  'role',
+  'accessibilityRole',
+  'accessibilityLanguage',
+  'lang',
+  'importantForAccessibility',
+  // input behaviour
+  'keyboardType',
+  'autoComplete',
+  'autoCapitalize',
+  'textContentType',
+  'inputMode',
+  'returnKeyType',
+  'enterKeyHint',
+  // style, layout and component variants
+  'style',
+  'fontFamily',
+  'type',
+  'resizeMode',
+  'pointerEvents',
+  'animation',
+  'presentation',
 ]);
 
 const LETTER = /\p{L}/u;
 
-/** Keys of a screen's `options` object that show up as a header or tab title. */
-const OPTION_TEXT_KEYS = new Set(['title', 'headerTitle']);
-
 /** Shown in place of each `${...}` substitution; contains no letter, so `${n}` alone is allowed. */
 const SUBSTITUTION = '${…}';
 
-type Literal = { text: string; node: ts.Node };
+const COMPARISONS = new Set([
+  ts.SyntaxKind.EqualsEqualsEqualsToken,
+  ts.SyntaxKind.ExclamationEqualsEqualsToken,
+  ts.SyntaxKind.EqualsEqualsToken,
+  ts.SyntaxKind.ExclamationEqualsToken,
+  ts.SyntaxKind.InKeyword,
+]);
 
-/**
- * Literal text an expression can evaluate to directly: `"a"`, `` `a ${n}` ``, `c ? "a" : "b"`,
- * `c && "a"`, `"a" + name`.
- */
-function literalsIn(expression: ts.Expression): Literal[] {
-  if (ts.isStringLiteral(expression) || ts.isNoSubstitutionTemplateLiteral(expression)) {
-    return [{ text: expression.text, node: expression }];
-  }
-  if (ts.isTemplateExpression(expression)) {
-    const text = expression.head.text + expression.templateSpans.map((span) => SUBSTITUTION + span.literal.text).join('');
-    return [{ text, node: expression }];
-  }
-  if (ts.isParenthesizedExpression(expression)) return literalsIn(expression.expression);
-  if (ts.isConditionalExpression(expression)) {
-    return [...literalsIn(expression.whenTrue), ...literalsIn(expression.whenFalse)];
-  }
-  if (ts.isBinaryExpression(expression)) {
-    const operator = expression.operatorToken.kind;
-    if (operator === ts.SyntaxKind.AmpersandAmpersandToken) return literalsIn(expression.right);
-    if (
-      operator === ts.SyntaxKind.BarBarToken ||
-      operator === ts.SyntaxKind.QuestionQuestionToken ||
-      operator === ts.SyntaxKind.PlusToken
-    ) {
-      return [...literalsIn(expression.left), ...literalsIn(expression.right)];
-    }
-  }
-  return [];
+function isNonUiKey(name: ts.PropertyName | ts.JsxAttributeName): boolean {
+  return (ts.isIdentifier(name) || ts.isStringLiteral(name)) && NON_UI_KEYS.has(name.text);
 }
 
-/** Values of `title` and `headerTitle` in `options={{ ... }}`. */
-function optionTextValues(expression: ts.Expression | undefined): ts.Expression[] {
-  if (!expression || !ts.isObjectLiteralExpression(expression)) return [];
-  return expression.properties.flatMap((property) =>
-    ts.isPropertyAssignment(property) && OPTION_TEXT_KEYS.has(property.name.getText()) ? [property.initializer] : []
-  );
+function isJsx(node: ts.Node): boolean {
+  return ts.isJsxElement(node) || ts.isJsxSelfClosingElement(node) || ts.isJsxFragment(node);
+}
+
+/** The key in `t("key", ...)`, or a string compared or used as an index (`x === "web"`, `o["k"]`): never rendered. */
+function isNeverRendered(literal: ts.Node): boolean {
+  const parent = literal.parent;
+  if (ts.isCallExpression(parent)) {
+    return ts.isIdentifier(parent.expression) && parent.expression.text === 't' && parent.arguments[0] === literal;
+  }
+  if (ts.isBinaryExpression(parent)) return COMPARISONS.has(parent.operatorToken.kind);
+  return ts.isElementAccessExpression(parent) && parent.argumentExpression === literal;
 }
 
 export function findUiStringLiterals(source: string, file: string): UiStringFinding[] {
@@ -74,29 +85,38 @@ export function findUiStringLiterals(source: string, file: string): UiStringFind
     findings.push({ file, line, text });
   }
 
-  function reportLiterals(expression: ts.Expression | undefined) {
-    if (!expression) return;
-    for (const literal of literalsIn(expression)) report(literal.text, literal.node.getStart());
-  }
-
-  function visit(node: ts.Node) {
+  function reportLiteral(node: ts.Node): boolean {
     if (ts.isJsxText(node)) {
       report(node.text, node.pos + node.text.search(/\S|$/));
-    } else if (ts.isJsxExpression(node) && (ts.isJsxElement(node.parent) || ts.isJsxFragment(node.parent))) {
-      reportLiterals(node.expression);
-    } else if (ts.isJsxAttribute(node) && node.initializer) {
-      const prop = node.name.getText(sourceFile);
-      const value = ts.isJsxExpression(node.initializer) ? node.initializer.expression : undefined;
-      if (TEXT_PROPS.has(prop)) {
-        if (ts.isStringLiteral(node.initializer)) report(node.initializer.text, node.initializer.getStart());
-        else reportLiterals(value);
-      } else if (prop === 'options') {
-        optionTextValues(value).forEach(reportLiterals);
-      }
+      return true;
     }
-    ts.forEachChild(node, visit);
+    if (ts.isStringLiteral(node) || ts.isNoSubstitutionTemplateLiteral(node)) {
+      if (!isNeverRendered(node)) report(node.text, node.getStart());
+      return true;
+    }
+    if (ts.isTemplateExpression(node)) {
+      report(node.head.text + node.templateSpans.map((span) => SUBSTITUTION + span.literal.text).join(''), node.getStart());
+    }
+    return false;
   }
 
-  visit(sourceFile);
+  function visit(node: ts.Node, inJsx: boolean) {
+    if (ts.isTypeNode(node)) return;
+    if (ts.isJsxAttribute(node) && isNonUiKey(node.name)) return;
+    if (ts.isPropertyAssignment(node)) {
+      if (!isNonUiKey(node.name)) visit(node.initializer, inJsx);
+      return;
+    }
+    if (inJsx && reportLiteral(node)) return;
+    const childInJsx = inJsx || isJsx(node);
+    // A template's static parts were reported whole; only its substitutions are visited.
+    if (ts.isTemplateExpression(node)) {
+      node.templateSpans.forEach((span) => visit(span.expression, childInJsx));
+      return;
+    }
+    ts.forEachChild(node, (child) => visit(child, childInJsx));
+  }
+
+  visit(sourceFile, false);
   return findings;
 }
