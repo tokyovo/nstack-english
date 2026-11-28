@@ -170,3 +170,13 @@
 - [x] 8. No new warnings or errors. first recorded counts
 - [x] 9. Access is enforced. check-security exit 0 (no non-public features yet; headers ok, no secrets in bundle, 0 high/critical advisories)
 - [x] Done when: all ticked. Not verified: iOS build (CI macOS job, runs on the PR); Android flows (no KVM, parked).
+
+## 2026-11-28 build T11
+- Read: build/SKILL.md a069840
+- [x] 1. Branch. nstack/review-speak (from nstack/learn-core, synced to main once foundation and learn-core ship)
+- [x] 2. Starting state. fast checks pass on learn-core (jest 130)
+- [x] 3. Dispatch. builder in worktree
+- [x] 4. Read the reply. done, e7489a5; stub red 9/11, mutation (early answers) red
+- [x] 5. Prove it yourself. merged: jest src/review 11 pass
+- [x] 6. Record. this entry
+- [x] Done when: committed on nstack/review-speak, items ticked.
