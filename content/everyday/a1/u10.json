@@ -1,0 +1,185 @@
+{
+  "id": "everyday-a1-u10",
+  "track": "everyday",
+  "level": "a1",
+  "number": 10,
+  "title": "Nhà cửa",
+  "goals": [
+    "Có thể gọi tên các phòng và một số đồ vật trong nhà",
+    "Có thể nói trong nhà có gì: “There are three rooms.”",
+    "Có thể nói đồ vật ở đâu: trong, trên, bên cạnh"
+  ],
+  "note_vi": "“There is” và “There are” nghĩa là “có” (ở đâu đó có cái gì). Một thứ thì dùng “There is”: “There is a bed in the room.” Từ hai thứ trở lên thì dùng “There are”, và danh từ thường thêm -s: “There are three rooms.” (room → rooms). Nói vị trí: “in” là ở trong (in the kitchen), “on” là ở trên (on the table), “next to” là bên cạnh (next to my room). Lưu ý: “on” cũng dùng trước thứ trong tuần (on Monday), nhưng khi nói về đồ vật thì nghĩa là “ở trên”.",
+  "source": "original",
+  "names": ["Lan", "Nam"],
+  "words": [
+    {
+      "id": "everyday-a1-u10-house",
+      "en": "house",
+      "vi": "ngôi nhà, căn nhà",
+      "example": { "en": "This is my house.", "vi": "Đây là nhà của tôi." }
+    },
+    {
+      "id": "everyday-a1-u10-room",
+      "en": "room",
+      "vi": "căn phòng",
+      "example": { "en": "This is my room.", "vi": "Đây là phòng của tôi." }
+    },
+    {
+      "id": "everyday-a1-u10-rooms",
+      "en": "rooms",
+      "vi": "các căn phòng (số nhiều)",
+      "example": { "en": "There are four rooms in my house.", "vi": "Nhà tôi có bốn phòng." }
+    },
+    {
+      "id": "everyday-a1-u10-there-is",
+      "en": "there is",
+      "vi": "có (một thứ)",
+      "example": { "en": "There is a table in the kitchen.", "vi": "Trong bếp có một cái bàn." }
+    },
+    {
+      "id": "everyday-a1-u10-there-are",
+      "en": "there are",
+      "vi": "có (nhiều thứ)",
+      "example": { "en": "There are three rooms.", "vi": "Có ba phòng." }
+    },
+    {
+      "id": "everyday-a1-u10-kitchen",
+      "en": "kitchen",
+      "vi": "nhà bếp",
+      "example": { "en": "Lan is in the kitchen.", "vi": "Lan đang ở trong bếp." }
+    },
+    {
+      "id": "everyday-a1-u10-bedroom",
+      "en": "bedroom",
+      "vi": "phòng ngủ",
+      "example": { "en": "There is a bed in the bedroom.", "vi": "Trong phòng ngủ có một cái giường." }
+    },
+    {
+      "id": "everyday-a1-u10-bed",
+      "en": "bed",
+      "vi": "cái giường",
+      "example": { "en": "My bed is white.", "vi": "Giường của tôi màu trắng." }
+    },
+    {
+      "id": "everyday-a1-u10-table",
+      "en": "table",
+      "vi": "cái bàn",
+      "example": { "en": "The book is on the table.", "vi": "Quyển sách ở trên bàn." }
+    },
+    {
+      "id": "everyday-a1-u10-next-to",
+      "en": "next to",
+      "vi": "bên cạnh",
+      "example": { "en": "The kitchen is next to my room.", "vi": "Nhà bếp ở bên cạnh phòng tôi." }
+    }
+  ],
+  "exercises": [
+    {
+      "id": "everyday-a1-u10-e01",
+      "type": "choose_meaning",
+      "prompt": "everyday-a1-u10-kitchen",
+      "options": ["phòng ngủ", "nhà bếp", "ngôi nhà, căn nhà"],
+      "answer": "nhà bếp"
+    },
+    {
+      "id": "everyday-a1-u10-e02",
+      "type": "choose_english",
+      "prompt": "Trong phòng ngủ có một cái giường.",
+      "options": ["There are a bed in the bedroom.", "There is a table in the bedroom.", "There is a bed in the bedroom."],
+      "answer": "There is a bed in the bedroom.",
+      "hint_vi": "Một thứ thì dùng “there is”, nhiều thứ thì dùng “there are”."
+    },
+    {
+      "id": "everyday-a1-u10-e03",
+      "type": "listen_choose",
+      "audio": "There are three rooms.",
+      "options": ["There are two rooms.", "There are three rooms.", "There is a room."],
+      "answer": "There are three rooms."
+    },
+    {
+      "id": "everyday-a1-u10-e04",
+      "type": "build_sentence",
+      "prompt": "Nhà tôi có bốn phòng.",
+      "tiles": ["four", "There", "in", "rooms", "are", "my", "house", "is"],
+      "answer": ["There", "are", "four", "rooms", "in", "my", "house"],
+      "accepted": [["in", "my", "house", "There", "are", "four", "rooms"]]
+    },
+    {
+      "id": "everyday-a1-u10-e05",
+      "type": "choose_meaning",
+      "prompt": "everyday-a1-u10-next-to",
+      "options": ["bên cạnh", "căn phòng", "cái bàn"],
+      "answer": "bên cạnh"
+    },
+    {
+      "id": "everyday-a1-u10-e06",
+      "type": "type_answer",
+      "prompt": "Quyển sách ở trên bàn.",
+      "answer": "The book is on the table.",
+      "accepted": ["The book's on the table."]
+    },
+    {
+      "id": "everyday-a1-u10-e07",
+      "type": "listen_choose",
+      "audio": "The bed is next to the table.",
+      "options": ["The bed is on the table.", "The bed is next to the table.", "The bag is next to the table."],
+      "answer": "The bed is next to the table."
+    },
+    {
+      "id": "everyday-a1-u10-e08",
+      "type": "choose_english",
+      "prompt": "phòng ngủ",
+      "options": ["kitchen", "bedroom", "house"],
+      "answer": "bedroom"
+    },
+    {
+      "id": "everyday-a1-u10-e09",
+      "type": "build_sentence",
+      "prompt": "Lan đang ở trong bếp.",
+      "tiles": ["is", "Lan", "kitchen", "the", "in", "on"],
+      "answer": ["Lan", "is", "in", "the", "kitchen"],
+      "fixedOrder": "\"in the kitchen\" completes \"is\" (where Lan is); \"In the kitchen Lan is\" is not English"
+    },
+    {
+      "id": "everyday-a1-u10-e10",
+      "type": "choose_english",
+      "prompt": "Trong bếp có một cái bàn.",
+      "options": ["There is a table in the kitchen.", "There are a table in the kitchen.", "There is a bed in the kitchen."],
+      "answer": "There is a table in the kitchen."
+    },
+    {
+      "id": "everyday-a1-u10-e11",
+      "type": "choose_meaning",
+      "prompt": "everyday-a1-u10-house",
+      "options": ["căn phòng", "cái giường", "ngôi nhà, căn nhà"],
+      "answer": "ngôi nhà, căn nhà"
+    },
+    {
+      "id": "everyday-a1-u10-e12",
+      "type": "type_answer",
+      "prompt": "Trong phòng có một cái giường.",
+      "answer": "There is a bed in the room.",
+      "accepted": ["There's a bed in the room."]
+    },
+    {
+      "id": "everyday-a1-u10-e13",
+      "type": "speak",
+      "text": "There are three rooms in my house.",
+      "vi": "Nhà tôi có ba phòng."
+    },
+    {
+      "id": "everyday-a1-u10-e14",
+      "type": "choose_english",
+      "prompt": "cái bàn",
+      "options": ["bed", "table", "house"],
+      "answer": "table"
+    },
+    {
+      "id": "everyday-a1-u10-e15",
+      "type": "speak",
+      "text": "The kitchen is next to my room.",
+      "vi": "Nhà bếp ở bên cạnh phòng tôi."
+    }
+  ]
+}

@@ -5,14 +5,35 @@ import everydayA0U2 from '../../content/everyday/a0/u2.json';
 import everydayA0U3 from '../../content/everyday/a0/u3.json';
 import everydayA0U4 from '../../content/everyday/a0/u4.json';
 import everydayA0U5 from '../../content/everyday/a0/u5.json';
+import everydayA1U6 from '../../content/everyday/a1/u6.json';
+import everydayA1U7 from '../../content/everyday/a1/u7.json';
+import everydayA1U8 from '../../content/everyday/a1/u8.json';
+import everydayA1U9 from '../../content/everyday/a1/u9.json';
+import everydayA1U10 from '../../content/everyday/a1/u10.json';
+import everydayA2U11 from '../../content/everyday/a2/u11.json';
+import everydayA2U12 from '../../content/everyday/a2/u12.json';
+import everydayA2U13 from '../../content/everyday/a2/u13.json';
+import everydayA2U14 from '../../content/everyday/a2/u14.json';
+import everydayA2U15 from '../../content/everyday/a2/u15.json';
 import workA0U1 from '../../content/work/a0/u1.json';
 import workA0U2 from '../../content/work/a0/u2.json';
 import workA0U3 from '../../content/work/a0/u3.json';
+import workA1U4 from '../../content/work/a1/u4.json';
+import workA1U5 from '../../content/work/a1/u5.json';
+import workA1U6 from '../../content/work/a1/u6.json';
+import workA2U7 from '../../content/work/a2/u7.json';
+import workA2U8 from '../../content/work/a2/u8.json';
+import workA2U9 from '../../content/work/a2/u9.json';
 import kidsA0U1 from '../../content/kids/a0/u1.json';
 import kidsA0U2 from '../../content/kids/a0/u2.json';
 import kidsA0U3 from '../../content/kids/a0/u3.json';
 import kidsA0U4 from '../../content/kids/a0/u4.json';
 import kidsA0U5 from '../../content/kids/a0/u5.json';
+import kidsA1U6 from '../../content/kids/a1/u6.json';
+import kidsA1U7 from '../../content/kids/a1/u7.json';
+import kidsA1U8 from '../../content/kids/a1/u8.json';
+import kidsA2U9 from '../../content/kids/a2/u9.json';
+import kidsA2U10 from '../../content/kids/a2/u10.json';
 
 import { inTeachingOrder } from './check';
 import { parseUnit, tracks, type Track, type Unit, type Word } from './schema';
@@ -26,14 +47,35 @@ const files: unknown[] = [
   everydayA0U3,
   everydayA0U4,
   everydayA0U5,
+  everydayA1U6,
+  everydayA1U7,
+  everydayA1U8,
+  everydayA1U9,
+  everydayA1U10,
+  everydayA2U11,
+  everydayA2U12,
+  everydayA2U13,
+  everydayA2U14,
+  everydayA2U15,
   workA0U1,
   workA0U2,
   workA0U3,
+  workA1U4,
+  workA1U5,
+  workA1U6,
+  workA2U7,
+  workA2U8,
+  workA2U9,
   kidsA0U1,
   kidsA0U2,
   kidsA0U3,
   kidsA0U4,
   kidsA0U5,
+  kidsA1U6,
+  kidsA1U7,
+  kidsA1U8,
+  kidsA2U9,
+  kidsA2U10,
 ];
 
 function load(data: unknown): Unit {

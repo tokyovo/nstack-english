@@ -413,3 +413,96 @@
 - [x] 3. Act on every finding. builder fixed all three (1250794): rate-limit concurrency test red (60 x 401) -> green; answer cut red (28 kept) -> green with a 2000-history property test against the schedule; unknown ids, failed-sync notice and expired-session leak each red -> green. Checks after: typecheck 0, lint 0, jest 322, test:server 64, test:drive 6, drive check passed, e2e 33, check-sync ok
 - [x] 4. Review the fixes. round 2 at c1b383b: both reviewers (general; security and failure modes) pass, no important findings; 4 nits to backlog
 - [x] Done when: round 2 has no important findings, verify passed at 1250794 (code) after the fixes, nits in backlog.md.
+## 2026-11-28 build T27
+- Read: build/SKILL.md a069840
+- [x] 1. Branch. nstack/content-a1
+- [x] 2. Starting state. fast checks pass at cf389ee
+- [x] 3. Dispatch. builder in worktree
+- [x] 4. Read the reply. done ee04ce5; native reader "pass with fixes": 1 must-fix (missed valid word order) + 10 optional, all fixed
+- [x] 5. Prove it yourself. merged: jest and typecheck below
+- [x] 6. Record. this entry, backlog
+- [x] Done when: committed, items ticked.
+
+## 2026-11-28 build T28
+- Read: build/SKILL.md a069840
+- [x] 1. Branch. nstack/content-a1
+- [x] 2. Starting state. fast checks pass at cf389ee
+- [x] 3. Dispatch. builder in worktree
+- [x] 4. Read the reply. done 19836a8; native reader "pass after fixes": 16 points, 14 fixed, 2 kept as the reader allowed (wording, friend emoji)
+- [x] 5. Prove it yourself. merged: jest and typecheck below
+- [x] 6. Record. this entry
+- [x] Done when: committed, items ticked.
+
+## 2026-11-28 build T26
+- Read: build/SKILL.md a069840
+- [x] 1. Branch. nstack/content-a1
+- [x] 2. Starting state. fast checks pass at cf389ee
+- [x] 3. Dispatch. builder in worktree
+- [x] 4. Read the reply. done 50fa35b; native reader: 1 fix (missed word order), 1 nit, 2 optional, all applied
+- [x] 5. Prove it yourself. merged: jest, typecheck, lint, e2e below
+- [x] 6. Record. this entry
+- [x] Done when: committed, items ticked.
+
+## 2026-11-28 build T31
+- Read: build/SKILL.md a069840
+- [x] 1. Branch. nstack/content-a2
+- [x] 2. Starting state. fast checks pass at 848f1f3
+- [x] 3. Dispatch. builder in worktree
+- [x] 4. Read the reply. done eecc2b9; native reader "pass with fixes", 7 problems fixed
+- [x] 5. Prove it yourself. merged: content tests below
+- [x] 6. Record. this entry
+- [x] Done when: committed, items ticked.
+- Lesson: Jest component tests timed out under parallel-builder load twice (T3, T31 builders). Check: raise the Jest testTimeout for component suites (ticket below), so load does not fail a correct test.
+
+## 2026-11-28 build T30
+- Read: build/SKILL.md a069840
+- [x] 1. Branch. nstack/content-a2
+- [x] 2. Starting state. fast checks pass at 848f1f3
+- [x] 3. Dispatch. builder in worktree
+- [x] 4. Read the reply. done eb04892; native reader "correct and ready", all raised items fixed (extra valid orders, accepted answers, wording)
+- [x] 5. Prove it yourself. merged: content tests below
+- [x] 6. Record. this entry
+- [x] Done when: committed, items ticked.
+
+## 2026-11-28 build T29
+- Read: build/SKILL.md a069840
+- [x] 1. Branch. nstack/content-a2
+- [x] 2. Starting state. fast checks pass at 848f1f3
+- [x] 3. Dispatch. builder in worktree
+- [x] 4. Read the reply. done fe890d5; native reader "pass with fixes": 8 must-fix (2 grammar notes, 1 missed order, 1 tile ambiguity, 4 typed variants) applied; 11 of 17 optional applied, 3 skipped (untaught words), 3 no change
+- [x] 5. Prove it yourself. merged: jest and typecheck above
+- [x] 6. Record. this entry; T32 planned for checks builders asked for
+- [x] Done when: committed, items ticked.
+
+## 2026-11-28 build T32
+- Read: build/SKILL.md a069840
+- [x] 1. Branch. nstack/content-a2
+- [x] 2. Starting state. fast checks pass at 42a6e09
+- [x] 3. Dispatch. builder in worktree
+- [x] 4. Read the reply. done bd89dd2; speak rule red 2, comma variants red 3, testTimeout 20000
+- [x] 5. Prove it yourself. merged: jest below
+- [x] 6. Record. this entry
+- [x] Done when: committed, items ticked.
+
+## 2026-11-28 verify content-a2 (with content-a1)
+- Read: verify/SKILL.md adc6a8a
+- [x] 1. Clean tree. code at the word-order merge; head 1fa46b3 after a .nstack-only sync with main
+- [x] 2. Project checks. typecheck 0, lint 0, jest 342, test:server 21, test:drive 6, drive check passed, e2e 24 passed
+- [x] 3. Every acceptance criterion in scope has a passing check. content test over all 34 units (schema, word order, 2 speak, note_vi, movable-phrase orders); reader verdicts per batch (T26-T31) and a full build_sentence sweep (81 items); check-features 0
+- [x] 4. Every new check bites. speak rule red 2, comma rule red 3 (T32); movable-phrase check red (flagged 9 items on existing content); broken unit file red (content-a1 verify)
+- [x] 5. The real thing runs. drive check lists the new units on the track screens
+- [x] 6. Every changed screen looks right. n/a: no screen code changed
+- [x] 7. Nothing got weaker. Jest testTimeout raised to 20 s (T32) because component tests timed out under load twice; no assertion loosened
+- [x] 8. No new warnings or errors. lint 0
+- [x] 9. Access is enforced. n/a: no routes, tables or auth
+- [x] Done when: all ticked. Not verified: none beyond the parked Android flows.
+- Decision: content-a1 and content-a2 ship as one PR (content-a2 is stacked on content-a1; one review and one CI cycle). content-a1's review finding (missing word orders) is fixed here by the movable-phrase check.
+
+## 2026-11-28 review content-a2 (with content-a1)
+- Read: review/SKILL.md c151f88
+- [x] 1. Dispatch. content-a1 reviewer at 42987b9: fix-needed (missing valid word orders in 3 items) -> fixed for all 34 units by the movable-phrase check (07c091f). content A1-A2 reviewer at c08693f: fix-needed, 1 important: the -X ours sync with main restored the branch's old speak-answer.tsx and test, undoing main's double-tap guard
+- [x] 2. Second reviewer. n/a: content only
+- [x] 3. Act on every finding. both files restored from origin/main (identical to main again); jest 343, e2e 24
+- [x] 4. Review the fixes. small-fix exception: the fix is a restore to main's reviewed code with its test passing; no new round
+- [x] Done when: no important findings open; verify passed after the fix.
+- Lesson: syncing a stacked branch with a squash-merged main using `merge -X ours` silently reverts main's fixes the branch forked before. Check added: scripts/check-sync <shipped PR head>... lists files that differ from main though no own commit changed them; run it after every sync.

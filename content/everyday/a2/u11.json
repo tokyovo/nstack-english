@@ -1,0 +1,186 @@
+{
+  "id": "everyday-a2-u11",
+  "track": "everyday",
+  "level": "a2",
+  "number": 11,
+  "title": "Ở nhà hàng",
+  "goals": [
+    "Có thể gọi món một cách lịch sự: “I'd like the fish, please.”",
+    "Có thể hiểu câu hỏi của người phục vụ: “What would you like?”",
+    "Có thể xin thực đơn, xin tính tiền và khen món ăn ngon"
+  ],
+  "note_vi": "Tiếng Việt hay nói “Cho tôi một ly cà phê” hoặc “Tôi muốn…”. Trong tiếng Anh, “I want …” (tôi muốn) đúng ngữ pháp nhưng nghe khá cộc khi nói với người phục vụ. Ở nhà hàng, hãy dùng “I'd like …” (I'd = I would, nghĩa là “tôi muốn”, nói lịch sự) hoặc hỏi “Can I have …, please?” (Cho tôi … được không?). Người phục vụ sẽ hỏi “What would you like?” (Anh/chị dùng gì ạ?). Sau “I'd like” là món bạn chọn: “I'd like a coffee, please.” Khi muốn trả tiền, nói “Can I have the bill, please?”.",
+  "source": "original",
+  "names": ["Lan", "Nam"],
+  "words": [
+    {
+      "id": "everyday-a2-u11-restaurant",
+      "en": "restaurant",
+      "vi": "nhà hàng",
+      "example": { "en": "This restaurant is nice.", "vi": "Nhà hàng này đẹp." }
+    },
+    {
+      "id": "everyday-a2-u11-menu",
+      "en": "menu",
+      "vi": "thực đơn",
+      "example": { "en": "Can I have the menu, please?", "vi": "Cho tôi xem thực đơn được không?" }
+    },
+    {
+      "id": "everyday-a2-u11-what-would-you-like",
+      "en": "What would you like?",
+      "vi": "Anh/chị dùng gì ạ?",
+      "example": { "en": "Hello! What would you like?", "vi": "Xin chào! Anh/chị dùng gì ạ?" }
+    },
+    {
+      "id": "everyday-a2-u11-id-like",
+      "en": "I'd like ...",
+      "vi": "Tôi muốn ... (nói lịch sự)",
+      "example": { "en": "I'd like a coffee, please.", "vi": "Cho tôi một ly cà phê." }
+    },
+    {
+      "id": "everyday-a2-u11-want",
+      "en": "want",
+      "vi": "muốn",
+      "example": { "en": "I want water.", "vi": "Tôi muốn uống nước." }
+    },
+    {
+      "id": "everyday-a2-u11-can-i-have",
+      "en": "Can I have ...?",
+      "vi": "Cho tôi ... được không?",
+      "example": { "en": "Can I have the bill, please?", "vi": "Cho tôi tính tiền được không?" }
+    },
+    {
+      "id": "everyday-a2-u11-bill",
+      "en": "bill",
+      "vi": "hóa đơn (tính tiền)",
+      "example": { "en": "The bill, please.", "vi": "Cho tôi tính tiền." }
+    },
+    {
+      "id": "everyday-a2-u11-fish",
+      "en": "fish",
+      "vi": "cá",
+      "example": { "en": "I'd like the fish, please.", "vi": "Cho tôi món cá." }
+    },
+    {
+      "id": "everyday-a2-u11-noodles",
+      "en": "noodles",
+      "vi": "mì, bún, phở (món sợi)",
+      "example": { "en": "I like noodles.", "vi": "Tôi thích ăn mì." }
+    },
+    {
+      "id": "everyday-a2-u11-delicious",
+      "en": "delicious",
+      "vi": "ngon",
+      "example": { "en": "The fish is delicious.", "vi": "Món cá ngon quá." }
+    }
+  ],
+  "exercises": [
+    {
+      "id": "everyday-a2-u11-e01",
+      "type": "choose_meaning",
+      "prompt": "everyday-a2-u11-menu",
+      "options": ["hóa đơn (tính tiền)", "thực đơn", "nhà hàng"],
+      "answer": "thực đơn"
+    },
+    {
+      "id": "everyday-a2-u11-e02",
+      "type": "choose_english",
+      "prompt": "Cho tôi món cá.",
+      "options": ["I'd like the fish, please.", "I like fish.", "The fish is delicious."],
+      "answer": "I'd like the fish, please.",
+      "hint_vi": "Gọi món lịch sự thì dùng “I'd like …”."
+    },
+    {
+      "id": "everyday-a2-u11-e03",
+      "type": "listen_choose",
+      "audio": "What would you like?",
+      "options": ["What would you like?", "What time is it?", "Where do you live?"],
+      "answer": "What would you like?"
+    },
+    {
+      "id": "everyday-a2-u11-e04",
+      "type": "build_sentence",
+      "prompt": "Cho tôi tính tiền được không?",
+      "tiles": ["have", "Can", "bill", "I", "the", "menu"],
+      "answer": ["Can", "I", "have", "the", "bill"]
+    },
+    {
+      "id": "everyday-a2-u11-e05",
+      "type": "choose_meaning",
+      "prompt": "everyday-a2-u11-delicious",
+      "options": ["rẻ", "ngon", "đắt, mắc"],
+      "answer": "ngon"
+    },
+    {
+      "id": "everyday-a2-u11-e06",
+      "type": "type_answer",
+      "prompt": "Cho tôi một ly cà phê. (nói lịch sự, bắt đầu bằng “I'd like”)",
+      "answer": "I'd like a coffee, please.",
+      "accepted": ["I'd like a coffee please.", "I would like a coffee, please.", "I would like a coffee please.", "I'd like a coffee.", "I would like a coffee."]
+    },
+    {
+      "id": "everyday-a2-u11-e07",
+      "type": "listen_choose",
+      "audio": "The noodles are delicious.",
+      "options": ["The noodles are delicious.", "The noodles are cheap.", "The fish is delicious."],
+      "answer": "The noodles are delicious."
+    },
+    {
+      "id": "everyday-a2-u11-e08",
+      "type": "choose_english",
+      "prompt": "nhà hàng",
+      "options": ["kitchen", "restaurant", "station"],
+      "answer": "restaurant"
+    },
+    {
+      "id": "everyday-a2-u11-e09",
+      "type": "build_sentence",
+      "prompt": "Cho tôi món mì và trà.",
+      "tiles": ["like", "noodles", "I'd", "and", "tea", "is"],
+      "answer": ["I'd", "like", "noodles", "and", "tea"],
+      "accepted": [["I'd", "like", "tea", "and", "noodles"]],
+      "hint_vi": "Gọi món lịch sự: “I'd like …”."
+    },
+    {
+      "id": "everyday-a2-u11-e10",
+      "type": "choose_english",
+      "prompt": "Anh/chị dùng gì ạ?",
+      "options": ["What would you like?", "How are you?", "How much is this?"],
+      "answer": "What would you like?"
+    },
+    {
+      "id": "everyday-a2-u11-e11",
+      "type": "choose_meaning",
+      "prompt": "everyday-a2-u11-bill",
+      "options": ["thực đơn", "hóa đơn (tính tiền)", "cá"],
+      "answer": "hóa đơn (tính tiền)"
+    },
+    {
+      "id": "everyday-a2-u11-e12",
+      "type": "type_answer",
+      "prompt": "Món cá ngon quá.",
+      "answer": "The fish is delicious.",
+      "accepted": ["The fish's delicious.", "This fish is delicious."]
+    },
+    {
+      "id": "everyday-a2-u11-e13",
+      "type": "speak",
+      "text": "Can I have the menu, please?",
+      "vi": "Cho tôi xem thực đơn được không?"
+    },
+    {
+      "id": "everyday-a2-u11-e14",
+      "type": "choose_english",
+      "prompt": "Cho tôi xin nước. (nói lịch sự)",
+      "options": ["I want water.", "Can I have water, please?", "Water is delicious."],
+      "answer": "Can I have water, please?",
+      "hint_vi": "“I want” nghe cộc với người phục vụ; “Can I have …, please?” lịch sự hơn."
+    },
+    {
+      "id": "everyday-a2-u11-e15",
+      "type": "speak",
+      "text": "I'd like the fish, please.",
+      "vi": "Cho tôi món cá."
+    }
+  ]
+}

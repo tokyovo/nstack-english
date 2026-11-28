@@ -1,0 +1,195 @@
+{
+  "id": "everyday-a2-u14",
+  "track": "everyday",
+  "level": "a2",
+  "number": 14,
+  "title": "Kể chuyện hôm qua",
+  "goals": [
+    "Có thể kể ngắn gọn hôm qua mình đã làm gì: “Yesterday I worked and cooked.”",
+    "Có thể dùng quá khứ của một số động từ: went, had, was, were",
+    "Có thể hỏi và trả lời: “Did you go to work yesterday?”"
+  ],
+  "note_vi": "Tiếng Việt không đổi động từ khi nói về quá khứ: chỉ thêm “hôm qua” hoặc “đã” (Tôi đi làm → Hôm qua tôi đi làm). Tiếng Anh thì phải đổi động từ, kể cả khi đã có “yesterday”. Phần lớn động từ thêm -ed: work → worked, cook → cooked. Một số động từ đổi hẳn, phải học thuộc: go → went, have/has → had. “be” đổi thành “was” (sau I, he, she, it) và “were” (sau you, they). Khi hỏi, dùng “Did” ở đầu câu và động từ trở về dạng gốc: “Did you go to work?” (không nói “Did you went?”). Lưu ý: “go home”, “went home” không có “to” (không nói “went to home”).",
+  "source": "original",
+  "names": ["Lan", "Nam"],
+  "words": [
+    {
+      "id": "everyday-a2-u14-yesterday",
+      "en": "yesterday",
+      "vi": "hôm qua",
+      "example": { "en": "I worked yesterday.", "vi": "Hôm qua tôi đi làm." }
+    },
+    {
+      "id": "everyday-a2-u14-last-night",
+      "en": "last night",
+      "vi": "tối qua",
+      "example": { "en": "I cooked fish last night.", "vi": "Tối qua tôi nấu cá." }
+    },
+    {
+      "id": "everyday-a2-u14-was",
+      "en": "was",
+      "vi": "đã là, đã ở (quá khứ của am, is)",
+      "example": { "en": "I was tired yesterday.", "vi": "Hôm qua tôi mệt." }
+    },
+    {
+      "id": "everyday-a2-u14-were",
+      "en": "were",
+      "vi": "đã là, đã ở (quá khứ của are)",
+      "example": { "en": "You were at the restaurant yesterday.", "vi": "Hôm qua bạn ở nhà hàng." }
+    },
+    {
+      "id": "everyday-a2-u14-went",
+      "en": "went",
+      "vi": "đã đi (quá khứ của go)",
+      "example": { "en": "Lan went to the station.", "vi": "Lan đã đi đến nhà ga." }
+    },
+    {
+      "id": "everyday-a2-u14-had",
+      "en": "had",
+      "vi": "đã có, đã ăn, đã bị (quá khứ của have, has)",
+      "example": { "en": "I had noodles yesterday.", "vi": "Hôm qua tôi ăn mì." }
+    },
+    {
+      "id": "everyday-a2-u14-worked",
+      "en": "worked",
+      "vi": "đã làm việc (quá khứ của work)",
+      "example": { "en": "Nam worked on Saturday.", "vi": "Nam đã làm việc vào thứ Bảy." }
+    },
+    {
+      "id": "everyday-a2-u14-cooked",
+      "en": "cooked",
+      "vi": "đã nấu (quá khứ của cook)",
+      "example": { "en": "My mother cooked rice.", "vi": "Mẹ tôi đã nấu cơm." }
+    },
+    {
+      "id": "everyday-a2-u14-home",
+      "en": "home",
+      "vi": "nhà, về nhà",
+      "example": { "en": "I went home by bus.", "vi": "Tôi về nhà bằng xe buýt." }
+    },
+    {
+      "id": "everyday-a2-u14-did",
+      "en": "did",
+      "vi": "(dùng để hỏi về quá khứ)",
+      "example": { "en": "Did you go to work yesterday?", "vi": "Hôm qua bạn có đi làm không?" }
+    }
+  ],
+  "exercises": [
+    {
+      "id": "everyday-a2-u14-e01",
+      "type": "choose_meaning",
+      "prompt": "everyday-a2-u14-yesterday",
+      "options": ["hôm nay", "hôm qua", "tối qua"],
+      "answer": "hôm qua"
+    },
+    {
+      "id": "everyday-a2-u14-e02",
+      "type": "choose_english",
+      "prompt": "Hôm qua tôi đi làm.",
+      "options": ["I work yesterday.", "I worked yesterday.", "I works yesterday."],
+      "answer": "I worked yesterday.",
+      "hint_vi": "Có “yesterday” thì động từ vẫn phải đổi: work → worked."
+    },
+    {
+      "id": "everyday-a2-u14-e03",
+      "type": "listen_choose",
+      "audio": "I went home by taxi.",
+      "options": ["I go home by taxi.", "I went home by taxi.", "I went home by bus."],
+      "answer": "I went home by taxi."
+    },
+    {
+      "id": "everyday-a2-u14-e04",
+      "type": "build_sentence",
+      "prompt": "Tối qua tôi nấu cá.",
+      "tiles": ["cooked", "I", "fish", "last", "night", "went"],
+      "answer": ["I", "cooked", "fish", "last", "night"],
+      "accepted": [["last", "night", "I", "cooked", "fish"]]
+    },
+    {
+      "id": "everyday-a2-u14-e05",
+      "type": "choose_meaning",
+      "prompt": "everyday-a2-u14-went",
+      "options": ["đã đi (quá khứ của go)", "đã nấu (quá khứ của cook)", "đã làm việc (quá khứ của work)"],
+      "answer": "đã đi (quá khứ của go)"
+    },
+    {
+      "id": "everyday-a2-u14-e06",
+      "type": "type_answer",
+      "prompt": "Hôm qua tôi mệt.",
+      "answer": "I was tired yesterday.",
+      "accepted": ["Yesterday I was tired.", "Yesterday, I was tired."]
+    },
+    {
+      "id": "everyday-a2-u14-e07",
+      "type": "choose_english",
+      "prompt": "Hôm qua bạn có đi làm không?",
+      "options": ["Did you go to work yesterday?", "Did you went to work yesterday?", "Do you go to work yesterday?"],
+      "answer": "Did you go to work yesterday?",
+      "hint_vi": "Sau “Did” động từ trở về dạng gốc: go, không phải went."
+    },
+    {
+      "id": "everyday-a2-u14-e08",
+      "type": "listen_choose",
+      "audio": "She had a headache last night.",
+      "options": ["She has a headache.", "She had a headache last night.", "She had a fever last night."],
+      "answer": "She had a headache last night."
+    },
+    {
+      "id": "everyday-a2-u14-e09",
+      "type": "build_sentence",
+      "prompt": "Hôm qua trời lạnh.",
+      "tiles": ["was", "It", "cold", "yesterday", "were"],
+      "answer": ["It", "was", "cold", "yesterday"],
+      "accepted": [["yesterday", "It", "was", "cold"]],
+      "hint_vi": "Sau “It” thì dùng “was”."
+    },
+    {
+      "id": "everyday-a2-u14-e10",
+      "type": "choose_english",
+      "prompt": "Mẹ tôi đã nấu cơm.",
+      "options": ["My mother had rice.", "My mother cooked rice.", "My mother cooked fish."],
+      "answer": "My mother cooked rice."
+    },
+    {
+      "id": "everyday-a2-u14-e11",
+      "type": "choose_meaning",
+      "prompt": "everyday-a2-u14-had",
+      "options": ["đã có, đã ăn, đã bị (quá khứ của have, has)", "đã đi (quá khứ của go)", "có (dùng sau he, she, it hoặc tên một người)"],
+      "answer": "đã có, đã ăn, đã bị (quá khứ của have, has)"
+    },
+    {
+      "id": "everyday-a2-u14-e12",
+      "type": "type_answer",
+      "prompt": "Hôm qua Lan ra ga.",
+      "answer": "Lan went to the station yesterday.",
+      "accepted": ["Yesterday Lan went to the station.", "Yesterday, Lan went to the station."]
+    },
+    {
+      "id": "everyday-a2-u14-e13",
+      "type": "speak",
+      "text": "Yesterday I worked and cooked.",
+      "vi": "Hôm qua tôi đi làm và nấu ăn."
+    },
+    {
+      "id": "everyday-a2-u14-e14",
+      "type": "choose_english",
+      "prompt": "Hôm qua bạn ở nhà hàng.",
+      "options": ["You was at the restaurant yesterday.", "You were at the restaurant yesterday.", "You are at the restaurant yesterday."],
+      "answer": "You were at the restaurant yesterday.",
+      "hint_vi": "Sau “you” thì dùng “were”."
+    },
+    {
+      "id": "everyday-a2-u14-e15",
+      "type": "listen_choose",
+      "audio": "Nam was at home last night.",
+      "options": ["Nam is at home.", "Nam was at home last night.", "Nam went home last night."],
+      "answer": "Nam was at home last night."
+    },
+    {
+      "id": "everyday-a2-u14-e16",
+      "type": "speak",
+      "text": "I had noodles yesterday.",
+      "vi": "Hôm qua tôi ăn mì."
+    }
+  ]
+}
