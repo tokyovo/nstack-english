@@ -3,12 +3,12 @@
   "track": "kids",
   "level": "a2",
   "number": 9,
-  "title": "Một ngày của em",
+  "title": "Một ngày của con",
   "goals": [
     "Con kể được việc mình làm mỗi ngày: thức dậy, ăn sáng, đi ngủ",
     "Con chào được bố mẹ bằng “Good morning!” và “Good night!”"
   ],
-  "note_vi": "Tiếng Việt hay bỏ người làm: “Dậy rồi!”, “Ăn sáng thôi!”. Tiếng Anh thì kể việc mình làm luôn bắt đầu bằng “I” (con): “I get up.” (Con thức dậy.), “I eat breakfast.” (Con ăn sáng.). Việc ngày nào cũng làm thì giữ nguyên động từ và thêm “every day” (mỗi ngày) ở cuối câu: “I eat breakfast every day.” Lời chào cũng khác: sáng dậy nói “Good morning!”, còn “Good night!” chỉ nói lúc đi ngủ (Chúc ngủ ngon!), không dùng để chào buổi tối. Bố mẹ kể một ngày của mình, con kể lại một ngày của con.",
+  "note_vi": "Tiếng Việt hay bỏ người làm: “Dậy rồi!”, “Ăn sáng thôi!”. Tiếng Anh thì kể việc mình làm luôn bắt đầu bằng “I” (con): “I get up.” (Con thức dậy.), “I eat breakfast.” (Con ăn sáng.). Việc ngày nào cũng làm thì giữ nguyên động từ và thêm “every day” (mỗi ngày) ở cuối câu: “I eat breakfast every day.” Lời chào cũng khác: sáng dậy nói “Good morning!”, còn “Good night!” (Chúc ngủ ngon!) nói khi đi ngủ hoặc khi tạm biệt nhau buổi tối, không dùng để chào khi gặp nhau. Bố mẹ kể một ngày của mình, con kể lại một ngày của con.",
   "source": "original",
   "words": [
     { "id": "kids-a2-u9-morning", "en": "morning", "vi": "buổi sáng", "picture": "🌅" },
@@ -119,6 +119,7 @@
       "prompt": "Ngày nào con cũng ăn sáng.",
       "tiles": ["every", "eat", "I", "day", "breakfast", "lunch"],
       "answer": ["I", "eat", "breakfast", "every", "day"],
+      "accepted": [["every", "day", "I", "eat", "breakfast"]],
       "hint_vi": "“every day” (mỗi ngày) đứng ở cuối câu."
     },
     {

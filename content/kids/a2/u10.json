@@ -8,7 +8,7 @@
     "Con nói được mình đang thấy thế nào: vui, buồn, mệt, đói",
     "Con hỏi được “How are you?” và trả lời bằng “I'm ...”"
   ],
-  "note_vi": "Tiếng Việt nói “Con vui.”, “Mẹ mệt.”: chỉ cần người và cảm xúc. Tiếng Anh phải có thêm một từ nhỏ ở giữa: “I am happy.” (Con vui.), nói nhanh thành “I'm happy.”. Không nói “I happy.”. Khi nói về người khác thì dùng “is”: “Mom is tired.” (Mẹ mệt.), “Dad is hungry.” (Bố đói.). Muốn hỏi con thấy thế nào, bố mẹ hỏi “How are you?”, con đáp “I'm happy!” hoặc “I'm tired.”.",
+  "note_vi": "Tiếng Việt nói “Con vui.”, “Mẹ mệt.”: chỉ cần người và cảm xúc. Tiếng Anh phải thêm một từ ở giữa. Với “I” (con) dùng “am”: “I am happy.” (Con vui.), nói nhanh thành “I'm happy.”; không nói “I happy.”. Nói về một người khác như Mom, Dad thì dùng “is”: “Mom is tired.” (Mẹ mệt.), “Dad is hungry.” (Bố đói.). Với “you” thì dùng “are”, như trong câu hỏi “How are you?”. Muốn hỏi con thấy thế nào, bố mẹ hỏi “How are you?”, con đáp “I'm happy!” hoặc “I'm tired.”.",
   "source": "original",
   "words": [
     { "id": "kids-a2-u10-happy", "en": "happy", "vi": "vui", "picture": "😀" },
@@ -16,12 +16,12 @@
     { "id": "kids-a2-u10-angry", "en": "angry", "vi": "tức giận", "picture": "😠" },
     { "id": "kids-a2-u10-scared", "en": "scared", "vi": "sợ", "picture": "😨" },
     { "id": "kids-a2-u10-tired", "en": "tired", "vi": "mệt", "picture": "😫" },
-    { "id": "kids-a2-u10-hungry", "en": "hungry", "vi": "đói", "picture": "😋" },
+    { "id": "kids-a2-u10-hungry", "en": "hungry", "vi": "đói", "picture": "🍽️" },
     {
       "id": "kids-a2-u10-i-m",
       "en": "I'm ...",
       "vi": "Con thấy ...",
-      "audio": "I'm happy.",
+      "audio": "I'm",
       "picture": "👉",
       "example": { "en": "I'm happy.", "vi": "Con vui." }
     },
@@ -129,7 +129,7 @@
       "id": "kids-a2-u10-e15",
       "type": "speak",
       "text": "How are you?",
-      "vi": "Con thấy thế nào?"
+      "vi": "Mẹ thấy thế nào ạ?"
     }
   ]
 }
