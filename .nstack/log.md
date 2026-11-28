@@ -180,3 +180,29 @@
 - [x] 5. Prove it yourself. merged: jest src/review 11 pass
 - [x] 6. Record. this entry
 - [x] Done when: committed on nstack/review-speak, items ticked.
+## 2026-11-28 build learn-core design fixes
+- Read: build/SKILL.md a069840
+- [x] 1. Branch. nstack/learn-core
+- [x] 2. Starting state. fast checks pass at 33e1c64
+- [x] 3. Dispatch. builder: leave-lesson link (critique: no way out of a lesson on web) and lang="en" on English content (foundation review nit)
+- [x] 4. Read the reply. done f82418e; Jest red 2 failed -> green; e2e lang red 1 failed -> green
+- [x] 5. Prove it yourself. merged: typecheck 0, lint 0, jest 130 pass
+- [x] 6. Record. this entry; backlog: lang on the type_answer input
+- [x] Done when: committed, items ticked.
+
+## 2026-11-28 build learn-core content fixes
+- Read: build/SKILL.md a069840
+- [x] 1. Branch. nstack/learn-core
+- [x] 2. Starting state. fast checks pass
+- [x] 3. Dispatch. builder with the native reader recheck findings (2 must-fix ambiguous build_sentence, 5 wording)
+- [x] 4. Read the reply. done 61bbabb; fresh reader passed every changed item
+- [x] 5. Prove it yourself. merged: jest 128 pass (content test)
+- [x] 6. Record. this entry; minors in backlog
+- [x] Done when: committed, items ticked.
+## 2026-11-28 review foundation
+- Read: review/SKILL.md c151f88
+- [x] 1. Dispatch. reviewer at 4a5f679: fix-needed, 1 important (UI-string checker misses template literals, +, options titles), 2 nits (lang="en" on web, drive pid check on macOS)
+- [x] 2. Second reviewer. n/a: no auth, payments, migrations of data, concurrency or public API (health only)
+- [x] 3. Act on every finding. important + pid nit: fresh builder, merged (red 5 failed -> green 14; drive pid test red -> green); lang nit: moved to learn-core where the English content screens are (builder dispatched)
+- [ ] 4. Review the fixes. fix is 101+/19- lines: new reviewer round dispatched
+- [ ] Done when: the latest round has no important findings, verify passed after the last fix, and nits are fixed or in backlog.md.

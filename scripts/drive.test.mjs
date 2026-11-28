@@ -1,9 +1,11 @@
 // @ts-check
 import assert from 'node:assert/strict';
-import { spawnSync } from 'node:child_process';
-import { existsSync, mkdtempSync, rmSync } from 'node:fs';
+import { spawn, spawnSync } from 'node:child_process';
+import { once } from 'node:events';
+import { existsSync, mkdtempSync, rmSync, writeFileSync } from 'node:fs';
 import { tmpdir } from 'node:os';
 import { join } from 'node:path';
+import { setTimeout as sleep } from 'node:timers/promises';
 import { after, before, describe, test } from 'node:test';
 
 const DRIVE = join(import.meta.dirname, 'drive.mjs');
@@ -81,6 +83,23 @@ describe('drive tool', () => {
 
     assert.equal(code, 2);
     assert.match(stderr, /KVM not available: see \.nstack\/needs-human\.md/);
+  });
+
+  test('stop leaves alone a live process that reused the recorded pid', async () => {
+    const other = spawn(process.execPath, ['-e', 'setTimeout(() => {}, 60_000)'], { stdio: 'ignore' });
+    const exited = once(other, 'exit').then(() => 'killed');
+    try {
+      const db = join(mkdtempSync(join(tmpdir(), 'drive-db-')), 'app.db');
+      writeFileSync(join(stateDir, 'state.json'), JSON.stringify({ url: 'http://127.0.0.1:1', db, pid: other.pid }));
+
+      const stopped = drive(stateDir, ['stop']);
+
+      assert.equal(stopped.code, 0, stopped.stderr);
+      // A killed child stays a zombie until this process reaps it, so wait for its exit event.
+      assert.equal(await Promise.race([exited, sleep(500).then(() => 'alive')]), 'alive');
+    } finally {
+      other.kill('SIGKILL');
+    }
   });
 
   test('start, seed and stop: a temporary database, the app served, then removed', async () => {
