@@ -47,7 +47,11 @@ export default function HomeScreen() {
                   key={track}
                   href={`/track/${track}`}
                   testID={`track-${track}`}
-                  accessibilityLabel={[name, description, line].filter(Boolean).join('. ')}>
+                  accessibilityLabel={
+                    line
+                      ? t('track.rowLabel', { name, description, progress: line })
+                      : t('track.rowLabelLoading', { name, description })
+                  }>
                   <ThemedText type="label">{name}</ThemedText>
                   <ThemedText>{description}</ThemedText>
                   {line && <ThemedText type="meta">{line}</ThemedText>}

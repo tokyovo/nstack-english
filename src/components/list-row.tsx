@@ -17,6 +17,8 @@ type ListRowProps = {
 export function ListRow({ href, accessibilityLabel, testID, children }: ListRowProps) {
   const theme = useTheme();
   const [hovered, setHovered] = useState(false);
+  const [pressed, setPressed] = useState(false);
+  const [focused, setFocused] = useState(false);
 
   return (
     <Link href={href} asChild>
@@ -26,14 +28,21 @@ export function ListRow({ href, accessibilityLabel, testID, children }: ListRowP
         testID={testID}
         onHoverIn={() => setHovered(true)}
         onHoverOut={() => setHovered(false)}
-        style={({ pressed }) => [
+        onPressIn={() => setPressed(true)}
+        onPressOut={() => setPressed(false)}
+        onFocus={() => setFocused(true)}
+        onBlur={() => setFocused(false)}
+        // One flat style object: Link's asChild on web drops style functions and breaks on nested arrays.
+        style={StyleSheet.flatten([
           styles.row,
           {
             backgroundColor: theme.surface,
             borderColor: hovered || pressed ? theme.accent : theme.line,
             opacity: pressed ? 0.85 : 1,
           },
-        ]}>
+          focused && styles.focused,
+          focused && { outlineColor: theme.accent },
+        ])}>
         {children}
       </Pressable>
     </Link>
@@ -48,5 +57,10 @@ const styles = StyleSheet.create({
     paddingHorizontal: Space.lg,
     paddingVertical: Space.lg,
     gap: Space.xs,
+  },
+  focused: {
+    outlineStyle: 'solid',
+    outlineWidth: 2,
+    outlineOffset: 2,
   },
 });

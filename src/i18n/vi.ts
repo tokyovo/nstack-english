@@ -12,6 +12,8 @@ export const vi = {
   'track.kids.name': 'Trẻ em',
   'track.kids.description': 'Cho bé từ 4 đến 10 tuổi, học cùng bố mẹ.',
   'track.progress': 'Đã học xong {done}/{total} bài',
+  'track.rowLabel': '{name}. {description} {progress}',
+  'track.rowLabelLoading': '{name}. {description}',
   'track.comingSoon': 'Bài học sắp có',
   'track.empty': 'Chủ đề này chưa có bài học. Bạn hãy chọn chủ đề khác nhé.',
   'track.notFound': 'Không tìm thấy chủ đề này',
