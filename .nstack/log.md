@@ -263,3 +263,26 @@
 - [x] 6. Record. this entry, backlog
 - [x] Done when: committed, items ticked.
 - Decision: no speak step in reviews without recognition (a self-mark would advance the schedule without proof).
+## 2026-11-28 ship foundation
+- Read: ship/SKILL.md b51cd2a
+- [x] 1. Commit. slice commits on nstack/foundation
+- [x] 2. Sync. origin/main is the initial commit (65220f0), already in the branch
+- [x] 3. Push. nstack/foundation
+- [x] 4. Open the PR. #1 with verification table, merge danger, decisions
+- [x] 5. Wait for CI. run 46088263694 at d4a607a: ubuntu checks pass, iOS simulator build pass (18m35s)
+- [ ] 6. Merge
+- [ ] 7. Confirm and clean up.
+- [ ] Done when: the PR is merged, CI is green on the default branch, and the fast checks pass there, or the PR is parked with a reason.
+
+## 2026-11-28 verify learn-core
+- Read: verify/SKILL.md adc6a8a
+- [x] 1. Clean tree. code at f61e4f4 (later commits: sync with main touching only .nstack and removing the re-added welcome tests); head 97eedbc
+- [x] 2. Project checks. typecheck 0, lint 0, jest 147 pass, test:server 21, test:drive 6, drive check passed (24 screenshots), e2e 18 passed
+- [x] 3. Every acceptance criterion in scope has a passing check. 1 content test (+broken fixture red); 2 content files + reader verdicts (T5, T9, T10, recheck); 3 tracks.spec + lesson.spec reload; 4 word-card Jest (speech on/off); 5 answers Jest + lesson Jest per exercise; 6 progress-store Jest, Maestro written (not run: no KVM, parked); 7 critique below + a11y.spec axe on 6 screens light/dark. check-features exit 0
+- [x] 4. Every new check bites. content test (broken fixture), progress-store (builder mutations), lesson completion save removed -> Jest and e2e red, tracks screen focus refresh removed -> red, lang test red, leave link red
+- [x] 5. The real thing runs. drive check + e2e against the drive server
+- [x] 6. Every changed screen looks right. /tmp/shots-lc/{home,track,track-kids,track-not-found,lesson,lesson-not-found}-{390,1280}-{light,dark}.png and /tmp/shots-lc/step-*.png: 1 primary action obvious (track rows; "Bắt đầu học"; "Tiếp tục") pass; 2 spacing on scale pass; 3 readable, Vietnamese diacritics clear pass; 4 no overflow pass; 5 not-found states have a way back, wrong-answer feedback intended pass; 6 paper/purple ink/ô-ly grid, no shadows pass; 7 keyboard focus e2e (tracks) pass; 8 copy names actions pass; 9 hierarchy pass. Removed: none needed after adding the leave link (critique fail fixed)
+- [x] 7. Nothing got weaker. welcome.spec removed because the welcome screen became the track picker (spec change, logged in sync commit); axe loop moved into a11y.spec for all screens
+- [x] 8. No new warnings or errors. lint 0 warnings
+- [x] 9. Access is enforced. n/a: no routes, tables or auth touched (app-only, public)
+- [x] Done when: all ticked. Not verified: Android Maestro lesson flow (no KVM, parked).
