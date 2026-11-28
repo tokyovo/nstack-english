@@ -330,3 +330,23 @@
 - [x] 6. Merge. squash, 67caa0f
 - [x] 7. Confirm and clean up. main pulled: typecheck 0, lint 0, jest 158, test:server 21; branch and worktree deleted local and remote (tree identical). CI on main: see next entry
 - [x] Done when: PR #2 merged, fast checks pass on main.
+
+## 2026-11-28 build T27
+- Read: build/SKILL.md a069840
+- [x] 1. Branch. nstack/content-a1
+- [x] 2. Starting state. fast checks pass at cf389ee
+- [x] 3. Dispatch. builder in worktree
+- [x] 4. Read the reply. done ee04ce5; native reader "pass with fixes": 1 must-fix (missed valid word order) + 10 optional, all fixed
+- [x] 5. Prove it yourself. merged: jest and typecheck below
+- [x] 6. Record. this entry, backlog
+- [x] Done when: committed, items ticked.
+
+## 2026-11-28 build T28
+- Read: build/SKILL.md a069840
+- [x] 1. Branch. nstack/content-a1
+- [x] 2. Starting state. fast checks pass at cf389ee
+- [x] 3. Dispatch. builder in worktree
+- [x] 4. Read the reply. done 19836a8; native reader "pass after fixes": 16 points, 14 fixed, 2 kept as the reader allowed (wording, friend emoji)
+- [x] 5. Prove it yourself. merged: jest and typecheck below
+- [x] 6. Record. this entry
+- [x] Done when: committed, items ticked.

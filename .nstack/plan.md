@@ -46,8 +46,8 @@ Acceptance criteria:
 3. A1 vocabulary stays within A1 (CEFR-J A1 used as a guide where useful; original writing).
 
 - [ ] T26 Everyday A1 u6-u10. Proof: content test, native reader verdict. Content: yes. Needs: none
-- [ ] T27 Work A1 u4-u6. Proof: content test, native reader verdict. Content: yes. Needs: none
-- [ ] T28 Kids A1 u6-u8. Proof: content test, native reader verdict. Content: yes. Needs: none
+- [x] T27 Work A1 u4-u6. Proof: content test, native reader verdict. Content: yes. Needs: none
+- [x] T28 Kids A1 u6-u8. Proof: content test, native reader verdict. Content: yes. Needs: none
 
 ## Done
 - foundation: T1-T4, PR #1
