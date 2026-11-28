@@ -41,7 +41,7 @@ describe('native config', () => {
     expect(requested.sort()).toEqual(['android.permission.INTERNET', 'android.permission.RECORD_AUDIO']);
   });
 
-  it('removes the storage, overlay and vibrate permissions that libraries would merge in', () => {
+  it('removes the storage, overlay, vibrate and biometric permissions that libraries would merge in', () => {
     const removed = (manifest['uses-permission'] ?? [])
       .filter((p) => p.$['tools:node'] === 'remove')
       .map((p) => p.$['android:name']);
@@ -52,6 +52,8 @@ describe('native config', () => {
         'android.permission.WRITE_EXTERNAL_STORAGE',
         'android.permission.SYSTEM_ALERT_WINDOW',
         'android.permission.VIBRATE',
+        'android.permission.USE_BIOMETRIC',
+        'android.permission.USE_FINGERPRINT',
       ]),
     );
   });
