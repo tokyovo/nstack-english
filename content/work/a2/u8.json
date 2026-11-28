@@ -9,7 +9,7 @@
     "Có thể nói mình biết làm gì và muốn làm gì",
     "Có thể hiểu các câu hỏi thường gặp khi phỏng vấn xin việc"
   ],
-  "note_vi": "Khi phỏng vấn, người ta hay kể việc đã làm. Tiếng Việt giữ nguyên động từ và thêm “đã” hoặc từ chỉ thời gian: “Tôi đã làm y tá 3 năm.” Tiếng Anh đổi chính động từ: thêm -ed cho việc đã xong: “work” thành “worked”: “I worked as a nurse for 3 years.” (Tôi đã làm y tá 3 năm.) “am” thành “was”: “I was a cook.” (Tôi từng là đầu bếp.) “for” + thời gian cho biết việc kéo dài bao lâu: “for 3 years” (trong 3 năm). “can” còn dùng để nói mình biết làm gì: “I can use a computer.” (Tôi biết dùng máy tính.) Sau “want” dùng “to” + động từ: “I want to work here.” (Tôi muốn làm việc ở đây.)",
+  "note_vi": "Khi phỏng vấn, người ta hay kể việc đã làm. Tiếng Việt giữ nguyên động từ và thêm “đã” hoặc từ chỉ thời gian: “Tôi đã làm y tá 3 năm.” Tiếng Anh đổi chính động từ: thêm -ed cho việc đã xong: “work” thành “worked”: “I worked as a nurse for 3 years.” (Trước đây tôi làm y tá 3 năm.) “worked” nghĩa là việc đó đã kết thúc, bây giờ không còn làm nữa. “am” thành “was”: “I was a cook.” (Tôi từng là đầu bếp.) “for” + thời gian cho biết việc kéo dài bao lâu: “for 3 years” (trong 3 năm). “can” còn dùng để nói mình biết làm gì: “I can use a computer.” (Tôi biết dùng máy tính.) Sau “want” dùng “to” + động từ: “I want to work here.” (Tôi muốn làm việc ở đây.)",
   "source": "original",
   "words": [
     {
@@ -41,7 +41,7 @@
       "en": "for 3 years",
       "vi": "trong 3 năm",
       "audio": "for three years",
-      "example": { "en": "I worked as a nurse for 3 years.", "vi": "Tôi đã làm y tá 3 năm." }
+      "example": { "en": "I worked as a nurse for 3 years.", "vi": "Trước đây tôi làm y tá 3 năm." }
     },
     {
       "id": "work-a2-u8-experience",
@@ -100,7 +100,7 @@
     {
       "id": "work-a2-u8-e04",
       "type": "build_sentence",
-      "prompt": "Tôi đã làm y tá 3 năm.",
+      "prompt": "Trước đây tôi làm y tá 3 năm.",
       "tiles": ["nurse", "worked", "for", "I", "3", "as", "years", "a", "work"],
       "answer": ["I", "worked", "as", "a", "nurse", "for", "3", "years"],
       "accepted": [["for", "3", "years", "I", "worked", "as", "a", "nurse"]],
@@ -111,7 +111,16 @@
       "type": "type_answer",
       "prompt": "Tôi đã làm giáo viên.",
       "answer": "I worked as a teacher.",
-      "accepted": ["I was a teacher", "I used to be a teacher", "I used to work as a teacher"]
+      "accepted": [
+        "I was a teacher",
+        "I used to be a teacher",
+        "I used to work as a teacher",
+        "I used to teach",
+        "I have worked as a teacher",
+        "I've worked as a teacher",
+        "I have been a teacher",
+        "I've been a teacher"
+      ]
     },
     {
       "id": "work-a2-u8-e06",
@@ -147,7 +156,7 @@
       "type": "type_answer",
       "prompt": "kinh nghiệm",
       "answer": "experience",
-      "accepted": ["work experience", "the experience"]
+      "accepted": ["work experience"]
     },
     {
       "id": "work-a2-u8-e11",
@@ -181,7 +190,7 @@
       "id": "work-a2-u8-e15",
       "type": "speak",
       "text": "I worked as a driver for 3 years.",
-      "vi": "Tôi đã làm tài xế 3 năm."
+      "vi": "Trước đây tôi làm tài xế 3 năm."
     }
   ]
 }

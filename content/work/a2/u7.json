@@ -111,7 +111,11 @@
       "prompt": "Chúng ta nên bắt đầu lúc 9 giờ.",
       "tiles": ["start", "should", "o'clock", "We", "9", "at", "on"],
       "answer": ["We", "should", "start", "at", "9", "o'clock"],
-      "accepted": [["at", "9", "o'clock", "We", "should", "start"]],
+      "accepted": [
+        ["at", "9", "o'clock", "We", "should", "start"],
+        ["We", "should", "start", "at", "9"],
+        ["at", "9", "We", "should", "start"]
+      ],
       "hint_vi": "Sau “should” động từ giữ nguyên: “should start”."
     },
     {
@@ -119,7 +123,7 @@
       "type": "type_answer",
       "prompt": "Chúng ta bắt đầu nhé.",
       "answer": "Let's start.",
-      "accepted": ["Let us start", "Let's begin", "Let us begin", "OK, let's start", "Okay, let's start"]
+      "accepted": ["Let us start", "Let's begin", "Let us begin", "OK, let's start", "Okay, let's start", "OK, let's begin", "Let's get started", "Shall we start", "Shall we begin"]
     },
     {
       "id": "work-a2-u7-e08",
@@ -148,7 +152,7 @@
       "type": "type_answer",
       "prompt": "vấn đề",
       "answer": "problem",
-      "accepted": ["a problem", "the problem", "problems", "issue", "an issue", "the issue"]
+      "accepted": ["a problem", "the problem", "problems", "issue", "an issue", "the issue", "issues"]
     },
     {
       "id": "work-a2-u7-e12",

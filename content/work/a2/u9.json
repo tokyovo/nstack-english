@@ -9,7 +9,7 @@
     "Có thể gọi điện báo sự cố và nhờ người sửa",
     "Có thể hỏi “What happened?” và trấn an người khác bằng “Don't worry”"
   ],
-  "note_vi": "Để báo một thứ đang có vấn đề, dùng “isn't working” (viết ngắn của “is not working”): “The printer isn't working.” (Máy in không chạy.) Đây là thì hiện tại tiếp diễn: “am/is/are” + động từ thêm -ing, cho việc đang diễn ra lúc nói. Tiếng Việt chỉ thêm “đang” và giữ nguyên động từ: “Tôi đang gọi.” Tiếng Anh cần cả “am/is/are” lẫn đuôi -ing: “I'm calling about the internet.” (Tôi gọi điện về chuyện mạng internet.) “I can't” (viết ngắn của “cannot”) là không làm được: “I can't send an email.” (Tôi không gửi email được.) Để hỏi chuyện vừa xảy ra, nói “What happened?” (Có chuyện gì vậy?): “happened” là “happen” thêm -ed, như “worked” ở bài trước.",
+  "note_vi": "Để báo một thứ đang có vấn đề, dùng “isn't working” (viết ngắn của “is not working”): “The printer isn't working.” (Máy in không chạy.) Đây là thì hiện tại tiếp diễn: “am/is/are” + động từ thêm -ing, cho việc đang diễn ra lúc nói. Tiếng Việt chỉ thêm “đang” và giữ nguyên động từ: “Tôi đang gọi.” Tiếng Anh cần cả “am/is/are” lẫn đuôi -ing: “I'm calling about the internet.” (Tôi gọi điện về chuyện mạng internet.) Tiếng Việt thường bỏ “đang” (“Máy in không chạy.”), nhưng tiếng Anh vẫn phải có “is” + -ing. “I can't” (viết ngắn của “cannot”) là không làm được: “I can't send an email.” (Tôi không gửi email được.) Để hỏi chuyện vừa xảy ra, nói “What happened?” (Có chuyện gì vậy?): “happened” là “happen” thêm -ed, như “worked” ở bài trước.",
   "source": "original",
   "words": [
     {
@@ -115,7 +115,7 @@
       "type": "type_answer",
       "prompt": "Đừng lo.",
       "answer": "Don't worry.",
-      "accepted": ["Do not worry", "No worries", "Don't worry about it"]
+      "accepted": ["Do not worry", "Don't worry about it", "Don't you worry"]
     },
     {
       "id": "work-a2-u9-e07",
