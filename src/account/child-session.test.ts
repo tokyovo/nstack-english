@@ -65,7 +65,7 @@ describe('handing the device to a child', () => {
     stop();
 
     expect(await activeChild()).toEqual(na);
-    expect(await syncSession()).toEqual({ token: 'child-tok', profileId: 'c1', deviceProfileId: 'c1' });
+    expect(await syncSession()).toEqual({ token: 'child-tok', profileId: 'c1', deviceProfileId: 'c1', ownerProfileId: 'p1' });
     expect(changed).toHaveBeenCalled();
   });
 
@@ -78,7 +78,7 @@ describe('handing the device to a child', () => {
     expect(await startChildSession('c1')).toEqual({ ok: false, error: 'offline' });
 
     expect(await activeChild()).toBeUndefined();
-    expect(await syncSession()).toEqual({ token: 'tok-1', profileId: 'p1', deviceProfileId: 'local' });
+    expect(await syncSession()).toEqual({ token: 'tok-1', profileId: 'p1', deviceProfileId: 'local', ownerProfileId: 'p1' });
   });
 
   it('needs a signed-in parent', async () => {
@@ -97,7 +97,7 @@ describe('returning to the parent', () => {
 
     expect(server.signedOut).toEqual(['child-tok']);
     expect(await activeChild()).toBeUndefined();
-    expect(await syncSession()).toEqual({ token: 'tok-1', profileId: 'p1', deviceProfileId: 'local' });
+    expect(await syncSession()).toEqual({ token: 'tok-1', profileId: 'p1', deviceProfileId: 'local', ownerProfileId: 'p1' });
   });
 
   it('returns to the parent while offline too', async () => {
@@ -109,7 +109,7 @@ describe('returning to the parent', () => {
     await endChildSession();
 
     expect(await activeChild()).toBeUndefined();
-    expect(await syncSession()).toEqual({ token: 'tok-1', profileId: 'p1', deviceProfileId: 'local' });
+    expect(await syncSession()).toEqual({ token: 'tok-1', profileId: 'p1', deviceProfileId: 'local', ownerProfileId: 'p1' });
   });
 
   it("signing out ends the child's session and the parent's", async () => {

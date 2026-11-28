@@ -4,7 +4,7 @@ import type { DatabaseSync } from 'node:sqlite';
 import { Hono, type Context } from 'hono';
 import { bodyLimit } from 'hono/body-limit';
 
-import { isProfilePicture, MAX_CHILDREN, MAX_NICKNAME } from '../src/profiles/child-profile.ts';
+import { isProfilePicture, MAX_CHILDREN, readNickname } from '../src/profiles/child-profile.ts';
 import { profileOf, requireAccountMiddleware, startProfileSession, type AuthEnv, type Profile } from './accounts.ts';
 
 type ErrorBody = { error: string; field?: 'name' | 'picture' };
@@ -13,6 +13,7 @@ const notFound: ErrorBody = { error: 'not_found' };
 const invalidBody: ErrorBody = { error: 'invalid_body' };
 const invalidName: ErrorBody = { error: 'invalid_name', field: 'name' };
 const invalidPicture: ErrorBody = { error: 'invalid_picture', field: 'picture' };
+const ownerProfile: ErrorBody = { error: 'owner_profile' };
 
 /**
  * Child profiles, mounted at `/api`, for the parent's account session only (a child's
@@ -48,6 +49,7 @@ export function profileRoutes(db: DatabaseSync, now: () => Date) {
   app.patch('/profiles/:id', requireAccount, limit, async (c) => {
     const current = profileOf(db, c.get('user').id, c.req.param('id'));
     if (!current) return c.json(notFound, 404);
+    if (current.kind === 'owner') return c.json(ownerProfile, 400);
     const body = await readObject(c);
     if (!body || (body.name === undefined && body.picture === undefined)) return c.json(invalidBody, 400);
     const name = body.name === undefined ? current.name : readNickname(body.name);
@@ -61,7 +63,7 @@ export function profileRoutes(db: DatabaseSync, now: () => Date) {
   app.delete('/profiles/:id', requireAccount, (c) => {
     const profile = profileOf(db, c.get('user').id, c.req.param('id'));
     if (!profile) return c.json(notFound, 404);
-    if (profile.kind === 'owner') return c.json({ error: 'owner_profile' } satisfies ErrorBody, 400);
+    if (profile.kind === 'owner') return c.json(ownerProfile, 400);
     // The schema's ON DELETE CASCADE removes the child's progress and sessions with it.
     db.prepare('DELETE FROM profiles WHERE id = ?').run(profile.id);
     return c.body(null, 204);
@@ -72,19 +74,11 @@ export function profileRoutes(db: DatabaseSync, now: () => Date) {
     const user = c.get('user');
     const profile = profileOf(db, user.id, c.req.param('id'));
     if (!profile) return c.json(notFound, 404);
-    if (profile.kind === 'owner') return c.json({ error: 'owner_profile' } satisfies ErrorBody, 400);
+    if (profile.kind === 'owner') return c.json(ownerProfile, 400);
     return c.json({ token: startProfileSession(db, user, profile.id, now()), profile }, 201);
   });
 
   return app;
-}
-
-/** A nickname of 1 to 20 characters, trimmed; undefined when it is not one. */
-function readNickname(value: unknown): string | undefined {
-  if (typeof value !== 'string') return undefined;
-  const nickname = value.normalize('NFC').trim();
-  const length = [...nickname].length;
-  return length >= 1 && length <= MAX_NICKNAME ? nickname : undefined;
 }
 
 /** The JSON object in the request body; undefined when it is not one. */

@@ -1,0 +1,132 @@
+{
+  "id": "kids-a1-u7",
+  "track": "kids",
+  "level": "a1",
+  "number": 7,
+  "title": "Đồ chơi",
+  "goals": [
+    "Con gọi được tên tám món đồ chơi",
+    "Con nói được mình có đồ chơi gì: “I have a ball.”",
+    "Con rủ được bạn chơi: “Let's play!”"
+  ],
+  "note_vi": "“I have a ...” nghĩa là “Con có một ...”. “A” nghĩa là “một”, đứng trước tên một món đồ: “a ball” (một quả bóng), “a car” (một chiếc ô tô). Tiếng Việt phải chọn “quả”, “chiếc”, “cái” hay “con”, còn tiếng Anh chỉ cần “a”. Muốn rủ bạn chơi, con nói “Let's play!” (Mình chơi đi!).",
+  "source": "original",
+  "words": [
+    { "id": "kids-a1-u7-ball", "en": "ball", "vi": "quả bóng (trái banh)", "picture": "⚽" },
+    { "id": "kids-a1-u7-car", "en": "car", "vi": "ô tô (xe hơi)", "picture": "🚗" },
+    { "id": "kids-a1-u7-train", "en": "train", "vi": "tàu hỏa (xe lửa)", "picture": "🚂" },
+    { "id": "kids-a1-u7-plane", "en": "plane", "vi": "máy bay", "picture": "✈️" },
+    { "id": "kids-a1-u7-boat", "en": "boat", "vi": "con thuyền", "picture": "⛵" },
+    { "id": "kids-a1-u7-robot", "en": "robot", "vi": "rô-bốt", "picture": "🤖" },
+    { "id": "kids-a1-u7-balloon", "en": "balloon", "vi": "bóng bay (bong bóng)", "picture": "🎈" },
+    { "id": "kids-a1-u7-drum", "en": "drum", "vi": "cái trống", "picture": "🥁" },
+    {
+      "id": "kids-a1-u7-i-have-a",
+      "en": "I have a ...",
+      "vi": "Con có một ...",
+      "audio": "I have a",
+      "picture": "🎁",
+      "example": { "en": "I have a ball.", "vi": "Con có một quả bóng." }
+    },
+    { "id": "kids-a1-u7-lets-play", "en": "Let's play!", "vi": "Mình chơi đi!", "picture": "🤸" }
+  ],
+  "exercises": [
+    {
+      "id": "kids-a1-u7-e01",
+      "type": "choose_meaning",
+      "prompt": "kids-a1-u7-ball",
+      "options": ["quả bóng (trái banh)", "bóng bay (bong bóng)", "cái trống"],
+      "answer": "quả bóng (trái banh)"
+    },
+    {
+      "id": "kids-a1-u7-e02",
+      "type": "listen_choose",
+      "audio": "train",
+      "options": ["plane", "train", "drum"],
+      "answer": "train"
+    },
+    {
+      "id": "kids-a1-u7-e03",
+      "type": "choose_english",
+      "prompt": "ô tô (xe hơi)",
+      "options": ["boat", "ball", "car"],
+      "answer": "car"
+    },
+    {
+      "id": "kids-a1-u7-e04",
+      "type": "choose_meaning",
+      "prompt": "kids-a1-u7-robot",
+      "options": ["máy bay", "rô-bốt", "con thuyền"],
+      "answer": "rô-bốt"
+    },
+    {
+      "id": "kids-a1-u7-e05",
+      "type": "listen_choose",
+      "audio": "I have a ball.",
+      "options": ["I have a car.", "I have a ball.", "I have a drum."],
+      "answer": "I have a ball."
+    },
+    {
+      "id": "kids-a1-u7-e06",
+      "type": "build_sentence",
+      "prompt": "Con có một quả bóng bay.",
+      "tiles": ["have", "balloon", "I", "a", "drum"],
+      "answer": ["I", "have", "a", "balloon"],
+      "hint_vi": "“a” đứng ngay trước tên món đồ: “a balloon”."
+    },
+    {
+      "id": "kids-a1-u7-e07",
+      "type": "choose_english",
+      "prompt": "máy bay",
+      "options": ["plane", "boat", "train"],
+      "answer": "plane"
+    },
+    {
+      "id": "kids-a1-u7-e08",
+      "type": "choose_meaning",
+      "prompt": "kids-a1-u7-drum",
+      "options": ["quả bóng (trái banh)", "tàu hỏa (xe lửa)", "cái trống"],
+      "answer": "cái trống"
+    },
+    {
+      "id": "kids-a1-u7-e09",
+      "type": "listen_choose",
+      "audio": "Let's play!",
+      "options": ["I love you.", "Let's play!", "It's a robot."],
+      "answer": "Let's play!"
+    },
+    {
+      "id": "kids-a1-u7-e10",
+      "type": "build_sentence",
+      "prompt": "Con có một con thuyền.",
+      "tiles": ["a", "I", "boat", "have", "car"],
+      "answer": ["I", "have", "a", "boat"]
+    },
+    {
+      "id": "kids-a1-u7-e11",
+      "type": "type_answer",
+      "prompt": "quả bóng (trái banh)",
+      "answer": "ball",
+      "accepted": ["a ball"]
+    },
+    {
+      "id": "kids-a1-u7-e12",
+      "type": "speak",
+      "text": "Let's play!",
+      "vi": "Mình chơi đi!"
+    },
+    {
+      "id": "kids-a1-u7-e13",
+      "type": "speak",
+      "text": "A red ball!",
+      "vi": "Một quả bóng màu đỏ."
+    },
+    {
+      "id": "kids-a1-u7-e14",
+      "type": "build_sentence",
+      "prompt": "Đây là rô-bốt của con.",
+      "tiles": ["robot", "is", "This", "my", "train"],
+      "answer": ["This", "is", "my", "robot"]
+    }
+  ]
+}

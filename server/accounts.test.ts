@@ -67,6 +67,15 @@ describe('accounts', () => {
     }
   }
 
+  function countAttempts(email: string): number {
+    const db = new DatabaseSync(dbPath, { readOnly: true });
+    try {
+      return Number(db.prepare('SELECT count(*) AS n FROM signin_failures WHERE email = ?').get(email)?.n);
+    } finally {
+      db.close();
+    }
+  }
+
   describe('POST /api/auth/signup', () => {
     test('creates the user with one owner profile and returns a session token', async () => {
       const { body, email } = await signUp();
@@ -232,6 +241,29 @@ describe('accounts', () => {
       await failSignIn(email, 9);
 
       assert.equal((await post('/api/auth/signin', { email, password })).status, 200);
+    });
+
+    test('60 wrong passwords at once: at most 10 are checked, the rest answer 429', async () => {
+      const { email } = await signUp();
+
+      const responses = await Promise.all(
+        Array.from({ length: 60 }, () => post('/api/auth/signin', { email, password: 'not the password' })),
+      );
+
+      const statuses = responses.map((response) => response.status);
+      assert.equal(statuses.filter((status) => status === 401).length, 10);
+      assert.equal(statuses.filter((status) => status === 429).length, 50);
+    });
+
+    test('the right password inside a flood, after 10 attempts are counted, answers 429', async () => {
+      const { email, password } = await signUp();
+      const flood = Array.from({ length: 59 }, () => post('/api/auth/signin', { email, password: 'not the password' }));
+      while (countAttempts(email) < 10) await new Promise((resolve) => setImmediate(resolve));
+
+      const response = await post('/api/auth/signin', { email, password });
+      await Promise.all(flood);
+
+      assert.equal(response.status, 429);
     });
 
     test('failures older than 15 minutes no longer count', async () => {

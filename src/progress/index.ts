@@ -1,6 +1,6 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
-import { mergeProgress } from './merge';
+import { mergeAnswers, mergeProgress } from './merge';
 import { emptyProgress, parseProgress, type LessonCompletion, type Progress } from './schema';
 
 export {
@@ -59,7 +59,7 @@ function withAnswer(progress: Progress, answer: Answer, at: string): Progress {
   const history = progress.answers[answer.itemId] ?? [];
   return {
     ...progress,
-    answers: { ...progress.answers, [answer.itemId]: [...history, { at, correct: answer.correct }] },
+    answers: { ...progress.answers, [answer.itemId]: mergeAnswers(history, [{ at, correct: answer.correct }]) },
   };
 }
 
@@ -128,6 +128,17 @@ export function createProgressStore({ now = () => new Date() }: StoreOptions = {
     /** Deletes the profile's saved progress, so the next learner on this device starts with none. */
     clear(profileId: string): Promise<Progress> {
       return update(profileId, 'account', () => emptyProgress(profileId));
+    },
+    /**
+     * Deletes every learner's saved progress on this device, including copies of profiles no session
+     * names and the unreadable copies set aside.
+     */
+    async clearAll(): Promise<void> {
+      const keys = (await AsyncStorage.getAllKeys()).filter((key) => key.startsWith(KEY_PREFIX));
+      const unreadable = keys.filter((key) => key.includes('.unreadable.'));
+      const profileIds = keys.filter((key) => !unreadable.includes(key)).map((key) => key.slice(KEY_PREFIX.length));
+      await AsyncStorage.multiRemove(unreadable);
+      await Promise.all(profileIds.map((profileId) => update(profileId, 'account', () => emptyProgress(profileId))));
     },
   };
 }

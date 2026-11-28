@@ -71,6 +71,18 @@ describe('progress store', () => {
     });
   });
 
+  it('keeps only the latest 7 answers to an item, so the saved copy stops growing', async () => {
+    const times = Array.from({ length: 9 }, (_, i) => `2026-11-2${i}T08:00:00.000Z`);
+    const store = createProgressStore({ now: clockAt(...times) });
+    for (let i = 0; i < times.length; i += 1) {
+      await store.recordAnswer(LOCAL_PROFILE_ID, { itemId: 'everyday-a0-u1-e1', correct: true });
+    }
+
+    const progress = await createProgressStore().load(LOCAL_PROFILE_ID);
+
+    expect(progress.answers['everyday-a0-u1-e1'].map((answer) => answer.at)).toEqual(times.slice(2));
+  });
+
   it('updates a lesson finished again but keeps when it was first finished', async () => {
     const store = createProgressStore({
       now: clockAt('2026-11-27T08:00:00.000Z', '2026-11-29T20:15:00.000Z', '2026-11-30T06:00:00.000Z'),

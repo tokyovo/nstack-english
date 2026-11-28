@@ -1,0 +1,183 @@
+{
+  "id": "work-a2-u9",
+  "track": "work",
+  "level": "a2",
+  "number": 9,
+  "title": "Báo cáo sự cố",
+  "goals": [
+    "Có thể báo máy móc ở nơi làm việc bị hỏng hoặc không chạy",
+    "Có thể gọi điện báo sự cố và nhờ người sửa",
+    "Có thể hỏi “What happened?” và trấn an người khác bằng “Don't worry”"
+  ],
+  "note_vi": "Để báo một thứ đang có vấn đề, dùng “isn't working” (viết ngắn của “is not working”): “The printer isn't working.” (Máy in không chạy.) Đây là thì hiện tại tiếp diễn: “am/is/are” + động từ thêm -ing, cho việc đang diễn ra lúc nói. Tiếng Việt chỉ thêm “đang” và giữ nguyên động từ: “Tôi đang gọi.” Tiếng Anh cần cả “am/is/are” lẫn đuôi -ing: “I'm calling about the internet.” (Tôi gọi điện về chuyện mạng internet.) Tiếng Việt thường bỏ “đang” (“Máy in không chạy.”), nhưng tiếng Anh vẫn phải có “is” + -ing. “I can't” (viết ngắn của “cannot”) là không làm được: “I can't send an email.” (Tôi không gửi email được.) Để hỏi chuyện vừa xảy ra, nói “What happened?” (Có chuyện gì vậy?): “happened” là “happen” thêm -ed, như “worked” ở bài trước.",
+  "source": "original",
+  "words": [
+    {
+      "id": "work-a2-u9-what-happened",
+      "en": "What happened?",
+      "vi": "Có chuyện gì vậy?",
+      "example": { "en": "Tom, what happened?", "vi": "Tom, có chuyện gì vậy?" }
+    },
+    {
+      "id": "work-a2-u9-isnt-working",
+      "en": "is not working / isn't working",
+      "vi": "không chạy, không hoạt động",
+      "audio": "is not working, isn't working",
+      "example": { "en": "The printer isn't working.", "vi": "Máy in không chạy." }
+    },
+    {
+      "id": "work-a2-u9-broken",
+      "en": "broken",
+      "vi": "bị hỏng",
+      "example": { "en": "My phone is broken.", "vi": "Điện thoại của tôi bị hỏng." }
+    },
+    {
+      "id": "work-a2-u9-i-cant",
+      "en": "I can't ...",
+      "vi": "Tôi không ... được",
+      "example": { "en": "I can't send an email.", "vi": "Tôi không gửi email được." }
+    },
+    {
+      "id": "work-a2-u9-the-internet",
+      "en": "the internet",
+      "vi": "mạng internet",
+      "example": { "en": "The internet isn't working.", "vi": "Mạng internet không vào được." }
+    },
+    {
+      "id": "work-a2-u9-im-calling-about",
+      "en": "I'm calling about ...",
+      "vi": "Tôi gọi điện về chuyện ...",
+      "example": { "en": "Hello. I'm calling about the printer.", "vi": "Xin chào. Tôi gọi điện về chuyện máy in." }
+    },
+    {
+      "id": "work-a2-u9-can-you-fix-it",
+      "en": "Can you fix it?",
+      "vi": "Anh/chị sửa giúp được không?",
+      "example": { "en": "My computer is broken. Can you fix it?", "vi": "Máy tính của tôi bị hỏng. Anh/chị sửa giúp được không?" }
+    },
+    {
+      "id": "work-a2-u9-today",
+      "en": "today",
+      "vi": "hôm nay",
+      "example": { "en": "Can you fix it today?", "vi": "Hôm nay anh/chị sửa giúp được không?" }
+    },
+    {
+      "id": "work-a2-u9-right-now",
+      "en": "right now",
+      "vi": "ngay bây giờ",
+      "example": { "en": "I can fix it right now.", "vi": "Tôi sửa được ngay bây giờ." }
+    },
+    {
+      "id": "work-a2-u9-dont-worry",
+      "en": "Don't worry",
+      "vi": "Đừng lo",
+      "example": { "en": "Don't worry. I can fix it.", "vi": "Đừng lo. Tôi sửa được." }
+    }
+  ],
+  "exercises": [
+    {
+      "id": "work-a2-u9-e01",
+      "type": "choose_meaning",
+      "prompt": "work-a2-u9-broken",
+      "options": ["hôm nay", "bị hỏng", "vấn đề"],
+      "answer": "bị hỏng"
+    },
+    {
+      "id": "work-a2-u9-e02",
+      "type": "choose_english",
+      "prompt": "Máy in không chạy.",
+      "options": ["The printer is working.", "Where is the printer?", "The printer isn't working."],
+      "answer": "The printer isn't working."
+    },
+    {
+      "id": "work-a2-u9-e03",
+      "type": "listen_choose",
+      "audio": "The internet isn't working.",
+      "options": ["The internet isn't working.", "The printer isn't working.", "The internet is working."],
+      "answer": "The internet isn't working."
+    },
+    {
+      "id": "work-a2-u9-e04",
+      "type": "build_sentence",
+      "prompt": "Máy tính của tôi bị hỏng.",
+      "tiles": ["broken", "computer", "is", "My", "are", "the"],
+      "answer": ["My", "computer", "is", "broken"]
+    },
+    {
+      "id": "work-a2-u9-e05",
+      "type": "choose_meaning",
+      "prompt": "work-a2-u9-what-happened",
+      "options": ["Đừng lo", "Có chuyện gì vậy?", "Anh/chị sửa giúp được không?"],
+      "answer": "Có chuyện gì vậy?"
+    },
+    {
+      "id": "work-a2-u9-e06",
+      "type": "type_answer",
+      "prompt": "Đừng lo.",
+      "answer": "Don't worry.",
+      "accepted": ["Do not worry", "Don't worry about it", "Don't you worry"]
+    },
+    {
+      "id": "work-a2-u9-e07",
+      "type": "build_sentence",
+      "prompt": "Tôi gọi điện về chuyện máy in.",
+      "tiles": ["about", "the", "I'm", "printer", "calling", "call"],
+      "answer": ["I'm", "calling", "about", "the", "printer"],
+      "hint_vi": "“I'm” + động từ thêm -ing: “I'm calling”."
+    },
+    {
+      "id": "work-a2-u9-e08",
+      "type": "listen_choose",
+      "audio": "Can you fix it today?",
+      "options": ["Can you call me back?", "Can you fix it right now?", "Can you fix it today?"],
+      "answer": "Can you fix it today?"
+    },
+    {
+      "id": "work-a2-u9-e09",
+      "type": "choose_english",
+      "prompt": "Tôi không gửi email được.",
+      "options": ["I can't send an email.", "I can send an email.", "Can you send an email?"],
+      "answer": "I can't send an email."
+    },
+    {
+      "id": "work-a2-u9-e10",
+      "type": "type_answer",
+      "prompt": "hôm nay",
+      "answer": "today"
+    },
+    {
+      "id": "work-a2-u9-e11",
+      "type": "build_sentence",
+      "prompt": "Anh/chị sửa giúp được không?",
+      "tiles": ["fix", "you", "it", "Can", "broken", "are"],
+      "answer": ["Can", "you", "fix", "it"]
+    },
+    {
+      "id": "work-a2-u9-e12",
+      "type": "choose_meaning",
+      "prompt": "work-a2-u9-right-now",
+      "options": ["hôm nay", "Hẹn mai gặp lại", "ngay bây giờ"],
+      "answer": "ngay bây giờ"
+    },
+    {
+      "id": "work-a2-u9-e13",
+      "type": "build_sentence",
+      "prompt": "Hôm nay mạng internet không vào được.",
+      "tiles": ["internet", "today", "isn't", "The", "working", "is"],
+      "answer": ["The", "internet", "isn't", "working", "today"],
+      "accepted": [["today", "The", "internet", "isn't", "working"]]
+    },
+    {
+      "id": "work-a2-u9-e14",
+      "type": "speak",
+      "text": "Hello. I'm calling about the internet.",
+      "vi": "Xin chào. Tôi gọi điện về chuyện mạng internet."
+    },
+    {
+      "id": "work-a2-u9-e15",
+      "type": "speak",
+      "text": "The printer isn't working today.",
+      "vi": "Hôm nay máy in không chạy."
+    }
+  ]
+}

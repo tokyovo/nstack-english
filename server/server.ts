@@ -64,7 +64,7 @@ function createApp(db: DatabaseSync, config: ServerConfig, units: readonly Unit[
   app.get('/api/health', (c) => c.json({ ok: true }));
   const now = config.now ?? (() => new Date());
   app.route('/api', accountRoutes(db, now));
-  app.route('/api', progressRoutes(db, now));
+  app.route('/api', progressRoutes(db, now, units));
   app.route('/api', profileRoutes(db, now));
   app.route('/api', unitRoutes(db, now, units));
   if (config.webDir) serveWebApp(app, config.webDir);

@@ -2,7 +2,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import { waitFor } from '@testing-library/react-native';
 import { join } from 'node:path';
 
-import { signIn, signOut, startChildSession, syncSession } from '@/account';
+import { loadAccount, signIn, signOut, startChildSession, syncSession } from '@/account';
 import { readUnits } from '@/content/files';
 import { loadPremiumUnit } from '@/premium';
 import { createProgressStore, LOCAL_PROFILE_ID, type Progress } from '@/progress';
@@ -48,8 +48,8 @@ const completion = (at: string) => ({
  * A stand-in for the API server (server/accounts.ts, server/profiles.ts, server/progress.ts): the
  * demo account owns profile p1, whose progress PUT merges like the real server, and the child c1,
  * whose progress the child's token child-tok and the parent's tok-1 reach; the account is Premium, so
- * the premium unit everyday-a0-u4 answers its tokens (server/units.ts); `online` switches the network
- * and `childFails` makes the child's progress answer 500.
+ * the premium unit everyday-a0-u4 answers its tokens (server/units.ts); `online` switches the network,
+ * `childFails` makes the child's progress answer 500, and GET /api/me lists `profiles`.
  */
 function fakeServer(stored: Progress = { schemaVersion: 1, profileId: 'p1', lessons: {}, answers: {} }) {
   const server = {
@@ -59,12 +59,14 @@ function fakeServer(stored: Progress = { schemaVersion: 1, profileId: 'p1', less
     childFails: false,
     puts: [] as unknown[],
     signedOut: [] as string[],
+    profiles: signedInBody.profiles,
   };
   jest.spyOn(global, 'fetch').mockImplementation(async (input, init) => {
     if (!server.online) throw new TypeError('Failed to fetch');
     const path = String(input);
     const json = (status: number, value: unknown) => new Response(JSON.stringify(value), { status });
     if (path === '/api/auth/signin') return json(200, signedInBody);
+    if (path === '/api/me') return json(200, { user: signedInBody.user, profiles: server.profiles });
     if (path === '/api/auth/signout') {
       server.signedOut.push(new Headers(init?.headers).get('authorization') ?? '');
       return new Response(null, { status: 204 });
@@ -259,7 +261,7 @@ describe('signing out of this device', () => {
     expect(await signOutOfDevice()).toBe('offline');
 
     expect(isCompletedOnDevice(await store.load(LOCAL_PROFILE_ID))).toBe(true);
-    expect(await syncSession()).toEqual({ token: 'tok-1', profileId: 'p1', deviceProfileId: LOCAL_PROFILE_ID });
+    expect(await syncSession()).toEqual({ token: 'tok-1', profileId: 'p1', deviceProfileId: LOCAL_PROFILE_ID, ownerProfileId: 'p1' });
   });
 
   it('reports a failed sync rather than signing out when the server answers with something unreadable', async () => {
@@ -271,7 +273,7 @@ describe('signing out of this device', () => {
     expect(await signOutOfDevice()).toBe('failed');
 
     expect(isCompletedOnDevice(await store.load(LOCAL_PROFILE_ID))).toBe(true);
-    expect(await syncSession()).toEqual({ token: 'tok-1', profileId: 'p1', deviceProfileId: LOCAL_PROFILE_ID });
+    expect(await syncSession()).toEqual({ token: 'tok-1', profileId: 'p1', deviceProfileId: LOCAL_PROFILE_ID, ownerProfileId: 'p1' });
   });
 
   it('signs out and discards the unsent progress when the learner chooses to', async () => {
@@ -368,7 +370,23 @@ describe('signing out of a family device', () => {
     expect(await signOutOfDevice()).toBe('failed');
 
     expect(Object.keys((await store.load('c1')).lessons)).toEqual(['kids-a0-u1']);
-    expect(await syncSession()).toEqual({ token: 'tok-1', profileId: 'p1', deviceProfileId: LOCAL_PROFILE_ID });
+    expect(await syncSession()).toEqual({ token: 'tok-1', profileId: 'p1', deviceProfileId: LOCAL_PROFILE_ID, ownerProfileId: 'p1' });
+  });
+
+  it('leaves no copy of a child deleted on another device, nor any unreadable copy set aside', async () => {
+    const server = fakeServer();
+    await signIn(demo.email, demo.password);
+    await startChildSession('c1');
+    await store.completeLesson('c1', { unitId: 'kids-a0-u1', correct: 8, total: 10 });
+    await leaveChildProfile();
+    await AsyncStorage.setItem('hocenglish.progress.local.unreadable.2026-11-27T08:00:00.000Z', '{"lessons":');
+    server.profiles = signedInBody.profiles.filter((profile) => profile.id !== 'c1');
+    await loadAccount();
+
+    expect(await signOutOfDevice()).toBe('signedOut');
+
+    expect(await AsyncStorage.getItem('hocenglish.progress.c1')).not.toContain('kids-a0-u1');
+    expect((await AsyncStorage.getAllKeys()).filter((key) => key.includes('.unreadable.'))).toEqual([]);
   });
 
   it("clears the children's copies too when the parent chooses to discard what could not be sent", async () => {
@@ -385,6 +403,155 @@ describe('signing out of a family device', () => {
   });
 });
 
+/**
+ * Two accounts, A (profile pa, child ca) and B (profile pb, child cb). Each sign-in or child
+ * session gets a new token; `expire` ends every session of an account, its children's included,
+ * as the server does after 90 days or a revoke.
+ */
+function twoAccountServer() {
+  const accounts = {
+    a: { email: 'a@example.com', profileId: 'pa', childId: 'ca' },
+    b: { email: 'b@example.com', profileId: 'pb', childId: 'cb' },
+  };
+  const server = {
+    online: true,
+    puts: [] as { profileId: string; body: Progress }[],
+    expire: (name: 'a' | 'b') => {
+      for (const [token, owner] of sessions) if (owner === name) sessions.delete(token);
+    },
+  };
+  const sessions = new Map<string, 'a' | 'b'>();
+  let issued = 0;
+  jest.spyOn(global, 'fetch').mockImplementation(async (input, init) => {
+    if (!server.online) throw new TypeError('Failed to fetch');
+    const path = String(input);
+    const json = (status: number, value: unknown) => new Response(JSON.stringify(value), { status });
+    const owner = sessions.get(new Headers(init?.headers).get('authorization')?.replace('Bearer ', '') ?? '');
+    const body = (name: 'a' | 'b') => ({
+      user: { id: name, email: accounts[name].email },
+      profiles: [
+        { id: accounts[name].profileId, kind: 'owner', name: '', picture: null },
+        { id: accounts[name].childId, kind: 'child', name: 'Bé', picture: '🐱' },
+      ],
+    });
+    const child = (name: 'a' | 'b') => body(name).profiles[1];
+    if (path === '/api/auth/signin') {
+      const { email } = JSON.parse(String(init?.body)) as { email: string };
+      const name = email === accounts.a.email ? 'a' : 'b';
+      const token = `tok-${name}-${(issued += 1)}`;
+      sessions.set(token, name);
+      return json(200, { token, ...body(name) });
+    }
+    if (path === '/api/auth/signout') return new Response(null, { status: 204 });
+    if (!owner) return json(401, { error: 'unauthorized' });
+    if (path === '/api/me') return json(200, body(owner));
+    if (path === `/api/profiles/${accounts[owner].childId}/session`) {
+      const token = `tok-${owner}-child-${(issued += 1)}`;
+      sessions.set(token, owner);
+      return json(201, { token, profile: child(owner) });
+    }
+    const profileId = [accounts[owner].profileId, accounts[owner].childId].find(
+      (id) => path === `/api/profiles/${id}/progress`
+    );
+    if (profileId && init?.method === 'PUT') {
+      const sent = JSON.parse(String(init.body)) as Progress;
+      server.puts.push({ profileId, body: sent });
+      return json(200, sent);
+    }
+    return json(404, { error: 'not_found' });
+  });
+  return { server, accounts };
+}
+
+describe('a session that ends without signing out (expired or revoked)', () => {
+  async function aExpiresWithAnUnsyncedLesson() {
+    const { server, accounts } = twoAccountServer();
+    await signIn(accounts.a.email, 'password a');
+    expect(await syncProgress()).toBe('synced');
+    server.online = false;
+    await store.completeLesson(LOCAL_PROFILE_ID, { unitId: 'everyday-a0-u1', correct: 8, total: 10 });
+    expect(await syncProgress()).toBe('offline');
+    server.online = true;
+    server.expire('a');
+    expect(await loadAccount()).toEqual({ status: 'signedOut' });
+    return { server, accounts };
+  }
+
+  it("does not add A's progress to B's account when B signs in next", async () => {
+    const { server, accounts } = await aExpiresWithAnUnsyncedLesson();
+
+    await signIn(accounts.b.email, 'password b');
+    expect(await syncProgress()).toBe('synced');
+
+    const toB = server.puts.filter((put) => put.profileId === 'pb');
+    expect(toB.length).toBeGreaterThan(0);
+    for (const put of toB) expect(put.body.lessons).toEqual({});
+    expect((await store.load(LOCAL_PROFILE_ID)).lessons).toEqual({});
+  });
+
+  it("sends A's unsynced lesson when A signs back in", async () => {
+    const { server, accounts } = await aExpiresWithAnUnsyncedLesson();
+
+    await signIn(accounts.a.email, 'password a');
+    expect(await syncProgress()).toBe('synced');
+
+    const toA = server.puts.filter((put) => put.profileId === 'pa');
+    expect(Object.keys(toA[toA.length - 1].body.lessons)).toEqual(['everyday-a0-u1']);
+  });
+
+  it('still adds guest progress made before any sign-in to the first account', async () => {
+    const { server, accounts } = twoAccountServer();
+    await store.completeLesson(LOCAL_PROFILE_ID, { unitId: 'everyday-a0-u1', correct: 8, total: 10 });
+
+    await signIn(accounts.b.email, 'password b');
+    expect(await syncProgress()).toBe('synced');
+
+    expect(Object.keys(server.puts[0].body.lessons)).toEqual(['everyday-a0-u1']);
+  });
+});
+
 function isCompletedOnDevice(progress: Progress): boolean {
   return 'everyday-a0-u1' in progress.lessons;
 }
+
+describe("a session that ends without signing out while a child's copy is on the device", () => {
+  async function aExpiresWithAChildsUnsyncedLesson() {
+    const { server, accounts } = twoAccountServer();
+    await signIn(accounts.a.email, 'password a');
+    expect(await syncProgress()).toBe('synced');
+    expect(await startChildSession('ca')).toEqual({ ok: true });
+    server.online = false;
+    await store.completeLesson('ca', { unitId: 'kids-a0-u1', correct: 8, total: 10 });
+    expect(await syncProgress()).toBe('offline');
+    server.online = true;
+    server.expire('a');
+    expect(await loadAccount()).toEqual({ status: 'signedOut' });
+    return { server, accounts };
+  }
+
+  it("leaves none of A's child's progress on the device once B signs in, and sends none of it to B", async () => {
+    const { server, accounts } = await aExpiresWithAChildsUnsyncedLesson();
+
+    await signIn(accounts.b.email, 'password b');
+    expect(await syncProgress()).toBe('synced');
+    expect(await startChildSession('cb')).toEqual({ ok: true });
+    expect(await syncProgress()).toBe('synced');
+
+    expect((await store.load('ca')).lessons).toEqual({});
+    const toB = server.puts.filter((put) => put.profileId === 'pb' || put.profileId === 'cb');
+    expect(toB.length).toBeGreaterThan(1);
+    for (const put of toB) expect(put.body.lessons).toEqual({});
+  });
+
+  it("sends A's child's unsynced lesson when A signs back in and hands the device to the child", async () => {
+    const { server, accounts } = await aExpiresWithAChildsUnsyncedLesson();
+
+    await signIn(accounts.a.email, 'password a');
+    expect(await syncProgress()).toBe('synced');
+    expect(await startChildSession('ca')).toEqual({ ok: true });
+    expect(await syncProgress()).toBe('synced');
+
+    const toChild = server.puts.filter((put) => put.profileId === 'ca');
+    expect(Object.keys(toChild[toChild.length - 1].body.lessons)).toEqual(['kids-a0-u1']);
+  });
+});

@@ -61,7 +61,7 @@ describe('profile progress', () => {
           timesCompleted: 1,
         },
       },
-      answers: { [`${unitId}-1`]: [{ at: '2026-11-27T07:59:00.000Z', correct: true }] },
+      answers: { [`${unitId}-e01`]: [{ at: '2026-11-27T07:59:00.000Z', correct: true }] },
     };
   }
 
@@ -120,7 +120,7 @@ describe('profile progress', () => {
       await putProgress(profileId, document(profileId, 'everyday-a0-u1', 8), token);
       const second = document(profileId, 'everyday-a0-u1', 6);
       second.lessons['everyday-a0-u1'].lastCompletedAt = '2026-11-28T08:00:00.000Z';
-      second.answers['everyday-a0-u1-1'] = [{ at: '2026-11-28T07:59:00.000Z', correct: false }];
+      second.answers['everyday-a0-u1-e01'] = [{ at: '2026-11-28T07:59:00.000Z', correct: false }];
 
       const response = await putProgress(profileId, second, token);
 
@@ -138,7 +138,7 @@ describe('profile progress', () => {
           },
         },
         answers: {
-          'everyday-a0-u1-1': [
+          'everyday-a0-u1-e01': [
             { at: '2026-11-27T07:59:00.000Z', correct: true },
             { at: '2026-11-28T07:59:00.000Z', correct: false },
           ],
@@ -219,10 +219,43 @@ describe('profile progress', () => {
       assert.deepEqual(await response.json(), { error: 'invalid_progress' });
     });
 
+    test('drops units and items that are not in the content, keeping the rest, premium units too', async () => {
+      const { token, profileId } = await signUp();
+      const sent = document(profileId);
+      sent.lessons['made-up-unit'] = { ...sent.lessons['everyday-a0-u1'] };
+      sent.lessons['kids-a2-u10'] = { ...sent.lessons['everyday-a0-u1'] };
+      sent.answers['everyday-a0-u1-hello'] = [{ at: '2026-11-27T08:01:00.000Z', correct: true }];
+      sent.answers['kids-a2-u10-happy'] = [{ at: '2026-11-27T08:03:00.000Z', correct: true }];
+      sent.answers['junk-000001'] = [{ at: '2026-11-27T08:02:00.000Z', correct: false }];
+
+      const response = await putProgress(profileId, sent, token);
+
+      const expected = document(profileId);
+      expected.lessons['kids-a2-u10'] = { ...expected.lessons['everyday-a0-u1'] };
+      expected.answers['everyday-a0-u1-hello'] = [{ at: '2026-11-27T08:01:00.000Z', correct: true }];
+      expected.answers['kids-a2-u10-happy'] = [{ at: '2026-11-27T08:03:00.000Z', correct: true }];
+      assert.equal(response.status, 200);
+      assert.deepEqual(await response.json(), expected);
+      assert.deepEqual(await (await getProgress(profileId, token)).json(), expected);
+    });
+
+    test('many PUTs of new answers keep at most 7 answers per item stored', async () => {
+      const { token, profileId } = await signUp();
+      for (let day = 1; day <= 12; day += 1) {
+        const sent = document(profileId);
+        sent.answers['everyday-a0-u1-e01'] = [{ at: `2026-11-${String(day).padStart(2, '0')}T08:00:00.000Z`, correct: true }];
+        await putProgress(profileId, sent, token);
+      }
+
+      const stored = (await (await getProgress(profileId, token)).json()) as { answers: Record<string, unknown[]> };
+
+      assert.equal(stored.answers['everyday-a0-u1-e01'].length, 7);
+    });
+
     test('a body over 1 MB answers 413', async () => {
       const { token, profileId } = await signUp();
       const huge = document(profileId);
-      huge.answers['everyday-a0-u1-1'] = Array.from({ length: 30_000 }, (_, i) => ({
+      huge.answers['everyday-a0-u1-e01'] = Array.from({ length: 30_000 }, (_, i) => ({
         at: new Date(Date.UTC(2026, 0, 1) + i * 1000).toISOString(),
         correct: true,
       }));

@@ -3,6 +3,7 @@ import type { DatabaseSync } from 'node:sqlite';
 import { Hono, type Context } from 'hono';
 import { bodyLimit } from 'hono/body-limit';
 
+import type { Unit } from '../src/content/schema.ts';
 import { mergeProgress } from '../src/progress/merge.ts';
 import { emptyProgress, parseProgress, type Progress } from '../src/progress/schema.ts';
 import { requireUserMiddleware, type AuthEnv, type SessionScope, type User } from './accounts.ts';
@@ -15,11 +16,13 @@ const invalidProgress = { error: 'invalid_progress' };
 /**
  * `GET` and `PUT /profiles/:id/progress`, mounted at `/api`, for the signed-in owner of the
  * profile, or a child's token for that child only; any other profile answers 404, so ids
- * reveal nothing. PUT merges the client's
- * copy into the stored one and returns the result.
+ * reveal nothing. PUT merges the client's copy into the stored one and returns the result. Units
+ * and items that are not in the content are dropped, and the merge keeps a few answers per item,
+ * so a stored document stays small.
  */
-export function progressRoutes(db: DatabaseSync, now: () => Date) {
+export function progressRoutes(db: DatabaseSync, now: () => Date, units: readonly Unit[]) {
   const app = new Hono<AuthEnv>();
+  const known = contentIds(units);
   app.use('/profiles/:id/progress', requireUserMiddleware(db, now));
 
   app.get('/profiles/:id/progress', (c) => {
@@ -37,7 +40,7 @@ export function progressRoutes(db: DatabaseSync, now: () => Date) {
       const incoming = parseProgress(await readJson(c), profileId);
       if (!incoming) return c.json(invalidProgress, 400);
       // No await between this read and the write, so concurrent PUTs cannot lose each other's answers.
-      const merged = mergeProgress(storedProgress(db, profileId), incoming);
+      const merged = mergeProgress(storedProgress(db, profileId), onlyKnown(incoming, known));
       db.prepare(
         `INSERT INTO progress (profile_id, document, updated_at) VALUES (?, ?, ?)
          ON CONFLICT (profile_id) DO UPDATE SET document = excluded.document, updated_at = excluded.updated_at`,
@@ -47,6 +50,26 @@ export function progressRoutes(db: DatabaseSync, now: () => Date) {
   );
 
   return app;
+}
+
+type ContentIds = { units: Set<string>; items: Set<string> };
+
+/** Unit ids, and the word and exercise ids answers are saved under, of every unit, free and premium. */
+function contentIds(units: readonly Unit[]): ContentIds {
+  const ids: ContentIds = { units: new Set(), items: new Set() };
+  for (const unit of units) {
+    ids.units.add(unit.id);
+    for (const { id } of [...unit.words, ...unit.exercises]) ids.items.add(id);
+  }
+  return ids;
+}
+
+function onlyKnown(progress: Progress, known: ContentIds): Progress {
+  return {
+    ...progress,
+    lessons: Object.fromEntries(Object.entries(progress.lessons).filter(([id]) => known.units.has(id))),
+    answers: Object.fromEntries(Object.entries(progress.answers).filter(([id]) => known.items.has(id))),
+  };
 }
 
 /** The parent's session reaches every profile of the account; a child's token only its own. */

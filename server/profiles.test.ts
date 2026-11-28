@@ -83,7 +83,7 @@ describe('family profiles', () => {
           timesCompleted: 1,
         },
       },
-      answers: { 'kids-a0-u1-1': [{ at: '2026-11-27T07:59:00.000Z', correct: true }] },
+      answers: { 'kids-a0-u1-cat': [{ at: '2026-11-27T07:59:00.000Z', correct: true }] },
     };
   }
 
@@ -117,6 +117,26 @@ describe('family profiles', () => {
         assert.deepEqual(await response.json(), { error: 'invalid_name', field: 'name' });
       }
       assert.equal((await profilesOf(parent)).length, 2);
+    });
+
+    test('a nickname of only invisible or control characters answers 400 next to the name', async () => {
+      const parent = await signUp();
+
+      for (const name of ['​', '‮⁦', '\n\t', '​ ‍']) {
+        const response = await request('POST', '/api/profiles', parent.token, { name, picture: '🐶' });
+        assert.equal(response.status, 400, JSON.stringify(name));
+        assert.deepEqual(await response.json(), { error: 'invalid_name', field: 'name' });
+      }
+      assert.equal((await profilesOf(parent)).length, 1);
+    });
+
+    test('control and direction-override characters are removed from a stored nickname', async () => {
+      const parent = await signUp();
+
+      const child = await addChild(parent, 'a\n‮b⁩ c\u0000');
+
+      assert.equal(child.name, 'ab c');
+      assert.equal((await profilesOf(parent))[1].name, 'ab c');
     });
 
     test('a picture outside the fixed set answers 400 next to the picture', async () => {
@@ -205,6 +225,19 @@ describe('family profiles', () => {
         assert.deepEqual(await response.json(), error);
       }
       assert.deepEqual((await profilesOf(parent))[1], child);
+    });
+
+    test('the owner profile cannot be changed: 400, and it keeps no name or picture', async () => {
+      const parent = await signUp();
+
+      const response = await request('PATCH', `/api/profiles/${parent.owner.id}`, parent.token, {
+        name: 'Mẹ',
+        picture: '🐼',
+      });
+
+      assert.equal(response.status, 400);
+      assert.deepEqual(await response.json(), { error: 'owner_profile' });
+      assert.deepEqual((await profilesOf(parent))[0], parent.owner);
     });
 
     test("another user's child answers 404 and changes nothing", async () => {
