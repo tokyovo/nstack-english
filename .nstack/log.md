@@ -319,3 +319,14 @@
 - [x] 3. Act on every finding. Both important fixed by a builder (855bb91): speech red 4/6 -> green, e2e no-voice walkthrough red -> green, shuffle red -> green. After merge: typecheck 0, lint 0, jest 158, test:server 21, test:drive 6, drive check passed, e2e 19 passed. Nit: already handled by T11 on review-speak (the schedule reads review answers recorded under word ids, and ignores lesson answers keyed by exercise id; src/review/schedule.test.ts passes), so no change here.
 - [x] 4. Review the fixes. Round 2 at a99f702: pass, no findings (mutations on shuffle and voice detection red; e2e 19 passed)
 - [x] Done when: latest round has no important findings; verify passed after the fix (jest 158, e2e 19, drive check passed); nits handled.
+
+## 2026-11-28 ship learn-core
+- Read: ship/SKILL.md b51cd2a
+- [x] 1. Commit. slice commits on nstack/learn-core
+- [x] 2. Sync. merged origin/main (foundation squash) with -X ours, removed the welcome tests main re-added; verify re-run (jest 158, e2e 19, drive check)
+- [x] 3. Push. nstack/learn-core
+- [x] 4. Open the PR. #2 with verification table, merge danger, decisions
+- [x] 5. Wait for CI. run 46092263310 at 261d6dd: ubuntu pass, iOS pass
+- [x] 6. Merge. squash, 67caa0f
+- [x] 7. Confirm and clean up. main pulled: typecheck 0, lint 0, jest 158, test:server 21; branch and worktree deleted local and remote (tree identical). CI on main: see next entry
+- [x] Done when: PR #2 merged, fast checks pass on main.
