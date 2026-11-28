@@ -381,3 +381,27 @@
 - [x] 6. Merge. squash, 67caa0f
 - [x] 7. Confirm and clean up. main pulled: typecheck 0, lint 0, jest 158, test:server 21; branch and worktree deleted local and remote (tree identical). CI on main: see next entry
 - [x] Done when: PR #2 merged, fast checks pass on main.
+
+## 2026-11-28 ship review-speak
+- Read: ship/SKILL.md b51cd2a
+- [x] 1. Commit. slice commits on nstack/review-speak
+- [x] 2. Sync. merged origin/main (learn-core squash) -X ours; verify re-run at 3a4789a
+- [x] 3. Push. nstack/review-speak
+- [x] 4. Open the PR. #3
+- [x] 5. Wait for CI. run 46095645949 at 789adea: ubuntu success, iOS success
+- [x] 6. Merge. squash d60033a
+- [x] 7. Confirm and clean up. main: typecheck 0, lint 0, jest 271, test:server 21; branch deleted local and remote
+- [x] Done when: PR #3 merged, fast checks pass on main.
+
+## 2026-11-28 verify accounts-sync
+- Read: verify/SKILL.md adc6a8a
+- [x] 1. Clean tree. b69d296 code (later commits .nstack only and sync with main touching only .nstack)
+- [x] 2. Project checks. typecheck 0, lint 0, jest 314, test:server 60, test:drive 6, drive check passed (32 screenshots), e2e 33 passed
+- [x] 3. Every acceptance criterion in scope has a passing check. 1 accounts.test (409, 401 same body, 400 weak, 401 me, 429 rate limit); 2 progress.test + merge.test (idempotent, commutative); 3 account.spec + account Jest (errors by field, focus, input kept); 4 sync.spec (two contexts, offline notice, shared-device sign-out, offline sign-out asks); 5 migrate checks in T16/T17 logs, drive seed demo account. check-features 0
+- [x] 4. Every new check bites. builders' red runs logged per ticket (T16-T19b); deny proofs seen failing with checks removed (T16, T17)
+- [x] 5. The real thing runs. e2e against the drive server with real accounts and sync
+- [x] 6. Every changed screen looks right. /account (sign up, sign in, errors, signed in, sign-out confirm) screenshots by T18/T19b builders at 390/1280 light/dark: 9/9; offline notice bar checked by T19 builder
+- [x] 7. Nothing got weaker. no tests removed; sync.spec gained a speak case for the merged content
+- [x] 8. No new warnings or errors. lint 0
+- [x] 9. Access is enforced. check-security exit 0 after the offline-notice row was marked public (it is UI, not a protected resource); deny proofs listed in Features
+- [x] Done when: all ticked. Not verified: Android flows (no KVM).

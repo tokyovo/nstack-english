@@ -38,5 +38,5 @@ How an agent runs and uses the app on its own, without touching anyone's data.
 | Account (me) | GET /api/me | signed-in | `server/accounts.test.ts` "the token signs the new user in for GET /api/me" | `server/accounts.test.ts` "a malformed Authorization header answers 401" |
 | Sign out (saves, then clears the device) | /account, Đăng xuất | signed-in | `e2e/sync.spec.ts` "after A signs out on a shared device, B signs in and has none of A lessons" | `server/accounts.test.ts` "signed out answers 401" |
 | Sync progress across devices | (automatic when signed in); GET/PUT /api/profiles/:id/progress | owner of profile | `e2e/sync.spec.ts` "a lesson completed on one device shows as completed after signing in on another" | `server/progress.test.ts` "another user's profile answers 404 and changes nothing" |
-| Offline notice | (root layout, signed in) | signed-in | `e2e/sync.spec.ts` "a signed-in learner offline is told progress will sync later" | - |
+| Offline notice | (root layout, signed in) | public | `e2e/sync.spec.ts` "a signed-in learner offline is told progress will sync later" | - |
 | API health | GET /api/health | public | `server/server.test.ts` "GET /api/health answers" | - |
