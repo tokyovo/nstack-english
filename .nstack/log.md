@@ -622,3 +622,17 @@
 - [x] 3. Act on every finding. builder fixed all (da25f8e): sign-out clearAll red -> green; delete clears the child's copy red -> green; owner PATCH 400 red -> green; nickname control/bidi rule red -> green (shared readNickname). Synced with main (PR #5 head; -s ours main; check-sync ok after counting work-branch merges). jest 451, test:server 92, drive check passed, e2e 44, check-features 0
 - [x] 4. Review the fixes. round 2 at 26ded27: both reviewers pass (general: no findings; security: 1 nit to backlog)
 - [x] Done when: round 2 clean, verify passed after the fixes (jest 451, server 92, e2e 44), nit in backlog.
+
+## 2026-11-28 verify plans
+- Read: verify/SKILL.md adc6a8a
+- [x] 1. Clean tree. head after check-sync commit
+- [x] 2. Project checks. typecheck 0, lint 0, jest 471, test:server 116, test:drive 6, drive check passed (40 screenshots), e2e 51 passed
+- [x] 3. Every acceptance criterion in scope has a passing check. 1 entitlements.test (free -> premium -> free by clock; child follows parent; grant idempotent); 2 units.test (401, 403 free, 403 free child, 200 premium and child, free units public); 3 bundle.spec (no premium exercise id in dist) + manifest.test; 4 premium.spec + premium Jest (locks, /premium, premium lesson offline after first open, premium words in review); 5 /premium behind the parent gate (premium.spec) and the payments item in needs-human.md. check-features 0
+- [x] 4. Every new check bites. T23 15 red before code, /api/plan red without requireUser; T24 401/403 red with checks removed, manifest red on a changed title, bundle red with a premium unit imported; T25 seed/premium tests red; T25b review and sign-out tests red
+- [x] 5. The real thing runs. e2e with the seeded Premium demo account against the drive server
+- [x] 6. Every changed screen looks right. /track with locks and /premium at 390 light and 1280 dark (T25 builder); premium tag drawn with Views, not emoji
+- [x] 7. Nothing got weaker. getWord removed (callers pass the unit's words); no tests removed
+- [x] 8. No new warnings or errors. lint 0
+- [x] 9. Access is enforced. check-security exit 0, 12 deny proofs (after correcting three proof names in verify.md)
+- [x] Done when: all ticked. Not verified: Android (no KVM); real store and card payments (parked).
+- Lesson: check-sync missed intentional conflict resolutions made while merging a shipped PR head; it now counts files a sync merge changed against both parents, and still reports the original -X ours revert (checked at 1fa46b3).
