@@ -1,6 +1,6 @@
 # Plan
 
-Later slices (in order, planned in full when reached): family (parent account, child profiles, parent gate, per-child progress), plans (free/premium entitlements, server-served premium lessons, payments parked), content-a2.
+Later slices (in order, planned in full when reached): family (parent account, child profiles, parent gate, per-child progress), plans (free/premium entitlements, server-served premium lessons, payments parked).
 
 ## Slice: review-speak (branch nstack/review-speak)
 Words a learner has met come back for review on a spaced schedule: a word answered wrongly comes back sooner, a word answered right waits longer. Home shows how many words are due; "Ôn tập" runs a short review session built from those words. Lessons and reviews include speaking: on devices with speech recognition the learner taps the microphone and says the phrase; elsewhere (or if the microphone is refused) they listen, repeat aloud and mark themselves.
@@ -48,6 +48,18 @@ Acceptance criteria:
 - [x] T26 Everyday A1 u6-u10. Proof: content test, native reader verdict. Content: yes. Needs: none
 - [x] T27 Work A1 u4-u6. Proof: content test, native reader verdict. Content: yes. Needs: none
 - [x] T28 Kids A1 u6-u8. Proof: content test, native reader verdict. Content: yes. Needs: none
+
+## Slice: content-a2 (branch nstack/content-a2)
+Learners continue to A2 in every track: everyday u11-u15 (Ở nhà hàng, Sức khỏe, Thời tiết, Kể chuyện hôm qua with the past simple, Kế hoạch with be going to), work u7-u9 (Họp và nêu ý kiến, Phỏng vấn xin việc, Báo cáo sự cố), kids u9-u10 (Một ngày của em, Cảm xúc). Each with a Vietnamese usage note. This completes the planned zero-to-A2 course (34 units).
+
+Acceptance criteria:
+1. The 10 unit files pass the content test (as content-a1, including 2 speak items and note_vi).
+2. Each track's batch has a native reader verdict with every problem fixed.
+3. A2 grammar is introduced with contrast to Vietnamese (e.g. past time without verb change in Vietnamese vs -ed / irregular forms; "going to" vs "sẽ").
+
+- [ ] T29 Everyday A2 u11-u15. Proof: content test, native reader verdict. Content: yes. Needs: none
+- [ ] T30 Work A2 u7-u9. Proof: content test, native reader verdict. Content: yes. Needs: none
+- [ ] T31 Kids A2 u9-u10. Proof: content test, native reader verdict. Content: yes. Needs: none
 
 ## Done
 - foundation: T1-T4, PR #1
