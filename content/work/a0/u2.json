@@ -155,6 +155,18 @@
       "answer": "I'm an engineer."
     },
     {
+      "id": "work-a0-u2-e14",
+      "type": "speak",
+      "text": "What do you do?",
+      "vi": "Anh/chị làm nghề gì?"
+    },
+    {
+      "id": "work-a0-u2-e15",
+      "type": "speak",
+      "text": "I'm a teacher.",
+      "vi": "Tôi là giáo viên."
+    },
+    {
       "id": "work-a0-u2-e13",
       "type": "type_answer",
       "prompt": "bác sĩ",

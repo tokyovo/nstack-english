@@ -101,6 +101,18 @@
       "answer": "two"
     },
     {
+      "id": "kids-a0-u3-e13",
+      "type": "speak",
+      "text": "One, two, three",
+      "vi": "Một, hai, ba"
+    },
+    {
+      "id": "kids-a0-u3-e14",
+      "type": "speak",
+      "text": "Ten fish",
+      "vi": "Mười con cá"
+    },
+    {
       "id": "kids-a0-u3-e12",
       "type": "type_answer",
       "prompt": "một",

@@ -107,6 +107,18 @@
       "accepted": ["eyes"]
     },
     {
+      "id": "kids-a0-u5-e13",
+      "type": "speak",
+      "text": "Touch your nose!",
+      "vi": "Chạm vào mũi nào!"
+    },
+    {
+      "id": "kids-a0-u5-e14",
+      "type": "speak",
+      "text": "Touch your hand!",
+      "vi": "Chạm vào tay nào!"
+    },
+    {
       "id": "kids-a0-u5-e12",
       "type": "type_answer",
       "prompt": "mũi",
