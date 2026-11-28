@@ -437,3 +437,13 @@
 - [x] 8. No new warnings or errors. lint 0
 - [x] 9. Access is enforced. check-security exit 0 after the offline-notice row was marked public (it is UI, not a protected resource); deny proofs listed in Features
 - [x] Done when: all ticked. Not verified: Android flows (no KVM).
+
+## 2026-11-28 build T22b (with sync of accounts-sync into family)
+- Read: build/SKILL.md a069840
+- [x] 1. Branch. nstack/family
+- [x] 2. Starting state. fast checks pass at 8305f69
+- [x] 3. Dispatch. builder: merge nstack/accounts-sync, then T22b
+- [x] 4. Read the reply. done b4085eb; conflicts resolved keeping both intents (review uses the active learner's progress; shared answerRight in e2e/learner.ts); T22b Jest red 4 -> green, e2e red (kids-a0-u1 left on device) -> green
+- [x] 5. Prove it yourself. fast-forwarded: typecheck 0, lint 0, jest 364, test:server 85; check-features 0
+- [x] 6. Record. this entry, Features rows, backlog
+- [x] Done when: committed, items ticked.
