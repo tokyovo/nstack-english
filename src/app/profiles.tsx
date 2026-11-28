@@ -1,9 +1,9 @@
-import { Link, Stack } from 'expo-router';
+import { Link, Stack, useRouter } from 'expo-router';
 import { useEffect, useRef, useState } from 'react';
 import { ScrollView, StyleSheet, Text, View, type TextInputInstance } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
-import { loadAccount, type Profile } from '@/account';
+import { loadAccount, startChildSession, type ChildSessionResult, type Profile } from '@/account';
 import {
   addChild,
   deleteChild,
@@ -15,8 +15,10 @@ import {
   type ProgressSummary,
 } from '@/account/profiles';
 import { useAccount } from '@/account/use-account';
+import { useLearner } from '@/account/use-learner';
 import { BackLink } from '@/components/back-link';
 import { ActionButton } from '@/components/lesson/action-button';
+import { ParentGate } from '@/components/parent-gate';
 import { PicturePicker } from '@/components/picture-picker';
 import { TextField } from '@/components/text-field';
 import { ThemedText } from '@/components/themed-text';
@@ -187,6 +189,7 @@ function ProfileRow({ profile, summary, mode, onMode, onChanged, onDeleted }: Pr
           <ThemedText type="meta">{summaryLine(summary)}</ThemedText>
         </View>
       </View>
+      {child && mode === 'view' && <HandToChild profile={profile} />}
       {child && mode === 'view' && (
         <View style={styles.rowActions}>
           <ActionButton
@@ -223,6 +226,39 @@ function ProfileRow({ profile, summary, mode, onMode, onChanged, onDeleted }: Pr
         <DeleteConfirmation profile={profile} onKeep={close} onDeleted={() => onDeleted(name)} />
       )}
     </View>
+  );
+}
+
+/** Hands the device to this child: home then shows the child's own learning. */
+function HandToChild({ profile }: { profile: Profile }) {
+  const router = useRouter();
+  const [switching, setSwitching] = useState(false);
+  const [error, setError] = useState<Extract<ChildSessionResult, { ok: false }>['error'] | null>(null);
+
+  async function start() {
+    setSwitching(true);
+    setError(null);
+    const result = await startChildSession(profile.id);
+    if (result.ok) {
+      router.dismissTo('/');
+      return;
+    }
+    setSwitching(false);
+    setError(result.error);
+  }
+
+  return (
+    <>
+      <ActionButton
+        kind="secondary"
+        label={switching ? t('profiles.switching') : t('profiles.switch')}
+        accessibilityLabel={t('profiles.switchLabel', { name: profile.name })}
+        disabled={switching}
+        onPress={start}
+        testID={`profile-${profile.id}-switch`}
+      />
+      {error && <FormError message={t(`profiles.error.${error}`)} />}
+    </>
   );
 }
 
@@ -336,6 +372,7 @@ function Profiles({ profiles, onChanged }: { profiles: Profile[]; onChanged: () 
 export default function ProfilesScreen() {
   const theme = useTheme();
   const [account, setAccount] = useAccount();
+  const learner = useLearner();
   // A session the server no longer knows comes back signed out, and the screen says so.
   const reload = () => loadAccount().then(setAccount, () => setAccount({ status: 'signedOut' }));
 
@@ -351,9 +388,15 @@ export default function ProfilesScreen() {
             </ThemedText>
             <ThemedText>{t('profiles.intro')}</ThemedText>
           </View>
-          {account.status === 'loading' && <ThemedText>{t('profiles.loading')}</ThemedText>}
-          {account.status === 'signedOut' && <SignedOut />}
-          {account.status === 'signedIn' && <Profiles profiles={account.profiles} onChanged={reload} />}
+          {learner.status === 'loading' || account.status === 'loading' ? (
+            <ThemedText>{t('profiles.loading')}</ThemedText>
+          ) : learner.child ? (
+            <ParentGate child={learner.child} />
+          ) : account.status === 'signedOut' ? (
+            <SignedOut />
+          ) : (
+            <Profiles profiles={account.profiles} onChanged={reload} />
+          )}
         </View>
       </ScrollView>
     </SafeAreaView>
