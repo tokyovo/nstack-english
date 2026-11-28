@@ -350,3 +350,13 @@
 - [x] 5. Prove it yourself. merged: jest and typecheck below
 - [x] 6. Record. this entry
 - [x] Done when: committed, items ticked.
+
+## 2026-11-28 build T26
+- Read: build/SKILL.md a069840
+- [x] 1. Branch. nstack/content-a1
+- [x] 2. Starting state. fast checks pass at cf389ee
+- [x] 3. Dispatch. builder in worktree
+- [x] 4. Read the reply. done 50fa35b; native reader: 1 fix (missed word order), 1 nit, 2 optional, all applied
+- [x] 5. Prove it yourself. merged: jest, typecheck, lint, e2e below
+- [x] 6. Record. this entry
+- [x] Done when: committed, items ticked.
