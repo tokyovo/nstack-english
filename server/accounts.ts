@@ -4,6 +4,8 @@ import type { DatabaseSync } from 'node:sqlite';
 import { Hono, type Context, type MiddlewareHandler } from 'hono';
 import { bodyLimit } from 'hono/body-limit';
 
+import { planOf } from './entitlements.ts';
+
 export type User = { id: string; email: string };
 export type Profile = { id: string; kind: 'owner' | 'child'; name: string; picture: string | null };
 /** What a session may reach: the whole account (the parent), or one profile (a child's token). */
@@ -72,8 +74,11 @@ export function accountRoutes(db: DatabaseSync, now: () => Date) {
 
   app.get('/me', requireAccount, (c) => {
     const user = c.get('user');
-    return c.json({ user, profiles: profilesOf(db, user.id) });
+    return c.json({ user, profiles: profilesOf(db, user.id), plan: planOf(db, user.id, now()) });
   });
+
+  // Any session, a child's too: a child's plan is its parent's, since its session belongs to the parent's user.
+  app.get('/plan', requireUser, (c) => c.json({ plan: planOf(db, c.get('user').id, now()) }));
 
   return app;
 }

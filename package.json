@@ -56,6 +56,7 @@
     "lint": "eslint . --max-warnings 0",
     "test": "jest",
     "server": "node server/main.ts",
+    "grant": "node server/grant.ts",
     "test:server": "node --test \"server/**/*.test.ts\"",
     "typecheck:server": "tsc -p server",
     "drive": "node scripts/drive.mjs",
