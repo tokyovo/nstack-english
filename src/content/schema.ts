@@ -15,6 +15,7 @@ export const exerciseTypes = [
   'listen_choose',
   'build_sentence',
   'type_answer',
+  'speak',
 ] as const;
 export type ExerciseType = (typeof exerciseTypes)[number];
 
@@ -34,6 +35,14 @@ export type Word = {
   source?: string;
 };
 
+/**
+ * A pattern to fill in, such as "My name is ..." or "Where is the ...?": taught and recognised,
+ * but not a sentence the learner can type or say as written.
+ */
+export function isTemplate(english: string): boolean {
+  return english.includes('...') || english.includes('…');
+}
+
 type ExerciseBase = { id: string; hint_vi?: string; source?: string };
 
 export type Exercise = ExerciseBase &
@@ -50,6 +59,7 @@ export type Exercise = ExerciseBase &
         accepted?: string[][];
       }
     | { type: 'type_answer'; prompt: string; answer: string; accepted?: string[] }
+    | { type: 'speak'; /** English the learner says */ text: string; vi: string }
   );
 
 export type Unit = {
@@ -80,6 +90,7 @@ const exerciseKeys: Record<ExerciseType, string[]> = {
   listen_choose: ['audio', 'options', 'answer'],
   build_sentence: ['prompt', 'tiles', 'answer', 'accepted'],
   type_answer: ['prompt', 'answer', 'accepted'],
+  speak: ['text', 'vi'],
 };
 
 /** Collects errors as "<where>: <what>" while reading untyped JSON. */
@@ -261,6 +272,8 @@ function parseExercise(r: Reader, value: unknown, at: string, unitId: string): E
         ...(accepted ? { accepted } : {}),
       };
     }
+    case 'speak':
+      return { ...base, type: 'speak', text: r.text(fields, 'text', id), vi: r.text(fields, 'vi', id) };
   }
 }
 

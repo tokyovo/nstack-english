@@ -1,31 +1,11 @@
 // Progress follows the account: two browsers stand for two devices of one learner.
 import { expect, test, type Page } from '@playwright/test';
 
-import { button, collectErrors, loadUnit, withoutSpeech } from './learner';
-import type { Exercise } from '../src/content/schema';
+import { answerRight, button, collectErrors, expectNoSeriousAxeViolations, loadUnit, withoutSpeech } from './learner';
 
 const unit = loadUnit('everyday/a0/u1.json');
 const offlineNotice = 'Đang ngoại tuyến, tiến độ sẽ được đồng bộ sau';
 const completedRow = /^Bài 1: .*\. Đã học xong$/;
-
-async function answerRight(page: Page, exercise: Exercise) {
-  switch (exercise.type) {
-    case 'choose_meaning':
-    case 'choose_english':
-    case 'listen_choose':
-      await button(page, exercise.answer).click();
-      return;
-    case 'build_sentence':
-      for (const tile of exercise.answer) await button(page, tile).first().click();
-      await button(page, 'Kiểm tra').click();
-      return;
-    case 'type_answer': {
-      const input = page.getByLabel('Câu trả lời bằng tiếng Anh');
-      await input.fill(exercise.answer);
-      await input.press('Enter');
-    }
-  }
-}
 
 async function completeUnit(page: Page) {
   await page.goto(`/lesson/${unit.id}`);
@@ -113,4 +93,57 @@ test('a signed-in learner offline is told progress will sync later', async ({ pa
   await context.setOffline(false);
   await page.getByRole('link', { name: 'Về danh sách chủ đề' }).click();
   await expect(page.getByText(offlineNotice)).toHaveCount(0);
+});
+
+test('after A signs out on a shared device, B signs in and has none of A lessons', async ({ page, request }) => {
+  const password = 'a-long-password';
+  const learnerB = `shared-b-${Date.now()}@example.com`;
+  expect((await request.post('/api/auth/signup', { data: { email: learnerB, password } })).status()).toBe(201);
+  const errors = collectErrors(page);
+  await withoutSpeech(page);
+
+  await page.goto('/account');
+  await button(page, 'Chưa có tài khoản? Tạo tài khoản mới').click();
+  await fillIn(page, `shared-a-${Date.now()}@example.com`, password);
+  await button(page, 'Tạo tài khoản').click();
+  await expect(page.getByText('Khi đăng xuất, tiến độ được lưu vào tài khoản rồi xoá khỏi thiết bị này.')).toBeVisible();
+  await completeUnit(page);
+  await expect.poll(() => accountLessons(page)).toEqual([unit.id]);
+  await page.goto('/account');
+  await button(page, 'Đăng xuất').click();
+  await expect(page.getByLabel('Email', { exact: true })).toBeVisible();
+  await page.goto('/track/everyday');
+  await expect(page.getByRole('link', { name: /^Bài 1: .*\. Chưa học$/ })).toBeVisible();
+
+  await page.goto('/account');
+  await fillIn(page, learnerB, password);
+  await button(page, 'Đăng nhập').click();
+  await expect(page.getByText(`Bạn đã đăng nhập bằng ${learnerB}.`)).toBeVisible();
+  await page.getByRole('link', { name: 'Về trang chủ' }).click();
+  await page.getByRole('link', { name: /^Đời sống\./ }).click();
+  await expect(page.getByRole('link', { name: /^Bài 1: .*\. Chưa học$/ })).toBeVisible();
+  await expect.poll(() => accountLessons(page)).toEqual([]);
+  expect(errors).toEqual([]);
+});
+
+test('offline, signing out asks first; staying keeps the learner signed in', async ({ page, context }) => {
+  const email = `offline-out-${Date.now()}@example.com`;
+  await page.goto('/account');
+  await button(page, 'Chưa có tài khoản? Tạo tài khoản mới').click();
+  await fillIn(page, email, 'a-long-password');
+  await button(page, 'Tạo tài khoản').click();
+  await expect(page.getByText(`Bạn đã đăng nhập bằng ${email}.`)).toBeVisible();
+
+  await context.setOffline(true);
+  await button(page, 'Đăng xuất').click();
+  await expect(page.getByRole('alert')).toHaveText(/^Đang ngoại tuyến nên chưa lưu được tiến độ vào tài khoản\./);
+  await expectNoSeriousAxeViolations(page);
+  await button(page, 'Ở lại, lưu tiến độ sau').click();
+  await expect(page.getByRole('alert')).toHaveCount(0);
+  await expect(page.getByText(`Bạn đã đăng nhập bằng ${email}.`)).toBeVisible();
+
+  await button(page, 'Đăng xuất').click();
+  await button(page, 'Vẫn đăng xuất và xoá tiến độ chưa lưu').click();
+  await expect(page.getByLabel('Email', { exact: true })).toBeVisible();
+  await context.setOffline(false);
 });

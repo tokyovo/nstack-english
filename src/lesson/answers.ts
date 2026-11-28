@@ -30,5 +30,12 @@ export function isSentenceCorrect(exercise: BuildSentence, placed: string[]): bo
 }
 
 export function rightAnswer(exercise: Exercise): string {
-  return exercise.type === 'build_sentence' ? exercise.answer.join(' ') : exercise.answer;
+  switch (exercise.type) {
+    case 'build_sentence':
+      return exercise.answer.join(' ');
+    case 'speak':
+      return exercise.text;
+    default:
+      return exercise.answer;
+  }
 }

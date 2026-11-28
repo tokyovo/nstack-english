@@ -39,6 +39,14 @@
             "image": "./assets/images/splash-icon.png"
           }
         }
+      ],
+      [
+        "expo-speech-recognition",
+        {
+          "microphonePermission": "$(PRODUCT_NAME) dùng micrô để nghe và chấm câu tiếng Anh bạn nói. Micrô chỉ bật khi bạn bấm “Nói”.",
+          "speechRecognitionPermission": "$(PRODUCT_NAME) dùng nhận dạng giọng nói để kiểm tra câu tiếng Anh bạn nói. Giọng nói không được ứng dụng lưu lại.",
+          "androidSpeechServicePackages": ["com.google.android.googlequicksearchbox"]
+        }
       ]
     ],
     "experiments": {

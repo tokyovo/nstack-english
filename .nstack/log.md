@@ -271,3 +271,169 @@
 - [x] 6. Record. this entry, plan T22b
 - [x] Done when: committed, items ticked.
 - Decision: each learner has its own device progress copy ("local" for the parent/guest, the profile id for a child); all session writes go through one queue.
+## 2026-11-28 build T19
+- Read: build/SKILL.md a069840
+- [x] 1. Branch. nstack/accounts-sync
+- [x] 2. Starting state. fast checks pass at 9bc8447
+- [x] 3. Dispatch. builder in worktree
+- [x] 4. Read the reply. done dd66e89; sync Jest red vs stub; sync e2e red with PUT disabled
+- [x] 5. Prove it yourself. merged: typecheck 0, lint 0, jest 192, test:server 60, e2e 25 passed
+- [x] 6. Record. this entry, backlog; shared-device sign-out leak becomes ticket T19b (below)
+- [x] Done when: committed, items ticked.
+
+## 2026-11-28 build T19b
+- Read: build/SKILL.md a069840
+- [x] 1. Branch. nstack/accounts-sync
+- [x] 2. Starting state. fast checks pass at cb5b9d7
+- [x] 3. Dispatch. builder in worktree
+- [x] 4. Read the reply. done 214af1e; 5 sync tests and 3 screen tests red vs stub
+- [x] 5. Prove it yourself. merged: typecheck 0, lint 0, jest and e2e below
+- [x] 6. Record. this entry, backlog
+- [x] Done when: committed, items ticked.
+## 2026-11-28 build T12
+- Read: build/SKILL.md a069840
+- [x] 1. Branch. nstack/review-speak
+- [x] 2. Starting state. fast checks pass at 7e4dd49
+- [x] 3. Dispatch. builder in worktree
+- [x] 4. Read the reply. done 825a0a0; mutations red (distractors from all tracks, home counting learned words, answers not recorded); Maestro syntax only (no KVM)
+- [x] 5. Prove it yourself. merged; UI-string test flagged t(cond ? 'a' : 'b') keys: checker taught that conditional branches of a t() key are keys (test red 2 failed -> green). jest 172 pass, drive check passed, e2e 21 passed
+- [x] 6. Record. this entry, backlog
+- [x] Done when: committed on nstack/review-speak, items ticked.
+- [x] 4. Review the fixes. Round 2 (44c4291): 1 important (screenOptions, options functions, quoted keys, tabBarLabel still missed). Shared premise of both fixes (we can list where text appears) attacked: builder inverted the rule to report every lettered string in JSX outside an allowlist (cdd1a94, red 9 failed -> green 27). Round 3 (4bdbefe): 1 important (allowlisted prop names also exempted object keys, e.g. t("x", { name: "Bạn" })) + 1 nit (strings outside JSX, backlog). Fixed by the controller in 15ad710 (10+/3- lines, one finding): new test red without the fix (1 failed), green with it; small-fix exception used, no round 4.
+- [x] Done when: latest round's important finding fixed under the small-fix exception, verify re-run at 15ad710 (below), nits fixed or in backlog.md.
+
+## 2026-11-28 verify foundation (after review fixes)
+- Read: verify/SKILL.md adc6a8a
+- [x] 1. Clean tree. 15ad710
+- [x] 2. Project checks. typecheck 0, lint 0, jest 30 pass, test:server 21 pass, test:drive 6 pass, drive check passed, e2e 3 passed
+- [x] 3. Every acceptance criterion in scope has a passing check. as before; check-features exit 0
+- [x] 4. Every new check bites. checker tests red before each fix (5, 9, 1 failed), drive pid test red
+- [x] 5. The real thing runs. drive check
+- [x] 6. Every changed screen looks right. no screen changed since the first verify
+- [x] 7. Nothing got weaker. no tests removed or loosened
+- [x] 8. No new warnings or errors. lint 0 warnings
+- [x] 9. Access is enforced. check-security exit 0 at c24cb0d; no route changed since
+- [x] Done when: all ticked. Not verified: iOS (CI job on the PR), Android flows (no KVM, parked).
+
+## 2026-11-28 build T13
+- Read: build/SKILL.md a069840
+- [x] 1. Branch. nstack/review-speak
+- [x] 2. Starting state. fast checks pass at 7e4dd49
+- [x] 3. Dispatch. builder in worktree
+- [x] 4. Read the reply. done c84da3a; expo-speech-recognition ~58.0.1 (MIT, SDK 58 line); red first for schema, scorer, recognition, speak component; Vietnamese usage strings in app config
+- [x] 5. Prove it yourself. merged; UI-string test flagged reason: "declined" (state discriminant) and review e2e lacked a speak step: fixed (994a52e; checker test red 2 failed -> green). jest 224 pass, e2e 23 passed, drive check passed
+- [x] 6. Record. this entry, backlog
+- [x] Done when: committed on nstack/review-speak, items ticked. Native recognition not run (no KVM; iOS builds in CI).
+- Decision: listening gives up after 15 s (headless browsers listen forever) and offers self-check; "nothing heard" can switch to self-check.
+
+## 2026-11-28 build T14
+- Read: build/SKILL.md a069840
+- [x] 1. Branch. nstack/review-speak
+- [x] 2. Starting state. fast checks pass at 5f55b46
+- [x] 3. Dispatch. builder in worktree
+- [x] 4. Read the reply. done d6c664c; native reader "pass with fixes", 4 fixes applied (son/sun and mouth/mouse misrecognition risks, polite form, speaker voice)
+- [x] 5. Prove it yourself. merged: jest pass (count below), content test covers speak items
+- [x] 6. Record. this entry, backlog
+- [x] Done when: committed, items ticked.
+
+## 2026-11-28 build T15
+- Read: build/SKILL.md a069840
+- [x] 1. Branch. nstack/review-speak
+- [x] 2. Starting state. fast checks pass at 5f55b46
+- [x] 3. Dispatch. builder in worktree
+- [x] 4. Read the reply. done 68d5a3a; session and review tests red first; shared useAnswerSaver, StepBar, e2e/learner.ts
+- [x] 5. Prove it yourself. merged: typecheck 0, lint 0, jest 228, drive check passed, e2e 23 passed
+- [x] 6. Record. this entry, backlog
+- [x] Done when: committed, items ticked.
+- Decision: no speak step in reviews without recognition (a self-mark would advance the schedule without proof).
+## 2026-11-28 ship foundation
+- Read: ship/SKILL.md b51cd2a
+- [x] 1. Commit. slice commits on nstack/foundation
+- [x] 2. Sync. origin/main is the initial commit (65220f0), already in the branch
+- [x] 3. Push. nstack/foundation
+- [x] 4. Open the PR. #1 with verification table, merge danger, decisions
+- [x] 5. Wait for CI. run 46088263694 at d4a607a: ubuntu checks pass, iOS simulator build pass (18m35s)
+- [ ] 6. Merge
+- [ ] 7. Confirm and clean up.
+- [ ] Done when: the PR is merged, CI is green on the default branch, and the fast checks pass there, or the PR is parked with a reason.
+
+## 2026-11-28 verify learn-core
+- Read: verify/SKILL.md adc6a8a
+- [x] 1. Clean tree. code at f61e4f4 (later commits: sync with main touching only .nstack and removing the re-added welcome tests); head 97eedbc
+- [x] 2. Project checks. typecheck 0, lint 0, jest 147 pass, test:server 21, test:drive 6, drive check passed (24 screenshots), e2e 18 passed
+- [x] 3. Every acceptance criterion in scope has a passing check. 1 content test (+broken fixture red); 2 content files + reader verdicts (T5, T9, T10, recheck); 3 tracks.spec + lesson.spec reload; 4 word-card Jest (speech on/off); 5 answers Jest + lesson Jest per exercise; 6 progress-store Jest, Maestro written (not run: no KVM, parked); 7 critique below + a11y.spec axe on 6 screens light/dark. check-features exit 0
+- [x] 4. Every new check bites. content test (broken fixture), progress-store (builder mutations), lesson completion save removed -> Jest and e2e red, tracks screen focus refresh removed -> red, lang test red, leave link red
+- [x] 5. The real thing runs. drive check + e2e against the drive server
+- [x] 6. Every changed screen looks right. /tmp/shots-lc/{home,track,track-kids,track-not-found,lesson,lesson-not-found}-{390,1280}-{light,dark}.png and /tmp/shots-lc/step-*.png: 1 primary action obvious (track rows; "Bắt đầu học"; "Tiếp tục") pass; 2 spacing on scale pass; 3 readable, Vietnamese diacritics clear pass; 4 no overflow pass; 5 not-found states have a way back, wrong-answer feedback intended pass; 6 paper/purple ink/ô-ly grid, no shadows pass; 7 keyboard focus e2e (tracks) pass; 8 copy names actions pass; 9 hierarchy pass. Removed: none needed after adding the leave link (critique fail fixed)
+- [x] 7. Nothing got weaker. welcome.spec removed because the welcome screen became the track picker (spec change, logged in sync commit); axe loop moved into a11y.spec for all screens
+- [x] 8. No new warnings or errors. lint 0 warnings
+- [x] 9. Access is enforced. n/a: no routes, tables or auth touched (app-only, public)
+- [x] Done when: all ticked. Not verified: Android Maestro lesson flow (no KVM, parked).
+
+## 2026-11-28 verify review-speak
+- Read: verify/SKILL.md adc6a8a
+- [x] 1. Clean tree. 255d7a3
+- [x] 2. Project checks. typecheck 0, lint 0, jest 228, test:server 21, test:drive 6, e2e 23 passed, drive screens 28 shots exit 0
+- [x] 3. Every acceptance criterion in scope has a passing check. 1 schedule.test (wrong before right); 2 review.spec (page.clock, count drops) + review Jest; 3 content test + reader verdicts (T14); 4 score.test near misses, speak-answer Jest both paths, lesson e2e fallback and real-API explain-then-fallback; 5 .maestro/review.yaml written, not run (no KVM, parked). check-features exit 0
+- [x] 4. Every new check bites. schedule stub red 9/11; review mutations red (distractors, due count, answers not recorded); speak component and scorer red first; checker test red for kind/reason
+- [x] 5. The real thing runs. e2e against the drive server (review after a simulated day; speak fallback)
+- [x] 6. Every changed screen looks right. /tmp/shots-rs/review-*.png (empty), /tmp/t12-shots/home-{due,notdue,empty}-*, review-step{1,2,3}-*, review-feedback-*, review-result-* at 390/1280 light/dark: 1 primary action (Ôn tập ngay, Kiểm tra) pass; 2 spacing pass; 3 readable pass; 4 no overflow pass; 5 empty states with hints, disabled Kiểm tra looks intended pass; 6 matches design.md pass; 7 focus (axe + keyboard in e2e) pass; 8 copy names actions pass; 9 hierarchy pass. Speak states critiqued by T13 builder (ready, explain, listening, nothing heard, self-check, wrong)
+- [x] 7. Nothing got weaker. one eslint-disable-next-line no-require-imports in src/speech/recognition.ts: lazy require of the optional native module so a missing module means no recognition instead of a crash (logged, justified)
+- [x] 8. No new warnings or errors. lint 0 warnings
+- [x] 9. Access is enforced. n/a: no routes, tables or auth
+- [x] Done when: all ticked. Not verified: native recognition on Android/iOS devices (no KVM; iOS build only), Maestro review flow (parked).
+
+## 2026-11-28 review review-speak
+- Read: review/SKILL.md c151f88
+- [x] 1. Dispatch. reviewer at 49fd51e: fix-needed. Important: review uses template words ("My name is ...") for speak and type_answer, marking correct sentences wrong. Nit: joined digits ("123") fail counting speak items.
+- [x] 2. Second reviewer. n/a: no auth, payments, migrations, concurrency or public API
+- [x] 3. Act on every finding. builder fixed both (89fea76): session red 9 failed, check red 1, score red 3 -> green; after merge jest 248, e2e 23 passed
+- [x] 4. Review the fixes. Round 2 at ee4792f: 1 important (Maestro flows hardcode exercise counts and positions, broken by the new speak items; review flow cannot answer a speak step), 1 nit ("reviewed all" message before any review). Fixed in b7e27a2 (with learn-core synced in): flows loop over one shared answer-step subflow until the result; new Jest guard src/__tests__/maestro-flows.test.ts red 7 against old flows; home message rule whyNothingDue red 2 -> green. jest 270, e2e 24, drive check passed, check-features 0. Round 3 at 90b69ea: 1 important (double tap on Nói starts two recognisers and records the answer twice). Fixed by the controller in cd96d79 (speak-answer.tsx +19/-4, one finding): new test red (start called 2, onAnswer 2) -> green; small-fix exception used.
+- [x] Done when: last important finding fixed under the small-fix exception; verify after sync with main at 3a4789a: typecheck 0, lint 0, jest 271, test:server 21, test:drive 6, drive check passed, e2e 24 passed, check-features 0, check-security 0 (after giving the content row an access level); nits in backlog.
+- Lesson: Maestro flows that never run went stale twice (option positions after shuffle, exercise counts after new content). Check added: src/__tests__/maestro-flows.test.ts rejects fixed counts, fixed-length repeats and answer taps outside the shared subflow.
+- [x] 6. Merge (ship foundation, continued). gh pr merge 1 --squash -> MERGED 37f40e0
+- [x] 7. Confirm and clean up. main pulled; typecheck 0, lint 0, jest 30, test:server 21, test:drive 6; CI on 37f40e0: ubuntu success, iOS success; nstack/foundation deleted locally and on origin (tree identical to main)
+- [x] Done when: PR #1 merged, CI green on main, fast checks pass there.
+
+## 2026-11-28 review learn-core
+- Read: review/SKILL.md c151f88
+- [x] 1. Dispatch. reviewer at 1a403d7: fix-needed. Important: web shows a silent "Nghe" with no voices and hides listen text (AC4); options never shuffled (answer at index 0 in 60/114). Nit: answers keyed by exercise id vs review-speak plan premise.
+- [x] 2. Second reviewer. n/a: no auth, payments, migrations, concurrency or public API in learn-core
+- [x] 3. Act on every finding. Both important fixed by a builder (855bb91): speech red 4/6 -> green, e2e no-voice walkthrough red -> green, shuffle red -> green. After merge: typecheck 0, lint 0, jest 158, test:server 21, test:drive 6, drive check passed, e2e 19 passed. Nit: already handled by T11 on review-speak (the schedule reads review answers recorded under word ids, and ignores lesson answers keyed by exercise id; src/review/schedule.test.ts passes), so no change here.
+- [x] 4. Review the fixes. Round 2 at a99f702: pass, no findings (mutations on shuffle and voice detection red; e2e 19 passed)
+- [x] Done when: latest round has no important findings; verify passed after the fix (jest 158, e2e 19, drive check passed); nits handled.
+
+## 2026-11-28 ship learn-core
+- Read: ship/SKILL.md b51cd2a
+- [x] 1. Commit. slice commits on nstack/learn-core
+- [x] 2. Sync. merged origin/main (foundation squash) with -X ours, removed the welcome tests main re-added; verify re-run (jest 158, e2e 19, drive check)
+- [x] 3. Push. nstack/learn-core
+- [x] 4. Open the PR. #2 with verification table, merge danger, decisions
+- [x] 5. Wait for CI. run 46092263310 at 261d6dd: ubuntu pass, iOS pass
+- [x] 6. Merge. squash, 67caa0f
+- [x] 7. Confirm and clean up. main pulled: typecheck 0, lint 0, jest 158, test:server 21; branch and worktree deleted local and remote (tree identical). CI on main: see next entry
+- [x] Done when: PR #2 merged, fast checks pass on main.
+
+## 2026-11-28 ship review-speak
+- Read: ship/SKILL.md b51cd2a
+- [x] 1. Commit. slice commits on nstack/review-speak
+- [x] 2. Sync. merged origin/main (learn-core squash) -X ours; verify re-run at 3a4789a
+- [x] 3. Push. nstack/review-speak
+- [x] 4. Open the PR. #3
+- [x] 5. Wait for CI. run 46095645949 at 789adea: ubuntu success, iOS success
+- [x] 6. Merge. squash d60033a
+- [x] 7. Confirm and clean up. main: typecheck 0, lint 0, jest 271, test:server 21; branch deleted local and remote
+- [x] Done when: PR #3 merged, fast checks pass on main.
+
+## 2026-11-28 verify accounts-sync
+- Read: verify/SKILL.md adc6a8a
+- [x] 1. Clean tree. b69d296 code (later commits .nstack only and sync with main touching only .nstack)
+- [x] 2. Project checks. typecheck 0, lint 0, jest 314, test:server 60, test:drive 6, drive check passed (32 screenshots), e2e 33 passed
+- [x] 3. Every acceptance criterion in scope has a passing check. 1 accounts.test (409, 401 same body, 400 weak, 401 me, 429 rate limit); 2 progress.test + merge.test (idempotent, commutative); 3 account.spec + account Jest (errors by field, focus, input kept); 4 sync.spec (two contexts, offline notice, shared-device sign-out, offline sign-out asks); 5 migrate checks in T16/T17 logs, drive seed demo account. check-features 0
+- [x] 4. Every new check bites. builders' red runs logged per ticket (T16-T19b); deny proofs seen failing with checks removed (T16, T17)
+- [x] 5. The real thing runs. e2e against the drive server with real accounts and sync
+- [x] 6. Every changed screen looks right. /account (sign up, sign in, errors, signed in, sign-out confirm) screenshots by T18/T19b builders at 390/1280 light/dark: 9/9; offline notice bar checked by T19 builder
+- [x] 7. Nothing got weaker. no tests removed; sync.spec gained a speak case for the merged content
+- [x] 8. No new warnings or errors. lint 0
+- [x] 9. Access is enforced. check-security exit 0 after the offline-notice row was marked public (it is UI, not a protected resource); deny proofs listed in Features
+- [x] Done when: all ticked. Not verified: Android flows (no KVM).

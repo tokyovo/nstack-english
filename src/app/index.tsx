@@ -1,17 +1,21 @@
+import { Link } from 'expo-router';
 import { ScrollView, StyleSheet, Text, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
 import { type AccountState, type Profile } from '@/account';
 import { useAccount } from '@/account/use-account';
 import { useLearner } from '@/account/use-learner';
+import { ActionButton } from '@/components/lesson/action-button';
 import { ListRow } from '@/components/list-row';
+import { nothingDueHint } from '@/components/review/review-session';
 import { ThemedText } from '@/components/themed-text';
-import { FontSize, MaxContentWidth, Space } from '@/constants/theme';
-import { tracks, unitsOf, type Track } from '@/content';
+import { Border, FontSize, MaxContentWidth, Radius, Space } from '@/constants/theme';
+import { tracks, units, unitsOf, type Track } from '@/content';
 import { useTheme } from '@/hooks/use-theme';
 import { t } from '@/i18n';
 import { isLessonCompleted } from '@/progress';
 import { useProgress, type ProgressState } from '@/progress/use-progress';
+import { dueWords, whyNothingDue } from '@/review/schedule';
 
 /** "Đã học xong 1/5 bài" once progress is read; nothing while it loads or when it cannot be read. */
 function progressLine(track: Track, state: ProgressState): string | null {
@@ -50,6 +54,36 @@ function AccountRow({ child }: { child: Profile | null }) {
   );
 }
 
+/** How many words are due now, or why there are none; nothing until progress is read. */
+function ReviewPanel({ state }: { state: ProgressState }) {
+  const theme = useTheme();
+  if (state.status !== 'ready') return null;
+  const due = dueWords(state.progress, units, new Date()).length;
+
+  return (
+    <View style={[styles.panel, { backgroundColor: theme.surface, borderColor: theme.line }]} testID="review-panel">
+      <ThemedText type="heading" role="heading" aria-level={2}>
+        {t('review.title')}
+      </ThemedText>
+      {due > 0 ? (
+        <>
+          <ThemedText type="label" testID="due-count" style={styles.count}>
+            {t('review.dueCount', { count: due })}
+          </ThemedText>
+          <Link href="/review" asChild>
+            <ActionButton label={t('review.start')} testID="review-start" />
+          </Link>
+        </>
+      ) : (
+        <>
+          <ThemedText type="label">{t('review.none')}</ThemedText>
+          <ThemedText>{t(nothingDueHint[whyNothingDue(state.progress, units)])}</ThemedText>
+        </>
+      )}
+    </View>
+  );
+}
+
 export default function HomeScreen() {
   const theme = useTheme();
   const learner = useLearner();
@@ -76,6 +110,8 @@ export default function HomeScreen() {
               </View>
             )}
           </View>
+
+          <ReviewPanel state={progress} />
 
           <View style={styles.list}>
             <ThemedText type="heading" role="heading" aria-level={2}>
@@ -139,5 +175,15 @@ const styles = StyleSheet.create({
   },
   list: {
     gap: Space.md,
+  },
+  panel: {
+    borderWidth: Border,
+    borderRadius: Radius.card,
+    padding: Space.lg,
+    gap: Space.sm,
+  },
+  count: {
+    fontVariant: ['tabular-nums'],
+    marginBottom: Space.sm,
   },
 });

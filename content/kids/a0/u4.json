@@ -100,6 +100,18 @@
       "answer": ["It's", "a", "yellow", "banana"]
     },
     {
+      "id": "kids-a0-u4-e13",
+      "type": "speak",
+      "text": "A red apple",
+      "vi": "Một quả táo đỏ"
+    },
+    {
+      "id": "kids-a0-u4-e14",
+      "type": "speak",
+      "text": "A yellow banana",
+      "vi": "Một quả chuối vàng"
+    },
+    {
       "id": "kids-a0-u4-e12",
       "type": "type_answer",
       "prompt": "quả táo",

@@ -13,4 +13,5 @@ export const screens: Screen[] = [
   { name: 'lesson-not-found', path: '/lesson/nope' },
   { name: 'account', path: '/account' },
   { name: 'profiles', path: '/profiles' },
+  { name: 'review', path: '/review' },
 ];

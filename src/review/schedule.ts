@@ -29,9 +29,17 @@ export type ScheduledWord = {
   track: Track;
   box: Box;
   dueAt: Date;
+  /** Whether the word has been answered since it was learned. */
+  reviewed: boolean;
 };
 
-function schedule(enteredAt: number, answers: readonly AnswerRecord[]): { box: Box; dueAt: Date } {
+/** Why no word is due: no lesson finished, words learned but never reviewed yet, or all reviewed for now. */
+export type NothingDue = 'notLearned' | 'firstReviewSoon' | 'allReviewed';
+
+function schedule(
+  enteredAt: number,
+  answers: readonly AnswerRecord[]
+): Pick<ScheduledWord, 'box' | 'dueAt' | 'reviewed'> {
   let box: Box = 1;
   let lastSeen = enteredAt;
   for (const answer of answers) {
@@ -40,7 +48,7 @@ function schedule(enteredAt: number, answers: readonly AnswerRecord[]): { box: B
     box = answer.correct ? UP[box] : 1;
     lastSeen = answeredAt;
   }
-  return { box, dueAt: new Date(lastSeen + INTERVALS[box]) };
+  return { box, dueAt: new Date(lastSeen + INTERVALS[box]), reviewed: lastSeen !== enteredAt };
 }
 
 /** Every word of a finished unit, in the order of `units`, with its box and when it is due. */
@@ -63,4 +71,11 @@ export function dueWords(progress: Progress, units: readonly Unit[], now: Date):
   return learnedWords(progress, units)
     .filter((entry) => entry.dueAt.getTime() <= now.getTime())
     .sort((a, b) => a.dueAt.getTime() - b.dueAt.getTime());
+}
+
+/** Why nothing is due, for when `dueWords` is empty. */
+export function whyNothingDue(progress: Progress, units: readonly Unit[]): NothingDue {
+  const learned = learnedWords(progress, units);
+  if (learned.length === 0) return 'notLearned';
+  return learned.some((entry) => !entry.reviewed) ? 'firstReviewSoon' : 'allReviewed';
 }

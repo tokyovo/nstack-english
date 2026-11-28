@@ -167,6 +167,18 @@
       "answer": "husband"
     },
     {
+      "id": "everyday-a0-u3-e15",
+      "type": "speak",
+      "text": "This is my mother.",
+      "vi": "Đây là mẹ tôi."
+    },
+    {
+      "id": "everyday-a0-u3-e16",
+      "type": "speak",
+      "text": "My daughter is five.",
+      "vi": "Con gái tôi năm tuổi."
+    },
+    {
       "id": "everyday-a0-u3-e14",
       "type": "build_sentence",
       "prompt": "Đây là gia đình tôi.",

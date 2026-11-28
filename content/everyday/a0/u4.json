@@ -167,6 +167,18 @@
       "answer": "rice"
     },
     {
+      "id": "everyday-a0-u4-e15",
+      "type": "speak",
+      "text": "Coffee, please.",
+      "vi": "Cho tôi xin cà phê."
+    },
+    {
+      "id": "everyday-a0-u4-e16",
+      "type": "speak",
+      "text": "I like rice and chicken.",
+      "vi": "Tôi thích cơm và thịt gà."
+    },
+    {
       "id": "everyday-a0-u4-e14",
       "type": "choose_meaning",
       "prompt": "everyday-a0-u4-please",

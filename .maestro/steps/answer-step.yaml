@@ -1,0 +1,104 @@
+# Answers whatever lesson or review step is on screen, right or wrong, and moves on.
+# Flows run it in a loop until the result screen, so they need no exercise counts or positions
+# and keep working when a unit gains, loses or reorders exercises.
+# Lives in steps/ so `maestro test .maestro` does not run it as a flow of its own.
+appId: app.hocenglish
+---
+# A word card: on to the next.
+- runFlow:
+    when:
+      visible:
+        id: "word-card"
+    commands:
+      - tapOn:
+          id: "continue"
+
+# Options (choose_meaning, choose_english, listen_choose): the first one shown.
+- runFlow:
+    when:
+      visible:
+        id: "option-0"
+    commands:
+      - tapOn:
+          id: "option-0"
+
+# A box to type in (type_answer).
+- runFlow:
+    when:
+      visible:
+        id: "answer-input"
+    commands:
+      - tapOn:
+          id: "answer-input"
+      - inputText: "hello"
+      - hideKeyboard
+      - tapOn:
+          id: "check"
+
+# Tiles (build_sentence): place every tile, then check.
+- runFlow:
+    when:
+      visible:
+        id: "tile-.*"
+    commands:
+      - repeat:
+          while:
+            visible:
+              id: "tile-.*"
+          times: 20
+          commands:
+            - tapOn:
+                id: "tile-.*"
+      - tapOn:
+          id: "check"
+
+# Speak with a recogniser: tap "Nói", then decline the microphone (or stop listening and decline).
+- runFlow:
+    when:
+      visible:
+        id: "speak"
+    commands:
+      - tapOn:
+          id: "speak"
+      - extendedWaitUntil:
+          visible:
+            id: "mic-decline|stop-listening|self-pass|feedback"
+          timeout: 5000
+          optional: true
+- runFlow:
+    when:
+      visible:
+        id: "stop-listening"
+    commands:
+      - tapOn:
+          id: "stop-listening"
+      - extendedWaitUntil:
+          visible:
+            id: "mic-decline|self-pass|feedback"
+          timeout: 5000
+          optional: true
+- runFlow:
+    when:
+      visible:
+        id: "mic-decline"
+    commands:
+      - tapOn:
+          id: "mic-decline"
+
+# Speak by self-check (no recogniser, microphone declined or refused).
+- runFlow:
+    when:
+      visible:
+        id: "self-pass"
+    commands:
+      - tapOn:
+          id: "self-pass"
+
+# Answered: on to the next step.
+- runFlow:
+    when:
+      visible:
+        id: "feedback"
+    commands:
+      - tapOn:
+          id: "continue"

@@ -3,8 +3,7 @@
 // and its real API; each test signs up its own account, so tests never share children.
 import { expect, test, type APIRequestContext, type Locator, type Page } from '@playwright/test';
 
-import { button, collectErrors, expectNoSeriousAxeViolations, loadUnit, withoutSpeech } from './learner';
-import type { Exercise } from '../src/content/schema';
+import { answerRight, button, collectErrors, expectNoSeriousAxeViolations, loadUnit, withoutSpeech } from './learner';
 
 type Session = { token: string; user: { id: string; email: string }; profiles: { id: string; kind: string }[] };
 type SavedSession = Session & { child?: { token: string; profile: { id: string } } };
@@ -59,25 +58,6 @@ async function gateAnswer(input: Locator): Promise<string> {
   const [, a, b] = /: (\S+) nhân (\S+) bằng/.exec(question) ?? [];
   expect(numbers[a] && numbers[b]).toBeTruthy();
   return String(numbers[a] * numbers[b]);
-}
-
-async function answerRight(page: Page, exercise: Exercise) {
-  switch (exercise.type) {
-    case 'choose_meaning':
-    case 'choose_english':
-    case 'listen_choose':
-      await button(page, exercise.answer).click();
-      return;
-    case 'build_sentence':
-      for (const tile of exercise.answer) await button(page, tile).first().click();
-      await button(page, 'Kiểm tra').click();
-      return;
-    case 'type_answer': {
-      const input = page.getByLabel('Câu trả lời bằng tiếng Anh');
-      await input.fill(exercise.answer);
-      await input.press('Enter');
-    }
-  }
 }
 
 function trackRow(page: Page, name: string) {

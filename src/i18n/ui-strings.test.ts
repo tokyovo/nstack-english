@@ -115,8 +115,20 @@ describe('findUiStringLiterals', () => {
     expect(check('const A = () => <Text>{t(`track.${id}.name`)}{`Còn ${n} bài`}</Text>;')).toEqual(['Còn ${…} bài']);
   });
 
+  it('treats both branches of a condition passed as the t() key as keys', () => {
+    expect(check('const A = () => <Text>{t(ok ? "a.yes" : ("a.no"))}{ok ? "Có" : "Không"}</Text>;')).toEqual(['Có', 'Không']);
+  });
+
+  it('ignores state discriminants kind and reason in objects', () => {
+    expect(check('const A = () => <B onPress={() => setPhase({ kind: "selfCheck", reason: "declined" })} />;')).toEqual([]);
+  });
+
   it('ignores live-region politeness and variant props', () => {
     expect(check('const A = () => <View aria-live="polite" accessibilityLiveRegion="polite"><B kind="secondary" /></View>;')).toEqual([]);
+  });
+
+  it('reports object values under keys that are only allowlisted as props', () => {
+    expect(check('const A = () => <Text>{t("greet", { name: "Bạn", type: "Lỗi" })}<F data={{ name: "Họ và tên" }} /></Text>;')).toEqual(['Bạn', 'Lỗi', 'Họ và tên']);
   });
 
   it('ignores the props and option keys on the allowlist, including their nested values', () => {

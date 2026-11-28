@@ -1,10 +1,10 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { waitFor } from '@testing-library/react-native';
 
-import { signIn, signOut, startChildSession } from '@/account';
+import { signIn, signOut, startChildSession, syncSession } from '@/account';
 import { createProgressStore, LOCAL_PROFILE_ID, type Progress } from '@/progress';
 import { mergeProgress } from '@/progress/merge';
-import { leaveChildProfile, startSync, syncProgress, syncState } from '@/sync';
+import { leaveChildProfile, signOutOfDevice, startSync, syncProgress, syncState } from '@/sync';
 
 jest.mock('@react-native-async-storage/async-storage', () =>
   jest.requireActual('@react-native-async-storage/async-storage/jest/async-storage-mock')
@@ -217,6 +217,84 @@ describe('progress sync for a child learning on the device', () => {
     expect(server.signedOut).toEqual(['Bearer child-tok']);
     expect(await syncProgress()).toBe('synced');
     expect(server.stored.lessons).toEqual({});
+  });
+});
+
+describe('signing out of this device', () => {
+  it('sends the device progress to the account first, then leaves none on the device', async () => {
+    const server = fakeServer();
+    await signIn(demo.email, demo.password);
+    await store.completeLesson(LOCAL_PROFILE_ID, { unitId: 'everyday-a0-u1', correct: 8, total: 10 });
+
+    expect(await signOutOfDevice()).toBe('signedOut');
+
+    expect(Object.keys(server.stored.lessons)).toEqual(['everyday-a0-u1']);
+    expect(await store.load(LOCAL_PROFILE_ID)).toEqual({
+      schemaVersion: 1,
+      profileId: LOCAL_PROFILE_ID,
+      lessons: {},
+      answers: {},
+    });
+    expect(await syncSession()).toBeUndefined();
+  });
+
+  it('stays signed in with the device progress kept when the progress cannot be sent', async () => {
+    const server = fakeServer();
+    await signIn(demo.email, demo.password);
+    await store.completeLesson(LOCAL_PROFILE_ID, { unitId: 'everyday-a0-u1', correct: 8, total: 10 });
+    server.online = false;
+
+    expect(await signOutOfDevice()).toBe('offline');
+
+    expect(isCompletedOnDevice(await store.load(LOCAL_PROFILE_ID))).toBe(true);
+    expect(await syncSession()).toEqual({ token: 'tok-1', profileId: 'p1', deviceProfileId: LOCAL_PROFILE_ID });
+  });
+
+  it('reports a failed sync rather than signing out when the server answers with something unreadable', async () => {
+    fakeServer();
+    await signIn(demo.email, demo.password);
+    await store.completeLesson(LOCAL_PROFILE_ID, { unitId: 'everyday-a0-u1', correct: 8, total: 10 });
+    jest.spyOn(global, 'fetch').mockResolvedValue(new Response('{"lessons":"nope"}', { status: 200 }));
+
+    expect(await signOutOfDevice()).toBe('failed');
+
+    expect(isCompletedOnDevice(await store.load(LOCAL_PROFILE_ID))).toBe(true);
+    expect(await syncSession()).toEqual({ token: 'tok-1', profileId: 'p1', deviceProfileId: LOCAL_PROFILE_ID });
+  });
+
+  it('signs out and discards the unsent progress when the learner chooses to', async () => {
+    const server = fakeServer();
+    await signIn(demo.email, demo.password);
+    await store.completeLesson(LOCAL_PROFILE_ID, { unitId: 'everyday-a0-u1', correct: 8, total: 10 });
+    server.online = false;
+
+    expect(await signOutOfDevice({ discardUnsynced: true })).toBe('signedOut');
+
+    expect(isCompletedOnDevice(await store.load(LOCAL_PROFILE_ID))).toBe(false);
+    expect(await syncSession()).toBeUndefined();
+    server.online = true;
+    expect(server.stored.lessons).toEqual({});
+  });
+
+  it('lets the next sign-in on the device start from that account only', async () => {
+    const server = fakeServer();
+    await signIn(demo.email, demo.password);
+    stopSync = startSync();
+    await store.completeLesson(LOCAL_PROFILE_ID, { unitId: 'everyday-a0-u1', correct: 8, total: 10 });
+    expect(await signOutOfDevice()).toBe('signedOut');
+
+    // The next person's account has only everyday A0 u2.
+    server.stored = {
+      schemaVersion: 1,
+      profileId: 'p1',
+      lessons: { 'everyday-a0-u2': completion('2026-11-20T08:00:00.000Z') },
+      answers: {},
+    };
+    await signIn(demo.email, demo.password);
+
+    await waitFor(() => expect(syncState()).toBe('synced'));
+    expect(Object.keys((await store.load(LOCAL_PROFILE_ID)).lessons)).toEqual(['everyday-a0-u2']);
+    expect(Object.keys(server.stored.lessons)).toEqual(['everyday-a0-u2']);
   });
 });
 
