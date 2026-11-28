@@ -9,6 +9,7 @@ import { secureHeaders } from 'hono/secure-headers';
 
 import { accountRoutes } from './accounts.ts';
 import { migrate } from './migrate.ts';
+import { profileRoutes } from './profiles.ts';
 import { progressRoutes } from './progress.ts';
 
 /**
@@ -59,6 +60,7 @@ function createApp(db: DatabaseSync, config: ServerConfig) {
   const now = config.now ?? (() => new Date());
   app.route('/api', accountRoutes(db, now));
   app.route('/api', progressRoutes(db, now));
+  app.route('/api', profileRoutes(db, now));
   if (config.webDir) serveWebApp(app, config.webDir);
   return app;
 }
