@@ -11,6 +11,7 @@ import { useTheme } from '@/hooks/use-theme';
 import { t } from '@/i18n';
 import { LOCAL_PROFILE_ID, type Answer, type createProgressStore } from '@/progress';
 import { reviewSession, type ReviewItem } from '@/review/session';
+import { canRecognise } from '@/speech/recognition';
 
 type ProgressStore = ReturnType<typeof createProgressStore>;
 
@@ -127,7 +128,7 @@ export function ReviewSession({ store, now = systemClock, random = Math.random }
     store.load(LOCAL_PROFILE_ID).then(
       (progress) => {
         if (!current) return;
-        const items = reviewSession(progress, units, now(), random);
+        const items = reviewSession(progress, units, now(), random, { speak: canRecognise() });
         setPhase(
           items.length > 0
             ? { kind: 'step', items, index: 0 }
