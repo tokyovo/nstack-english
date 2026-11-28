@@ -37,7 +37,7 @@ Acceptance criteria:
 - [x] T12 Review screen and home due count. Proof: Jest, e2e `e2e/review.spec.ts`, axe via e2e/screens.ts. Access: public. Needs: T11
 - [x] T13 Speak exercise: schema type, recognition module with forgiving scoring, permission explanation, fallback, in the lesson player. Proof: Jest `src/speech/*.test.ts`, lesson Jest, e2e fallback step. Needs: none
 - [x] T14 Content: 2 speak items per existing unit. Proof: content test, native reader verdict. Content: yes. Needs: T13 (schema)
-- [ ] T15 Speak in review sessions (one speak item per session when supported). Proof: Jest. Needs: T12, T13
+- [x] T15 Speak in review sessions (one speak item per session when supported). Proof: Jest. Needs: T12, T13
 
 ## Slice: accounts-sync (branch nstack/accounts-sync)
 A learner can create an account with email and password, sign in on another phone or the web, and find the same progress there. Learning without an account keeps working; the first sign-in on a device adds that device's progress to the account (nothing is lost, research need 2). Progress saves locally first and syncs when online; the app says when it is offline.

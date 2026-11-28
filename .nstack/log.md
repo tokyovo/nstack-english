@@ -252,3 +252,14 @@
 - [x] 5. Prove it yourself. merged: jest pass (count below), content test covers speak items
 - [x] 6. Record. this entry, backlog
 - [x] Done when: committed, items ticked.
+
+## 2026-11-28 build T15
+- Read: build/SKILL.md a069840
+- [x] 1. Branch. nstack/review-speak
+- [x] 2. Starting state. fast checks pass at 5f55b46
+- [x] 3. Dispatch. builder in worktree
+- [x] 4. Read the reply. done 68d5a3a; session and review tests red first; shared useAnswerSaver, StepBar, e2e/learner.ts
+- [x] 5. Prove it yourself. merged: typecheck 0, lint 0, jest 228, drive check passed, e2e 23 passed
+- [x] 6. Record. this entry, backlog
+- [x] Done when: committed, items ticked.
+- Decision: no speak step in reviews without recognition (a self-mark would advance the schedule without proof).
