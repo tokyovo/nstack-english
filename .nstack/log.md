@@ -559,3 +559,17 @@
 - [x] 7. Confirm and clean up. content-a1 and content-a2 branches and worktrees deleted; main checks run with the next sync
 - [x] Done when: PR #4 merged.
 - Lesson (sync procedure): sync a stacked branch by merging the shipped PR's head commit (real ancestry, real conflicts), then `git merge -s ours origin/main` after checking the squash tree equals that head; then run scripts/check-sync <shipped heads>. Never `-X ours`.
+
+## 2026-11-28 verify family
+- Read: verify/SKILL.md adc6a8a
+- [x] 1. Clean tree. de144df
+- [x] 2. Project checks. typecheck 0, lint 0, jest 446, test:server 89, test:drive 6, drive check passed (36 screenshots), e2e 44 passed
+- [x] 3. Every acceptance criterion in scope has a passing check. 1 profiles.test create/rename/delete/limits/404/401; 2 child token tests (own progress, 404 sibling/owner, 403 account endpoints); 3 profiles.spec (summary, add/rename/delete with confirm, errors); 4 child-mode.spec (switch, child learns, gate, separate progress) + combined expired-session test; 5 child form has only nickname and picture (server stores only those: "stores only the nickname and picture, whatever else is sent"); no new third-party dependencies. check-features 0
+- [x] 4. Every new check bites. T20 deny proofs red with checks removed; T21 stubs red; T22 gate removed -> e2e red; race test red; T22b red; combined device-owner test red with parent-only clearing
+- [x] 5. The real thing runs. e2e against the drive server with the seeded parent and child
+- [x] 6. Every changed screen looks right. /profiles (list, edit, delete confirm, errors), child home, parent gate and its wrong answer at 390/1280 light/dark (T21, T22 builders' critiques, 9/9)
+- [x] 7. Nothing got weaker. one fixture id changed to a real content id (server now drops unknown ids)
+- [x] 8. No new warnings or errors. lint 0
+- [x] 9. Access is enforced. check-security exit 0, 8 deny proofs
+- [x] Done when: all ticked. Not verified: Android (no KVM).
+- Note: scripts/check-sync flags files changed inside an earlier merge commit (46b5ca6) as reverted; they equal family's own tip. Known limit of the script (it counts non-merge commits only).
