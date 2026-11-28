@@ -24,3 +24,4 @@
 - (unscored) Kids colour pictures use one consistent set (hearts vs circles) once older-Android emoji support allows. Evidence: native reader 2026-11-28
 - (unscored) lang="en" on the type_answer English input. Evidence: learn-core fix builder
 - (unscored) UI-string checker: options as a function, tabBarLabel, navigation.setOptions titles. Evidence: review fix builder
+- (unscored) UI-string checker: strings outside JSX that reach the user (Alert.alert, confirm, consts rendered later). Evidence: review round 3
