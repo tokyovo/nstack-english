@@ -1,25 +1,31 @@
 import { useFocusEffect } from 'expo-router';
 import { useCallback, useState } from 'react';
 
-import { createProgressStore, LOCAL_PROFILE_ID, onProgressChange, type Progress } from './index';
+import { createProgressStore, onProgressChange, type Progress } from './index';
 
 export type ProgressState =
   | { status: 'loading' }
   | { status: 'ready'; progress: Progress }
   | { status: 'error' };
 
-/** The profile's saved progress, read again each time the screen comes into view and after each saved change. */
-export function useProgress(profileId: string = LOCAL_PROFILE_ID): ProgressState {
-  const [state, setState] = useState<ProgressState>({ status: 'loading' });
+/**
+ * The profile's saved progress, read again each time the screen comes into view and after each
+ * saved change. Loading while `profileId` is undefined (the learner is not known yet).
+ */
+export function useProgress(profileId: string | undefined): ProgressState {
+  // Kept with the profile it belongs to, so another learner's progress is never shown, even briefly.
+  const [state, setState] = useState<{ profileId: string; value: ProgressState }>();
 
   useFocusEffect(
     useCallback(() => {
+      if (profileId === undefined) return;
       let current = true;
       const store = createProgressStore();
+      const show = (value: ProgressState) => current && setState({ profileId, value });
       const read = () =>
         store.load(profileId).then(
-          (progress) => current && setState({ status: 'ready', progress }),
-          () => current && setState({ status: 'error' })
+          (progress) => show({ status: 'ready', progress }),
+          () => show({ status: 'error' })
         );
       read();
       const stop = onProgressChange((change) => {
@@ -32,5 +38,5 @@ export function useProgress(profileId: string = LOCAL_PROFILE_ID): ProgressState
     }, [profileId])
   );
 
-  return state;
+  return state && state.profileId === profileId ? state.value : { status: 'loading' };
 }

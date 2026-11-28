@@ -14,9 +14,9 @@
 How an agent runs and uses the app on its own, without touching anyone's data.
 - **Tool:** `npm run drive -- <command>`; `npm run drive -- --help` lists start, seed, screens, check, stop, android-build, android-start, android-test, android-stop
 - **Start:** `drive start --json` re-exports dist/ when src/, assets/, app.json or package files changed, starts server/main.ts (API + dist/) on a free 127.0.0.1 port with a temporary database under /tmp, prints `{"url","db","pid"}`; reuses a healthy running instance (state in .drive/)
-- **Seed:** `drive seed` creates the demo account (prints `{"seeded":["account demo@hocenglish.test"]}`; a second run counts the 409 as already seeded)
+- **Seed:** `drive seed` creates the demo account with one child profile (prints `{"seeded":["account demo@hocenglish.test","child profile Bé Na"]}`; a second run counts what exists as already seeded)
 - **Sign in:** demo@hocenglish.test / hoc-english-demo on /account (temporary drive database only); API: POST /api/auth/signin, then `Authorization: Bearer <token>`
-- **Screens:** /, /track/everyday, /track/kids, /track/nope, /lesson/everyday-a0-u1, /lesson/nope, /account, /review (list in e2e/screens.ts, shared with the axe e2e)
+- **Screens:** /, /track/everyday, /track/kids, /track/nope, /lesson/everyday-a0-u1, /lesson/nope, /account, /profiles, /review (list in e2e/screens.ts, shared with the axe e2e)
 - **Evidence:** `drive screens <dir>` (every screen at 1280 and 390 px, light and dark; exits 1 on console errors, page errors or failed same-origin requests)
 - **Health:** `drive check` starts its own instance, seeds, screenshots every screen, stops, deletes the database; exit 0 means this section is true
 - **Clean up:** `drive stop [--dry-run]` stops the recorded pid (checked to be server/main.ts) and deletes the temporary database
@@ -39,4 +39,9 @@ How an agent runs and uses the app on its own, without touching anyone's data.
 | Sign out (saves, then clears the device) | /account, Đăng xuất | signed-in | `e2e/sync.spec.ts` "after A signs out on a shared device, B signs in and has none of A lessons" | `server/accounts.test.ts` "signed out answers 401" |
 | Sync progress across devices | (automatic when signed in); GET/PUT /api/profiles/:id/progress | owner of profile | `e2e/sync.spec.ts` "a lesson completed on one device shows as completed after signing in on another" | `server/progress.test.ts` "another user's profile answers 404 and changes nothing" |
 | Offline notice | (root layout, signed in) | public | `e2e/sync.spec.ts` "a signed-in learner offline is told progress will sync later" | - |
+| Family profiles: add, rename, delete a child | /profiles; POST/PATCH/DELETE /api/profiles | owner | `e2e/profiles.spec.ts` "a parent adds, renames and deletes a child profile" | `server/profiles.test.ts` "another user's child answers 404 and changes nothing" |
+| Parent view of each child's progress | /profiles | owner | `e2e/profiles.spec.ts` "a parent sees each learner with lessons finished and words due" | `e2e/profiles.spec.ts` "a signed-out visitor is asked to sign in" |
+| Child mode with its own progress | /profiles, Cho bé học -> / | child | `e2e/child-mode.spec.ts` "a parent hands the device to a child, the child learns, and the gate returns it to the parent" | `server/profiles.test.ts` "a child's token gets 404 for the owner's and a sibling's progress, and changes neither" |
+| Parent gate on account and profiles | /account, /profiles while a child is active | owner | `e2e/child-mode.spec.ts` "/profiles is behind the parent gate while a child is learning" | `server/profiles.test.ts` "a child's token is refused with 403 by the account and profile endpoints, which change nothing" |
+| Sign out on a family device | /account, Đăng xuất | owner | `e2e/child-mode.spec.ts` "a parent with a child learning signs out; the next sign-in on the device finds neither" | `server/profiles.test.ts` "signed out answers 401" |
 | API health | GET /api/health | public | `server/server.test.ts` "GET /api/health answers" | - |

@@ -12,6 +12,15 @@ done
 [ ${#tips[@]} -gt 0 ] || { echo "usage: check-sync <shipped-tip>... [--base origin/main]" >&2; exit 2; }
 excl=(); for t in "${tips[@]}"; do excl+=("^$t"); done
 own=$(git log --no-merges --format= --name-only HEAD "${excl[@]}" "^$base" | sort -u)
+# A merge of another work branch can change files too (conflict resolutions):
+# count what each such merge changed against its first parent. Merges of a
+# shipped tip or of the base are syncs, not own work, so they are not counted.
+skip=" $(git rev-parse "$base") $(for t in "${tips[@]}"; do git rev-parse "$t"; done | tr '\n' ' ') "
+for m in $(git rev-list --merges HEAD "${excl[@]}" "^$base"); do
+  p2=$(git rev-parse "$m^2")
+  case "$skip" in *" $p2 "*) continue ;; esac
+  own=$(printf '%s\n%s' "$own" "$(git diff --name-only "$m^1" "$m")" | sort -u)
+done
 bad=0
 for f in $(git diff --name-only "$base" HEAD); do
   case "$f" in .nstack/*) continue ;; esac

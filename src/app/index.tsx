@@ -1,14 +1,15 @@
 import { Link } from 'expo-router';
-import { ScrollView, StyleSheet, View } from 'react-native';
+import { ScrollView, StyleSheet, Text, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
-import { type AccountState } from '@/account';
+import { type AccountState, type Profile } from '@/account';
 import { useAccount } from '@/account/use-account';
+import { useLearner } from '@/account/use-learner';
 import { ActionButton } from '@/components/lesson/action-button';
 import { ListRow } from '@/components/list-row';
 import { nothingDueHint } from '@/components/review/review-session';
 import { ThemedText } from '@/components/themed-text';
-import { Border, MaxContentWidth, Radius, Space } from '@/constants/theme';
+import { Border, FontSize, MaxContentWidth, Radius, Space } from '@/constants/theme';
 import { tracks, units, unitsOf, type Track } from '@/content';
 import { useTheme } from '@/hooks/use-theme';
 import { t } from '@/i18n';
@@ -32,10 +33,16 @@ function accountLine(account: AccountState): string | null {
   return null;
 }
 
-function AccountRow() {
+/** A child learning sees the kids track first; everyone else the tracks in their usual order. */
+function tracksFor(child: Profile | null): readonly Track[] {
+  return child ? [...tracks].sort((a, b) => Number(b === 'kids') - Number(a === 'kids')) : tracks;
+}
+
+/** The way to the account; while a child is learning it is marked for the parent (the gate is behind it). */
+function AccountRow({ child }: { child: Profile | null }) {
   const [account] = useAccount();
-  const title = t('home.account');
-  const line = accountLine(account);
+  const title = child ? t('home.parentArea') : t('home.account');
+  const line = child ? t('home.parentAreaHint') : accountLine(account);
   return (
     <ListRow
       href="/account"
@@ -79,7 +86,9 @@ function ReviewPanel({ state }: { state: ProgressState }) {
 
 export default function HomeScreen() {
   const theme = useTheme();
-  const progress = useProgress();
+  const learner = useLearner();
+  const child = learner.status === 'ready' ? learner.child : null;
+  const progress = useProgress(learner.status === 'ready' ? learner.progressId : undefined);
 
   return (
     <SafeAreaView style={[styles.screen, { backgroundColor: theme.background }]}>
@@ -90,6 +99,16 @@ export default function HomeScreen() {
               {t('app.name')}
             </ThemedText>
             <ThemedText type="lead">{t('home.tagline')}</ThemedText>
+            {child && (
+              <View style={styles.greeting}>
+                {child.picture && (
+                  <Text style={styles.picture} aria-hidden>
+                    {child.picture}
+                  </Text>
+                )}
+                <ThemedText type="heading">{t('home.greeting', { name: child.name })}</ThemedText>
+              </View>
+            )}
           </View>
 
           <ReviewPanel state={progress} />
@@ -98,7 +117,7 @@ export default function HomeScreen() {
             <ThemedText type="heading" role="heading" aria-level={2}>
               {t('home.chooseTrack')}
             </ThemedText>
-            {tracks.map((track) => {
+            {tracksFor(child).map((track) => {
               const name = t(`track.${track}.name`);
               const description = t(`track.${track}.description`);
               const line = progressLine(track, progress);
@@ -120,7 +139,7 @@ export default function HomeScreen() {
             })}
           </View>
 
-          <AccountRow />
+          <AccountRow child={child} />
         </View>
       </ScrollView>
     </SafeAreaView>
@@ -144,6 +163,15 @@ const styles = StyleSheet.create({
   },
   intro: {
     gap: Space.md,
+  },
+  greeting: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: Space.md,
+  },
+  picture: {
+    fontSize: FontSize.title,
+    lineHeight: 44,
   },
   list: {
     gap: Space.md,

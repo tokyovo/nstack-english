@@ -11,7 +11,7 @@ import { Radius, Space } from '@/constants/theme';
 import { unitsOf, type Exercise, type Unit, type Word } from '@/content';
 import { useTheme } from '@/hooks/use-theme';
 import { t } from '@/i18n';
-import { isLessonCompleted, LOCAL_PROFILE_ID, type createProgressStore } from '@/progress';
+import { isLessonCompleted, type createProgressStore } from '@/progress';
 import { useAnswerSaver } from '@/progress/use-answer-saver';
 
 type ProgressStore = ReturnType<typeof createProgressStore>;
@@ -38,12 +38,12 @@ function nextUnitAfter(unit: Unit): Unit | undefined {
   return track[track.findIndex((u) => u.id === unit.id) + 1];
 }
 
-function useCompleted(store: ProgressStore, unitId: string): boolean {
+function useCompleted(store: ProgressStore, profileId: string, unitId: string): boolean {
   const [completed, setCompleted] = useState(false);
   useEffect(() => {
     let current = true;
     store
-      .load(LOCAL_PROFILE_ID)
+      .load(profileId)
       .then((progress) => {
         if (current) setCompleted(isLessonCompleted(progress, unitId));
       })
@@ -52,7 +52,7 @@ function useCompleted(store: ProgressStore, unitId: string): boolean {
     return () => {
       current = false;
     };
-  }, [store, unitId]);
+  }, [store, profileId, unitId]);
   return completed;
 }
 
@@ -130,11 +130,18 @@ function Result({ unit, correct }: { unit: Unit; correct: number }) {
 }
 
 /** One lesson from intro to result; answers and completion go to the progress store. */
-export function LessonPlayer({ unit, store }: { unit: Unit; store: ProgressStore }) {
+type LessonPlayerProps = {
+  unit: Unit;
+  store: ProgressStore;
+  /** The device copy of progress the learner's answers go to (src/account useLearner). */
+  profileId: string;
+};
+
+export function LessonPlayer({ unit, store, profileId }: LessonPlayerProps) {
   const theme = useTheme();
   const steps = stepsOf(unit);
-  const completed = useCompleted(store, unit.id);
-  const saver = useAnswerSaver(store);
+  const completed = useCompleted(store, profileId, unit.id);
+  const saver = useAnswerSaver(store, profileId);
   const [phase, setPhase] = useState<Phase>({ kind: 'intro' });
   const [correct, setCorrect] = useState(0);
 
@@ -142,7 +149,7 @@ export function LessonPlayer({ unit, store }: { unit: Unit; store: ProgressStore
     setPhase({ kind: 'saving' });
     try {
       await saver.flush();
-      await store.completeLesson(LOCAL_PROFILE_ID, { unitId: unit.id, correct, total: unit.exercises.length });
+      await store.completeLesson(profileId, { unitId: unit.id, correct, total: unit.exercises.length });
       setPhase({ kind: 'result' });
     } catch {
       setPhase({ kind: 'saveFailed' });

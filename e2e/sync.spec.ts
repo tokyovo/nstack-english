@@ -1,35 +1,11 @@
 // Progress follows the account: two browsers stand for two devices of one learner.
 import { expect, test, type Page } from '@playwright/test';
 
-import { button, collectErrors, expectNoSeriousAxeViolations, loadUnit, withoutSpeech } from './learner';
-import type { Exercise } from '../src/content/schema';
+import { answerRight, button, collectErrors, expectNoSeriousAxeViolations, loadUnit, withoutSpeech } from './learner';
 
 const unit = loadUnit('everyday/a0/u1.json');
 const offlineNotice = 'Đang ngoại tuyến, tiến độ sẽ được đồng bộ sau';
 const completedRow = /^Bài 1: .*\. Đã học xong$/;
-
-async function answerRight(page: Page, exercise: Exercise) {
-  switch (exercise.type) {
-    case 'choose_meaning':
-    case 'choose_english':
-    case 'listen_choose':
-      await button(page, exercise.answer).click();
-      return;
-    case 'build_sentence':
-      for (const tile of exercise.answer) await button(page, tile).first().click();
-      await button(page, 'Kiểm tra').click();
-      return;
-    case 'type_answer': {
-      const input = page.getByLabel('Câu trả lời bằng tiếng Anh');
-      await input.fill(exercise.answer);
-      await input.press('Enter');
-      return;
-    }
-    case 'speak':
-      // withoutSpeech removes recognition, so the learner repeats aloud and marks themselves.
-      await button(page, 'Tôi nói được rồi').click();
-  }
-}
 
 async function completeUnit(page: Page) {
   await page.goto(`/lesson/${unit.id}`);

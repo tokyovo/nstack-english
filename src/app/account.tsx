@@ -5,8 +5,11 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 
 import { signIn, signUp, type AccountError, type Profile, type User } from '@/account';
 import { useAccount } from '@/account/use-account';
+import { useLearner } from '@/account/use-learner';
 import { BackLink } from '@/components/back-link';
 import { ActionButton } from '@/components/lesson/action-button';
+import { ListRow } from '@/components/list-row';
+import { ParentGate } from '@/components/parent-gate';
 import { TextField } from '@/components/text-field';
 import { ThemedText } from '@/components/themed-text';
 import { MaxContentWidth, Space } from '@/constants/theme';
@@ -151,6 +154,13 @@ function SignedIn({ user, onSignedOut }: { user: User; onSignedOut: () => void }
   return (
     <View style={styles.section}>
       <ThemedText type="lead">{t('account.signedInAs', { email: user.email })}</ThemedText>
+      <ListRow
+        href="/profiles"
+        testID="account-profiles"
+        accessibilityLabel={t('account.profilesLabel', { title: t('account.profiles'), hint: t('account.profilesHint') })}>
+        <ThemedText type="label">{t('account.profiles')}</ThemedText>
+        <ThemedText>{t('account.profilesHint')}</ThemedText>
+      </ListRow>
       {step.status === 'unsaved' ? (
         <>
           <FormError message={t(`account.signOutUnsaved.${step.reason}`)} />
@@ -181,6 +191,7 @@ function SignedIn({ user, onSignedOut }: { user: User; onSignedOut: () => void }
 export default function AccountScreen() {
   const theme = useTheme();
   const [account, setAccount] = useAccount();
+  const learner = useLearner();
   const showSignedIn = (user: User, profiles: Profile[]) => setAccount({ status: 'signedIn', user, profiles });
   const showSignedOut = () => setAccount({ status: 'signedOut' });
 
@@ -193,11 +204,13 @@ export default function AccountScreen() {
           <ThemedText type="title" role="heading" aria-level={1}>
             {t('account.title')}
           </ThemedText>
-          {account.status === 'loading' && <ThemedText>{t('account.loading')}</ThemedText>}
-          {account.status === 'signedOut' && (
+          {learner.status === 'loading' || account.status === 'loading' ? (
+            <ThemedText>{t('account.loading')}</ThemedText>
+          ) : learner.child ? (
+            <ParentGate child={learner.child} />
+          ) : account.status === 'signedOut' ? (
             <AccountForm onSignedIn={showSignedIn} />
-          )}
-          {account.status === 'signedIn' && (
+          ) : (
             <SignedIn user={account.user} onSignedOut={showSignedOut} />
           )}
         </View>

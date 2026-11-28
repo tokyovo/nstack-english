@@ -239,6 +239,38 @@
 - [x] Done when: committed, items ticked.
 - Decision: expo-secure-store config plugin not added (it adds a Face ID usage string); Android backup rules for it go to the backlog.
 
+## 2026-11-28 build T20
+- Read: build/SKILL.md a069840
+- [x] 1. Branch. nstack/family (from nstack/accounts-sync)
+- [x] 2. Starting state. fast checks pass
+- [x] 3. Dispatch. builder in worktree
+- [x] 4. Read the reply. done 8910780; deny proofs red with checks removed (ownership, auth, child scope, child 403); migration 0003 expand-only, data test on 300 users
+- [x] 5. Prove it yourself. merged: test:server 85 pass, jest 192, typecheck 0
+- [x] 6. Record. this entry
+- [x] Done when: committed, items ticked.
+- Decision: child tokens may sign themselves out; a session's scope is a union account|profile.
+
+## 2026-11-28 build T21
+- Read: build/SKILL.md a069840
+- [x] 1. Branch. nstack/family
+- [x] 2. Starting state. fast checks pass
+- [x] 3. Dispatch. builder in worktree
+- [x] 4. Read the reply. done 6e4710c; module 15/15 and screen 8/8 red vs stubs; summary e2e red with wordsDue mutated; critique 9/9 at 390/1280 light/dark
+- [x] 5. Prove it yourself. merged: typecheck, lint, jest, test:server (below)
+- [x] 6. Record. this entry, backlog
+- [x] Done when: committed, items ticked.
+- Decision: delete confirmation and edit inline (Alert does not work on web); child profile limits in one shared module imported by the server.
+
+## 2026-11-28 build T22
+- Read: build/SKILL.md a069840
+- [x] 1. Branch. nstack/family
+- [x] 2. Starting state. fast checks pass at c45b9db
+- [x] 3. Dispatch. builder in worktree
+- [x] 4. Read the reply. done 2fcc11a; e2e red with the gate removed; race test red with the stale session write; critique screenshots of child home, gate, wrong answer, profiles
+- [x] 5. Prove it yourself. merged: checks below
+- [x] 6. Record. this entry, plan T22b
+- [x] Done when: committed, items ticked.
+- Decision: each learner has its own device progress copy ("local" for the parent/guest, the profile id for a child); all session writes go through one queue.
 ## 2026-11-28 build T19
 - Read: build/SKILL.md a069840
 - [x] 1. Branch. nstack/accounts-sync
@@ -406,6 +438,15 @@
 - [x] 9. Access is enforced. check-security exit 0 after the offline-notice row was marked public (it is UI, not a protected resource); deny proofs listed in Features
 - [x] Done when: all ticked. Not verified: Android flows (no KVM).
 
+## 2026-11-28 build T22b (with sync of accounts-sync into family)
+- Read: build/SKILL.md a069840
+- [x] 1. Branch. nstack/family
+- [x] 2. Starting state. fast checks pass at 8305f69
+- [x] 3. Dispatch. builder: merge nstack/accounts-sync, then T22b
+- [x] 4. Read the reply. done b4085eb; conflicts resolved keeping both intents (review uses the active learner's progress; shared answerRight in e2e/learner.ts); T22b Jest red 4 -> green, e2e red (kids-a0-u1 left on device) -> green
+- [x] 5. Prove it yourself. fast-forwarded: typecheck 0, lint 0, jest 364, test:server 85; check-features 0
+- [x] 6. Record. this entry, Features rows, backlog
+- [x] Done when: committed, items ticked.
 ## 2026-11-28 review accounts-sync
 - Read: review/SKILL.md c151f88
 - [x] 1. Dispatch. reviewer at 2ae1aff: fix-needed. Important: parallel sign-ins bypass the rate limit (60 at once -> 59-60 x 401, 0-1 x 429); progress documents grow without limit (event loop blocked by a 17 MB merge; a real learner passes the 1 MB body cap after ~21,000 answers and sync fails silently for good)
@@ -518,3 +559,25 @@
 - [x] 7. Confirm and clean up. content-a1 and content-a2 branches and worktrees deleted; main checks run with the next sync
 - [x] Done when: PR #4 merged.
 - Lesson (sync procedure): sync a stacked branch by merging the shipped PR's head commit (real ancestry, real conflicts), then `git merge -s ours origin/main` after checking the squash tree equals that head; then run scripts/check-sync <shipped heads>. Never `-X ours`.
+
+## 2026-11-28 verify family
+- Read: verify/SKILL.md adc6a8a
+- [x] 1. Clean tree. de144df
+- [x] 2. Project checks. typecheck 0, lint 0, jest 446, test:server 89, test:drive 6, drive check passed (36 screenshots), e2e 44 passed
+- [x] 3. Every acceptance criterion in scope has a passing check. 1 profiles.test create/rename/delete/limits/404/401; 2 child token tests (own progress, 404 sibling/owner, 403 account endpoints); 3 profiles.spec (summary, add/rename/delete with confirm, errors); 4 child-mode.spec (switch, child learns, gate, separate progress) + combined expired-session test; 5 child form has only nickname and picture (server stores only those: "stores only the nickname and picture, whatever else is sent"); no new third-party dependencies. check-features 0
+- [x] 4. Every new check bites. T20 deny proofs red with checks removed; T21 stubs red; T22 gate removed -> e2e red; race test red; T22b red; combined device-owner test red with parent-only clearing
+- [x] 5. The real thing runs. e2e against the drive server with the seeded parent and child
+- [x] 6. Every changed screen looks right. /profiles (list, edit, delete confirm, errors), child home, parent gate and its wrong answer at 390/1280 light/dark (T21, T22 builders' critiques, 9/9)
+- [x] 7. Nothing got weaker. one fixture id changed to a real content id (server now drops unknown ids)
+- [x] 8. No new warnings or errors. lint 0
+- [x] 9. Access is enforced. check-security exit 0, 8 deny proofs
+- [x] Done when: all ticked. Not verified: Android (no KVM).
+- Note: scripts/check-sync flags files changed inside an earlier merge commit (46b5ca6) as reverted; they equal family's own tip. Known limit of the script (it counts non-merge commits only).
+
+## 2026-11-28 review family
+- Read: review/SKILL.md c151f88
+- [x] 1. Dispatch. reviewer at 043bf20: fix-needed, 1 important: a deleted child's device copy survives sign-out (sign-out clears only listed profiles and removes the owner mark, so the next account's claim does not clear it)
+- [x] 2. Second reviewer. focus security and failure modes, at 043bf20: fix-needed, the same important finding; nits: owner profile accepts a name/picture by PATCH; nicknames accept invisible and control characters; T20 unticked in plan (fixed)
+- [x] 3. Act on every finding. builder fixed all (da25f8e): sign-out clearAll red -> green; delete clears the child's copy red -> green; owner PATCH 400 red -> green; nickname control/bidi rule red -> green (shared readNickname). Synced with main (PR #5 head; -s ours main; check-sync ok after counting work-branch merges). jest 451, test:server 92, drive check passed, e2e 44, check-features 0
+- [x] 4. Review the fixes. round 2 at 26ded27: both reviewers pass (general: no findings; security: 1 nit to backlog)
+- [x] Done when: round 2 clean, verify passed after the fixes (jest 451, server 92, e2e 44), nit in backlog.

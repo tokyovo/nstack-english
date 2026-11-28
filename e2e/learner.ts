@@ -4,7 +4,7 @@ import { expect, type Page } from '@playwright/test';
 import { readFileSync } from 'node:fs';
 import { join } from 'node:path';
 
-import { parseUnit, type Unit } from '../src/content/schema';
+import { parseUnit, type Exercise, type Unit } from '../src/content/schema';
 
 /** A unit from content/, checked by the same parser the app uses. */
 export function loadUnit(path: string): Unit {
@@ -15,6 +15,30 @@ export function loadUnit(path: string): Unit {
 
 export function button(page: Page, name: string) {
   return page.getByRole('button', { name, exact: true });
+}
+
+/** Answers a lesson exercise right; a speak exercise by self-check, so pair it with withoutSpeech. */
+export async function answerRight(page: Page, exercise: Exercise) {
+  switch (exercise.type) {
+    case 'choose_meaning':
+    case 'choose_english':
+    case 'listen_choose':
+      await button(page, exercise.answer).click();
+      return;
+    case 'build_sentence':
+      for (const tile of exercise.answer) await button(page, tile).first().click();
+      await button(page, 'Kiểm tra').click();
+      return;
+    case 'type_answer': {
+      const input = page.getByLabel('Câu trả lời bằng tiếng Anh');
+      await input.fill(exercise.answer);
+      await input.press('Enter');
+      return;
+    }
+    case 'speak':
+      // withoutSpeech removes recognition, so the learner repeats aloud and marks themselves.
+      await button(page, 'Tôi nói được rồi').click();
+  }
 }
 
 export async function expectNoSeriousAxeViolations(page: Page) {

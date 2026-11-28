@@ -1,5 +1,5 @@
 import assert from 'node:assert/strict';
-import { mkdirSync, mkdtempSync, rmSync, writeFileSync } from 'node:fs';
+import { copyFileSync, mkdirSync, mkdtempSync, rmSync, writeFileSync } from 'node:fs';
 import { tmpdir } from 'node:os';
 import { join } from 'node:path';
 import { DatabaseSync } from 'node:sqlite';
@@ -175,5 +175,56 @@ describe('migrate', () => {
 
     assert.throws(() => addProfile.run('second-owner', 'owner'), /UNIQUE constraint failed/);
     assert.throws(() => addProfile.run('admin', 'admin'), /CHECK constraint failed/);
+  });
+
+  test('0003_family keeps existing accounts, sessions and progress: no pictures, account-wide sessions', () => {
+    const repoMigrations = join(import.meta.dirname, 'migrations');
+    for (const name of ['0001_accounts.sql', '0002_progress.sql']) {
+      copyFileSync(join(repoMigrations, name), join(migrationsDir, name));
+    }
+    migrate(db, migrationsDir);
+    const addUser = db.prepare('INSERT INTO users (id, email, password_hash, created_at) VALUES (?, ?, ?, ?)');
+    const addProfile = db.prepare('INSERT INTO profiles (id, user_id, kind, name, created_at) VALUES (?, ?, ?, ?, ?)');
+    const addSession = db.prepare('INSERT INTO sessions (token_hash, user_id, created_at, expires_at) VALUES (?, ?, ?, ?)');
+    const addProgress = db.prepare('INSERT INTO progress (profile_id, document, updated_at) VALUES (?, ?, ?)');
+    for (let i = 0; i < 300; i += 1) {
+      addUser.run(`u${i}`, `user${i}@example.com`, 'scrypt$16384$8$1$salt$key', i);
+      addProfile.run(`p${i}`, `u${i}`, 'owner', i % 3 ? '' : 'Tên rất dài '.repeat(100), i);
+      addSession.run(`h${i}`, `u${i}`, i, i + 1);
+      if (i % 2) addProgress.run(`p${i}`, JSON.stringify({ schemaVersion: 1, profileId: `p${i}`, lessons: {}, answers: {} }), i);
+    }
+    addProfile.run('child', 'u0', 'child', 'Bé Na', 1);
+    const tables = ['users', 'profiles', 'sessions', 'progress'];
+    const before = tables.map((table) => db.prepare(`SELECT * FROM ${table} ORDER BY rowid`).all());
+
+    copyFileSync(join(repoMigrations, '0003_family.sql'), join(migrationsDir, '0003_family.sql'));
+    assert.deepEqual(migrate(db, migrationsDir), ['0003_family.sql']);
+
+    const profiles = db.prepare('SELECT * FROM profiles ORDER BY rowid').all();
+    const sessions = db.prepare('SELECT * FROM sessions ORDER BY rowid').all();
+    assert.deepEqual(profiles.map((row) => ({ ...row })), before[1].map((row) => ({ ...row, picture: null })));
+    assert.deepEqual(sessions.map((row) => ({ ...row })), before[2].map((row) => ({ ...row, profile_id: null })));
+    assert.deepEqual(db.prepare('SELECT * FROM users ORDER BY rowid').all(), before[0]);
+    assert.deepEqual(db.prepare('SELECT * FROM progress ORDER BY rowid').all(), before[3]);
+    assert.deepEqual([profiles.length, sessions.length, before[3].length], [301, 300, 150]);
+
+    const schemaAfter = schema(db);
+    assert.deepEqual(migrate(db, migrationsDir), []);
+    assert.deepEqual(schema(db), schemaAfter);
+    assert.equal(db.prepare('SELECT count(*) AS n FROM profiles').get()?.n, 301);
+  });
+
+  test('a child-scoped session is deleted with its profile', () => {
+    migrate(db, join(import.meta.dirname, 'migrations'));
+    db.exec('PRAGMA foreign_keys = ON');
+    db.prepare("INSERT INTO users (id, email, password_hash, created_at) VALUES ('u', 'a@b.co', 'x', 0)").run();
+    db.prepare("INSERT INTO profiles (id, user_id, kind, created_at) VALUES ('child', 'u', 'child', 0)").run();
+    const addSession = db.prepare('INSERT INTO sessions (token_hash, user_id, profile_id, created_at, expires_at) VALUES (?, ?, ?, 0, 1)');
+    addSession.run('account', 'u', null);
+    addSession.run('child', 'u', 'child');
+
+    assert.throws(() => addSession.run('missing', 'u', 'no-such-profile'), /FOREIGN KEY constraint failed/);
+    db.prepare("DELETE FROM profiles WHERE id = 'child'").run();
+    assert.deepEqual(db.prepare('SELECT token_hash FROM sessions').all().map((row) => row.token_hash), ['account']);
   });
 });

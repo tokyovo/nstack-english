@@ -5,8 +5,10 @@ import { Hono, type Context, type MiddlewareHandler } from 'hono';
 import { bodyLimit } from 'hono/body-limit';
 
 export type User = { id: string; email: string };
-export type Profile = { id: string; kind: 'owner' | 'child'; name: string };
-export type AuthEnv = { Variables: { user: User; token: string } };
+export type Profile = { id: string; kind: 'owner' | 'child'; name: string; picture: string | null };
+/** What a session may reach: the whole account (the parent), or one profile (a child's token). */
+export type SessionScope = { kind: 'account' } | { kind: 'profile'; profileId: string };
+export type AuthEnv = { Variables: { user: User; token: string; scope: SessionScope } };
 
 type Credentials = { email: string; password: string };
 type ErrorBody = { error: string; field?: 'email' | 'password' };
@@ -21,6 +23,7 @@ const MAX_FAILURES = 10;
 const FAILURE_WINDOW = 15 * 60 * 1000;
 
 const unauthorized: ErrorBody = { error: 'unauthorized' };
+const forbidden: ErrorBody = { error: 'forbidden' };
 const invalidCredentials: ErrorBody = { error: 'invalid_credentials' };
 
 /**
@@ -30,6 +33,7 @@ const invalidCredentials: ErrorBody = { error: 'invalid_credentials' };
 export function accountRoutes(db: DatabaseSync, now: () => Date) {
   const app = new Hono<AuthEnv>();
   const requireUser = requireUserMiddleware(db, now);
+  const requireAccount = requireAccountMiddleware(db, now);
   app.use('/auth/*', bodyLimit({ maxSize: 4 * 1024, onError: (c) => c.json({ error: 'invalid_body' }, 413) }));
 
   app.post('/auth/signup', async (c) => {
@@ -63,7 +67,7 @@ export function accountRoutes(db: DatabaseSync, now: () => Date) {
     return c.body(null, 204);
   });
 
-  app.get('/me', requireUser, (c) => {
+  app.get('/me', requireAccount, (c) => {
     const user = c.get('user');
     return c.json({ user, profiles: profilesOf(db, user.id) });
   });
@@ -71,16 +75,36 @@ export function accountRoutes(db: DatabaseSync, now: () => Date) {
   return app;
 }
 
-/** Sets `user` from a valid `Authorization: Bearer` session token, or answers 401. */
+/**
+ * Sets `user`, `token` and `scope` from a valid `Authorization: Bearer` session token, or
+ * answers 401. Any session passes, including a child's profile-scoped one.
+ */
 export function requireUserMiddleware(db: DatabaseSync, now: () => Date): MiddlewareHandler<AuthEnv> {
-  return async (c, next) => {
+  return sessionMiddleware(db, now, { accountOnly: false });
+}
+
+/** Like `requireUserMiddleware`, but a child's profile-scoped session answers 403. */
+export function requireAccountMiddleware(db: DatabaseSync, now: () => Date): MiddlewareHandler<AuthEnv> {
+  return sessionMiddleware(db, now, { accountOnly: true });
+}
+
+function sessionMiddleware(db: DatabaseSync, now: () => Date, { accountOnly }: { accountOnly: boolean }) {
+  const middleware: MiddlewareHandler<AuthEnv> = async (c, next) => {
     const token = /^Bearer ([A-Za-z0-9_-]+)$/.exec(c.req.header('authorization') ?? '')?.[1];
-    const user = token === undefined ? undefined : userForToken(db, token, now());
-    if (!token || !user) return c.json(unauthorized, 401);
-    c.set('user', user);
+    const session = token === undefined ? undefined : sessionForToken(db, token, now());
+    if (!token || !session) return c.json(unauthorized, 401);
+    if (accountOnly && session.scope.kind !== 'account') return c.json(forbidden, 403);
+    c.set('user', session.user);
     c.set('token', token);
+    c.set('scope', session.scope);
     await next();
   };
+  return middleware;
+}
+
+/** Starts a session that reaches only `profileId`, one of `user`'s child profiles. */
+export function startProfileSession(db: DatabaseSync, user: User, profileId: string, at: Date): string {
+  return insertSession(db, user.id, profileId, at);
 }
 
 async function readCredentials(c: Context): Promise<Credentials | ErrorBody> {
@@ -126,24 +150,30 @@ function createUser(db: DatabaseSync, email: string, passwordHash: string, at: D
 }
 
 function signedIn(db: DatabaseSync, user: User, at: Date) {
-  const token = randomBytes(32).toString('base64url');
-  db.prepare('INSERT INTO sessions (token_hash, user_id, created_at, expires_at) VALUES (?, ?, ?, ?)').run(
-    sha256(token),
-    user.id,
-    at.getTime(),
-    at.getTime() + SESSION_DAYS * DAY,
-  );
+  const token = insertSession(db, user.id, null, at);
   return { token, user, profiles: profilesOf(db, user.id) };
 }
 
-function userForToken(db: DatabaseSync, token: string, at: Date): User | undefined {
+/** Returns the new token; only its hash is stored. `profileId` null means the whole account. */
+function insertSession(db: DatabaseSync, userId: string, profileId: string | null, at: Date): string {
+  const token = randomBytes(32).toString('base64url');
+  db.prepare(
+    'INSERT INTO sessions (token_hash, user_id, profile_id, created_at, expires_at) VALUES (?, ?, ?, ?, ?)',
+  ).run(sha256(token), userId, profileId, at.getTime(), at.getTime() + SESSION_DAYS * DAY);
+  return token;
+}
+
+function sessionForToken(db: DatabaseSync, token: string, at: Date): { user: User; scope: SessionScope } | undefined {
   const row = db
     .prepare(
-      `SELECT users.id, users.email FROM sessions JOIN users ON users.id = sessions.user_id
+      `SELECT users.id, users.email, sessions.profile_id FROM sessions JOIN users ON users.id = sessions.user_id
        WHERE sessions.token_hash = ? AND sessions.expires_at > ?`,
     )
     .get(sha256(token), at.getTime());
-  return row ? { id: String(row.id), email: String(row.email) } : undefined;
+  if (!row) return undefined;
+  const scope: SessionScope =
+    row.profile_id === null ? { kind: 'account' } : { kind: 'profile', profileId: String(row.profile_id) };
+  return { user: { id: String(row.id), email: String(row.email) }, scope };
 }
 
 /**
@@ -160,11 +190,26 @@ function countAttempt(db: DatabaseSync, email: string, at: Date): boolean {
   return true;
 }
 
-function profilesOf(db: DatabaseSync, userId: string): Profile[] {
+export function profilesOf(db: DatabaseSync, userId: string): Profile[] {
   return db
-    .prepare('SELECT id, kind, name FROM profiles WHERE user_id = ? ORDER BY created_at, id')
+    .prepare('SELECT id, kind, name, picture FROM profiles WHERE user_id = ? ORDER BY created_at, rowid')
     .all(userId)
-    .map((row) => ({ id: String(row.id), kind: row.kind === 'child' ? 'child' : 'owner', name: String(row.name) }));
+    .map(toProfile);
+}
+
+/** One of `userId`'s profiles by id, or undefined (also for another user's profile). */
+export function profileOf(db: DatabaseSync, userId: string, profileId: string): Profile | undefined {
+  const row = db.prepare('SELECT id, kind, name, picture FROM profiles WHERE id = ? AND user_id = ?').get(profileId, userId);
+  return row ? toProfile(row) : undefined;
+}
+
+function toProfile(row: Record<string, unknown>): Profile {
+  return {
+    id: String(row.id),
+    kind: row.kind === 'child' ? 'child' : 'owner',
+    name: String(row.name),
+    picture: row.picture === null ? null : String(row.picture),
+  };
 }
 
 function sha256(value: string): string {

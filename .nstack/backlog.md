@@ -29,6 +29,7 @@
 - (unscored) Rate-limit signup; prune expired sessions and old signin_failures. Evidence: T16 builder
 - (unscored) expo-secure-store plugin with faceIDPermission false and Android backup rules, so restored backups do not hold undecryptable tokens. Evidence: T18 builder
 - (unscored) Web focus outline draws black over accent/danger input borders (TextField, type-answer); TypeAnswer could reuse TextField. Evidence: T18 builder
+- (unscored) Profiles: move focus into the delete confirmation; arrow keys in the picture picker; refresh summaries while open. Evidence: T21 builder
 - (unscored) Offline notice clears only on the next navigation/foreground; add a network listener. Web offline cannot open route chunks not yet loaded. Evidence: T19 builder
 - (unscored) Lesson intro "completed" badge does not refresh after a pull. Evidence: T19 builder
 - (unscored) Expired/forgotten session (401) keeps the device progress, so the next sign-in on a shared device merges it into another account. Evidence: T19b builder
@@ -42,9 +43,11 @@
 - (unscored) Content test: at least 2 speak items per unit. Evidence: T14 builder
 - (unscored) Review speak phrase: skip words with a placeholder ("My name is ..."). Evidence: T15 builder
 - (unscored) Speech scoring: "12" heard for "One, two" reads as twelve. Evidence: review-speak fix builder
+- (unscored) Deleting a child on /profiles does not clear that child's device copy. Evidence: T22b builder
 - (unscored) After a forced sign-out, guest answers made before a different account signs in are cleared with the previous account's copy. Evidence: accounts-sync fix builder
 - (unscored) Sessions have a fixed 90-day life: renew on use (sliding expiry) so daily learners are not signed out without warning on day 90. Evidence: accounts-sync review round 2
 - (unscored) Validate lesson records at the server boundary (bestCorrect <= total, ISO times); today nonsense values from the owner's own client are kept forever. Evidence: accounts-sync review round 2
 - (unscored) Passwords over 256 characters get the "at least 8 characters" message; give them their own code and text. Evidence: accounts-sync security review round 2
 - (unscored) Sign-up reveals existing emails (409) with no rate limit. Evidence: accounts-sync security review round 2
 - (unscored) Content test: build_sentence accepted orders are listed by hand; a missed valid order was found twice by readers. Consider checking tile permutations against a small grammar, or flagging units with movable time phrases. Evidence: T27 builder, T5/T10 readers
+- (unscored) Nickname check: blank-rendering letters (Hangul filler U+3164, U+115F/1160) pass as visible. Evidence: family security review round 2

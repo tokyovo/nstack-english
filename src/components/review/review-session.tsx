@@ -10,7 +10,7 @@ import { Space } from '@/constants/theme';
 import { units } from '@/content';
 import { useTheme } from '@/hooks/use-theme';
 import { t, type MessageKey } from '@/i18n';
-import { LOCAL_PROFILE_ID, type createProgressStore } from '@/progress';
+import { type createProgressStore } from '@/progress';
 import { useAnswerSaver } from '@/progress/use-answer-saver';
 import { whyNothingDue, type NothingDue } from '@/review/schedule';
 import { reviewSession, type ReviewItem } from '@/review/session';
@@ -31,6 +31,8 @@ const systemClock = () => new Date();
 
 type Props = {
   store: ProgressStore;
+  /** The device copy of progress reviewed and answered into (src/account useLearner). */
+  profileId: string;
   now?: () => Date;
   random?: () => number;
 };
@@ -86,16 +88,16 @@ function Result({ correct, total }: { correct: number; total: number }) {
 }
 
 /** A review of the words due now, from the first exercise to the result. Answers go under each word id. */
-export function ReviewSession({ store, now = systemClock, random = Math.random }: Props) {
+export function ReviewSession({ store, profileId, now = systemClock, random = Math.random }: Props) {
   const theme = useTheme();
-  const saver = useAnswerSaver(store);
+  const saver = useAnswerSaver(store, profileId);
   const [phase, setPhase] = useState<Phase>({ kind: 'loading' });
   const [correct, setCorrect] = useState(0);
 
   // Built once, when the progress is read, so the answers given during the review do not reshuffle it.
   useEffect(() => {
     let current = true;
-    store.load(LOCAL_PROFILE_ID).then(
+    store.load(profileId).then(
       (progress) => {
         if (!current) return;
         const items = reviewSession(progress, units, now(), random, { speak: canRecognise() });
@@ -110,7 +112,7 @@ export function ReviewSession({ store, now = systemClock, random = Math.random }
     return () => {
       current = false;
     };
-  }, [store, now, random]);
+  }, [store, profileId, now, random]);
 
   async function finish(total: number) {
     setPhase({ kind: 'saving', total });
