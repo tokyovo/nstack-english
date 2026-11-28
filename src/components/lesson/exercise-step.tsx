@@ -6,6 +6,7 @@ import { ActionButton } from '@/components/lesson/action-button';
 import { BuildSentence } from '@/components/lesson/build-sentence';
 import { ChoiceList } from '@/components/lesson/choice-list';
 import { ListenButton } from '@/components/lesson/listen-button';
+import { SpeakAnswer } from '@/components/lesson/speak-answer';
 import { TypeAnswer } from '@/components/lesson/type-answer';
 import { EnglishText, ThemedText } from '@/components/themed-text';
 import { Radius, Space } from '@/constants/theme';
@@ -20,6 +21,8 @@ type Props = {
   /** Called once, when the learner commits an answer. */
   onAnswer: (correct: boolean) => void;
   onContinue: () => void;
+  /** Orders the choice options; Math.random unless a test passes a seeded source. */
+  random?: () => number;
 };
 
 /** Vietnamese text the learner translates, shown large in plain text colour. */
@@ -56,7 +59,7 @@ function Feedback({ exercise, correct }: { exercise: Exercise; correct: boolean 
 }
 
 /** One exercise: instruction, prompt, the answer control, then feedback and "Tiếp tục". */
-export function ExerciseStep({ exercise, onAnswer, onContinue }: Props) {
+export function ExerciseStep({ exercise, onAnswer, onContinue, random }: Props) {
   const canSpeak = useCanSpeak();
   const [correct, setCorrect] = useState<boolean | null>(null);
   const answered = correct !== null;
@@ -74,12 +77,12 @@ export function ExerciseStep({ exercise, onAnswer, onContinue }: Props) {
     case 'choose_meaning':
       instruction = t('lesson.chooseMeaning');
       prompt = <EnglishPrompt text={getWord(exercise.prompt)?.en ?? exercise.prompt} />;
-      control = <ChoiceList options={exercise.options} answer={exercise.answer} english={false} onCheck={check} />;
+      control = <ChoiceList options={exercise.options} answer={exercise.answer} english={false} onCheck={check} random={random} />;
       break;
     case 'choose_english':
       instruction = t('lesson.chooseEnglish');
       prompt = <VietnamesePrompt text={exercise.prompt} />;
-      control = <ChoiceList options={exercise.options} answer={exercise.answer} english onCheck={check} />;
+      control = <ChoiceList options={exercise.options} answer={exercise.answer} english onCheck={check} random={random} />;
       break;
     case 'listen_choose':
       instruction = canSpeak ? t('lesson.listenChoose') : t('lesson.readChoose');
@@ -90,7 +93,7 @@ export function ExerciseStep({ exercise, onAnswer, onContinue }: Props) {
       ) : (
         <EnglishPrompt text={exercise.audio} testID="listen-text" />
       );
-      control = <ChoiceList options={exercise.options} answer={exercise.answer} english onCheck={check} />;
+      control = <ChoiceList options={exercise.options} answer={exercise.answer} english onCheck={check} random={random} />;
       break;
     case 'build_sentence':
       instruction = t('lesson.buildSentence');
@@ -101,6 +104,17 @@ export function ExerciseStep({ exercise, onAnswer, onContinue }: Props) {
       instruction = t('lesson.typeAnswer');
       prompt = <VietnamesePrompt text={exercise.prompt} />;
       control = <TypeAnswer exercise={exercise} answered={answered} onCheck={check} />;
+      break;
+    case 'speak':
+      instruction = t('lesson.speak');
+      prompt = (
+        <GridCard>
+          <EnglishText type="word">{exercise.text}</EnglishText>
+          <ThemedText>{exercise.vi}</ThemedText>
+          {canSpeak ? <ListenButton text={exercise.text} testID="listen-exercise" /> : null}
+        </GridCard>
+      );
+      control = <SpeakAnswer exercise={exercise} canListen={canSpeak} answered={answered} onCheck={check} />;
       break;
   }
 

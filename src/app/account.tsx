@@ -3,15 +3,19 @@ import { useRef, useState } from 'react';
 import { ScrollView, StyleSheet, View, type TextInputInstance } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
-import { signIn, signOut, signUp, type AccountError, type Profile, type User } from '@/account';
+import { signIn, signUp, type AccountError, type Profile, type User } from '@/account';
 import { useAccount } from '@/account/use-account';
+import { useLearner } from '@/account/use-learner';
 import { BackLink } from '@/components/back-link';
 import { ActionButton } from '@/components/lesson/action-button';
+import { ListRow } from '@/components/list-row';
+import { ParentGate } from '@/components/parent-gate';
 import { TextField } from '@/components/text-field';
 import { ThemedText } from '@/components/themed-text';
 import { MaxContentWidth, Space } from '@/constants/theme';
 import { useTheme } from '@/hooks/use-theme';
 import { t } from '@/i18n';
+import { signOutOfDevice } from '@/sync';
 
 type Mode = 'signIn' | 'signUp';
 
@@ -130,27 +134,56 @@ function FormError({ message }: { message: string }) {
   );
 }
 
+type SignOutStep = { status: 'idle' } | { status: 'signingOut' } | { status: 'unsaved'; reason: 'offline' | 'failed' };
+
+/** Signing out clears this device's progress; when it could not be saved first, the learner is asked. */
 function SignedIn({ user, onSignedOut }: { user: User; onSignedOut: () => void }) {
-  const [signingOut, setSigningOut] = useState(false);
+  const [step, setStep] = useState<SignOutStep>({ status: 'idle' });
 
-  const label = signingOut ? t('account.signingOut') : t('account.signOut');
-
-  async function leave() {
-    setSigningOut(true);
-    await signOut();
-    onSignedOut();
+  async function leave(discardUnsynced: boolean) {
+    setStep({ status: 'signingOut' });
+    const result = await signOutOfDevice({ discardUnsynced });
+    if (result === 'signedOut') onSignedOut();
+    else setStep({ status: 'unsaved', reason: result });
   }
+
+  const stay = () => setStep({ status: 'idle' });
+  const signingOut = step.status === 'signingOut';
+  const signOutLabel = signingOut ? t('account.signingOut') : t('account.signOut');
 
   return (
     <View style={styles.section}>
       <ThemedText type="lead">{t('account.signedInAs', { email: user.email })}</ThemedText>
-      <ActionButton
-        kind="secondary"
-        label={label}
-        disabled={signingOut}
-        onPress={leave}
-        testID="account-signout"
-      />
+      <ListRow
+        href="/profiles"
+        testID="account-profiles"
+        accessibilityLabel={t('account.profilesLabel', { title: t('account.profiles'), hint: t('account.profilesHint') })}>
+        <ThemedText type="label">{t('account.profiles')}</ThemedText>
+        <ThemedText>{t('account.profilesHint')}</ThemedText>
+      </ListRow>
+      {step.status === 'unsaved' ? (
+        <>
+          <FormError message={t(`account.signOutUnsaved.${step.reason}`)} />
+          <ActionButton label={t('account.signOutStay')} onPress={stay} />
+          <ActionButton
+            kind="secondary"
+            label={t('account.signOutDiscard')}
+            onPress={() => leave(true)}
+            testID="account-signout-discard"
+          />
+        </>
+      ) : (
+        <>
+          <ThemedText type="meta">{t('account.signOutHint')}</ThemedText>
+          <ActionButton
+            kind="secondary"
+            label={signOutLabel}
+            disabled={signingOut}
+            onPress={() => leave(false)}
+            testID="account-signout"
+          />
+        </>
+      )}
     </View>
   );
 }
@@ -158,6 +191,7 @@ function SignedIn({ user, onSignedOut }: { user: User; onSignedOut: () => void }
 export default function AccountScreen() {
   const theme = useTheme();
   const [account, setAccount] = useAccount();
+  const learner = useLearner();
   const showSignedIn = (user: User, profiles: Profile[]) => setAccount({ status: 'signedIn', user, profiles });
   const showSignedOut = () => setAccount({ status: 'signedOut' });
 
@@ -170,11 +204,13 @@ export default function AccountScreen() {
           <ThemedText type="title" role="heading" aria-level={1}>
             {t('account.title')}
           </ThemedText>
-          {account.status === 'loading' && <ThemedText>{t('account.loading')}</ThemedText>}
-          {account.status === 'signedOut' && (
+          {learner.status === 'loading' || account.status === 'loading' ? (
+            <ThemedText>{t('account.loading')}</ThemedText>
+          ) : learner.child ? (
+            <ParentGate child={learner.child} />
+          ) : account.status === 'signedOut' ? (
             <AccountForm onSignedIn={showSignedIn} />
-          )}
-          {account.status === 'signedIn' && (
+          ) : (
             <SignedIn user={account.user} onSignedOut={showSignedOut} />
           )}
         </View>

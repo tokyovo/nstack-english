@@ -149,6 +149,18 @@
       "answer": "Good afternoon, Ms. Hoa."
     },
     {
+      "id": "work-a0-u1-e13",
+      "type": "speak",
+      "text": "Nice to meet you.",
+      "vi": "Rất vui được gặp anh/chị."
+    },
+    {
+      "id": "work-a0-u1-e14",
+      "type": "speak",
+      "text": "See you tomorrow.",
+      "vi": "Hẹn mai gặp lại."
+    },
+    {
       "id": "work-a0-u1-e12",
       "type": "type_answer",
       "prompt": "Tạm biệt",

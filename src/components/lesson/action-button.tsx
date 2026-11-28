@@ -5,8 +5,8 @@ import { useTheme } from '@/hooks/use-theme';
 
 type Props = Omit<PressableProps, 'children'> & {
   label: string;
-  /** One primary action per screen; the others are secondary. */
-  kind?: 'primary' | 'secondary';
+  /** One primary action per screen; the others are secondary. `danger` confirms a deletion. */
+  kind?: 'primary' | 'secondary' | 'danger';
 };
 
 /**
@@ -15,7 +15,7 @@ type Props = Omit<PressableProps, 'children'> & {
  */
 export function ActionButton({ label, kind = 'primary', disabled, style, role = 'button', ...rest }: Props) {
   const theme = useTheme();
-  const primary = kind === 'primary';
+  const filled = kind === 'secondary' ? null : kind === 'danger' ? theme.danger : theme.accent;
 
   return (
     <Pressable
@@ -27,8 +27,8 @@ export function ActionButton({ label, kind = 'primary', disabled, style, role = 
       style={(state) => [
         styles.button,
         {
-          backgroundColor: primary ? theme.accent : theme.surface,
-          borderColor: primary ? theme.accent : theme.line,
+          backgroundColor: filled ?? theme.surface,
+          borderColor: filled ?? theme.line,
           opacity: disabled ? 0.45 : state.pressed ? 0.85 : 1,
         },
         // react-native-web passes `focused` for keyboard focus; native ignores it.
@@ -36,7 +36,7 @@ export function ActionButton({ label, kind = 'primary', disabled, style, role = 
         typeof style === 'function' ? style(state) : style,
       ]}
       {...rest}>
-      <Text style={[styles.label, { color: primary ? theme.surface : theme.text }]}>{label}</Text>
+      <Text style={[styles.label, { color: filled ? theme.surface : theme.text }]}>{label}</Text>
     </Pressable>
   );
 }

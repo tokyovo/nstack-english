@@ -1,16 +1,18 @@
 import { Link } from 'expo-router';
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { StyleSheet, View } from 'react-native';
 
 import { ActionButton } from '@/components/lesson/action-button';
 import { ExerciseStep } from '@/components/lesson/exercise-step';
 import { WordCard } from '@/components/lesson/word-card';
+import { StepBar } from '@/components/step-bar';
 import { ThemedText } from '@/components/themed-text';
 import { Radius, Space } from '@/constants/theme';
 import { unitsOf, type Exercise, type Unit, type UnitSummary, type Word } from '@/content';
 import { useTheme } from '@/hooks/use-theme';
 import { t } from '@/i18n';
-import { isLessonCompleted, LOCAL_PROFILE_ID, type Answer, type createProgressStore } from '@/progress';
+import { isLessonCompleted, type createProgressStore } from '@/progress';
+import { useAnswerSaver } from '@/progress/use-answer-saver';
 
 type ProgressStore = ReturnType<typeof createProgressStore>;
 
@@ -36,43 +38,12 @@ function nextUnitAfter(unit: Unit): UnitSummary | undefined {
   return track[track.findIndex((u) => u.id === unit.id) + 1];
 }
 
-/**
- * Saves each answer as it is given. An answer that fails to save is kept and saved again
- * with the completion, so "Thử lại" loses nothing.
- */
-function useLessonSaver(store: ProgressStore, unit: Unit) {
-  const writes = useRef<Promise<void>[]>([]);
-  const unsaved = useRef<Answer[]>([]);
-
-  function recordAnswer(answer: Answer) {
-    const write = store.recordAnswer(LOCAL_PROFILE_ID, answer).then(
-      () => undefined,
-      () => {
-        unsaved.current.push(answer);
-      }
-    );
-    writes.current.push(write);
-  }
-
-  async function complete(correct: number) {
-    await Promise.all(writes.current);
-    writes.current = [];
-    while (unsaved.current.length > 0) {
-      await store.recordAnswer(LOCAL_PROFILE_ID, unsaved.current[0]);
-      unsaved.current.shift();
-    }
-    await store.completeLesson(LOCAL_PROFILE_ID, { unitId: unit.id, correct, total: unit.exercises.length });
-  }
-
-  return { recordAnswer, complete };
-}
-
-function useCompleted(store: ProgressStore, unitId: string): boolean {
+function useCompleted(store: ProgressStore, profileId: string, unitId: string): boolean {
   const [completed, setCompleted] = useState(false);
   useEffect(() => {
     let current = true;
     store
-      .load(LOCAL_PROFILE_ID)
+      .load(profileId)
       .then((progress) => {
         if (current) setCompleted(isLessonCompleted(progress, unitId));
       })
@@ -81,7 +52,7 @@ function useCompleted(store: ProgressStore, unitId: string): boolean {
     return () => {
       current = false;
     };
-  }, [store, unitId]);
+  }, [store, profileId, unitId]);
   return completed;
 }
 
@@ -126,18 +97,6 @@ function Intro({ unit, completed, onStart }: { unit: Unit; completed: boolean; o
   );
 }
 
-function StepBar({ current, total }: { current: number; total: number }) {
-  const theme = useTheme();
-  return (
-    <View style={styles.stepBar}>
-      <ThemedText type="meta">{t('lesson.step', { current, total })}</ThemedText>
-      <View style={[styles.track, { backgroundColor: theme.line }]} aria-hidden>
-        <View style={[styles.bar, { backgroundColor: theme.accent, width: `${(current / total) * 100}%` }]} />
-      </View>
-    </View>
-  );
-}
-
 function Result({ unit, correct }: { unit: Unit; correct: number }) {
   const total = unit.exercises.length;
   const next = nextUnitAfter(unit);
@@ -171,18 +130,26 @@ function Result({ unit, correct }: { unit: Unit; correct: number }) {
 }
 
 /** One lesson from intro to result; answers and completion go to the progress store. */
-export function LessonPlayer({ unit, store }: { unit: Unit; store: ProgressStore }) {
+type LessonPlayerProps = {
+  unit: Unit;
+  store: ProgressStore;
+  /** The device copy of progress the learner's answers go to (src/account useLearner). */
+  profileId: string;
+};
+
+export function LessonPlayer({ unit, store, profileId }: LessonPlayerProps) {
   const theme = useTheme();
   const steps = stepsOf(unit);
-  const completed = useCompleted(store, unit.id);
-  const saver = useLessonSaver(store, unit);
+  const completed = useCompleted(store, profileId, unit.id);
+  const saver = useAnswerSaver(store, profileId);
   const [phase, setPhase] = useState<Phase>({ kind: 'intro' });
   const [correct, setCorrect] = useState(0);
 
   async function finish() {
     setPhase({ kind: 'saving' });
     try {
-      await saver.complete(correct);
+      await saver.flush();
+      await store.completeLesson(profileId, { unitId: unit.id, correct, total: unit.exercises.length });
       setPhase({ kind: 'result' });
     } catch {
       setPhase({ kind: 'saveFailed' });
@@ -196,7 +163,7 @@ export function LessonPlayer({ unit, store }: { unit: Unit; store: ProgressStore
 
   function onAnswer(exercise: Exercise, isCorrect: boolean) {
     if (isCorrect) setCorrect((n) => n + 1);
-    saver.recordAnswer({ itemId: exercise.id, correct: isCorrect });
+    saver.record({ itemId: exercise.id, correct: isCorrect });
   }
 
   switch (phase.kind) {
@@ -215,7 +182,11 @@ export function LessonPlayer({ unit, store }: { unit: Unit; store: ProgressStore
       const step = steps[phase.index];
       return (
         <View style={styles.fill}>
-          <StepBar current={phase.index + 1} total={steps.length} />
+          <StepBar
+            label={t('lesson.step', { current: phase.index + 1, total: steps.length })}
+            current={phase.index + 1}
+            total={steps.length}
+          />
           {step.kind === 'word' ? (
             <View style={styles.fill}>
               <WordCard key={step.word.id} word={step.word} />
@@ -265,7 +236,4 @@ const styles = StyleSheet.create({
     marginTop: Space.sm,
   },
   note: { borderWidth: 1, borderRadius: Radius.card, padding: Space.lg, gap: Space.sm },
-  stepBar: { gap: Space.xs },
-  track: { height: 6, borderRadius: 3, overflow: 'hidden' },
-  bar: { height: 6, borderRadius: 3 },
 });

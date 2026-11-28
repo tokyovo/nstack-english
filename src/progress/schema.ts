@@ -5,6 +5,12 @@
  */
 export const PROGRESS_SCHEMA_VERSION = 1;
 
+/**
+ * The device copy of whoever learns without a child profile: a signed-out learner or the parent.
+ * A child learning on the device has its own copy, saved under the child's profile id.
+ */
+export const LOCAL_PROFILE_ID = 'local';
+
 export type LessonCompletion = {
   firstCompletedAt: string;
   lastCompletedAt: string;

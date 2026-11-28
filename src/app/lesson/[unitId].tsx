@@ -2,6 +2,7 @@ import { Link, Stack, useLocalSearchParams } from 'expo-router';
 import { ScrollView, StyleSheet, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
+import { useLearner } from '@/account/use-learner';
 import { BackLink } from '@/components/back-link';
 import { ActionButton } from '@/components/lesson/action-button';
 import { LessonPlayer } from '@/components/lesson/lesson-player';
@@ -18,6 +19,7 @@ export default function LessonScreen() {
   const theme = useTheme();
   const { unitId } = useLocalSearchParams<{ unitId: string }>();
   const unit = typeof unitId === 'string' ? getUnit(unitId) : undefined;
+  const learner = useLearner();
 
   return (
     <SafeAreaView style={[styles.screen, { backgroundColor: theme.background }]}>
@@ -32,8 +34,15 @@ export default function LessonScreen() {
                 label={t('lesson.leave')}
                 accessibilityLabel={t('lesson.leaveLabel', { track: t(`track.${unit.track}.name`) })}
               />
-              {/* A new unit starts a new lesson, never the previous one's steps. */}
-              <LessonPlayer key={unit.id} unit={unit} store={store} />
+              {/* A new unit or learner starts a new lesson, never the previous one's steps. */}
+              {learner.status === 'ready' && (
+                <LessonPlayer
+                  key={`${learner.progressId} ${unit.id}`}
+                  unit={unit}
+                  store={store}
+                  profileId={learner.progressId}
+                />
+              )}
             </>
           ) : (
             <View style={styles.missing}>

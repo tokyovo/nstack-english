@@ -23,7 +23,24 @@
 - (unscored) Kids: fewer type_answer items for ages 4-5 (replace with listen_choose or speak). Evidence: native reader 2026-11-28
 - (unscored) Kids colour pictures use one consistent set (hearts vs circles) once older-Android emoji support allows. Evidence: native reader 2026-11-28
 - (unscored) lang="en" on the type_answer English input. Evidence: learn-core fix builder
+- (unscored) android-build: build only x86_64 for the emulator (reactNativeArchitectures) to cut the 23 min first build. Evidence: T3 builder
+- (unscored) Jest timeout under CPU load (one flaky failure during gradle). Evidence: T3 builder
 - (unscored) UI-string checker: options as a function, tabBarLabel, navigation.setOptions titles. Evidence: review fix builder
 - (unscored) Rate-limit signup; prune expired sessions and old signin_failures. Evidence: T16 builder
 - (unscored) expo-secure-store plugin with faceIDPermission false and Android backup rules, so restored backups do not hold undecryptable tokens. Evidence: T18 builder
 - (unscored) Web focus outline draws black over accent/danger input borders (TextField, type-answer); TypeAnswer could reuse TextField. Evidence: T18 builder
+- (unscored) Profiles: move focus into the delete confirmation; arrow keys in the picture picker; refresh summaries while open. Evidence: T21 builder
+- (unscored) Offline notice clears only on the next navigation/foreground; add a network listener. Web offline cannot open route chunks not yet loaded. Evidence: T19 builder
+- (unscored) Lesson intro "completed" badge does not refresh after a pull. Evidence: T19 builder
+- (unscored) Expired/forgotten session (401) keeps the device progress, so the next sign-in on a shared device merges it into another account. Evidence: T19b builder
+- (unscored) Remove unreadable progress backup copies at sign-out. Evidence: T19b builder
+- (unscored) Result screens link to "/" by push, so Android back returns to the finished lesson/review; use replace/dismiss. Evidence: T12 builder
+- (unscored) Share the answer saver and step bar between lesson-player and review-session; share e2e learner helpers. Evidence: T12 builder
+- (unscored) UI-string checker: strings outside JSX that reach the user (Alert.alert, confirm, consts rendered later). Evidence: review round 3
+- (unscored) Prune default Android READ/WRITE_EXTERNAL_STORAGE permissions from the app config. Evidence: T13 builder
+- (unscored) Self-check feedback says "Đúng rồi!" for a self-mark; use wording that fits self-assessment. Evidence: T13 builder
+- (unscored) Progress documents grow without limit (all answers kept): compact old answers before the 1 MB cap. Evidence: T17 builder
+- (unscored) Content test: at least 2 speak items per unit. Evidence: T14 builder
+- (unscored) Review speak phrase: skip words with a placeholder ("My name is ..."). Evidence: T15 builder
+- (unscored) Speech scoring: "12" heard for "One, two" reads as twelve. Evidence: review-speak fix builder
+- (unscored) Deleting a child on /profiles does not clear that child's device copy. Evidence: T22b builder

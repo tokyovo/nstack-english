@@ -1,8 +1,8 @@
-// Local-first progress sync. The device always learns as LOCAL_PROFILE_ID; while signed in, that
-// copy is sent to the account's profile, the server merges it with what it has (server/progress.ts)
-// and the merged copy comes back and is merged into the device's. One PUT both pushes and pulls,
+// Local-first progress sync. The device learns as LOCAL_PROFILE_ID, or in the child's own copy while
+// a child is learning (src/account syncSession); while signed in, that copy is sent to its profile,
+// the server merges it with what it has (server/progress.ts) and the merged copy comes back and is merged into the device's. One PUT both pushes and pulls,
 // and the merge is a union, so retries and several devices converge.
-import { onSessionChange, syncSession } from '@/account';
+import { endChildSession, familySyncSessions, onSessionChange, signOut, syncSession, type SyncSession } from '@/account';
 import { callApi } from '@/api/client';
 import { createProgressStore, LOCAL_PROFILE_ID, onProgressChange } from '@/progress';
 import { parseProgress } from '@/progress/schema';
@@ -57,8 +57,9 @@ export function syncProgress(): Promise<SyncState> {
 export function startSync(): () => void {
   const sync = () => void syncProgress();
   const stopSession = onSessionChange(sync);
-  const stopProgress = onProgressChange(({ profileId, source }) => {
-    if (profileId === LOCAL_PROFILE_ID && source === 'device') sync();
+  // Only the active learner's copy is synced; a change to any copy on the device starts a run.
+  const stopProgress = onProgressChange(({ source }) => {
+    if (source === 'device') sync();
   });
   return () => {
     stopSession();
@@ -68,8 +69,12 @@ export function startSync(): () => void {
 
 async function syncOnce(): Promise<SyncState> {
   const session = await syncSession();
-  if (!session) return 'signedOut';
-  const device = await store.load(LOCAL_PROFILE_ID);
+  return session ? syncCopy(session) : 'signedOut';
+}
+
+/** Sends one device copy to its profile and merges the account's copy back into it. */
+async function syncCopy(session: SyncSession): Promise<Exclude<SyncState, 'idle' | 'signedOut'>> {
+  const device = await store.load(session.deviceProfileId);
   const reply = await callApi(`/api/profiles/${encodeURIComponent(session.profileId)}/progress`, {
     method: 'PUT',
     body: { ...device, profileId: session.profileId },
@@ -78,8 +83,50 @@ async function syncOnce(): Promise<SyncState> {
   if (reply.status === 'offline') return 'offline';
   const merged = reply.status === 200 ? parseProgress(reply.body, session.profileId) : null;
   if (!merged) return 'failed';
-  await store.mergeIn(LOCAL_PROFILE_ID, { ...merged, profileId: LOCAL_PROFILE_ID });
+  await store.mergeIn(session.deviceProfileId, { ...merged, profileId: session.deviceProfileId });
   return 'synced';
+}
+
+/**
+ * The parent takes the device back from a child: the child's progress is sent first, then the
+ * child's token is ended. Unsent progress stays in the child's device copy and goes with the
+ * child's next session.
+ */
+export async function leaveChildProfile(): Promise<void> {
+  await syncProgress();
+  await endChildSession();
+}
+
+/** `signedOut` when the device's progress is gone with the session; otherwise why it could not be sent. */
+export type SignOutResult = 'signedOut' | 'offline' | 'failed';
+
+/**
+ * Signs out so the next person on this device finds none of the family's progress: every learner's
+ * device copy (the parent's and each child's) is sent to the account first, then all are cleared and
+ * an active child's session ends with the parent's. When a copy cannot be sent the parent stays
+ * signed in with nothing lost, unless they chose `discardUnsynced`.
+ */
+export async function signOutOfDevice({ discardUnsynced = false } = {}): Promise<SignOutResult> {
+  const family = await familySyncSessions();
+  const saved = await saveFamily(family ?? []);
+  if (saved !== 'synced' && !discardUnsynced) return saved;
+  // The session goes first, and any sync still running is waited for, so none refills the device.
+  await signOut();
+  await syncProgress();
+  const copies = family?.map((session) => session.deviceProfileId) ?? [LOCAL_PROFILE_ID];
+  await Promise.all(copies.map((copy) => store.clear(copy)));
+  return 'signedOut';
+}
+
+/** The active learner's copy through the usual sync, then every other learner's; the first problem wins. */
+async function saveFamily(family: SyncSession[]): Promise<'synced' | 'offline' | 'failed'> {
+  const active = await syncSession();
+  const others = family.filter((session) => session.deviceProfileId !== active?.deviceProfileId);
+  const results = [
+    await syncProgress(),
+    ...(await Promise.all(others.map((session) => syncCopy(session).catch(() => 'failed' as const)))),
+  ];
+  return results.find((result) => result === 'offline' || result === 'failed') ?? 'synced';
 }
 
 function setState(next: SyncState) {

@@ -4,7 +4,7 @@ const API_URL = process.env.EXPO_PUBLIC_API_URL ?? '';
 
 export type ApiReply = { status: number; body: unknown } | { status: 'offline' };
 
-type ApiRequest = { method?: 'GET' | 'POST' | 'PUT'; body?: unknown; token?: string };
+type ApiRequest = { method?: 'GET' | 'POST' | 'PUT' | 'PATCH' | 'DELETE'; body?: unknown; token?: string };
 
 /** Sends a JSON request; a server that cannot be reached answers `offline` instead of throwing. */
 export async function callApi(

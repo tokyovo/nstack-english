@@ -6,7 +6,7 @@ import { parseUnit, type Track, type Unit, type Word } from './schema';
 
 export type { Access, UnitSummary } from './access';
 export type { Exercise, ExerciseType, Level, Track, Unit, Word } from './schema';
-export { levels, tracks } from './schema';
+export { isTemplate, levels, tracks } from './schema';
 
 function load(data: unknown): Unit {
   const result = parseUnit(data);

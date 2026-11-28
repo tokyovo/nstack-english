@@ -4,15 +4,13 @@ import { mergeProgress } from './merge';
 import { emptyProgress, parseProgress, type LessonCompletion, type Progress } from './schema';
 
 export {
+  LOCAL_PROFILE_ID,
   PROGRESS_SCHEMA_VERSION,
   upgradeProgress,
   type AnswerRecord,
   type LessonCompletion,
   type Progress,
 } from './schema';
-
-/** The only profile until accounts and child profiles exist. */
-export const LOCAL_PROFILE_ID = 'local';
 
 const KEY_PREFIX = 'hocenglish.progress.';
 
@@ -126,6 +124,10 @@ export function createProgressStore({ now = () => new Date() }: StoreOptions = {
     /** Adds another copy of the profile's progress (the account's) to the saved one; nothing saved is lost. */
     mergeIn(profileId: string, other: Progress): Promise<Progress> {
       return update(profileId, 'account', (progress) => mergeProgress(progress, other));
+    },
+    /** Deletes the profile's saved progress, so the next learner on this device starts with none. */
+    clear(profileId: string): Promise<Progress> {
+      return update(profileId, 'account', () => emptyProgress(profileId));
     },
   };
 }

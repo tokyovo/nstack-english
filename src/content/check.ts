@@ -1,7 +1,7 @@
-// Rules that span all units: unique ids, listed sources, and that every English
-// word an exercise or example shows was taught in its unit or an earlier one.
+// Rules that span all units: unique ids, listed sources, that every English word an exercise or
+// example shows was taught in its unit or an earlier one, and that nothing asks for a template.
 // Imports by path with the extension, so Node (server, manifest script) can load it too.
-import { levels, type Exercise, type Unit, type Word } from './schema.ts';
+import { isTemplate, levels, type Exercise, type Unit, type Word } from './schema.ts';
 
 /** Lowercased English words of a text; apostrophes kept ("i'm"), punctuation and digits dropped. */
 export function englishTokens(text: string): string[] {
@@ -28,7 +28,31 @@ function shownEnglish(exercise: Exercise): string[] {
       return exercise.tiles;
     case 'type_answer':
       return [exercise.answer];
+    case 'speak':
+      return [exercise.text];
   }
+}
+
+/** English the learner must type or say, which a template such as "My name is ..." cannot be. */
+function producedEnglish(exercise: Exercise): string[] {
+  switch (exercise.type) {
+    case 'type_answer':
+      return [exercise.answer, ...(exercise.accepted ?? [])];
+    case 'speak':
+      return [exercise.text];
+    default:
+      return [];
+  }
+}
+
+function templatesAsked(units: readonly Unit[]): string[] {
+  return units.flatMap((u) =>
+    u.exercises.flatMap((exercise) =>
+      producedEnglish(exercise)
+        .filter(isTemplate)
+        .map((text) => `${exercise.id}: "${text}" is a template; ask for a complete sentence`)
+    )
+  );
 }
 
 function duplicateIds(units: readonly Unit[]): string[] {
@@ -84,5 +108,5 @@ function wordOrder(units: readonly Unit[]): string[] {
 
 /** Every cross-unit problem in the given units, as "<id>: <what>"; empty when all is well. */
 export function checkContent(units: readonly Unit[], sourceIds: readonly string[]): string[] {
-  return [...duplicateIds(units), ...unlistedSources(units, sourceIds), ...wordOrder(units)];
+  return [...duplicateIds(units), ...unlistedSources(units, sourceIds), ...wordOrder(units), ...templatesAsked(units)];
 }

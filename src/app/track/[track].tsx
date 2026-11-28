@@ -2,6 +2,7 @@ import { Stack, useLocalSearchParams } from 'expo-router';
 import { ScrollView, StyleSheet, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
+import { useLearner } from '@/account/use-learner';
 import { BackLink } from '@/components/back-link';
 import { ListRow } from '@/components/list-row';
 import { ThemedText } from '@/components/themed-text';
@@ -40,7 +41,8 @@ function UnitRow({ unit, progress }: { unit: UnitSummary; progress: ProgressStat
 }
 
 function TrackUnits({ track }: { track: Track }) {
-  const progress = useProgress();
+  const learner = useLearner();
+  const progress = useProgress(learner.status === 'ready' ? learner.progressId : undefined);
   const units = unitsOf(track);
   const byLevel = levels
     .map((level) => ({ level, units: units.filter((unit) => unit.level === level) }))
