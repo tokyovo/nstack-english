@@ -242,3 +242,13 @@
 - [x] 6. Record. this entry, backlog
 - [x] Done when: committed on nstack/review-speak, items ticked. Native recognition not run (no KVM; iOS builds in CI).
 - Decision: listening gives up after 15 s (headless browsers listen forever) and offers self-check; "nothing heard" can switch to self-check.
+
+## 2026-11-28 build T14
+- Read: build/SKILL.md a069840
+- [x] 1. Branch. nstack/review-speak
+- [x] 2. Starting state. fast checks pass at 5f55b46
+- [x] 3. Dispatch. builder in worktree
+- [x] 4. Read the reply. done d6c664c; native reader "pass with fixes", 4 fixes applied (son/sun and mouth/mouse misrecognition risks, polite form, speaker voice)
+- [x] 5. Prove it yourself. merged: jest pass (count below), content test covers speak items
+- [x] 6. Record. this entry, backlog
+- [x] Done when: committed, items ticked.

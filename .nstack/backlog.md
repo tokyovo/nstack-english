@@ -30,3 +30,4 @@
 - (unscored) Prune default Android READ/WRITE_EXTERNAL_STORAGE permissions from the app config. Evidence: T13 builder
 - (unscored) Self-check feedback says "Đúng rồi!" for a self-mark; use wording that fits self-assessment. Evidence: T13 builder
 - (unscored) Progress documents grow without limit (all answers kept): compact old answers before the 1 MB cap. Evidence: T17 builder
+- (unscored) Content test: at least 2 speak items per unit. Evidence: T14 builder
