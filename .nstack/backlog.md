@@ -26,4 +26,12 @@
 - (unscored) android-build: build only x86_64 for the emulator (reactNativeArchitectures) to cut the 23 min first build. Evidence: T3 builder
 - (unscored) Jest timeout under CPU load (one flaky failure during gradle). Evidence: T3 builder
 - (unscored) UI-string checker: options as a function, tabBarLabel, navigation.setOptions titles. Evidence: review fix builder
+- (unscored) Result screens link to "/" by push, so Android back returns to the finished lesson/review; use replace/dismiss. Evidence: T12 builder
+- (unscored) Share the answer saver and step bar between lesson-player and review-session; share e2e learner helpers. Evidence: T12 builder
 - (unscored) UI-string checker: strings outside JSX that reach the user (Alert.alert, confirm, consts rendered later). Evidence: review round 3
+- (unscored) Prune default Android READ/WRITE_EXTERNAL_STORAGE permissions from the app config. Evidence: T13 builder
+- (unscored) Self-check feedback says "Đúng rồi!" for a self-mark; use wording that fits self-assessment. Evidence: T13 builder
+- (unscored) Progress documents grow without limit (all answers kept): compact old answers before the 1 MB cap. Evidence: T17 builder
+- (unscored) Content test: at least 2 speak items per unit. Evidence: T14 builder
+- (unscored) Review speak phrase: skip words with a placeholder ("My name is ..."). Evidence: T15 builder
+- (unscored) Speech scoring: "12" heard for "One, two" reads as twelve. Evidence: review-speak fix builder

@@ -1,29 +1,11 @@
 // A learner completes everyday A0 u1 on web, reloads, and sees it completed.
 // Runs against the served web export (`npx expo export --platform web`); baseURL comes from the config.
-import { AxeBuilder } from '@axe-core/playwright';
 import { expect, test, type Page } from '@playwright/test';
-import { readFileSync } from 'node:fs';
-import { join } from 'node:path';
 
-import { parseUnit, type Exercise, type Unit } from '../src/content/schema';
-
-function loadUnit(path: string): Unit {
-  const result = parseUnit(JSON.parse(readFileSync(join(import.meta.dirname, '..', 'content', path), 'utf8')));
-  if (!result.ok) throw new Error(result.errors.join('\n'));
-  return result.unit;
-}
+import type { Exercise } from '../src/content/schema';
+import { button, collectErrors, expectNoSeriousAxeViolations, loadUnit, withoutSpeechRecognition } from './learner.ts';
 
 const unit = loadUnit('everyday/a0/u1.json');
-
-function button(page: Page, name: string) {
-  return page.getByRole('button', { name, exact: true });
-}
-
-async function expectNoSeriousAxeViolations(page: Page) {
-  const { violations } = await new AxeBuilder({ page }).withTags(['wcag2a', 'wcag2aa', 'wcag21aa']).analyze();
-  const serious = violations.filter((v) => v.impact === 'serious' || v.impact === 'critical');
-  expect(serious.map((v) => `${v.id}: ${v.nodes.map((n) => n.target.join(' ')).join(', ')}`)).toEqual([]);
-}
 
 /** The English being taught is marked lang="en", so screen readers pronounce it as English on a vi page. */
 async function expectEnglish(page: Page, text: string) {
@@ -42,6 +24,10 @@ async function expectLanguagesMarked(page: Page, exercise: Exercise) {
       return;
     case 'build_sentence':
       for (const tile of exercise.tiles) await expectEnglish(page, tile);
+      return;
+    case 'speak':
+      await expectEnglish(page, exercise.text);
+      await expect(page.getByText(exercise.vi, { exact: true })).not.toHaveAttribute('lang', 'en');
       return;
     case 'type_answer':
   }
@@ -81,18 +67,32 @@ async function answerRight(page: Page, exercise: Exercise) {
       const input = page.getByLabel('Câu trả lời bằng tiếng Anh');
       await input.fill(` ${exercise.answer.toLowerCase()}. `);
       await input.press('Enter');
+      return;
     }
+    case 'speak':
+      // Without speech recognition the learner says it aloud and marks themselves.
+      await button(page, 'Tôi nói được rồi').click();
   }
 }
 
+/** Plays the lesson up to its first speak exercise, answering everything before it right. */
+async function playToSpeak(page: Page): Promise<Extract<Exercise, { type: 'speak' }>> {
+  await page.goto(`/lesson/${unit.id}`);
+  await button(page, 'Bắt đầu học').click();
+  for (let i = 0; i < unit.words.length; i++) await button(page, 'Tiếp tục').click();
+  for (const exercise of unit.exercises) {
+    if (exercise.type === 'speak') return exercise;
+    await answerRight(page, exercise);
+    await button(page, 'Tiếp tục').click();
+  }
+  throw new Error(`${unit.id} has no speak exercise`);
+}
+
 test('a learner completes everyday A0 u1, reloads, and sees it completed', async ({ page }) => {
+  const errors = collectErrors(page);
+  await withoutSpeechRecognition(page);
   // A browser with no voices, like headless or Linux Chromium: the listening text is shown instead of "Nghe".
   await fakeVoices(page, []);
-  const errors: string[] = [];
-  page.on('pageerror', (error) => errors.push(error.message));
-  page.on('console', (message) => {
-    if (message.type() === 'error') errors.push(message.text());
-  });
 
   await page.goto(`/lesson/${unit.id}`);
   await expect(page.getByRole('heading', { name: unit.title, level: 1 })).toBeVisible();
@@ -121,6 +121,11 @@ test('a learner completes everyday A0 u1, reloads, and sees it completed', async
     await expectLanguagesMarked(page, exercise);
     if (exercise.type === 'listen_choose') {
       await expect(page.getByTestId('listen-text')).toHaveText(exercise.audio);
+      await expect(button(page, 'Nghe')).toHaveCount(0);
+    }
+    if (exercise.type === 'speak') {
+      // No recogniser and no English voice: the learner reads the phrase aloud and marks themselves.
+      await expect(page.getByText('Bạn hãy đọc to câu ở trên, rồi tự chấm.')).toBeVisible();
       await expect(button(page, 'Nghe')).toHaveCount(0);
     }
     await answerRight(page, exercise);
@@ -184,6 +189,38 @@ test('a learner leaves mid-lesson for the track list and keeps the answers given
   const saved = await page.evaluate(() => localStorage.getItem('hocenglish.progress.local'));
   const answers = (JSON.parse(saved ?? '{}') as { answers?: Record<string, unknown[]> }).answers ?? {};
   expect(Object.keys(answers).sort()).toEqual([first.id, second.id]);
+});
+
+test('a speak exercise falls back to self-check where the browser has no recogniser', async ({ page }) => {
+  await withoutSpeechRecognition(page);
+  const speak = await playToSpeak(page);
+
+  await expect(page.getByText('Nói câu này bằng tiếng Anh')).toBeVisible();
+  await expect(button(page, 'Nói')).toHaveCount(0);
+  await expectNoSeriousAxeViolations(page);
+  await button(page, 'Tôi chưa nói được').click();
+
+  await expect(page.getByText('Chưa đúng.')).toBeVisible();
+  await expect(page.getByText(`Đáp án đúng: ${speak.text}`)).toBeVisible();
+});
+
+test('with the real speech API, "Nói" explains the microphone first and falls back when it hears nothing', async ({
+  page,
+}) => {
+  await playToSpeak(page);
+
+  await button(page, 'Nói').click();
+  await expect(page.getByText(/ứng dụng cần dùng micrô/)).toBeVisible();
+  await expectNoSeriousAxeViolations(page);
+  await button(page, 'Cho phép dùng micrô').click();
+
+  // Headless Chromium has no microphone: it listens until "Nói xong", then has heard nothing.
+  await expect(page.getByText('Đang nghe... Bạn hãy nói câu ở trên.')).toBeVisible();
+  await button(page, 'Nói xong').click();
+  await expect(page.getByText(/Chưa nghe thấy bạn nói/)).toBeVisible();
+  await button(page, 'Không dùng micrô, tự chấm').click();
+  await button(page, 'Tôi nói được rồi').click();
+  await expect(page.getByText('Đúng rồi!')).toBeVisible();
 });
 
 test('an unknown lesson says so and links home', async ({ page }) => {

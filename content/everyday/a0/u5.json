@@ -167,6 +167,18 @@
       "answer": "green"
     },
     {
+      "id": "everyday-a0-u5-e15",
+      "type": "speak",
+      "text": "My bag is red.",
+      "vi": "Túi của tôi màu đỏ."
+    },
+    {
+      "id": "everyday-a0-u5-e16",
+      "type": "speak",
+      "text": "This is my phone.",
+      "vi": "Đây là điện thoại của tôi."
+    },
+    {
       "id": "everyday-a0-u5-e14",
       "type": "type_answer",
       "prompt": "Đây là cái bút của tôi.",

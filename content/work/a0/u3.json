@@ -148,6 +148,18 @@
       "answer": "It's there"
     },
     {
+      "id": "work-a0-u3-e13",
+      "type": "speak",
+      "text": "Where is the printer?",
+      "vi": "Máy in ở đâu?"
+    },
+    {
+      "id": "work-a0-u3-e14",
+      "type": "speak",
+      "text": "Where is the meeting room?",
+      "vi": "Phòng họp ở đâu?"
+    },
+    {
       "id": "work-a0-u3-e12",
       "type": "type_answer",
       "prompt": "máy tính",

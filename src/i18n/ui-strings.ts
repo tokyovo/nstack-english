@@ -63,7 +63,7 @@ const COMPARISONS = new Set([
 ]);
 
 /** Object keys (route objects, navigator options, styles) whose values are never shown; props use NON_UI_KEYS. */
-const NON_UI_OBJECT_KEYS = new Set(['pathname', 'animation', 'presentation', 'fontFamily', 'kind']);
+const NON_UI_OBJECT_KEYS = new Set(['pathname', 'animation', 'presentation', 'fontFamily', 'kind', 'reason']);
 
 function isNonUiKey(name: ts.PropertyName | ts.JsxAttributeName, keys = NON_UI_KEYS): boolean {
   return (ts.isIdentifier(name) || ts.isStringLiteral(name)) && keys.has(name.text);
@@ -75,7 +75,14 @@ function isJsx(node: ts.Node): boolean {
 
 /** The key in `t("key", ...)`, or a string compared or used as an index (`x === "web"`, `o["k"]`): never rendered. */
 function isNeverRendered(node: ts.Node): boolean {
-  const literal = node;
+  let literal = node;
+  // A key picked by a condition, t(ok ? "a" : "b"), is still a key.
+  while (
+    ts.isParenthesizedExpression(literal.parent) ||
+    (ts.isConditionalExpression(literal.parent) && literal.parent.condition !== literal)
+  ) {
+    literal = literal.parent;
+  }
   const parent = literal.parent;
   if (ts.isCallExpression(parent)) {
     return ts.isIdentifier(parent.expression) && parent.expression.text === 't' && parent.arguments[0] === literal;
