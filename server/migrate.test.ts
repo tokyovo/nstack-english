@@ -133,6 +133,39 @@ describe('migrate', () => {
     assert.equal(db.prepare('SELECT count(*) AS n FROM profiles').get()?.n, 201);
   });
 
+  test('rerunning the repository migrations keeps progress documents as they were', () => {
+    const repoMigrations = join(import.meta.dirname, 'migrations');
+    migrate(db, repoMigrations);
+    db.prepare("INSERT INTO users (id, email, password_hash, created_at) VALUES ('u', 'a@b.co', 'x', 0)").run();
+    const addProfile = db.prepare("INSERT INTO profiles (id, user_id, kind, created_at) VALUES (?, 'u', 'child', 0)");
+    const addProgress = db.prepare('INSERT INTO progress (profile_id, document, updated_at) VALUES (?, ?, ?)');
+    const answers = Array.from({ length: 2000 }, (_, i) => ({ at: new Date(i * 1000).toISOString(), correct: i % 3 > 0 }));
+    for (let i = 0; i < 100; i += 1) {
+      addProfile.run(`p${i}`);
+      const lessons = i % 2 ? {} : { 'everyday-a0-u1': { bestCorrect: i } };
+      addProgress.run(`p${i}`, JSON.stringify({ schemaVersion: 1, profileId: `p${i}`, lessons, answers: { item: answers } }), i);
+    }
+    const before = db.prepare('SELECT * FROM progress ORDER BY rowid').all();
+
+    assert.deepEqual(migrate(db, repoMigrations), []);
+
+    assert.deepEqual(db.prepare('SELECT * FROM progress ORDER BY rowid').all(), before);
+    assert.equal(before.length, 100);
+  });
+
+  test('a profile\'s progress is deleted with the profile, and needs an existing profile', () => {
+    migrate(db, join(import.meta.dirname, 'migrations'));
+    db.exec('PRAGMA foreign_keys = ON');
+    db.prepare("INSERT INTO users (id, email, password_hash, created_at) VALUES ('u', 'a@b.co', 'x', 0)").run();
+    db.prepare("INSERT INTO profiles (id, user_id, kind, created_at) VALUES ('p', 'u', 'owner', 0)").run();
+    const addProgress = db.prepare("INSERT INTO progress (profile_id, document, updated_at) VALUES (?, '{}', 0)");
+    addProgress.run('p');
+
+    assert.throws(() => addProgress.run('missing'), /FOREIGN KEY constraint failed/);
+    db.prepare("DELETE FROM users WHERE id = 'u'").run();
+    assert.equal(db.prepare('SELECT count(*) AS n FROM progress').get()?.n, 0);
+  });
+
   test('the accounts schema allows one owner profile per user', () => {
     migrate(db, join(import.meta.dirname, 'migrations'));
     db.prepare("INSERT INTO users (id, email, password_hash, created_at) VALUES ('u', 'a@b.co', 'x', 0)").run();

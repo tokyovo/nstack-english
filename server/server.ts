@@ -9,6 +9,7 @@ import { secureHeaders } from 'hono/secure-headers';
 
 import { accountRoutes } from './accounts.ts';
 import { migrate } from './migrate.ts';
+import { progressRoutes } from './progress.ts';
 
 /**
  * `webDir`: the exported web app, served on every non-API path.
@@ -55,7 +56,9 @@ function createApp(db: DatabaseSync, config: ServerConfig) {
   const app = new Hono();
   app.use(secureHeaders({ xFrameOptions: 'DENY', contentSecurityPolicy }));
   app.get('/api/health', (c) => c.json({ ok: true }));
-  app.route('/api', accountRoutes(db, config.now ?? (() => new Date())));
+  const now = config.now ?? (() => new Date());
+  app.route('/api', accountRoutes(db, now));
+  app.route('/api', progressRoutes(db, now));
   if (config.webDir) serveWebApp(app, config.webDir);
   return app;
 }
