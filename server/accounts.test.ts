@@ -299,16 +299,6 @@ describe('accounts', () => {
   });
 
   describe('GET /api/me', () => {
-    test('a session expires after 90 days', async () => {
-      const { token } = await signUp();
-      clock += 90 * DAY - 1;
-      assert.equal((await me(token)).status, 200);
-
-      clock += 1;
-
-      assert.equal((await me(token)).status, 401);
-    });
-
     test('signed out answers 401', async () => {
       const response = await me();
 
@@ -328,6 +318,81 @@ describe('accounts', () => {
       const response = await fetch(`${server.url}/api/me`, { headers: { authorization: `Basic ${token}` } });
 
       assert.equal(response.status, 401);
+    });
+  });
+
+  describe('session expiry', () => {
+    async function childToken(parentToken: string): Promise<string> {
+      const added = await post('/api/profiles', { name: 'Bé Na', picture: '🐱' }, parentToken);
+      assert.equal(added.status, 201);
+      const { profile } = (await added.json()) as { profile: { id: string } };
+      const started = await post(`/api/profiles/${profile.id}/session`, {}, parentToken);
+      assert.equal(started.status, 201);
+      return ((await started.json()) as { token: string }).token;
+    }
+
+    function plan(token: string) {
+      return fetch(`${server.url}/api/plan`, { headers: { authorization: `Bearer ${token}` } });
+    }
+
+    test('an unused session works until 90 days and answers 401 from then on', async () => {
+      const { token: kept } = await signUp();
+      const { token: unused } = await signUp();
+      const start = clock;
+
+      clock = start + 90 * DAY - 1;
+      assert.equal((await me(kept)).status, 200);
+      clock = start + 90 * DAY;
+
+      assert.equal((await me(unused)).status, 401);
+    });
+
+    test('a session used on day 60 lasts until day 150', async () => {
+      const { token: kept } = await signUp();
+      const { token: left } = await signUp();
+      const start = clock;
+      clock = start + 60 * DAY;
+      assert.equal((await me(kept)).status, 200);
+      assert.equal((await me(left)).status, 200);
+
+      clock = start + 150 * DAY - 1;
+      assert.equal((await me(kept)).status, 200);
+      clock = start + 150 * DAY;
+
+      assert.equal((await me(left)).status, 401);
+    });
+
+    test('use within a day of the last renewal does not move the expiry', async () => {
+      const { token } = await signUp();
+      const start = clock;
+      clock = start + DAY;
+      assert.equal((await me(token)).status, 200);
+
+      clock = start + 90 * DAY;
+
+      assert.equal((await me(token)).status, 401);
+    });
+
+    test('use more than a day after the last renewal moves the expiry', async () => {
+      const { token } = await signUp();
+      const start = clock;
+      clock = start + DAY + 1;
+      assert.equal((await me(token)).status, 200);
+
+      clock = start + 91 * DAY;
+
+      assert.equal((await me(token)).status, 200);
+    });
+
+    test("a child's session slides the same way", async () => {
+      const { token: parent } = await signUp();
+      const child = await childToken(parent);
+      const start = clock;
+      clock = start + 60 * DAY;
+      assert.equal((await plan(child)).status, 200);
+
+      clock = start + 150 * DAY - 1;
+      assert.equal((await plan(child)).status, 200);
     });
   });
 });

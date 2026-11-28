@@ -16,6 +16,8 @@ type Credentials = { email: string; password: string };
 type ErrorBody = { error: string; field?: 'email' | 'password' };
 
 const SESSION_DAYS = 90;
+/** A session is renewed when used with less than this left: at most once a day, so most reads stay reads. */
+const RENEW_BELOW_DAYS = SESSION_DAYS - 1;
 const MIN_PASSWORD = 8;
 const MAX_PASSWORD = 256;
 const MAX_EMAIL = 254;
@@ -168,14 +170,20 @@ function insertSession(db: DatabaseSync, userId: string, profileId: string | nul
   return token;
 }
 
+/** The live session for `token`, if any; its expiry slides to 90 days from `at` (no absolute maximum). */
 function sessionForToken(db: DatabaseSync, token: string, at: Date): { user: User; scope: SessionScope } | undefined {
+  const tokenHash = sha256(token);
   const row = db
     .prepare(
-      `SELECT users.id, users.email, sessions.profile_id FROM sessions JOIN users ON users.id = sessions.user_id
+      `SELECT users.id, users.email, sessions.profile_id, sessions.expires_at FROM sessions
+       JOIN users ON users.id = sessions.user_id
        WHERE sessions.token_hash = ? AND sessions.expires_at > ?`,
     )
-    .get(sha256(token), at.getTime());
+    .get(tokenHash, at.getTime());
   if (!row) return undefined;
+  if (Number(row.expires_at) - at.getTime() < RENEW_BELOW_DAYS * DAY) {
+    db.prepare('UPDATE sessions SET expires_at = ? WHERE token_hash = ?').run(at.getTime() + SESSION_DAYS * DAY, tokenHash);
+  }
   const scope: SessionScope =
     row.profile_id === null ? { kind: 'account' } : { kind: 'profile', profileId: String(row.profile_id) };
   return { user: { id: String(row.id), email: String(row.email) }, scope };
