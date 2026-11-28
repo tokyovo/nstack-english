@@ -41,7 +41,14 @@ export type Exercise = ExerciseBase &
     | { type: 'choose_meaning'; /** a word id */ prompt: string; options: string[]; answer: string }
     | { type: 'choose_english'; prompt: string; options: string[]; answer: string }
     | { type: 'listen_choose'; audio: string; options: string[]; answer: string }
-    | { type: 'build_sentence'; prompt: string; tiles: string[]; answer: string[] }
+    | {
+        type: 'build_sentence';
+        prompt: string;
+        tiles: string[];
+        answer: string[];
+        /** Other correct orders of the tiles, e.g. "Lan is my name" for "My name is Lan". */
+        accepted?: string[][];
+      }
     | { type: 'type_answer'; prompt: string; answer: string; accepted?: string[] }
   );
 
@@ -71,7 +78,7 @@ const exerciseKeys: Record<ExerciseType, string[]> = {
   choose_meaning: ['prompt', 'options', 'answer'],
   choose_english: ['prompt', 'options', 'answer'],
   listen_choose: ['audio', 'options', 'answer'],
-  build_sentence: ['prompt', 'tiles', 'answer'],
+  build_sentence: ['prompt', 'tiles', 'answer', 'accepted'],
   type_answer: ['prompt', 'answer', 'accepted'],
 };
 
@@ -129,9 +136,11 @@ class Reader {
     return found ?? allowed[0];
   }
 
-  list(fields: Fields, key: string, at: string): unknown[] {
+  /** With `fallback`, the field is optional and the fallback stands in when it is absent. */
+  list(fields: Fields, key: string, at: string, fallback?: unknown[]): unknown[] {
     const value = fields[key];
     if (Array.isArray(value)) return value;
+    if (value === undefined && fallback) return fallback;
     this.fail(`${at}.${key}`, 'must be a list');
     return [];
   }
@@ -166,17 +175,24 @@ function checkOptions(r: Reader, id: string, options: string[], answer: string) 
   if (answer && !options.includes(answer)) r.fail(id, `answer "${answer}" is not among the options`);
 }
 
-function checkTiles(r: Reader, id: string, tiles: string[], answer: string[]) {
+/** Returns the tiles an order leaves unused, or undefined when it uses a tile that is not there. */
+function unusedTiles(r: Reader, id: string, tiles: string[], order: string[], label: string): string[] | undefined {
   const left = [...tiles];
-  for (const tile of answer) {
+  for (const tile of order) {
     const i = left.indexOf(tile);
     if (i === -1) {
-      r.fail(id, `answer tile "${tile}" is not among the tiles`);
-      return;
+      r.fail(id, `${label} tile "${tile}" is not among the tiles`);
+      return undefined;
     }
     left.splice(i, 1);
   }
-  if (left.length > 2) r.fail(id, `at most 2 distractor tiles, has ${left.length}`);
+  return left;
+}
+
+function checkTiles(r: Reader, id: string, tiles: string[], answer: string[], accepted: string[][]) {
+  const left = unusedTiles(r, id, tiles, answer, 'answer');
+  if (left && left.length > 2) r.fail(id, `at most 2 distractor tiles, has ${left.length}`);
+  accepted.forEach((order) => unusedTiles(r, id, tiles, order, 'accepted'));
 }
 
 /** Returns undefined when the type is unknown: its other fields cannot be checked. */
@@ -221,14 +237,18 @@ function parseExercise(r: Reader, value: unknown, at: string, unitId: string): E
       return exercise;
     }
     case 'build_sentence': {
+      const accepted = r.list(fields, 'accepted', id, []).map((order, i) =>
+        r.texts({ [i]: order }, String(i), `${id}.accepted`)
+      );
       const exercise = {
         ...base,
         type: 'build_sentence' as const,
         prompt: r.text(fields, 'prompt', id),
         tiles: r.texts(fields, 'tiles', id),
         answer: r.texts(fields, 'answer', id),
+        ...(accepted.length > 0 ? { accepted } : {}),
       };
-      checkTiles(r, id, exercise.tiles, exercise.answer);
+      checkTiles(r, id, exercise.tiles, exercise.answer, accepted);
       return exercise;
     }
     case 'type_answer': {

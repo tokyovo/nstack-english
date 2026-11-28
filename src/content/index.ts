@@ -15,7 +15,7 @@ import kidsA0U4 from '../../content/kids/a0/u4.json';
 import kidsA0U5 from '../../content/kids/a0/u5.json';
 
 import { inTeachingOrder } from './check';
-import { parseUnit, tracks, type Track, type Unit } from './schema';
+import { parseUnit, tracks, type Track, type Unit, type Word } from './schema';
 
 export type { Exercise, ExerciseType, Level, Track, Unit, Word } from './schema';
 export { levels, tracks } from './schema';
@@ -54,4 +54,13 @@ export const units: readonly Unit[] = tracks.flatMap(unitsOf);
 
 export function getUnit(id: string): Unit | undefined {
   return units.find((u) => u.id === id);
+}
+
+/** A word from any unit, e.g. the prompt of a choose_meaning exercise. */
+export function getWord(id: string): Word | undefined {
+  for (const unit of units) {
+    const word = unit.words.find((w) => w.id === id);
+    if (word) return word;
+  }
+  return undefined;
 }

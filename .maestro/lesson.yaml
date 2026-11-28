@@ -1,0 +1,130 @@
+# Completes everyday A0 u1 on Android, restarts the app, and sees the lesson completed.
+# Run: MAESTRO_CLI_NO_ANALYTICS=1 npm run drive -- android-test .maestro/lesson.yaml
+# Answers follow content/everyday/a0/u1.json; option-<n> is the n-th option, tile-<n> the n-th tile.
+appId: app.hocenglish
+---
+- launchApp:
+    clearState: true
+- openLink: hocenglish://lesson/everyday-a0-u1
+- assertVisible: "Chào hỏi"
+- assertNotVisible: "Bạn đã học xong bài này."
+- tapOn:
+    id: "start"
+
+# Nine word cards.
+- repeat:
+    times: 9
+    commands:
+      - assertVisible:
+          id: "word-card"
+      - tapOn:
+          id: "continue"
+
+# e01 choose_meaning Hello -> Xin chào
+- tapOn:
+    id: "option-0"
+- assertVisible: "Đúng rồi!"
+- tapOn:
+    id: "continue"
+# e02 choose_meaning Goodbye -> Tạm biệt
+- tapOn:
+    id: "option-1"
+- tapOn:
+    id: "continue"
+# e03 listen_choose -> Hi
+- tapOn:
+    id: "option-0"
+- tapOn:
+    id: "continue"
+# e04 choose_english Chào buổi sáng -> Good morning
+- tapOn:
+    id: "option-0"
+- tapOn:
+    id: "continue"
+# e05 choose_meaning Thank you -> Cảm ơn
+- tapOn:
+    id: "option-2"
+- tapOn:
+    id: "continue"
+# e06 build_sentence: My name is Lan
+- tapOn:
+    id: "tile-2"
+- tapOn:
+    id: "tile-0"
+- tapOn:
+    id: "tile-4"
+- tapOn:
+    id: "tile-1"
+- tapOn:
+    id: "check"
+- assertVisible: "Đúng rồi!"
+- tapOn:
+    id: "continue"
+# e07 listen_choose -> How are you?
+- tapOn:
+    id: "option-1"
+- tapOn:
+    id: "continue"
+# e08 choose_english Tôi khỏe -> I'm fine
+- tapOn:
+    id: "option-1"
+- tapOn:
+    id: "continue"
+# e09 type_answer Tạm biệt -> Goodbye, typed in lower case
+- tapOn:
+    id: "answer-input"
+- inputText: "goodbye"
+- hideKeyboard
+- tapOn:
+    id: "check"
+- assertVisible: "Đúng rồi!"
+- tapOn:
+    id: "continue"
+# e10 choose_meaning Nice to meet you -> Rất vui được gặp bạn
+- tapOn:
+    id: "option-1"
+- tapOn:
+    id: "continue"
+# e11 listen_choose -> Nice to meet you
+- tapOn:
+    id: "option-2"
+- tapOn:
+    id: "continue"
+# e12 build_sentence: I'm fine thank you
+- tapOn:
+    id: "tile-2"
+- tapOn:
+    id: "tile-0"
+- tapOn:
+    id: "tile-4"
+- tapOn:
+    id: "tile-1"
+- tapOn:
+    id: "check"
+- tapOn:
+    id: "continue"
+# e13 choose_english Bạn khỏe không? -> How are you?
+- tapOn:
+    id: "option-1"
+- tapOn:
+    id: "continue"
+# e14 type_answer Cảm ơn -> Thank you
+- tapOn:
+    id: "answer-input"
+- inputText: "Thank you"
+- hideKeyboard
+- tapOn:
+    id: "check"
+- tapOn:
+    id: "continue"
+
+- assertVisible: "Xong bài học!"
+- assertVisible: "Bạn trả lời đúng 14/14 câu."
+
+# Close and open the app again: the lesson stays completed.
+- stopApp
+- launchApp:
+    clearState: false
+- openLink: hocenglish://lesson/everyday-a0-u1
+- assertVisible: "Bạn đã học xong bài này."
+- assertVisible: "Học lại"

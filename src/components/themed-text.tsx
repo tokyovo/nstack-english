@@ -50,6 +50,7 @@ const styles = StyleSheet.create({
     fontFamily: Fonts.regular,
     fontSize: FontSize.body,
     lineHeight: 24,
+    fontVariant: ['tabular-nums'],
   },
   word: {
     fontFamily: Fonts.semiBold,

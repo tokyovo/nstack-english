@@ -16,3 +16,5 @@
 - (unscored) Restore progress from the `.unreadable.<time>` backup key after an app downgrade. Evidence: T7 builder; research need 2
 - (unscored) Add a formatter (prettier) config; style is only enforced by lint. Evidence: T7 builder
 - (unscored) Content test: sanity assertions per track (work, kids), not only everyday ids. Evidence: T10 builder
+- (unscored) Merge lesson ActionButton with the shared button style. Evidence: T8 builder
+- (unscored) Add accepted order "Lan is my name" to everyday-a0-u1 e06 after a native reader check. Evidence: T8 builder, T5 reader

@@ -127,3 +127,23 @@
 - [x] 6. Record. this entry, backlog
 - [x] Done when: committed on nstack/learn-core, items ticked.
 - Decision: kids emoji limited to Unicode 9 for older Android; kids addressed as "con", Northern words with Southern in brackets.
+
+## 2026-11-28 build T6
+- Read: build/SKILL.md a069840
+- [x] 1. Branch. nstack/learn-core
+- [x] 2. Starting state. fast checks pass at 076cadf
+- [x] 3. Dispatch. builder in worktree
+- [x] 4. Read the reply. done, bb4fa6a; Jest screen tests seen red against stubs; tracks e2e 18 passed against a served export
+- [x] 5. Prove it yourself. merged: typecheck 0, lint 0, jest 78 pass. e2e runs at slice verify after sync with foundation (drive tool)
+- [x] 6. Record. this entry, backlog
+- [x] Done when: committed on nstack/learn-core, items ticked.
+
+## 2026-11-28 build T8
+- Read: build/SKILL.md a069840
+- [x] 1. Branch. nstack/learn-core
+- [x] 2. Starting state. fast checks pass after T6 merge
+- [x] 3. Dispatch. builder in worktree
+- [x] 4. Read the reply. done, c39e1f5; completion-save removal seen failing in Jest and e2e; Maestro syntax checked, not run (no KVM)
+- [x] 5. Prove it yourself. merged (conflicts in themed-text.tsx and vi.ts: kept T6's label/meta types and moved T8's small labels to meta with tabular numbers; welcome.* keys dropped): typecheck 0, lint 0, jest 128 pass
+- [x] 6. Record. this entry, backlog
+- [x] Done when: committed on nstack/learn-core, items ticked.

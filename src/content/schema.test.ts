@@ -37,6 +37,12 @@ function validUnit() {
   };
 }
 
+/** The valid unit with other accepted orders on its build_sentence "My name is Lan". */
+function withAccepted(accepted: string[][]) {
+  const unit = validUnit();
+  return { ...unit, exercises: unit.exercises.map((e, i) => (i === 3 ? { ...e, accepted } : e)) };
+}
+
 describe('parseUnit', () => {
   it('returns the typed unit when it follows every rule', () => {
     const result = parseUnit(validUnit());
@@ -70,6 +76,18 @@ describe('parseUnit', () => {
         'everyday-a0-u1-e07.audio: missing or empty',
       ].sort()
     );
+  });
+
+  it('keeps alternative build_sentence orders, each made of the tiles', () => {
+    const result = parseUnit(withAccepted([['Lan', 'is', 'My', 'name']]));
+    expect(result.ok ? result.unit.exercises[3] : result.errors).toMatchObject({
+      accepted: [['Lan', 'is', 'My', 'name']],
+    });
+  });
+
+  it('reports an alternative build_sentence order that uses a tile not among the tiles', () => {
+    const result = parseUnit(withAccepted([['Lan', 'is', 'my', 'name']]));
+    expect(result.ok ? [] : result.errors).toEqual(['everyday-a0-u9-e04: accepted tile "my" is not among the tiles']);
   });
 
   it('requires a Vietnamese usage note from A1 up', () => {
