@@ -28,16 +28,37 @@ async function addChild(request: APIRequestContext, session: Session, name: stri
   return ((await response.json()) as { profile: { id: string } }).profile.id;
 }
 
-/** The parent finished everyday unit 1 on another device: the account already has it. */
-async function parentFinishedEverydayUnit1(request: APIRequestContext, session: Session) {
+/** The learner `profileId` finished `unitId` on another device: the account already has it. */
+async function finishedOnAnotherDevice(request: APIRequestContext, session: Session, profileId: string, unitId: string) {
   const at = new Date().toISOString();
   const lesson = { firstCompletedAt: at, lastCompletedAt: at, bestCorrect: 12, total: 12, timesCompleted: 1 };
-  const owner = session.profiles[0].id;
-  const response = await request.put(`/api/profiles/${owner}/progress`, {
-    data: { schemaVersion: 1, profileId: owner, lessons: { 'everyday-a0-u1': lesson }, answers: {} },
+  const response = await request.put(`/api/profiles/${profileId}/progress`, {
+    data: { schemaVersion: 1, profileId, lessons: { [unitId]: lesson }, answers: {} },
     headers: { authorization: `Bearer ${session.token}` },
   });
   expect(response.status()).toBe(200);
+}
+
+async function parentFinishedEverydayUnit1(request: APIRequestContext, session: Session) {
+  await finishedOnAnotherDevice(request, session, session.profiles[0].id, 'everyday-a0-u1');
+}
+
+/** The lessons in every device copy of progress this browser keeps, by copy. */
+function deviceLessons(page: Page): Promise<Record<string, string[]>> {
+  return page.evaluate(() =>
+    Object.fromEntries(
+      Object.keys(localStorage)
+        .filter((key) => key.startsWith('hocenglish.progress.'))
+        .map((key) => [key, Object.keys((JSON.parse(localStorage.getItem(key) ?? '{}') as { lessons?: object }).lessons ?? {})])
+    )
+  );
+}
+
+async function signInOnPage(page: Page, email: string) {
+  await page.goto('/account');
+  await page.getByLabel('Email', { exact: true }).fill(email);
+  await page.getByLabel('Mật khẩu', { exact: true }).fill('a-long-password');
+  await button(page, 'Đăng nhập').click();
 }
 
 async function lessonsOf(request: APIRequestContext, token: string, profileId: string): Promise<string[]> {
@@ -154,4 +175,58 @@ test('/profiles is behind the parent gate while a child is learning', async ({ p
   await expect(page.getByLabel(gateQuestion)).toBeVisible();
   await expect(page.getByText('Người học', { exact: true })).toHaveCount(0);
   await expect(button(page, 'Thêm hồ sơ')).toHaveCount(0);
+});
+
+test('a parent with a child learning signs out; the next sign-in on the device finds neither one\'s lessons', async ({
+  page,
+  request,
+}) => {
+  const errors = collectErrors(page);
+  const session = await signUp(request);
+  const naId = await addChild(request, session, 'Bé Na');
+  await parentFinishedEverydayUnit1(request, session);
+  await finishedOnAnotherDevice(request, session, naId, 'kids-a0-u1');
+  const next = await signUp(request);
+
+  // The parent signs in and hands the device to Bé Na, whose lessons come to the device.
+  await signInOnPage(page, session.user.email);
+  await page.getByRole('link', { name: /^Hồ sơ học trong gia đình/ }).click();
+  await button(page, 'Cho bé học trên máy này: Bé Na').click();
+  await expect(trackRow(page, 'Trẻ em')).toContainText('Đã học xong 1/');
+  const onDevice = await savedSession(page);
+  const deviceTokens = [onDevice.token, onDevice.child?.token ?? ''];
+  expect(deviceTokens.every(Boolean)).toBe(true);
+
+  // Signing out goes through the parent gate while Bé Na is learning.
+  await page.goto('/');
+  await page.getByRole('link', { name: /^Dành cho bố mẹ/ }).click();
+  const answer = page.getByLabel(gateQuestion);
+  await answer.fill(await gateAnswer(answer));
+  await answer.press('Enter');
+  await button(page, 'Đăng xuất').click();
+  await expect(page.getByLabel('Email', { exact: true })).toBeVisible();
+
+  // Nothing of the parent's or Bé Na's is left on the device, and both sessions are over.
+  expect(Object.values(await deviceLessons(page)).flat()).toEqual([]);
+  for (const token of deviceTokens) {
+    const ended = await request.get(`/api/profiles/${naId}/progress`, { headers: { authorization: `Bearer ${token}` } });
+    expect(ended.status()).toBe(401);
+  }
+
+  // The next person signs in on the device and starts from their own account only.
+  await signInOnPage(page, next.user.email);
+  await expect(page.getByText(`Bạn đã đăng nhập bằng ${next.user.email}.`)).toBeVisible();
+  await page.getByRole('link', { name: 'Về trang chủ' }).click();
+  await expect(trackRow(page, 'Đời sống')).toContainText('Đã học xong 0/');
+  await expect(trackRow(page, 'Trẻ em')).toContainText('Đã học xong 0/');
+  expect(Object.values(await deviceLessons(page)).flat()).toEqual([]);
+
+  // Both sets of lessons were kept in the first account.
+  const signIn = await request.post('/api/auth/signin', {
+    data: { email: session.user.email, password: 'a-long-password' },
+  });
+  const again = (await signIn.json()) as Session;
+  expect(await lessonsOf(request, again.token, again.profiles[0].id)).toEqual(['everyday-a0-u1']);
+  expect(await lessonsOf(request, again.token, naId)).toEqual(['kids-a0-u1']);
+  expect(errors).toEqual([]);
 });
