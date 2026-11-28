@@ -41,6 +41,10 @@ async function answerLessonExercise(page: Page, exercise: Exercise) {
     case 'type_answer':
       await page.getByLabel('Câu trả lời bằng tiếng Anh').fill(exercise.answer);
       await button(page, 'Kiểm tra').click();
+      return;
+    case 'speak':
+      // Recognition is removed below, so the learner repeats aloud and marks themselves.
+      await button(page, 'Tôi nói được rồi').click();
   }
 }
 
@@ -86,6 +90,8 @@ test('a learner reviews the words of a lesson a day later and sees the due count
   // Without an English voice, listening steps show the English text (as on devices with no voice).
   await page.addInitScript(() => {
     delete (window as { speechSynthesis?: unknown }).speechSynthesis;
+    Reflect.deleteProperty(window, 'SpeechRecognition');
+    Reflect.deleteProperty(window, 'webkitSpeechRecognition');
   });
   await page.clock.install({ time: START });
 

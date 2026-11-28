@@ -63,7 +63,7 @@ const COMPARISONS = new Set([
 ]);
 
 /** Object keys (route objects, navigator options, styles) whose values are never shown; props use NON_UI_KEYS. */
-const NON_UI_OBJECT_KEYS = new Set(['pathname', 'animation', 'presentation', 'fontFamily', 'kind']);
+const NON_UI_OBJECT_KEYS = new Set(['pathname', 'animation', 'presentation', 'fontFamily', 'kind', 'reason']);
 
 function isNonUiKey(name: ts.PropertyName | ts.JsxAttributeName, keys = NON_UI_KEYS): boolean {
   return (ts.isIdentifier(name) || ts.isStringLiteral(name)) && keys.has(name.text);
