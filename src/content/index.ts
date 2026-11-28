@@ -5,6 +5,7 @@ import everydayA0U2 from '../../content/everyday/a0/u2.json';
 import everydayA0U3 from '../../content/everyday/a0/u3.json';
 import everydayA0U4 from '../../content/everyday/a0/u4.json';
 import everydayA0U5 from '../../content/everyday/a0/u5.json';
+import everydayA1U6 from '../../content/everyday/a1/u6.json';
 import workA0U1 from '../../content/work/a0/u1.json';
 import workA0U2 from '../../content/work/a0/u2.json';
 import workA0U3 from '../../content/work/a0/u3.json';
@@ -26,6 +27,7 @@ const files: unknown[] = [
   everydayA0U3,
   everydayA0U4,
   everydayA0U5,
+  everydayA1U6,
   workA0U1,
   workA0U2,
   workA0U3,
