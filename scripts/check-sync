@@ -14,12 +14,18 @@ excl=(); for t in "${tips[@]}"; do excl+=("^$t"); done
 own=$(git log --no-merges --format= --name-only HEAD "${excl[@]}" "^$base" | sort -u)
 # A merge of another work branch can change files too (conflict resolutions):
 # count what each such merge changed against its first parent. Merges of a
-# shipped tip or of the base are syncs, not own work, so they are not counted.
+# shipped tip or of the base are syncs: only files they changed against both
+# parents count.
 skip=" $(git rev-parse "$base") $(for t in "${tips[@]}"; do git rev-parse "$t"; done | tr '\n' ' ') "
 for m in $(git rev-list --merges HEAD "${excl[@]}" "^$base"); do
   p2=$(git rev-parse "$m^2")
-  case "$skip" in *" $p2 "*) continue ;; esac
-  own=$(printf '%s\n%s' "$own" "$(git diff --name-only "$m^1" "$m")" | sort -u)
+  case "$skip" in
+    # A sync: only resolutions that differ from both sides are own work. A file
+    # kept as this branch had it (e.g. by -X ours) is not, so a revert still shows.
+    *" $p2 "*) changed=$(comm -12 <(git diff --name-only "$m^1" "$m" | sort) <(git diff --name-only "$m^2" "$m" | sort)) ;;
+    *) changed=$(git diff --name-only "$m^1" "$m") ;;
+  esac
+  own=$(printf '%s\n%s' "$own" "$changed" | sort -u)
 done
 bad=0
 for f in $(git diff --name-only "$base" HEAD); do
