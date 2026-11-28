@@ -25,6 +25,7 @@ export const vi = {
   'gate.number.9': 'chín',
 
   'sync.offline': 'Đang ngoại tuyến, tiến độ sẽ được đồng bộ sau',
+  'sync.failed': 'Chưa đồng bộ được tiến độ với tài khoản. Tiến độ vẫn được lưu trên thiết bị này.',
 
   'account.title': 'Tài khoản',
   'account.back': 'Về trang chủ',

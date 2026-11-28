@@ -83,7 +83,7 @@ describe('family profiles', () => {
           timesCompleted: 1,
         },
       },
-      answers: { 'kids-a0-u1-1': [{ at: '2026-11-27T07:59:00.000Z', correct: true }] },
+      answers: { 'kids-a0-u1-cat': [{ at: '2026-11-27T07:59:00.000Z', correct: true }] },
     };
   }
 

@@ -2,6 +2,8 @@
 // a child is learning (src/account syncSession); while signed in, that copy is sent to its profile,
 // the server merges it with what it has (server/progress.ts) and the merged copy comes back and is merged into the device's. One PUT both pushes and pulls,
 // and the merge is a union, so retries and several devices converge.
+import AsyncStorage from '@react-native-async-storage/async-storage';
+
 import { endChildSession, familySyncSessions, onSessionChange, signOut, syncSession, type SyncSession } from '@/account';
 import { callApi } from '@/api/client';
 import { createProgressStore, LOCAL_PROFILE_ID, onProgressChange } from '@/progress';
@@ -11,6 +13,15 @@ import { parseProgress } from '@/progress/schema';
 export type SyncState = 'idle' | 'signedOut' | 'synced' | 'offline' | 'failed';
 
 const store = createProgressStore();
+
+/**
+ * The account (its owner profile) every device copy belongs to, children's included, set when one
+ * is first synced. A session that ends without signing out (expired, revoked) leaves the copies and
+ * this mark behind, so the same account signing back in gets its unsynced answers, and any other
+ * account starts with none of them.
+ * No mark: guest progress, which the first sign-in adds to its account.
+ */
+const DEVICE_ACCOUNT_KEY = 'hocenglish.sync.deviceAccount';
 const listeners = new Set<() => void>();
 let state: SyncState = 'idle';
 let running: Promise<SyncState> | undefined;
@@ -74,6 +85,7 @@ async function syncOnce(): Promise<SyncState> {
 
 /** Sends one device copy to its profile and merges the account's copy back into it. */
 async function syncCopy(session: SyncSession): Promise<Exclude<SyncState, 'idle' | 'signedOut'>> {
+  await claimDeviceCopies(session.ownerProfileId);
   const device = await store.load(session.deviceProfileId);
   const reply = await callApi(`/api/profiles/${encodeURIComponent(session.profileId)}/progress`, {
     method: 'PUT',
@@ -97,6 +109,17 @@ export async function leaveChildProfile(): Promise<void> {
   await endChildSession();
 }
 
+/**
+ * Clears every device copy (the parent's and any child's) left by another account, then marks the
+ * device's copies as this account's. A child's copy belongs to its parent's account.
+ */
+async function claimDeviceCopies(ownerProfileId: string) {
+  const owner = await AsyncStorage.getItem(DEVICE_ACCOUNT_KEY);
+  if (owner === ownerProfileId) return;
+  if (owner !== null) await store.clearAll();
+  await AsyncStorage.setItem(DEVICE_ACCOUNT_KEY, ownerProfileId);
+}
+
 /** `signedOut` when the device's progress is gone with the session; otherwise why it could not be sent. */
 export type SignOutResult = 'signedOut' | 'offline' | 'failed';
 
@@ -115,6 +138,7 @@ export async function signOutOfDevice({ discardUnsynced = false } = {}): Promise
   await syncProgress();
   const copies = family?.map((session) => session.deviceProfileId) ?? [LOCAL_PROFILE_ID];
   await Promise.all(copies.map((copy) => store.clear(copy)));
+  await AsyncStorage.removeItem(DEVICE_ACCOUNT_KEY);
   return 'signedOut';
 }
 

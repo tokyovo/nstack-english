@@ -8,26 +8,28 @@ import { t } from '@/i18n';
 import { useSyncState } from '@/sync/use-sync';
 
 /**
- * A quiet bar above every screen while a signed-in learner's progress cannot reach the server.
+ * A quiet bar above every screen while a signed-in learner's progress cannot reach the server:
+ * the device is offline, or the server refused it (the app tries again on the next screen).
  * The status region is always there, so screen readers announce the notice when it appears.
  */
 export function OfflineNotice() {
   const theme = useTheme();
   const insets = useSafeAreaInsets();
-  const offline = useSyncState() === 'offline';
+  const state = useSyncState();
+  const message = state === 'offline' ? t('sync.offline') : state === 'failed' ? t('sync.failed') : undefined;
 
   return (
     <View
       role="status"
       style={
-        offline && [
+        message !== undefined && [
           styles.bar,
           { paddingTop: insets.top + Space.sm, backgroundColor: theme.surface, borderColor: theme.line },
         ]
       }>
-      {offline && (
+      {message !== undefined && (
         <ThemedText style={styles.text} testID="offline-notice">
-          {t('sync.offline')}
+          {message}
         </ThemedText>
       )}
     </View>

@@ -39,11 +39,12 @@ type ChildSession = { token: string; profile: Profile };
 type Session = { token: string; user: User; profiles: Profile[]; child?: ChildSession };
 
 /**
- * What progress sync needs: the token to send, the account profile to sync, and the device copy
+ * What progress sync needs: the token to send, the account profile to sync, the device copy
  * that profile learns in (LOCAL_PROFILE_ID for the parent, the child's id for a child), so a
- * child's and a parent's progress never mix on the device.
+ * child's and a parent's progress never mix on the device, and the account's owner profile,
+ * which every copy on the device belongs to (a child's included).
  */
-export type SyncSession = { token: string; profileId: string; deviceProfileId: string };
+export type SyncSession = { token: string; profileId: string; deviceProfileId: string; ownerProfileId: string };
 
 export type ChildSessionResult =
   | { ok: true }
@@ -136,12 +137,13 @@ export function deviceProfileIdOf(child: Profile | undefined): string {
 /** The saved session's token and learning profile, read on the device without asking the server. */
 export async function syncSession(): Promise<SyncSession | undefined> {
   const session = await savedSession();
-  if (session?.child) {
-    const { token, profile } = session.child;
-    return { token, profileId: profile.id, deviceProfileId: deviceProfileIdOf(profile) };
-  }
   const owner = session?.profiles.find((profile) => profile.kind === 'owner');
-  return session && owner && { token: session.token, profileId: owner.id, deviceProfileId: deviceProfileIdOf(undefined) };
+  if (!session || !owner) return undefined;
+  if (session.child) {
+    const { token, profile } = session.child;
+    return { token, profileId: profile.id, deviceProfileId: deviceProfileIdOf(profile), ownerProfileId: owner.id };
+  }
+  return { token: session.token, profileId: owner.id, deviceProfileId: deviceProfileIdOf(undefined), ownerProfileId: owner.id };
 }
 
 /**
@@ -150,11 +152,13 @@ export async function syncSession(): Promise<SyncSession | undefined> {
  */
 export async function familySyncSessions(): Promise<SyncSession[] | undefined> {
   const session = await savedSession();
-  if (!session) return undefined;
+  const owner = session?.profiles.find((profile) => profile.kind === 'owner');
+  if (!session || !owner) return undefined;
   return session.profiles.map((profile) => ({
     token: session.token,
     profileId: profile.id,
     deviceProfileId: deviceProfileIdOf(profile.kind === 'child' ? profile : undefined),
+    ownerProfileId: owner.id,
   }));
 }
 

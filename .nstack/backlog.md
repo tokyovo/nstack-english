@@ -44,3 +44,9 @@
 - (unscored) Review speak phrase: skip words with a placeholder ("My name is ..."). Evidence: T15 builder
 - (unscored) Speech scoring: "12" heard for "One, two" reads as twelve. Evidence: review-speak fix builder
 - (unscored) Deleting a child on /profiles does not clear that child's device copy. Evidence: T22b builder
+- (unscored) After a forced sign-out, guest answers made before a different account signs in are cleared with the previous account's copy. Evidence: accounts-sync fix builder
+- (unscored) Sessions have a fixed 90-day life: renew on use (sliding expiry) so daily learners are not signed out without warning on day 90. Evidence: accounts-sync review round 2
+- (unscored) Validate lesson records at the server boundary (bestCorrect <= total, ISO times); today nonsense values from the owner's own client are kept forever. Evidence: accounts-sync review round 2
+- (unscored) Passwords over 256 characters get the "at least 8 characters" message; give them their own code and text. Evidence: accounts-sync security review round 2
+- (unscored) Sign-up reveals existing emails (409) with no rate limit. Evidence: accounts-sync security review round 2
+- (unscored) Content test: build_sentence accepted orders are listed by hand; a missed valid order was found twice by readers. Consider checking tile permutations against a small grammar, or flagging units with movable time phrases. Evidence: T27 builder, T5/T10 readers

@@ -1,0 +1,195 @@
+{
+  "id": "work-a1-u4",
+  "track": "work",
+  "level": "a1",
+  "number": 4,
+  "title": "Lịch và giờ làm",
+  "goals": [
+    "Có thể nói mình bắt đầu và tan làm lúc mấy giờ",
+    "Có thể nói mình làm việc những ngày nào",
+    "Có thể hỏi đồng nghiệp mấy giờ bắt đầu làm việc"
+  ],
+  "note_vi": "Thì hiện tại đơn dùng cho việc lặp lại hằng ngày, như giờ làm: “I start work at 8 o'clock.” (Tôi bắt đầu làm việc lúc 8 giờ.) Động từ giữ nguyên sau “I”, “you”, “we”, “they”; sau “he”, “she” hoặc tên một người thì thêm -s: “Lan starts work at 9 o'clock.” Trước giờ dùng “at”: “at 5 o'clock”. Trước thứ dùng “on”: “on Monday”. Để hỏi, thêm “do” trước “I”, “you”, “we”, “they”: “What time do you start work?” (Mấy giờ anh/chị bắt đầu làm việc?). Với “he”, “she” hoặc tên một người thì dùng “does” và động từ giữ nguyên: “What time does Lan start work?”",
+  "source": "original",
+  "words": [
+    {
+      "id": "work-a1-u4-monday",
+      "en": "Monday",
+      "vi": "thứ Hai",
+      "example": { "en": "I have a meeting on Monday.", "vi": "Tôi có cuộc họp vào thứ Hai." }
+    },
+    {
+      "id": "work-a1-u4-friday",
+      "en": "Friday",
+      "vi": "thứ Sáu",
+      "example": { "en": "See you on Friday.", "vi": "Hẹn gặp lại vào thứ Sáu." }
+    },
+    {
+      "id": "work-a1-u4-from-monday-to-friday",
+      "en": "from Monday to Friday",
+      "vi": "từ thứ Hai đến thứ Sáu",
+      "example": { "en": "I work from Monday to Friday.", "vi": "Tôi làm việc từ thứ Hai đến thứ Sáu." }
+    },
+    {
+      "id": "work-a1-u4-oclock",
+      "en": "o'clock",
+      "vi": "giờ (giờ đúng)",
+      "example": { "en": "It's 9 o'clock.", "vi": "Bây giờ là 9 giờ." }
+    },
+    {
+      "id": "work-a1-u4-at-8-oclock",
+      "en": "at 8 o'clock",
+      "vi": "lúc 8 giờ",
+      "example": { "en": "I start work at 8 o'clock.", "vi": "Tôi bắt đầu làm việc lúc 8 giờ." }
+    },
+    {
+      "id": "work-a1-u4-on-monday",
+      "en": "on Monday",
+      "vi": "vào thứ Hai",
+      "example": { "en": "See you on Monday.", "vi": "Hẹn gặp lại vào thứ Hai." }
+    },
+    {
+      "id": "work-a1-u4-i-start-work",
+      "en": "I start work",
+      "vi": "Tôi bắt đầu làm việc",
+      "example": { "en": "I start work at 9 o'clock.", "vi": "Tôi bắt đầu làm việc lúc 9 giờ." }
+    },
+    {
+      "id": "work-a1-u4-i-finish-work",
+      "en": "I finish work",
+      "vi": "Tôi tan làm",
+      "example": { "en": "I finish work at 5 o'clock.", "vi": "Tôi tan làm lúc 5 giờ." }
+    },
+    {
+      "id": "work-a1-u4-what-time-do-you-start-work",
+      "en": "What time do you start work?",
+      "vi": "Mấy giờ anh/chị bắt đầu làm việc?",
+      "example": { "en": "What time do you start work, Tom?", "vi": "Anh Tom, mấy giờ anh bắt đầu làm việc?" }
+    },
+    {
+      "id": "work-a1-u4-i-have-a-meeting",
+      "en": "I have a meeting",
+      "vi": "Tôi có cuộc họp",
+      "example": { "en": "I have a meeting at 10 o'clock.", "vi": "Tôi có cuộc họp lúc 10 giờ." }
+    }
+  ],
+  "exercises": [
+    {
+      "id": "work-a1-u4-e01",
+      "type": "choose_meaning",
+      "prompt": "work-a1-u4-monday",
+      "options": ["thứ Sáu", "thứ Hai", "giờ (giờ đúng)"],
+      "answer": "thứ Hai"
+    },
+    {
+      "id": "work-a1-u4-e02",
+      "type": "choose_english",
+      "prompt": "thứ Sáu",
+      "options": ["Monday", "Friday", "o'clock"],
+      "answer": "Friday"
+    },
+    {
+      "id": "work-a1-u4-e03",
+      "type": "listen_choose",
+      "audio": "I start work at 8 o'clock.",
+      "options": ["I start work at 8 o'clock.", "I finish work at 8 o'clock.", "I start work at 5 o'clock."],
+      "answer": "I start work at 8 o'clock."
+    },
+    {
+      "id": "work-a1-u4-e04",
+      "type": "build_sentence",
+      "prompt": "Tôi bắt đầu làm việc lúc 9 giờ.",
+      "tiles": ["work", "I", "o'clock", "at", "start", "9", "on"],
+      "answer": ["I", "start", "work", "at", "9", "o'clock"],
+      "accepted": [
+        ["at", "9", "o'clock", "I", "start", "work"],
+        ["I", "start", "work", "at", "9"],
+        ["at", "9", "I", "start", "work"]
+      ],
+      "hint_vi": "Trước giờ dùng “at”: “at 9 o'clock”."
+    },
+    {
+      "id": "work-a1-u4-e05",
+      "type": "choose_meaning",
+      "prompt": "work-a1-u4-from-monday-to-friday",
+      "options": ["vào thứ Hai", "từ thứ Hai đến thứ Sáu", "lúc 8 giờ"],
+      "answer": "từ thứ Hai đến thứ Sáu"
+    },
+    {
+      "id": "work-a1-u4-e06",
+      "type": "choose_english",
+      "prompt": "Tôi có cuộc họp vào thứ Sáu.",
+      "options": ["I have a meeting on Friday.", "I have a meeting on Monday.", "I finish work on Friday."],
+      "answer": "I have a meeting on Friday."
+    },
+    {
+      "id": "work-a1-u4-e07",
+      "type": "listen_choose",
+      "audio": "What time do you start work?",
+      "options": ["What time do you start work?", "What do you do?", "What time do you finish work?"],
+      "answer": "What time do you start work?"
+    },
+    {
+      "id": "work-a1-u4-e08",
+      "type": "build_sentence",
+      "prompt": "Tôi tan làm lúc 5 giờ.",
+      "tiles": ["finish", "at", "5", "I", "work", "o'clock", "start"],
+      "answer": ["I", "finish", "work", "at", "5", "o'clock"],
+      "accepted": [
+        ["at", "5", "o'clock", "I", "finish", "work"],
+        ["I", "finish", "work", "at", "5"],
+        ["at", "5", "I", "finish", "work"]
+      ]
+    },
+    {
+      "id": "work-a1-u4-e09",
+      "type": "type_answer",
+      "prompt": "thứ Hai",
+      "answer": "Monday"
+    },
+    {
+      "id": "work-a1-u4-e10",
+      "type": "choose_meaning",
+      "prompt": "work-a1-u4-i-finish-work",
+      "options": ["Tôi bắt đầu làm việc", "Tôi có cuộc họp", "Tôi tan làm"],
+      "answer": "Tôi tan làm"
+    },
+    {
+      "id": "work-a1-u4-e11",
+      "type": "build_sentence",
+      "prompt": "Tôi làm việc từ thứ Hai đến thứ Sáu.",
+      "tiles": ["Friday", "work", "to", "I", "Monday", "from", "at"],
+      "answer": ["I", "work", "from", "Monday", "to", "Friday"],
+      "accepted": [
+        ["from", "Monday", "to", "Friday", "I", "work"],
+        ["I", "work", "Monday", "to", "Friday"]
+      ]
+    },
+    {
+      "id": "work-a1-u4-e12",
+      "type": "choose_english",
+      "prompt": "vào thứ Hai",
+      "options": ["at 8 o'clock", "on Monday", "from Monday to Friday"],
+      "answer": "on Monday",
+      "hint_vi": "Trước thứ trong tuần dùng “on”."
+    },
+    {
+      "id": "work-a1-u4-e13",
+      "type": "type_answer",
+      "prompt": "thứ Sáu",
+      "answer": "Friday"
+    },
+    {
+      "id": "work-a1-u4-e14",
+      "type": "speak",
+      "text": "I work from Monday to Friday.",
+      "vi": "Tôi làm việc từ thứ Hai đến thứ Sáu."
+    },
+    {
+      "id": "work-a1-u4-e15",
+      "type": "speak",
+      "text": "What time do you start work?",
+      "vi": "Mấy giờ anh/chị bắt đầu làm việc?"
+    }
+  ]
+}

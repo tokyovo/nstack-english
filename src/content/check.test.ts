@@ -111,4 +111,50 @@ describe('checkContent', () => {
       ].sort()
     );
   });
+
+  describe('build_sentence with a time or place phrase at one end', () => {
+    const station: Word = { id: 'everyday-a0-u1-station', en: 'Turn right at the station today every day in my house where are you from', vi: 'Thử' };
+    type Extra = { accepted?: string[][]; fixedOrder?: string };
+    const sentence = (id: string, answer: string[], extra: Extra = {}): Exercise => ({
+      id: `everyday-a0-u1-${id}`,
+      type: 'build_sentence',
+      prompt: 'Thử',
+      tiles: answer,
+      answer,
+      ...extra,
+    });
+    const check = (...exercises: Exercise[]) => checkContent([unit('everyday-a0-u1', [station], exercises)], ['original']);
+    const movable = (id: string, text: string) =>
+      `everyday-a0-u1-${id}: "${text}" has a time or place phrase at one end; accept the order with it moved to the other end, or set fixedOrder to the reason it cannot move`;
+
+    it('reports a phrase at the end or the start whose moved order is not accepted', () => {
+      expect(
+        check(
+          sentence('e1', ['Turn', 'right', 'at', 'the', 'station']),
+          sentence('e2', ['In', 'my', 'house', 'turn', 'right']),
+          sentence('e3', ['Turn', 'right', 'today']),
+          sentence('e4', ['Turn', 'right', 'every', 'day'], { accepted: [['Turn', 'right', 'every', 'day']] })
+        )
+      ).toEqual([
+        movable('e1', 'Turn right at the station'),
+        movable('e2', 'In my house turn right'),
+        movable('e3', 'Turn right today'),
+        movable('e4', 'Turn right every day'),
+      ]);
+    });
+
+    it('accepts the moved order in either case, or a reason the phrase cannot move', () => {
+      expect(
+        check(
+          sentence('e1', ['Turn', 'right', 'at', 'the', 'station'], { accepted: [['at', 'the', 'station', 'Turn', 'right']] }),
+          sentence('e2', ['In', 'my', 'house', 'turn', 'right'], { accepted: [['turn', 'right', 'In', 'my', 'house']] }),
+          sentence('e3', ['Turn', 'right', 'at', 'the', 'station'], { fixedOrder: 'Thử: không đảo được.' })
+        )
+      ).toEqual([]);
+    });
+
+    it('does not take a preposition that ends a question for a phrase', () => {
+      expect(check(sentence('e1', ['Where', 'are', 'you', 'from']))).toEqual([]);
+    });
+  });
 });
