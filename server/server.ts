@@ -7,19 +7,24 @@ import { serveStatic } from '@hono/node-server/serve-static';
 import { Hono } from 'hono';
 import { secureHeaders } from 'hono/secure-headers';
 
+import { readUnits } from '../src/content/files.ts';
+import type { Unit } from '../src/content/schema.ts';
 import { accountRoutes } from './accounts.ts';
 import { migrate } from './migrate.ts';
 import { profileRoutes } from './profiles.ts';
 import { progressRoutes } from './progress.ts';
+import { unitRoutes } from './units.ts';
 
 /**
  * `webDir`: the exported web app, served on every non-API path.
  * `now`: the clock (tests move it); defaults to the system clock.
+ * `contentDir`: the unit files; defaults to the repo's content/.
  */
-export type ServerConfig = { port: number; dbPath: string; webDir?: string; now?: () => Date };
+export type ServerConfig = { port: number; dbPath: string; webDir?: string; now?: () => Date; contentDir?: string };
 export type RunningServer = { url: string; close: () => Promise<void> };
 
 const MIGRATIONS_DIR = join(import.meta.dirname, 'migrations');
+const CONTENT_DIR = join(import.meta.dirname, '..', 'content');
 
 export function readConfig(env: Record<string, string | undefined>): ServerConfig {
   const config: ServerConfig = {
@@ -53,7 +58,7 @@ const contentSecurityPolicy = {
   frameAncestors: ["'none'"],
 };
 
-function createApp(db: DatabaseSync, config: ServerConfig) {
+function createApp(db: DatabaseSync, config: ServerConfig, units: readonly Unit[]) {
   const app = new Hono();
   app.use(secureHeaders({ xFrameOptions: 'DENY', contentSecurityPolicy }));
   app.get('/api/health', (c) => c.json({ ok: true }));
@@ -61,6 +66,7 @@ function createApp(db: DatabaseSync, config: ServerConfig) {
   app.route('/api', accountRoutes(db, now));
   app.route('/api', progressRoutes(db, now));
   app.route('/api', profileRoutes(db, now));
+  app.route('/api', unitRoutes(db, now, units));
   if (config.webDir) serveWebApp(app, config.webDir);
   return app;
 }
@@ -81,6 +87,8 @@ function serveWebApp(app: Hono, webDir: string) {
 
 /** Opens and migrates the database, then listens. Port 0 picks a free port. */
 export async function startServer(config: ServerConfig): Promise<RunningServer> {
+  // Read first: broken content stops the server before it opens anything.
+  const units = readUnits(config.contentDir ?? CONTENT_DIR);
   mkdirSync(dirname(config.dbPath), { recursive: true });
   const db = new DatabaseSync(config.dbPath);
   db.exec('PRAGMA foreign_keys = ON');
@@ -91,7 +99,7 @@ export async function startServer(config: ServerConfig): Promise<RunningServer> 
     throw error;
   }
 
-  const server = createAdaptorServer({ fetch: createApp(db, config).fetch });
+  const server = createAdaptorServer({ fetch: createApp(db, config, units).fetch });
   await new Promise<void>((resolve, reject) => {
     server.once('error', reject);
     server.listen(config.port, '127.0.0.1', () => resolve());
