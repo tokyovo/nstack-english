@@ -157,6 +157,12 @@
       "answer": ["I'm", "fine", "thank", "you"]
     },
     {
+      "id": "everyday-a0-u1-e15",
+      "type": "speak",
+      "text": "I'm fine, thank you.",
+      "vi": "Tôi khỏe, cảm ơn bạn."
+    },
+    {
       "id": "everyday-a0-u1-e13",
       "type": "choose_english",
       "prompt": "Bạn khỏe không?",

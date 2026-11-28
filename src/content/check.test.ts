@@ -53,6 +53,17 @@ describe('checkContent', () => {
     ]);
   });
 
+  it('reports a speak item whose English is not taught in its unit or earlier', () => {
+    const u1 = unit('everyday-a0-u1', [hello, bye], [
+      { id: 'everyday-a0-u1-e1', type: 'speak', text: 'Hello, goodbye!', vi: 'Xin chào, tạm biệt!' },
+      { id: 'everyday-a0-u1-e2', type: 'speak', text: 'Thank you.', vi: 'Cảm ơn.' },
+    ]);
+    expect(checkContent([u1], ['original'])).toEqual([
+      'everyday-a0-u1-e2: "thank" is not taught in this unit or earlier',
+      'everyday-a0-u1-e2: "you" is not taught in this unit or earlier',
+    ]);
+  });
+
   it('does not let one track use words another track teaches', () => {
     const work = unit('work-a0-u1', [], [
       { id: 'work-a0-u1-e1', type: 'type_answer', prompt: 'Xin chào', answer: 'Hello' },

@@ -58,6 +58,10 @@ async function answer(exercise: Exercise, right: boolean) {
     case 'type_answer':
       await fireEvent.changeText(screen.getByLabelText('Câu trả lời bằng tiếng Anh'), right ? exercise.answer : 'xyz');
       await press('Kiểm tra');
+      return;
+    case 'speak':
+      // Jest has no speech recogniser, so the learner repeats aloud and marks themselves.
+      await press(right ? 'Tôi nói được rồi' : 'Tôi chưa nói được');
   }
 }
 

@@ -43,6 +43,10 @@ async function expectLanguagesMarked(page: Page, exercise: Exercise) {
     case 'build_sentence':
       for (const tile of exercise.tiles) await expectEnglish(page, tile);
       return;
+    case 'speak':
+      await expectEnglish(page, exercise.text);
+      await expect(page.getByText(exercise.vi, { exact: true })).not.toHaveAttribute('lang', 'en');
+      return;
     case 'type_answer':
   }
 }
@@ -66,8 +70,37 @@ async function answerRight(page: Page, exercise: Exercise) {
       const input = page.getByLabel('Câu trả lời bằng tiếng Anh');
       await input.fill(` ${exercise.answer.toLowerCase()}. `);
       await input.press('Enter');
+      return;
     }
+    case 'speak':
+      // Without speech recognition the learner listens, repeats aloud and marks themselves.
+      await expect(page.getByText('Bấm “Nghe” để nghe câu mẫu, nói to theo, rồi tự chấm.')).toBeVisible();
+      await button(page, 'Tôi nói được rồi').click();
   }
+}
+
+/** Plays the lesson up to its first speak exercise, answering everything before it right. */
+async function playToSpeak(page: Page): Promise<Extract<Exercise, { type: 'speak' }>> {
+  await page.goto(`/lesson/${unit.id}`);
+  await button(page, 'Bắt đầu học').click();
+  for (let i = 0; i < unit.words.length; i++) await button(page, 'Tiếp tục').click();
+  for (const exercise of unit.exercises) {
+    if (exercise.type === 'speak') return exercise;
+    await answerRight(page, exercise);
+    await button(page, 'Tiếp tục').click();
+  }
+  throw new Error(`${unit.id} has no speak exercise`);
+}
+
+/**
+ * Headless Chromium has the Web Speech API but no working recogniser behind it. Taking it away, as in
+ * a browser without recognition, makes a speak exercise run the same way every time.
+ */
+async function withoutSpeechRecognition(page: Page) {
+  await page.addInitScript(() => {
+    Reflect.deleteProperty(window, 'SpeechRecognition');
+    Reflect.deleteProperty(window, 'webkitSpeechRecognition');
+  });
 }
 
 test('a learner completes everyday A0 u1, reloads, and sees it completed', async ({ page }) => {
@@ -76,6 +109,7 @@ test('a learner completes everyday A0 u1, reloads, and sees it completed', async
   page.on('console', (message) => {
     if (message.type() === 'error') errors.push(message.text());
   });
+  await withoutSpeechRecognition(page);
 
   await page.goto(`/lesson/${unit.id}`);
   await expect(page.getByRole('heading', { name: unit.title, level: 1 })).toBeVisible();
@@ -139,6 +173,38 @@ test('a learner leaves mid-lesson for the track list and keeps the answers given
   const saved = await page.evaluate(() => localStorage.getItem('hocenglish.progress.local'));
   const answers = (JSON.parse(saved ?? '{}') as { answers?: Record<string, unknown[]> }).answers ?? {};
   expect(Object.keys(answers).sort()).toEqual([first.id, second.id]);
+});
+
+test('a speak exercise falls back to self-check where the browser has no recogniser', async ({ page }) => {
+  await withoutSpeechRecognition(page);
+  const speak = await playToSpeak(page);
+
+  await expect(page.getByText('Nói câu này bằng tiếng Anh')).toBeVisible();
+  await expect(button(page, 'Nói')).toHaveCount(0);
+  await expectNoSeriousAxeViolations(page);
+  await button(page, 'Tôi chưa nói được').click();
+
+  await expect(page.getByText('Chưa đúng.')).toBeVisible();
+  await expect(page.getByText(`Đáp án đúng: ${speak.text}`)).toBeVisible();
+});
+
+test('with the real speech API, "Nói" explains the microphone first and falls back when it hears nothing', async ({
+  page,
+}) => {
+  await playToSpeak(page);
+
+  await button(page, 'Nói').click();
+  await expect(page.getByText(/ứng dụng cần dùng micrô/)).toBeVisible();
+  await expectNoSeriousAxeViolations(page);
+  await button(page, 'Cho phép dùng micrô').click();
+
+  // Headless Chromium has no microphone: it listens until "Nói xong", then has heard nothing.
+  await expect(page.getByText('Đang nghe... Bạn hãy nói câu ở trên.')).toBeVisible();
+  await button(page, 'Nói xong').click();
+  await expect(page.getByText(/Chưa nghe thấy bạn nói/)).toBeVisible();
+  await button(page, 'Không dùng micrô, tự chấm').click();
+  await button(page, 'Tôi nói được rồi').click();
+  await expect(page.getByText('Đúng rồi!')).toBeVisible();
 });
 
 test('an unknown lesson says so and links home', async ({ page }) => {
