@@ -2,7 +2,7 @@
 // example shows was taught in its unit or an earlier one, that nothing asks for a template, and
 // that a sentence to build accepts its time or place phrase at either end.
 // Imports by path with the extension, so Node (server, manifest script) can load it too.
-import { isTemplate, levels, type Exercise, type Unit, type Word } from './schema.ts';
+import { isTemplate, levels, type Exercise, type Unit } from './schema.ts';
 
 /** Lowercased English words of a text; apostrophes kept ("i'm"), punctuation and digits dropped. */
 export function englishTokens(text: string): string[] {
@@ -80,12 +80,10 @@ function wordOrder(units: readonly Unit[]): string[] {
   const tracks = [...new Set(units.map((u) => u.track))];
   for (const track of tracks) {
     const known = new Set<string>();
-    const knownWords = new Map<string, Word>();
     for (const unit of inTeachingOrder(units.filter((u) => u.track === track))) {
       for (const text of [...unit.words.map((w) => w.en), ...(unit.names ?? [])]) {
         englishTokens(text).forEach((token) => known.add(token));
       }
-      unit.words.forEach((w) => knownWords.set(w.id, w));
 
       const untaught = (id: string, texts: string[]) => {
         const missing = new Set(texts.flatMap(englishTokens).filter((token) => !known.has(token)));
@@ -95,9 +93,9 @@ function wordOrder(units: readonly Unit[]): string[] {
       for (const exercise of unit.exercises) {
         untaught(exercise.id, shownEnglish(exercise));
         if (exercise.type !== 'choose_meaning') continue;
-        const word = knownWords.get(exercise.prompt);
+        const word = unit.words.find((w) => w.id === exercise.prompt);
         if (!word) {
-          errors.push(`${exercise.id}: prompt "${exercise.prompt}" is not a word taught in this unit or earlier`);
+          errors.push(`${exercise.id}: prompt "${exercise.prompt}" is not a word of this unit`);
         } else if (exercise.answer !== word.vi) {
           errors.push(`${exercise.id}: answer must be the meaning of "${word.en}" ("${word.vi}")`);
         }
