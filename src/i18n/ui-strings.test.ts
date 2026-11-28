@@ -41,6 +41,33 @@ describe('findUiStringLiterals', () => {
     ).toEqual(['Trên web', 'Bạn']);
   });
 
+  it('reports template literals whose static text has letters, in children and props', () => {
+    const source = 'const A = () => <Text accessibilityLabel={`Nghe ${w}`}>{`Còn ${n} bài`}{`${a}/${b}`}</Text>;';
+    expect(check(source)).toEqual(['Nghe ${…}', 'Còn ${…} bài']);
+  });
+
+  it('reports both operands of string concatenation', () => {
+    expect(check('const A = () => <Text title={name + " ơi"}>{"Chào " + name}{a + b}</Text>;')).toEqual([
+      'ơi',
+      'Chào',
+    ]);
+  });
+
+  it('reports template literals in conditional branches', () => {
+    expect(check('const A = () => <Text>{ok ? `Còn ${n} bài` : t("done")}</Text>;')).toEqual(['Còn ${…} bài']);
+  });
+
+  it('reports title and headerTitle in an object passed to options', () => {
+    const source = `const A = () => (
+      <Stack>
+        <Stack.Screen name="index" options={{ title: "Trang chủ", headerShown: false }} />
+        <Stack.Screen name="learn" options={{ headerTitle: \`Học \${n}\`, animation: "fade" }} />
+        <Stack.Screen name="t" options={{ title: t("home") }} />
+      </Stack>
+    );`;
+    expect(check(source)).toEqual(['Trang chủ', 'Học ${…}']);
+  });
+
   it('allows children that come from t() or variables', () => {
     expect(check('const A = () => <Text>{t("app.name")}{`${count}`}{name}</Text>;')).toEqual([]);
   });
@@ -67,7 +94,7 @@ describe('findUiStringLiterals', () => {
 
   it('reports the literals planted in the fixture', () => {
     const fixture = readFileSync(join(__dirname, '__fixtures__', 'planted.tsx.txt'), 'utf8');
-    expect(check(fixture)).toEqual(['Chào mừng bạn', 'Bắt đầu học']);
+    expect(check(fixture)).toEqual(['Trang chủ', 'Chào mừng bạn', 'Bắt đầu học', 'Còn ${…} bài', 'Xin chào']);
   });
 });
 
