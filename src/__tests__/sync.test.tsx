@@ -43,15 +43,17 @@ const accountProgress = {
   answers: {},
 };
 
-/** A stand-in for the API server; `online` switches the network. */
+/** A stand-in for the API server; `online` switches the network, `progressStatus` the progress answer. */
 function fakeServer() {
-  const server = { online: true };
+  const server = { online: true, progressStatus: 200 };
   jest.spyOn(global, 'fetch').mockImplementation(async (input) => {
     if (!server.online) throw new TypeError('Failed to fetch');
     const path = String(input);
     const json = (status: number, value: unknown) => new Response(JSON.stringify(value), { status });
     if (path === '/api/auth/signin' || path === '/api/me') return json(200, signedInBody);
-    if (path === '/api/profiles/p1/progress') return json(200, accountProgress);
+    if (path === '/api/profiles/p1/progress') {
+      return server.progressStatus === 200 ? json(200, accountProgress) : json(server.progressStatus, { error: 'too_large' });
+    }
     return json(404, { error: 'not_found' });
   });
   return server;
@@ -65,6 +67,7 @@ function renderApp(initialUrl: string) {
 }
 
 const offlineNotice = 'Đang ngoại tuyến, tiến độ sẽ được đồng bộ sau';
+const failedNotice = 'Chưa đồng bộ được tiến độ với tài khoản. Tiến độ vẫn được lưu trên thiết bị này.';
 
 beforeEach(async () => {
   (jest.requireMock('expo-secure-store') as { clear: () => void }).clear();
@@ -90,6 +93,17 @@ describe('progress sync in the app', () => {
     await renderApp('/');
 
     expect(await screen.findByText(offlineNotice)).toBeOnTheScreen();
+  });
+
+  it('says so when the server refuses the progress while online', async () => {
+    const server = fakeServer();
+    await signIn('demo@hocenglish.test', 'hoc-english-demo');
+    server.progressStatus = 413;
+
+    await renderApp('/');
+
+    expect(await screen.findByText(failedNotice)).toBeOnTheScreen();
+    expect(screen.queryByText(offlineNotice)).not.toBeOnTheScreen();
   });
 
   it('says nothing about being offline to a learner who is not signed in', async () => {
