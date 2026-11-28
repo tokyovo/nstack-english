@@ -26,3 +26,4 @@
 - (unscored) UI-string checker: options as a function, tabBarLabel, navigation.setOptions titles. Evidence: review fix builder
 - (unscored) Result screens link to "/" by push, so Android back returns to the finished lesson/review; use replace/dismiss. Evidence: T12 builder
 - (unscored) Share the answer saver and step bar between lesson-player and review-session; share e2e learner helpers. Evidence: T12 builder
+- (unscored) UI-string checker: strings outside JSX that reach the user (Alert.alert, confirm, consts rendered later). Evidence: review round 3

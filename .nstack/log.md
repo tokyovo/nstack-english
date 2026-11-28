@@ -216,3 +216,18 @@
 - [x] 5. Prove it yourself. merged; UI-string test flagged t(cond ? 'a' : 'b') keys: checker taught that conditional branches of a t() key are keys (test red 2 failed -> green). jest 172 pass, drive check passed, e2e 21 passed
 - [x] 6. Record. this entry, backlog
 - [x] Done when: committed on nstack/review-speak, items ticked.
+- [x] 4. Review the fixes. Round 2 (44c4291): 1 important (screenOptions, options functions, quoted keys, tabBarLabel still missed). Shared premise of both fixes (we can list where text appears) attacked: builder inverted the rule to report every lettered string in JSX outside an allowlist (cdd1a94, red 9 failed -> green 27). Round 3 (4bdbefe): 1 important (allowlisted prop names also exempted object keys, e.g. t("x", { name: "Bạn" })) + 1 nit (strings outside JSX, backlog). Fixed by the controller in 15ad710 (10+/3- lines, one finding): new test red without the fix (1 failed), green with it; small-fix exception used, no round 4.
+- [x] Done when: latest round's important finding fixed under the small-fix exception, verify re-run at 15ad710 (below), nits fixed or in backlog.md.
+
+## 2026-11-28 verify foundation (after review fixes)
+- Read: verify/SKILL.md adc6a8a
+- [x] 1. Clean tree. 15ad710
+- [x] 2. Project checks. typecheck 0, lint 0, jest 30 pass, test:server 21 pass, test:drive 6 pass, drive check passed, e2e 3 passed
+- [x] 3. Every acceptance criterion in scope has a passing check. as before; check-features exit 0
+- [x] 4. Every new check bites. checker tests red before each fix (5, 9, 1 failed), drive pid test red
+- [x] 5. The real thing runs. drive check
+- [x] 6. Every changed screen looks right. no screen changed since the first verify
+- [x] 7. Nothing got weaker. no tests removed or loosened
+- [x] 8. No new warnings or errors. lint 0 warnings
+- [x] 9. Access is enforced. check-security exit 0 at c24cb0d; no route changed since
+- [x] Done when: all ticked. Not verified: iOS (CI job on the PR), Android flows (no KVM, parked).
