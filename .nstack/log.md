@@ -371,3 +371,13 @@
 - [x] 6. Record. this entry
 - [x] Done when: committed, items ticked.
 - Lesson: Jest component tests timed out under parallel-builder load twice (T3, T31 builders). Check: raise the Jest testTimeout for component suites (ticket below), so load does not fail a correct test.
+
+## 2026-11-28 build T30
+- Read: build/SKILL.md a069840
+- [x] 1. Branch. nstack/content-a2
+- [x] 2. Starting state. fast checks pass at 848f1f3
+- [x] 3. Dispatch. builder in worktree
+- [x] 4. Read the reply. done eb04892; native reader "correct and ready", all raised items fixed (extra valid orders, accepted answers, wording)
+- [x] 5. Prove it yourself. merged: content tests below
+- [x] 6. Record. this entry
+- [x] Done when: committed, items ticked.

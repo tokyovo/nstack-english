@@ -58,7 +58,7 @@ Acceptance criteria:
 3. A2 grammar is introduced with contrast to Vietnamese (e.g. past time without verb change in Vietnamese vs -ed / irregular forms; "going to" vs "sẽ").
 
 - [ ] T29 Everyday A2 u11-u15. Proof: content test, native reader verdict. Content: yes. Needs: none
-- [ ] T30 Work A2 u7-u9. Proof: content test, native reader verdict. Content: yes. Needs: none
+- [x] T30 Work A2 u7-u9. Proof: content test, native reader verdict. Content: yes. Needs: none
 - [x] T31 Kids A2 u9-u10. Proof: content test, native reader verdict. Content: yes. Needs: none
 
 ## Done
