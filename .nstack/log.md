@@ -468,3 +468,13 @@
 - [x] 5. Prove it yourself. fast-forwarded: typecheck 0, lint 0, jest 364, test:server 85; check-features 0
 - [x] 6. Record. this entry, Features rows, backlog
 - [x] Done when: committed, items ticked.
+
+## 2026-11-28 build T25 (with sync of family into plans)
+- Read: build/SKILL.md a069840
+- [x] 1. Branch. nstack/plans
+- [x] 2. Starting state. fast checks pass at 8cb2736
+- [x] 3. Dispatch. builder: merge nstack/family, then T25
+- [x] 4. Read the reply. done 31a4569; merge moved callers of the removed `units` export to bundledUnits; T25 drive seed test red -> green, premium Jest 9 red vs stub -> green, premium e2e red without the seed grant -> green
+- [x] 5. Prove it yourself. fast-forwarded: typecheck 0, jest 379, check-features 0
+- [x] 6. Record. this entry, Features rows, needs-human payments item, T25b planned
+- [x] Done when: committed, items ticked.
