@@ -1,0 +1,130 @@
+{
+  "id": "kids-a1-u8",
+  "track": "kids",
+  "level": "a1",
+  "number": 8,
+  "title": "Trường học",
+  "goals": [
+    "Con gọi được tên đồ dùng học tập",
+    "Con hiểu và làm theo được câu “Open your book!” và “Close your book!”"
+  ],
+  "note_vi": "Ở lớp, cô giáo hay nói những câu ngắn để bảo các con làm gì: “Open your book!” (Con mở sách ra nào!), “Close your book!” (Con đóng sách lại nào!). Câu bắt đầu ngay bằng việc cần làm: “open” là mở, “close” là đóng; “your” nghĩa là “của con”: “your book” là sách của con. Con đã gặp kiểu câu này ở bài Cơ thể: “Touch your nose!”. Bố mẹ nói câu, con làm theo, rồi đổi vai.",
+  "source": "original",
+  "words": [
+    { "id": "kids-a1-u8-school", "en": "school", "vi": "trường học", "picture": "🏫" },
+    { "id": "kids-a1-u8-book", "en": "book", "vi": "quyển sách (cuốn sách)", "picture": "📘" },
+    { "id": "kids-a1-u8-pen", "en": "pen", "vi": "bút bi (cây viết)", "picture": "🖊️" },
+    { "id": "kids-a1-u8-pencil", "en": "pencil", "vi": "bút chì", "picture": "✏️" },
+    { "id": "kids-a1-u8-crayon", "en": "crayon", "vi": "bút sáp màu", "picture": "🖍️" },
+    { "id": "kids-a1-u8-ruler", "en": "ruler", "vi": "thước kẻ", "picture": "📏" },
+    { "id": "kids-a1-u8-bag", "en": "bag", "vi": "cặp sách, túi", "picture": "🎒" },
+    {
+      "id": "kids-a1-u8-friend",
+      "en": "friend",
+      "vi": "bạn",
+      "picture": "👫",
+      "example": { "en": "This is my friend.", "vi": "Đây là bạn của con." }
+    },
+    { "id": "kids-a1-u8-open-your-book", "en": "Open your book!", "vi": "Con mở sách ra nào!", "picture": "📖" },
+    { "id": "kids-a1-u8-close-your-book", "en": "Close your book!", "vi": "Con đóng sách lại nào!", "picture": "📕" }
+  ],
+  "exercises": [
+    {
+      "id": "kids-a1-u8-e01",
+      "type": "choose_meaning",
+      "prompt": "kids-a1-u8-book",
+      "options": ["cặp sách", "quyển sách (cuốn sách)", "trường học"],
+      "answer": "quyển sách (cuốn sách)"
+    },
+    {
+      "id": "kids-a1-u8-e02",
+      "type": "listen_choose",
+      "audio": "pencil",
+      "options": ["pen", "ruler", "pencil"],
+      "answer": "pencil"
+    },
+    {
+      "id": "kids-a1-u8-e03",
+      "type": "choose_english",
+      "prompt": "bút sáp màu",
+      "options": ["crayon", "pencil", "bag"],
+      "answer": "crayon"
+    },
+    {
+      "id": "kids-a1-u8-e04",
+      "type": "choose_meaning",
+      "prompt": "kids-a1-u8-friend",
+      "options": ["em bé", "bà", "bạn"],
+      "answer": "bạn"
+    },
+    {
+      "id": "kids-a1-u8-e05",
+      "type": "listen_choose",
+      "audio": "Open your book!",
+      "options": ["Close your book!", "Open your book!", "Touch your nose!"],
+      "answer": "Open your book!"
+    },
+    {
+      "id": "kids-a1-u8-e06",
+      "type": "build_sentence",
+      "prompt": "Đây là bạn của con.",
+      "tiles": ["friend", "This", "my", "is", "school"],
+      "answer": ["This", "is", "my", "friend"]
+    },
+    {
+      "id": "kids-a1-u8-e07",
+      "type": "choose_english",
+      "prompt": "thước kẻ",
+      "options": ["pen", "ruler", "book"],
+      "answer": "ruler"
+    },
+    {
+      "id": "kids-a1-u8-e08",
+      "type": "choose_meaning",
+      "prompt": "kids-a1-u8-school",
+      "options": ["trường học", "quyển sách (cuốn sách)", "bạn"],
+      "answer": "trường học"
+    },
+    {
+      "id": "kids-a1-u8-e09",
+      "type": "listen_choose",
+      "audio": "I have a pen.",
+      "options": ["I have a bag.", "I have a ruler.", "I have a pen."],
+      "answer": "I have a pen."
+    },
+    {
+      "id": "kids-a1-u8-e10",
+      "type": "build_sentence",
+      "prompt": "Con đóng sách lại nào!",
+      "tiles": ["your", "Open", "book", "Close"],
+      "answer": ["Close", "your", "book"],
+      "hint_vi": "“close” là đóng, “open” là mở."
+    },
+    {
+      "id": "kids-a1-u8-e11",
+      "type": "type_answer",
+      "prompt": "bút chì",
+      "answer": "pencil",
+      "accepted": ["a pencil"]
+    },
+    {
+      "id": "kids-a1-u8-e12",
+      "type": "speak",
+      "text": "Open your book!",
+      "vi": "Con mở sách ra nào!"
+    },
+    {
+      "id": "kids-a1-u8-e13",
+      "type": "speak",
+      "text": "My school bag.",
+      "vi": "Cặp sách của con."
+    },
+    {
+      "id": "kids-a1-u8-e14",
+      "type": "build_sentence",
+      "prompt": "Con có một cái cặp sách.",
+      "tiles": ["bag", "have", "I", "a", "pen"],
+      "answer": ["I", "have", "a", "bag"]
+    }
+  ]
+}
