@@ -1,6 +1,6 @@
 # Plan
 
-Later slices (in order, planned in full when reached): plans (free/premium entitlements, server-served premium lessons, payments parked), content-a1, content-a2.
+Later slices (in order, planned in full when reached): family (parent account, child profiles, parent gate, per-child progress), plans (free/premium entitlements, server-served premium lessons, payments parked), content-a1, content-a2.
 
 ## Slice: accounts-sync (branch nstack/accounts-sync)
 A learner can create an account with email and password, sign in on another phone or the web, and find the same progress there. Learning without an account keeps working; the first sign-in on a device adds that device's progress to the account (nothing is lost, research need 2). Progress saves locally first and syncs when online; the app says when it is offline.
