@@ -106,7 +106,7 @@ Acceptance criteria:
 
 - [ ] T20 Server: child profile create/rename/delete with limits; child-scoped sessions; 403 for child tokens on account and profile endpoints. Proof: `npm run test:server` (deny proofs seen failing). Access: owner (manage), child (own progress). Migration: yes. Needs: accounts-sync
 - [x] T21 App profiles screen: list with per-profile progress summary, add/rename/delete with confirmation. Proof: Jest, e2e `e2e/profiles.spec.ts`, axe. Access: parent. Needs: T20
-- [ ] T22 Active profile and child mode: token switching, parent gate on /account and /profiles, kids track first, separate progress and sync. Proof: Jest, e2e `e2e/child-mode.spec.ts`. Access: parent / child. Needs: T20, T21
+- [x] T22 Active profile and child mode: token switching, parent gate on /account and /profiles, kids track first, separate progress and sync. Proof: Jest, e2e `e2e/child-mode.spec.ts`. Access: parent / child. Needs: T20, T21
 
 ## Slice: plans (branch nstack/plans)
 Learners see which lessons are free and which need Premium. Free covers the first 3 units of every track (research need 4: a free plan you can really learn on, no ads, no energy limits); review, speaking and sync stay free. Premium unlocks every unit. A Premium learner's children get Premium too. Premium is granted by a server-side record; store (App Store, Google Play) and card payments are not connected: the Premium screen says payment is coming, and connecting them is parked for a person with exact steps.

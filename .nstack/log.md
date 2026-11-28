@@ -260,3 +260,14 @@
 - [x] 6. Record. this entry, backlog
 - [x] Done when: committed, items ticked.
 - Decision: delete confirmation and edit inline (Alert does not work on web); child profile limits in one shared module imported by the server.
+
+## 2026-11-28 build T22
+- Read: build/SKILL.md a069840
+- [x] 1. Branch. nstack/family
+- [x] 2. Starting state. fast checks pass at c45b9db
+- [x] 3. Dispatch. builder in worktree
+- [x] 4. Read the reply. done 2fcc11a; e2e red with the gate removed; race test red with the stale session write; critique screenshots of child home, gate, wrong answer, profiles
+- [x] 5. Prove it yourself. merged: checks below
+- [x] 6. Record. this entry, plan T22b
+- [x] Done when: committed, items ticked.
+- Decision: each learner has its own device progress copy ("local" for the parent/guest, the profile id for a child); all session writes go through one queue.
