@@ -44,7 +44,15 @@ describe('type_answer', () => {
     expect(isTypedAnswerCorrect(fine, 'I’m fine')).toBe(true);
   });
 
-  it.each(['Good bye', 'Hello', '', 'Goodbye Nam', '.'])('rejects "%s"', (typed) => {
+  it.each(['Hello Lan, how are you', 'Hello, Lan how are you', 'Hello ,Lan, how are you?'])(
+    'ignores commas inside the sentence: accepts "%s"',
+    (typed) => {
+      const greet: Typed = { id: 'x-e3', type: 'type_answer', prompt: 'Chào Lan, bạn khỏe không?', answer: 'Hello, Lan, how are you?' };
+      expect(isTypedAnswerCorrect(greet, typed)).toBe(true);
+    }
+  );
+
+  it.each(['Good bye', 'Hello', '', 'Goodbye Nam', '.', ','])('rejects "%s"', (typed) => {
     expect(isTypedAnswerCorrect(goodbye, typed)).toBe(false);
   });
 });

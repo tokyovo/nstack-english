@@ -154,7 +154,8 @@
       "type": "build_sentence",
       "prompt": "Tôi khỏe, cảm ơn bạn.",
       "tiles": ["fine", "you", "I'm", "hello", "thank"],
-      "answer": ["I'm", "fine", "thank", "you"]
+      "answer": ["I'm", "fine", "thank", "you"],
+      "accepted": [["thank", "you", "I'm", "fine"]]
     },
     {
       "id": "everyday-a0-u1-e15",

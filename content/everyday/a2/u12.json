@@ -1,0 +1,185 @@
+{
+  "id": "everyday-a2-u12",
+  "track": "everyday",
+  "level": "a2",
+  "number": 12,
+  "title": "Sức khỏe",
+  "goals": [
+    "Có thể hỏi ai đó bị làm sao: “What's the matter?”",
+    "Có thể nói mình bị đau đầu, bị sốt, bị ho: “I have a fever.”",
+    "Có thể khuyên người khác: “You should rest.”"
+  ],
+  "note_vi": "Tiếng Việt nói “Tôi bị đau đầu”, “Tôi bị sốt”. Tiếng Anh không có từ “bị”: dùng “have” (có) cùng với “a”: “I have a headache.”, “I have a fever.”, “I have a cough.” Với he, she thì “have” đổi thành “has”: “She has a fever.” (giống như live → lives). Riêng “mệt” thì dùng “be”, không dùng “have”: “I'm tired.” Muốn khuyên ai thì dùng “should” (nên). Động từ sau “should” giữ nguyên, kể cả sau he, she: “You should rest.”, “She should go to the doctor.” (không nói “should rests”).",
+  "source": "original",
+  "names": ["Lan", "Nam"],
+  "words": [
+    {
+      "id": "everyday-a2-u12-whats-the-matter",
+      "en": "What's the matter?",
+      "vi": "Bạn bị làm sao vậy?",
+      "example": { "en": "Lan, what's the matter?", "vi": "Lan ơi, bạn bị làm sao vậy?" }
+    },
+    {
+      "id": "everyday-a2-u12-headache",
+      "en": "headache",
+      "vi": "đau đầu",
+      "example": { "en": "I have a headache.", "vi": "Tôi bị đau đầu." }
+    },
+    {
+      "id": "everyday-a2-u12-fever",
+      "en": "fever",
+      "vi": "sốt",
+      "example": { "en": "I have a fever.", "vi": "Tôi bị sốt." }
+    },
+    {
+      "id": "everyday-a2-u12-cough",
+      "en": "cough",
+      "vi": "ho, cơn ho",
+      "example": { "en": "I have a cough.", "vi": "Tôi bị ho." }
+    },
+    {
+      "id": "everyday-a2-u12-has",
+      "en": "has",
+      "vi": "có (dùng sau he, she, it hoặc tên một người)",
+      "example": { "en": "She has a headache.", "vi": "Cô ấy bị đau đầu." }
+    },
+    {
+      "id": "everyday-a2-u12-tired",
+      "en": "tired",
+      "vi": "mệt",
+      "example": { "en": "I'm tired today.", "vi": "Hôm nay tôi mệt." }
+    },
+    {
+      "id": "everyday-a2-u12-doctor",
+      "en": "doctor",
+      "vi": "bác sĩ",
+      "example": { "en": "My sister is a doctor.", "vi": "Chị gái tôi là bác sĩ." }
+    },
+    {
+      "id": "everyday-a2-u12-should",
+      "en": "should",
+      "vi": "nên",
+      "example": { "en": "You should go to the doctor.", "vi": "Bạn nên đi khám bác sĩ." }
+    },
+    {
+      "id": "everyday-a2-u12-rest",
+      "en": "rest",
+      "vi": "nghỉ ngơi",
+      "example": { "en": "You should rest today.", "vi": "Hôm nay bạn nên nghỉ ngơi." }
+    },
+    {
+      "id": "everyday-a2-u12-take-medicine",
+      "en": "take medicine",
+      "vi": "uống thuốc",
+      "example": { "en": "You should take medicine.", "vi": "Bạn nên uống thuốc." }
+    }
+  ],
+  "exercises": [
+    {
+      "id": "everyday-a2-u12-e01",
+      "type": "choose_meaning",
+      "prompt": "everyday-a2-u12-headache",
+      "options": ["sốt", "đau đầu", "mệt"],
+      "answer": "đau đầu"
+    },
+    {
+      "id": "everyday-a2-u12-e02",
+      "type": "choose_english",
+      "prompt": "Tôi bị sốt.",
+      "options": ["I have a fever.", "I'm a fever.", "I have a cough."],
+      "answer": "I have a fever.",
+      "hint_vi": "Tiếng Anh không có “bị”: dùng “I have a …”."
+    },
+    {
+      "id": "everyday-a2-u12-e03",
+      "type": "listen_choose",
+      "audio": "What's the matter?",
+      "options": ["What's the matter?", "What would you like?", "What time is it?"],
+      "answer": "What's the matter?"
+    },
+    {
+      "id": "everyday-a2-u12-e04",
+      "type": "build_sentence",
+      "prompt": "Cô ấy bị đau đầu.",
+      "tiles": ["has", "She", "headache", "a", "have"],
+      "answer": ["She", "has", "a", "headache"],
+      "hint_vi": "Sau “she” thì “have” đổi thành “has”."
+    },
+    {
+      "id": "everyday-a2-u12-e05",
+      "type": "choose_meaning",
+      "prompt": "everyday-a2-u12-should",
+      "options": ["nên", "muốn", "có thể"],
+      "answer": "nên"
+    },
+    {
+      "id": "everyday-a2-u12-e06",
+      "type": "type_answer",
+      "prompt": "Tôi bị ho.",
+      "answer": "I have a cough.",
+      "accepted": ["I've got a cough."]
+    },
+    {
+      "id": "everyday-a2-u12-e07",
+      "type": "listen_choose",
+      "audio": "You should take medicine.",
+      "options": ["You should take medicine.", "You should rest.", "You should go to the doctor."],
+      "answer": "You should take medicine."
+    },
+    {
+      "id": "everyday-a2-u12-e08",
+      "type": "choose_english",
+      "prompt": "Hôm nay tôi mệt.",
+      "options": ["I have tired today.", "I'm tired today.", "I tired today."],
+      "answer": "I'm tired today.",
+      "hint_vi": "“Mệt” đi với “be”: I'm tired."
+    },
+    {
+      "id": "everyday-a2-u12-e09",
+      "type": "build_sentence",
+      "prompt": "Bạn nên đi khám bác sĩ.",
+      "tiles": ["should", "the", "You", "go", "doctor", "to", "has"],
+      "answer": ["You", "should", "go", "to", "the", "doctor"]
+    },
+    {
+      "id": "everyday-a2-u12-e10",
+      "type": "choose_meaning",
+      "prompt": "everyday-a2-u12-take-medicine",
+      "options": ["nghỉ ngơi", "uống thuốc", "bác sĩ"],
+      "answer": "uống thuốc"
+    },
+    {
+      "id": "everyday-a2-u12-e11",
+      "type": "choose_english",
+      "prompt": "Anh ấy bị sốt.",
+      "options": ["He have a fever.", "He has a fever.", "He is a fever."],
+      "answer": "He has a fever."
+    },
+    {
+      "id": "everyday-a2-u12-e12",
+      "type": "type_answer",
+      "prompt": "Bạn nên nghỉ ngơi.",
+      "answer": "You should rest.",
+      "accepted": ["You should get some rest."]
+    },
+    {
+      "id": "everyday-a2-u12-e13",
+      "type": "speak",
+      "text": "I have a headache.",
+      "vi": "Tôi bị đau đầu."
+    },
+    {
+      "id": "everyday-a2-u12-e14",
+      "type": "choose_english",
+      "prompt": "bác sĩ",
+      "options": ["doctor", "fever", "medicine"],
+      "answer": "doctor"
+    },
+    {
+      "id": "everyday-a2-u12-e15",
+      "type": "speak",
+      "text": "You should go to the doctor.",
+      "vi": "Bạn nên đi khám bác sĩ."
+    }
+  ]
+}

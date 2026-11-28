@@ -31,8 +31,8 @@ function validUnit() {
       { id: 'everyday-a0-u9-e06', type: 'choose_meaning', prompt: 'everyday-a0-u9-goodbye', options: ['Xin chào', 'Tạm biệt', 'Cảm ơn'], answer: 'Tạm biệt' },
       { id: 'everyday-a0-u9-e07', type: 'choose_english', prompt: 'Tôi khỏe', options: ["I'm fine", 'Goodbye', 'Hello'], answer: "I'm fine" },
       { id: 'everyday-a0-u9-e08', type: 'listen_choose', audio: 'How are you?', options: ['How are you?', 'Goodbye', 'Hello', 'Thank you'], answer: 'How are you?' },
-      { id: 'everyday-a0-u9-e09', type: 'type_answer', prompt: 'Xin chào', answer: 'Hello' },
-      { id: 'everyday-a0-u9-e10', type: 'build_sentence', prompt: 'Tôi khỏe.', tiles: ["I'm", 'fine'], answer: ["I'm", 'fine'] },
+      { id: 'everyday-a0-u9-e09', type: 'speak', text: 'Hello, Lan!', vi: 'Chào Lan!' },
+      { id: 'everyday-a0-u9-e10', type: 'speak', text: "I'm fine, thank you.", vi: 'Tôi khỏe, cảm ơn.' },
     ],
   };
 }
@@ -62,6 +62,7 @@ describe('parseUnit', () => {
         'everyday-a0-u1: id must be "everyday-a0-u2" (track-level-u<number>)',
         'everyday-a0-u1: needs at least 6 words, has 3',
         'everyday-a0-u1: needs at least 10 exercises, has 7',
+        'everyday-a0-u1: needs at least 2 speak items, has 0',
         'everyday-a0-u1.title: missing or empty',
         'everyday-a0-u1.colour: unknown field',
         'everyday-a0-u1-hello.vi: missing or empty',
@@ -90,6 +91,18 @@ describe('parseUnit', () => {
     expect(result.ok ? [] : result.errors).toEqual(['everyday-a0-u9-e04: accepted tile "my" is not among the tiles']);
   });
 
+  it('keeps the reason a build_sentence order is fixed, and reports an empty one', () => {
+    const unit = validUnit();
+    const withFixedOrder = (fixedOrder: string) => ({
+      ...unit,
+      exercises: unit.exercises.map((e, i) => (i === 3 ? { ...e, fixedOrder } : e)),
+    });
+    const kept = parseUnit(withFixedOrder('“Lan” không đứng đầu câu được.'));
+    expect(kept.ok ? kept.unit.exercises[3] : kept.errors).toMatchObject({ fixedOrder: '“Lan” không đứng đầu câu được.' });
+    const empty = parseUnit(withFixedOrder(' '));
+    expect(empty.ok ? [] : empty.errors).toEqual(['everyday-a0-u9-e04.fixedOrder: missing or empty']);
+  });
+
   it('reads a speak item: the English to say and its Vietnamese meaning', () => {
     const unit = validUnit();
     const speak = { id: 'everyday-a0-u9-e11', type: 'speak', text: "I'm fine, thank you.", vi: 'Tôi khỏe, cảm ơn bạn.' };
@@ -106,6 +119,15 @@ describe('parseUnit', () => {
       'everyday-a0-u9-e11.text: missing or empty',
       'everyday-a0-u9-e11.vi: missing or empty',
     ].sort());
+  });
+
+  it('reports a unit with fewer than 2 speak items', () => {
+    const unit = validUnit();
+    const oneSpeak = unit.exercises.map((e, i) =>
+      i === 9 ? { id: e.id, type: 'type_answer', prompt: 'Xin chào', answer: 'Hello' } : e
+    );
+    const result = parseUnit({ ...unit, exercises: oneSpeak });
+    expect(result.ok ? [] : result.errors).toEqual(['everyday-a0-u9: needs at least 2 speak items, has 1']);
   });
 
   it('requires a Vietnamese usage note from A1 up', () => {
