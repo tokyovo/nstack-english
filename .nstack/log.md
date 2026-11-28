@@ -506,3 +506,15 @@
 - [x] 4. Review the fixes. small-fix exception: the fix is a restore to main's reviewed code with its test passing; no new round
 - [x] Done when: no important findings open; verify passed after the fix.
 - Lesson: syncing a stacked branch with a squash-merged main using `merge -X ours` silently reverts main's fixes the branch forked before. Check added: scripts/check-sync <shipped PR head>... lists files that differ from main though no own commit changed them; run it after every sync.
+
+## 2026-11-28 ship content A1-A2
+- Read: ship/SKILL.md b51cd2a
+- [x] 1. Commit. slice commits on nstack/content-a2 (content-a1 stacked under it)
+- [x] 2. Sync. with main after PR #3; reverted files found and restored; scripts/check-sync ok
+- [x] 3. Push. nstack/content-a2
+- [x] 4. Open the PR. #4
+- [x] 5. Wait for CI. run 46099287696 at 0f55923: ubuntu success, iOS success
+- [x] 6. Merge. squash 94b07a6 (tree equal to the PR head)
+- [x] 7. Confirm and clean up. content-a1 and content-a2 branches and worktrees deleted; main checks run with the next sync
+- [x] Done when: PR #4 merged.
+- Lesson (sync procedure): sync a stacked branch by merging the shipped PR's head commit (real ancestry, real conflicts), then `git merge -s ours origin/main` after checking the squash tree equals that head; then run scripts/check-sync <shipped heads>. Never `-X ours`.

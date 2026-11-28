@@ -1,6 +1,5 @@
 # Plan
 
-Later slices (in order, planned in full when reached): family (parent account, child profiles, parent gate, per-child progress), plans (free/premium entitlements, server-served premium lessons, payments parked), 
 
 ## Slice: family (branch nstack/family)
 A parent with an account adds child profiles (a nickname and a picture, nothing else), renames or deletes them, and hands the phone to a child: the app then shows only that child's learning, with its own progress, starting on the kids track. Leaving the child's profile, or reaching the account, profiles or (later) plan screens, needs the parent gate. The parent sees each child's progress on the profiles screen (research need 9).
