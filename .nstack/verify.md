@@ -16,7 +16,7 @@ How an agent runs and uses the app on its own, without touching anyone's data.
 - **Start:** `drive start --json` re-exports dist/ when src/, assets/, app.json or package files changed, starts server/main.ts (API + dist/) on a free 127.0.0.1 port with a temporary database under /tmp, prints `{"url","db","pid"}`; reuses a healthy running instance (state in .drive/)
 - **Seed:** `drive seed` prints `{"seeded":[]}` (no app tables yet)
 - **Sign in:** none (no accounts yet)
-- **Screens:** /, /track/everyday, /track/kids, /track/nope, /lesson/everyday-a0-u1, /lesson/nope (list in e2e/screens.ts, shared with the axe e2e)
+- **Screens:** /, /track/everyday, /track/kids, /track/nope, /lesson/everyday-a0-u1, /lesson/nope, /review (list in e2e/screens.ts, shared with the axe e2e)
 - **Evidence:** `drive screens <dir>` (every screen at 1280 and 390 px, light and dark; exits 1 on console errors, page errors or failed same-origin requests)
 - **Health:** `drive check` starts its own instance, seeds, screenshots every screen, stops, deletes the database; exit 0 means this section is true
 - **Clean up:** `drive stop [--dry-run]` stops the recorded pid (checked to be server/main.ts) and deletes the temporary database
@@ -31,4 +31,6 @@ How an agent runs and uses the app on its own, without touching anyone's data.
 | Leave a lesson keeping answers | /lesson/<unitId>, Rời bài học | public | `e2e/lesson.spec.ts` "a learner leaves mid-lesson for the track list and keeps the answers given" | - |
 | Progress saved on the device | (all lesson screens) | public | `src/progress/progress-store.test.ts` "keeps a completed lesson after the app is closed and opened again" | - |
 | Lesson content checked | content/ | - | `src/content/content.test.ts` "passes the cross-unit checks with the sources listed in SOURCES.md" | - |
+| Review due words (spaced repetition) | /, Ôn tập ngay; /review | public | `e2e/review.spec.ts` "a learner reviews the words of a lesson a day later and sees the due count drop"; `src/review/schedule.test.ts` "brings a word answered wrongly back before the same word answered rightly" | - |
+| Speaking practice with fallback | /lesson/<unitId>, speak step | public | `e2e/lesson.spec.ts` "a speak exercise falls back to self-check where the browser has no recogniser"; `src/speech/score.test.ts` | - |
 | API health | GET /api/health | public | `server/server.test.ts` "GET /api/health answers" | - |

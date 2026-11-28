@@ -286,3 +286,16 @@
 - [x] 8. No new warnings or errors. lint 0 warnings
 - [x] 9. Access is enforced. n/a: no routes, tables or auth touched (app-only, public)
 - [x] Done when: all ticked. Not verified: Android Maestro lesson flow (no KVM, parked).
+
+## 2026-11-28 verify review-speak
+- Read: verify/SKILL.md adc6a8a
+- [x] 1. Clean tree. 255d7a3
+- [x] 2. Project checks. typecheck 0, lint 0, jest 228, test:server 21, test:drive 6, e2e 23 passed, drive screens 28 shots exit 0
+- [x] 3. Every acceptance criterion in scope has a passing check. 1 schedule.test (wrong before right); 2 review.spec (page.clock, count drops) + review Jest; 3 content test + reader verdicts (T14); 4 score.test near misses, speak-answer Jest both paths, lesson e2e fallback and real-API explain-then-fallback; 5 .maestro/review.yaml written, not run (no KVM, parked). check-features exit 0
+- [x] 4. Every new check bites. schedule stub red 9/11; review mutations red (distractors, due count, answers not recorded); speak component and scorer red first; checker test red for kind/reason
+- [x] 5. The real thing runs. e2e against the drive server (review after a simulated day; speak fallback)
+- [x] 6. Every changed screen looks right. /tmp/shots-rs/review-*.png (empty), /tmp/t12-shots/home-{due,notdue,empty}-*, review-step{1,2,3}-*, review-feedback-*, review-result-* at 390/1280 light/dark: 1 primary action (Ôn tập ngay, Kiểm tra) pass; 2 spacing pass; 3 readable pass; 4 no overflow pass; 5 empty states with hints, disabled Kiểm tra looks intended pass; 6 matches design.md pass; 7 focus (axe + keyboard in e2e) pass; 8 copy names actions pass; 9 hierarchy pass. Speak states critiqued by T13 builder (ready, explain, listening, nothing heard, self-check, wrong)
+- [x] 7. Nothing got weaker. one eslint-disable-next-line no-require-imports in src/speech/recognition.ts: lazy require of the optional native module so a missing module means no recognition instead of a crash (logged, justified)
+- [x] 8. No new warnings or errors. lint 0 warnings
+- [x] 9. Access is enforced. n/a: no routes, tables or auth
+- [x] Done when: all ticked. Not verified: native recognition on Android/iOS devices (no KVM; iOS build only), Maestro review flow (parked).
