@@ -29,3 +29,5 @@
 - (unscored) Web focus outline draws black over accent/danger input borders (TextField, type-answer); TypeAnswer could reuse TextField. Evidence: T18 builder
 - (unscored) Offline notice clears only on the next navigation/foreground; add a network listener. Web offline cannot open route chunks not yet loaded. Evidence: T19 builder
 - (unscored) Lesson intro "completed" badge does not refresh after a pull. Evidence: T19 builder
+- (unscored) Expired/forgotten session (401) keeps the device progress, so the next sign-in on a shared device merges it into another account. Evidence: T19b builder
+- (unscored) Remove unreadable progress backup copies at sign-out. Evidence: T19b builder

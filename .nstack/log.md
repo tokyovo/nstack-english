@@ -248,3 +248,13 @@
 - [x] 5. Prove it yourself. merged: typecheck 0, lint 0, jest 192, test:server 60, e2e 25 passed
 - [x] 6. Record. this entry, backlog; shared-device sign-out leak becomes ticket T19b (below)
 - [x] Done when: committed, items ticked.
+
+## 2026-11-28 build T19b
+- Read: build/SKILL.md a069840
+- [x] 1. Branch. nstack/accounts-sync
+- [x] 2. Starting state. fast checks pass at cb5b9d7
+- [x] 3. Dispatch. builder in worktree
+- [x] 4. Read the reply. done 214af1e; 5 sync tests and 3 screen tests red vs stub
+- [x] 5. Prove it yourself. merged: typecheck 0, lint 0, jest and e2e below
+- [x] 6. Record. this entry, backlog
+- [x] Done when: committed, items ticked.
