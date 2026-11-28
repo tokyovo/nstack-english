@@ -8,16 +8,16 @@
     "Con gọi được tên đồ dùng học tập",
     "Con hiểu và làm theo được câu “Open your book!” và “Close your book!”"
   ],
-  "note_vi": "Ở lớp, cô giáo hay nói những câu ngắn để bảo các con làm gì: “Open your book!” (Con mở sách ra nào!), “Close your book!” (Con đóng sách lại nào!). Câu bắt đầu ngay bằng việc cần làm: “open” là mở, “close” là đóng. Con đã gặp kiểu câu này ở bài Cơ thể: “Touch your nose!”. Bố mẹ nói câu, con làm theo, rồi đổi vai.",
+  "note_vi": "Ở lớp, cô giáo hay nói những câu ngắn để bảo các con làm gì: “Open your book!” (Con mở sách ra nào!), “Close your book!” (Con đóng sách lại nào!). Câu bắt đầu ngay bằng việc cần làm: “open” là mở, “close” là đóng; “your” nghĩa là “của con”: “your book” là sách của con. Con đã gặp kiểu câu này ở bài Cơ thể: “Touch your nose!”. Bố mẹ nói câu, con làm theo, rồi đổi vai.",
   "source": "original",
   "words": [
     { "id": "kids-a1-u8-school", "en": "school", "vi": "trường học", "picture": "🏫" },
-    { "id": "kids-a1-u8-book", "en": "book", "vi": "quyển sách", "picture": "📚" },
-    { "id": "kids-a1-u8-pen", "en": "pen", "vi": "bút bi, bút mực", "picture": "🖊️" },
+    { "id": "kids-a1-u8-book", "en": "book", "vi": "quyển sách (cuốn sách)", "picture": "📘" },
+    { "id": "kids-a1-u8-pen", "en": "pen", "vi": "bút bi (cây viết)", "picture": "🖊️" },
     { "id": "kids-a1-u8-pencil", "en": "pencil", "vi": "bút chì", "picture": "✏️" },
     { "id": "kids-a1-u8-crayon", "en": "crayon", "vi": "bút sáp màu", "picture": "🖍️" },
     { "id": "kids-a1-u8-ruler", "en": "ruler", "vi": "thước kẻ", "picture": "📏" },
-    { "id": "kids-a1-u8-bag", "en": "bag", "vi": "cặp sách", "picture": "🎒" },
+    { "id": "kids-a1-u8-bag", "en": "bag", "vi": "cặp sách, túi", "picture": "🎒" },
     {
       "id": "kids-a1-u8-friend",
       "en": "friend",
@@ -33,8 +33,8 @@
       "id": "kids-a1-u8-e01",
       "type": "choose_meaning",
       "prompt": "kids-a1-u8-book",
-      "options": ["cặp sách", "quyển sách", "trường học"],
-      "answer": "quyển sách"
+      "options": ["cặp sách", "quyển sách (cuốn sách)", "trường học"],
+      "answer": "quyển sách (cuốn sách)"
     },
     {
       "id": "kids-a1-u8-e02",
@@ -82,7 +82,7 @@
       "id": "kids-a1-u8-e08",
       "type": "choose_meaning",
       "prompt": "kids-a1-u8-school",
-      "options": ["trường học", "quyển sách", "bạn"],
+      "options": ["trường học", "quyển sách (cuốn sách)", "bạn"],
       "answer": "trường học"
     },
     {
@@ -104,7 +104,8 @@
       "id": "kids-a1-u8-e11",
       "type": "type_answer",
       "prompt": "bút chì",
-      "answer": "pencil"
+      "answer": "pencil",
+      "accepted": ["a pencil"]
     },
     {
       "id": "kids-a1-u8-e12",

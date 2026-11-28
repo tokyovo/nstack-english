@@ -36,13 +36,13 @@
       "en": "This is my ...",
       "vi": "Đây là ... của con",
       "audio": "This is my",
-      "picture": "🙋",
-      "example": { "en": "This is my sister.", "vi": "Đây là chị của con." }
+      "picture": "👉",
+      "example": { "en": "This is my sister.", "vi": "Đây là chị/em gái của con." }
     },
     {
       "id": "kids-a1-u6-i-love-you",
       "en": "I love you.",
-      "vi": "Con yêu bố mẹ.",
+      "vi": "Con yêu bố/mẹ.",
       "picture": "💕"
     }
   ],
@@ -129,13 +129,13 @@
       "id": "kids-a1-u6-e12",
       "type": "speak",
       "text": "I love you.",
-      "vi": "Con yêu bố mẹ."
+      "vi": "Con yêu bố/mẹ."
     },
     {
       "id": "kids-a1-u6-e13",
       "type": "speak",
-      "text": "My baby sister.",
-      "vi": "Em gái nhỏ của con."
+      "text": "My family.",
+      "vi": "Gia đình của con."
     },
     {
       "id": "kids-a1-u6-e14",

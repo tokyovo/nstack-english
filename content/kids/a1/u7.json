@@ -12,7 +12,7 @@
   "note_vi": "“I have a ...” nghĩa là “Con có một ...”. “A” nghĩa là “một”, đứng trước tên một món đồ: “a ball” (một quả bóng), “a car” (một chiếc ô tô). Tiếng Việt phải chọn “quả”, “chiếc”, “cái” hay “con”, còn tiếng Anh chỉ cần “a”. Muốn rủ bạn chơi, con nói “Let's play!” (Mình chơi đi!).",
   "source": "original",
   "words": [
-    { "id": "kids-a1-u7-ball", "en": "ball", "vi": "quả bóng", "picture": "⚽" },
+    { "id": "kids-a1-u7-ball", "en": "ball", "vi": "quả bóng (trái banh)", "picture": "⚽" },
     { "id": "kids-a1-u7-car", "en": "car", "vi": "ô tô (xe hơi)", "picture": "🚗" },
     { "id": "kids-a1-u7-train", "en": "train", "vi": "tàu hỏa (xe lửa)", "picture": "🚂" },
     { "id": "kids-a1-u7-plane", "en": "plane", "vi": "máy bay", "picture": "✈️" },
@@ -28,15 +28,15 @@
       "picture": "🎁",
       "example": { "en": "I have a ball.", "vi": "Con có một quả bóng." }
     },
-    { "id": "kids-a1-u7-lets-play", "en": "Let's play!", "vi": "Mình chơi đi!", "picture": "🎲" }
+    { "id": "kids-a1-u7-lets-play", "en": "Let's play!", "vi": "Mình chơi đi!", "picture": "🤸" }
   ],
   "exercises": [
     {
       "id": "kids-a1-u7-e01",
       "type": "choose_meaning",
       "prompt": "kids-a1-u7-ball",
-      "options": ["quả bóng", "bóng bay (bong bóng)", "cái trống"],
-      "answer": "quả bóng"
+      "options": ["quả bóng (trái banh)", "bóng bay (bong bóng)", "cái trống"],
+      "answer": "quả bóng (trái banh)"
     },
     {
       "id": "kids-a1-u7-e02",
@@ -70,7 +70,7 @@
       "id": "kids-a1-u7-e06",
       "type": "build_sentence",
       "prompt": "Con có một quả bóng bay.",
-      "tiles": ["have", "balloon", "I", "a", "ball"],
+      "tiles": ["have", "balloon", "I", "a", "drum"],
       "answer": ["I", "have", "a", "balloon"],
       "hint_vi": "“a” đứng ngay trước tên món đồ: “a balloon”."
     },
@@ -85,7 +85,7 @@
       "id": "kids-a1-u7-e08",
       "type": "choose_meaning",
       "prompt": "kids-a1-u7-drum",
-      "options": ["quả bóng", "tàu hỏa (xe lửa)", "cái trống"],
+      "options": ["quả bóng (trái banh)", "tàu hỏa (xe lửa)", "cái trống"],
       "answer": "cái trống"
     },
     {
@@ -105,8 +105,9 @@
     {
       "id": "kids-a1-u7-e11",
       "type": "type_answer",
-      "prompt": "quả bóng",
-      "answer": "ball"
+      "prompt": "quả bóng (trái banh)",
+      "answer": "ball",
+      "accepted": ["a ball"]
     },
     {
       "id": "kids-a1-u7-e12",
@@ -117,7 +118,7 @@
     {
       "id": "kids-a1-u7-e13",
       "type": "speak",
-      "text": "A red ball.",
+      "text": "A red ball!",
       "vi": "Một quả bóng màu đỏ."
     },
     {
