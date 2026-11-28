@@ -34,7 +34,7 @@
   },
   "devDependencies": {
     "@axe-core/playwright": "^4.14.1",
-    "@playwright/test": "^1.65.1",
+    "@playwright/test": "1.65.0",
     "@testing-library/react-native": "^14.1.0",
     "@types/jest": "^30.0.0",
     "@types/node": "~24.19.4",
@@ -48,15 +48,18 @@
   },
   "scripts": {
     "start": "expo start",
-    "android": "expo start --android",
-    "ios": "expo start --ios",
+    "android": "expo run:android",
+    "ios": "expo run:ios",
     "web": "expo start --web",
     "typecheck": "tsc --noEmit && tsc -p server",
     "lint": "eslint . --max-warnings 0",
     "test": "jest",
     "server": "node server/main.ts",
     "test:server": "node --test \"server/**/*.test.ts\"",
-    "typecheck:server": "tsc -p server"
+    "typecheck:server": "tsc -p server",
+    "drive": "node scripts/drive.mjs",
+    "e2e": "playwright test",
+    "test:drive": "node --test \"scripts/**/*.test.mjs\""
   },
   "private": true,
   "jest": {
@@ -64,13 +67,19 @@
     "testPathIgnorePatterns": [
       "/node_modules/",
       "<rootDir>/server/",
+      "<rootDir>/scripts/",
       "<rootDir>/e2e/",
       "<rootDir>/.claude/",
       "<rootDir>/dist/"
     ],
     "modulePathIgnorePatterns": [
       "<rootDir>/.claude/",
-      "<rootDir>/dist/"
+      "<rootDir>/dist/",
+      "<rootDir>/android/",
+      "<rootDir>/ios/"
     ]
+  },
+  "overrides": {
+    "playwright-core": "1.65.0"
   }
 }

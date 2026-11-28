@@ -147,3 +147,26 @@
 - [x] 5. Prove it yourself. merged (conflicts in themed-text.tsx and vi.ts: kept T6's label/meta types and moved T8's small labels to meta with tabular numbers; welcome.* keys dropped): typecheck 0, lint 0, jest 128 pass
 - [x] 6. Record. this entry, backlog
 - [x] Done when: committed on nstack/learn-core, items ticked.
+## 2026-11-27 build T3
+- Read: build/SKILL.md a069840
+- [x] 1. Branch. nstack/foundation
+- [x] 2. Starting state. fast checks pass at 93d5aed
+- [x] 3. Dispatch. builder in worktree
+- [x] 4. Read the reply. done, 2868f89; axe seen failing on planted low contrast, drive screens seen failing on planted 404
+- [x] 5. Prove it yourself. merged: typecheck 0, lint 0, jest 15, test:server 21, test:drive 5, drive check exit 0 (4 screenshots, db deleted), e2e 3 passed; check-features exit 0
+- [x] 6. Record. verify.md Drive and Features sections, backlog
+- [x] Done when: committed on nstack/foundation, items ticked.
+- Decision: @playwright/test pinned to 1.65.0 to match the cached browser; CI installs chromium.
+
+## 2026-11-28 verify foundation
+- Read: verify/SKILL.md adc6a8a
+- [x] 1. Clean tree. c24cb0d, git status clean
+- [x] 2. Project checks. typecheck 0, lint 0 warnings, jest 15 pass, test:server 21 pass 0 skipped, test:drive 5 pass, drive check passed, e2e 3 passed
+- [x] 3. Every acceptance criterion in scope has a passing check. 1-2 typecheck/lint/jest (ui-strings test); 3 e2e welcome.spec + screenshots; 4 test:server; 5 drive --help + drive check; 6 e2e a11y.spec (axe); 7 actionlint exit 0 (builder) and the PR's CI run (ship). check-features exit 0
+- [x] 4. Every new check bites. UI-string test: planted literal -> 1 failed. Server: health ok:false -> 1 failed, restored. Axe (planted low contrast) and drive screens (planted 404) seen failing by T3 builder; migrator mutations by T2 builder.
+- [x] 5. The real thing runs. drive check started the server with dist/, loaded /, screenshots, no console errors
+- [x] 6. Every changed screen looks right. /tmp/shots-f/welcome-{390,1280}-{light,dark}.png: 1 n/a no action yet (placeholder screen replaced in learn-core); 2 spacing on 4px scale pass; 3 contrast/size pass; 4 no overflow pass; 5 n/a no states; 6 matches design.md (paper, purple ink, ô-ly grid) pass; 7 n/a no controls; 8 copy pass; 9 title stands out pass
+- [x] 7. Nothing got weaker. no eslint-disable, ts-ignore, any or skip in src/server/scripts/e2e
+- [x] 8. No new warnings or errors. first recorded counts
+- [x] 9. Access is enforced. check-security exit 0 (no non-public features yet; headers ok, no secrets in bundle, 0 high/critical advisories)
+- [x] Done when: all ticked. Not verified: iOS build (CI macOS job, runs on the PR); Android flows (no KVM, parked).

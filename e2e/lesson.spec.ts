@@ -8,7 +8,7 @@ import { join } from 'node:path';
 import { parseUnit, type Exercise, type Unit } from '../src/content/schema';
 
 function loadUnit(path: string): Unit {
-  const result = parseUnit(JSON.parse(readFileSync(join(__dirname, '..', 'content', path), 'utf8')));
+  const result = parseUnit(JSON.parse(readFileSync(join(import.meta.dirname, '..', 'content', path), 'utf8')));
   if (!result.ok) throw new Error(result.errors.join('\n'));
   return result.unit;
 }

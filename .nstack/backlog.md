@@ -18,3 +18,5 @@
 - (unscored) Content test: sanity assertions per track (work, kids), not only everyday ids. Evidence: T10 builder
 - (unscored) Merge lesson ActionButton with the shared button style. Evidence: T8 builder
 - (unscored) Add accepted order "Lan is my name" to everyday-a0-u1 e06 after a native reader check. Evidence: T8 builder, T5 reader
+- (unscored) android-build: build only x86_64 for the emulator (reactNativeArchitectures) to cut the 23 min first build. Evidence: T3 builder
+- (unscored) Jest timeout under CPU load (one flaky failure during gradle). Evidence: T3 builder
