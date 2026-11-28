@@ -238,3 +238,14 @@
 - [x] 6. Record. this entry, backlog
 - [x] Done when: committed, items ticked.
 - Decision: expo-secure-store config plugin not added (it adds a Face ID usage string); Android backup rules for it go to the backlog.
+
+## 2026-11-28 build T23
+- Read: build/SKILL.md a069840
+- [x] 1. Branch. nstack/plans (from nstack/family)
+- [x] 2. Starting state. fast checks pass at 3702dcc
+- [x] 3. Dispatch. builder in worktree
+- [x] 4. Read the reply. done fdb8cce; 15 tests red before code; /api/plan red with requireUser removed; migration 0004 expand-only with data tests
+- [x] 5. Prove it yourself. merged: test:server pass (below), typecheck 0
+- [x] 6. Record. this entry
+- [x] Done when: committed, items ticked.
+- Decision: GET /api/plan added for any session because /api/me refuses child tokens (family); a child's plan follows its parent. Grant CLI requires an explicit --db and never creates or migrates a database.
