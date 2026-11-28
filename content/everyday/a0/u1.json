@@ -111,6 +111,7 @@
       "prompt": "Tên tôi là Lan.",
       "tiles": ["name", "Lan", "My", "you", "is"],
       "answer": ["My", "name", "is", "Lan"],
+      "accepted": [["Lan", "is", "My", "name"]],
       "hint_vi": "Tiếng Anh nói “My name is ...”, giống “Tên tôi là ...”."
     },
     {
