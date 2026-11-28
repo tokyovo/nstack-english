@@ -45,3 +45,4 @@
 - Formatter config: only restyles working code. Reconsider if: style disagreements slow reviews.
 - Done items removed: answer-history growth, expired-session leak, deleted-child copy, premium copies at sign-out, /profiles premium due count, 2 speak items per unit, review template phrases, "Lan is my name", Jest timeout under load, android x86 duplicate.
 - (unscored) TRUST_PROXY setting so the sign-up limit counts the real client behind a reverse proxy. Evidence: T34 builder
+- kids-a2-u9-breakfast picture `cooking` reads as cook/fry; find a clearer breakfast picture (native reader, 2026-11-28). Score later.

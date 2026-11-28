@@ -838,8 +838,8 @@
 - [x] 3. Dispatch. builder in worktree, Parallel: 3
 - [x] 4. Read the reply. done 9c157f7: scripts/pictures.ts (fluentui-emoji 1ffb34c7, 155 PNGs 4.2 MB), Picture component, picture-or-abstract enforced in parseUnit, avatars mapped from emoji keys, emoji scan; red first on missing picture and bad slug; pictures run twice identical
 - [x] 5. Prove it yourself. merged at 1b36d41: ci 0, typecheck 0, lint 0, jest 507, test:server pass. Native reader (fresh agent): problems in 10 words (nurse/doctor confusion, engineer, hungry, sad, friend x2, face, lunch, kitchen, summer, it's o'clock) -> fixer builder dispatched on nstack/colour
-- [ ] 6. Record. (after the fixer)
-- [ ] Done when: committed on the slice's branch with items 1-6 ticked in its log entry, or is parked in `plan.md`.
+- [x] 6. Record. fixer b7abdf0 merged: 10 words fixed (nurse abstract, doctor health_worker, engineer technologist, sad frowning_face, face neutral_face, lunch cooked_rice, it's o'clock seven_oclock; hungry/kitchen/summer/friend(s) abstract: people_holding_hands is not in the pinned set); content+pictures+emoji tests 109 pass; new pictures viewed (/tmp/newpics.png) and fit. Backlog: breakfast uses `cooking` (same as old kitchen)
+- [x] Done when: merged on nstack/colour, items ticked.
 
 ## 2026-11-28 verify hardening
 - Read: verify/SKILL.md adc6a8a
@@ -866,8 +866,8 @@
 - Read: review/SKILL.md c151f88
 - [x] 1. Dispatch. reviewer in worktree at 837c791
 - [x] 2. Second reviewer. auth changes (T33, T34): second reviewer, Focus: security and failure modes, in parallel
-- [ ] 3. Act on every finding. reviewer 1: pass, nits: verify.md server/drive rows stale (fixed now: test:server 128), per-address 30 vs 5 (logged decision, kept). reviewer 2: important: merged release manifest has USE_BIOMETRIC/USE_FINGERPRINT (androidx.biometric via expo-secure-store) and the introspect test cannot see library manifests -> fixer builder; nit: no test proves counting before scrypt -> same fixer
-- [ ] 4. Review the fixes
+- [x] 3. Act on every finding. reviewer 1: pass, nits: verify.md server/drive rows stale (fixed now: test:server 128), per-address 30 vs 5 (logged decision, kept). reviewer 2: important: merged release manifest has USE_BIOMETRIC/USE_FINGERPRINT (androidx.biometric via expo-secure-store) and the introspect test cannot see library manifests -> fixer builder; nit: no test proves counting before scrypt -> same fixer. Fixer aa0fff4/a59a340 merged (6e6333b): new `drive android-permissions` check run by android-build (red on the old manifest: USE_BIOMETRIC, USE_FINGERPRINT), app.json blocks both, APK permissions INTERNET, RECORD_AUDIO and the app's own receiver permission; hash-count test red with scrypt moved first; typecheck 0, lint 0, jest 486, test:server 129, test:drive pass
+- [ ] 4. Review the fixes. round 2 reviewer dispatched at 6e6333b (fix is over 20 lines)
 - [ ] Done when: the latest round has no important findings, `verify` passed after the last fix, and nits are fixed or in `backlog.md`.
 ## 2026-11-28 build T42
 - Read: build/SKILL.md a069840
