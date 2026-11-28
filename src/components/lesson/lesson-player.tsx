@@ -7,7 +7,7 @@ import { ExerciseStep } from '@/components/lesson/exercise-step';
 import { WordCard } from '@/components/lesson/word-card';
 import { ThemedText } from '@/components/themed-text';
 import { Radius, Space } from '@/constants/theme';
-import { unitsOf, type Exercise, type Unit, type Word } from '@/content';
+import { unitsOf, type Exercise, type Unit, type UnitSummary, type Word } from '@/content';
 import { useTheme } from '@/hooks/use-theme';
 import { t } from '@/i18n';
 import { isLessonCompleted, LOCAL_PROFILE_ID, type Answer, type createProgressStore } from '@/progress';
@@ -31,7 +31,7 @@ function stepsOf(unit: Unit): Step[] {
   ];
 }
 
-function nextUnitAfter(unit: Unit): Unit | undefined {
+function nextUnitAfter(unit: Unit): UnitSummary | undefined {
   const track = unitsOf(unit.track);
   return track[track.findIndex((u) => u.id === unit.id) + 1];
 }

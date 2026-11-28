@@ -1,21 +1,14 @@
 // The content test: every unit file in content/ follows the schema and the
 // cross-unit rules, uses only sources listed in SOURCES.md, and is in the app's index.
-import { readdirSync, readFileSync } from 'node:fs';
+import { readFileSync } from 'node:fs';
 import { join, relative } from 'node:path';
 
 import { checkContent } from './check';
-import { getUnit, units, unitsOf } from './index';
+import { unitFiles } from './files';
+import { bundledUnits, getUnit, unitsOf } from './index';
 import { parseUnit, type Unit } from './schema';
 
 const contentDir = join(__dirname, '..', '..', 'content');
-
-function unitFiles(dir: string): string[] {
-  return readdirSync(dir, { withFileTypes: true }).flatMap((entry) => {
-    const path = join(dir, entry.name);
-    if (entry.isDirectory()) return unitFiles(path);
-    return entry.name.endsWith('.json') ? [path] : [];
-  });
-}
 
 /** Source ids are the first column of the table in SOURCES.md, written as `id`. */
 function listedSources(): string[] {
@@ -49,9 +42,19 @@ describe('content files', () => {
     expect(checkContent(valid, listedSources())).toEqual([]);
   });
 
-  it('lists every unit file in the app index, in teaching order per track', () => {
-    expect(units.map((u) => u.id).sort()).toEqual(valid.map((u) => u.id).sort());
-    expect(getUnit('everyday-a0-u1')?.title).toBe('Chào hỏi');
-    expect(unitsOf('everyday')[0].id).toBe('everyday-a0-u1');
+  it('lists every unit file in the app index by title, in teaching order per track', () => {
+    const listed = (['everyday', 'work', 'kids'] as const).flatMap(unitsOf);
+    expect(listed.map((u) => u.id).sort()).toEqual(valid.map((u) => u.id).sort());
+    expect(unitsOf('everyday')[0]).toMatchObject({ id: 'everyday-a0-u1', title: 'Chào hỏi', access: 'free' });
+    expect(unitsOf('everyday')[3]).toMatchObject({ id: 'everyday-a0-u4', access: 'premium' });
+  });
+
+  it('bundles the bodies of free units only', () => {
+    expect(getUnit('everyday-a0-u1')?.words.length).toBeGreaterThan(0);
+    expect(getUnit('everyday-a0-u4')).toBeUndefined();
+    expect(bundledUnits.map((u) => u.id)).toEqual(
+      expect.arrayContaining(['everyday-a0-u3', 'work-a0-u3', 'kids-a0-u3'])
+    );
+    expect(bundledUnits.map((u) => u.id)).not.toContain('kids-a0-u4');
   });
 });

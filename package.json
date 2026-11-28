@@ -61,7 +61,8 @@
     "typecheck:server": "tsc -p server",
     "drive": "node scripts/drive.mjs",
     "e2e": "playwright test",
-    "test:drive": "node --test \"scripts/**/*.test.mjs\""
+    "test:drive": "node --test \"scripts/**/*.test.mjs\"",
+    "content:manifest": "node --disable-warning=MODULE_TYPELESS_PACKAGE_JSON scripts/content-manifest.ts"
   },
   "private": true,
   "jest": {
