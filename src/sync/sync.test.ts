@@ -43,7 +43,7 @@ const completion = (at: string) => ({
  * A stand-in for the API server (server/accounts.ts, server/profiles.ts, server/progress.ts): the
  * demo account owns profile p1, whose progress PUT merges like the real server, and the child c1,
  * whose progress the child's token child-tok and the parent's tok-1 reach; `online` switches the network
- * and `childFails` makes the child's progress answer 500.
+ * and `childFails` makes the child's progress answer 500; GET /api/me lists `profiles`.
  */
 function fakeServer(stored: Progress = { schemaVersion: 1, profileId: 'p1', lessons: {}, answers: {} }) {
   const server = {
@@ -53,12 +53,14 @@ function fakeServer(stored: Progress = { schemaVersion: 1, profileId: 'p1', less
     childFails: false,
     puts: [] as unknown[],
     signedOut: [] as string[],
+    profiles: signedInBody.profiles,
   };
   jest.spyOn(global, 'fetch').mockImplementation(async (input, init) => {
     if (!server.online) throw new TypeError('Failed to fetch');
     const path = String(input);
     const json = (status: number, value: unknown) => new Response(JSON.stringify(value), { status });
     if (path === '/api/auth/signin') return json(200, signedInBody);
+    if (path === '/api/me') return json(200, { user: signedInBody.user, profiles: server.profiles });
     if (path === '/api/auth/signout') {
       server.signedOut.push(new Headers(init?.headers).get('authorization') ?? '');
       return new Response(null, { status: 204 });
@@ -350,6 +352,22 @@ describe('signing out of a family device', () => {
 
     expect(Object.keys((await store.load('c1')).lessons)).toEqual(['kids-a0-u1']);
     expect(await syncSession()).toEqual({ token: 'tok-1', profileId: 'p1', deviceProfileId: LOCAL_PROFILE_ID, ownerProfileId: 'p1' });
+  });
+
+  it('leaves no copy of a child deleted on another device, nor any unreadable copy set aside', async () => {
+    const server = fakeServer();
+    await signIn(demo.email, demo.password);
+    await startChildSession('c1');
+    await store.completeLesson('c1', { unitId: 'kids-a0-u1', correct: 8, total: 10 });
+    await leaveChildProfile();
+    await AsyncStorage.setItem('hocenglish.progress.local.unreadable.2026-11-27T08:00:00.000Z', '{"lessons":');
+    server.profiles = signedInBody.profiles.filter((profile) => profile.id !== 'c1');
+    await loadAccount();
+
+    expect(await signOutOfDevice()).toBe('signedOut');
+
+    expect(await AsyncStorage.getItem('hocenglish.progress.c1')).not.toContain('kids-a0-u1');
+    expect((await AsyncStorage.getAllKeys()).filter((key) => key.includes('.unreadable.'))).toEqual([]);
   });
 
   it("clears the children's copies too when the parent chooses to discard what could not be sent", async () => {

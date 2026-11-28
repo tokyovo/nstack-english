@@ -6,7 +6,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 
 import { endChildSession, familySyncSessions, onSessionChange, signOut, syncSession, type SyncSession } from '@/account';
 import { callApi } from '@/api/client';
-import { createProgressStore, LOCAL_PROFILE_ID, onProgressChange } from '@/progress';
+import { createProgressStore, onProgressChange } from '@/progress';
 import { parseProgress } from '@/progress/schema';
 
 /** `idle` until the first sync has run; `failed` is any answer other than offline or the merged copy. */
@@ -125,8 +125,8 @@ export type SignOutResult = 'signedOut' | 'offline' | 'failed';
 
 /**
  * Signs out so the next person on this device finds none of the family's progress: every learner's
- * device copy (the parent's and each child's) is sent to the account first, then all are cleared and
- * an active child's session ends with the parent's. When a copy cannot be sent the parent stays
+ * device copy (the parent's and each child's) is sent to the account first, then every copy on the
+ * device is cleared and an active child's session ends with the parent's. When a copy cannot be sent the parent stays
  * signed in with nothing lost, unless they chose `discardUnsynced`.
  */
 export async function signOutOfDevice({ discardUnsynced = false } = {}): Promise<SignOutResult> {
@@ -136,8 +136,8 @@ export async function signOutOfDevice({ discardUnsynced = false } = {}): Promise
   // The session goes first, and any sync still running is waited for, so none refills the device.
   await signOut();
   await syncProgress();
-  const copies = family?.map((session) => session.deviceProfileId) ?? [LOCAL_PROFILE_ID];
-  await Promise.all(copies.map((copy) => store.clear(copy)));
+  // Every copy, not only the profiles listed now: a child deleted on another device left one too.
+  await store.clearAll();
   await AsyncStorage.removeItem(DEVICE_ACCOUNT_KEY);
   return 'signedOut';
 }

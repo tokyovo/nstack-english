@@ -3,7 +3,7 @@
 import { accountToken } from '@/account';
 import { callApi, type ApiReply } from '@/api/client';
 import { units } from '@/content';
-import { isLessonCompleted } from '@/progress';
+import { createProgressStore, isLessonCompleted } from '@/progress';
 import { parseProgress } from '@/progress/schema';
 import type { ProfilePicture } from '@/profiles/child-profile';
 import { dueWords } from '@/review/schedule';
@@ -44,9 +44,11 @@ export function updateChild(profileId: string, input: ChildInput): Promise<Profi
   return change(profilePath(profileId), 'PATCH', input);
 }
 
-/** Deletes the child's profile and, on the server, all of its progress. */
-export function deleteChild(profileId: string): Promise<ProfileResult> {
-  return change(profilePath(profileId), 'DELETE');
+/** Deletes the child's profile and all of its progress, on the server and then on this device. */
+export async function deleteChild(profileId: string): Promise<ProfileResult> {
+  const result = await change(profilePath(profileId), 'DELETE');
+  if (result.ok) await createProgressStore().clear(profileId);
+  return result;
 }
 
 /** Lessons finished and words due at `now`; undefined when the progress cannot be read now. */

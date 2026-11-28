@@ -1,5 +1,6 @@
 import { signIn, signOut } from '@/account';
 import { addChild, deleteChild, loadProgressSummary, updateChild } from '@/account/profiles';
+import { createProgressStore } from '@/progress';
 
 jest.mock('@react-native-async-storage/async-storage', () =>
   jest.requireActual('@react-native-async-storage/async-storage/jest/async-storage-mock')
@@ -129,6 +130,24 @@ describe('changing and deleting a child profile', () => {
       body: undefined,
       authorization: 'Bearer tok-1',
     });
+  });
+
+  it("leaves none of the deleted child's progress on this device", async () => {
+    const store = createProgressStore();
+    await store.completeLesson('c1', { unitId: 'kids-a0-u1', correct: 8, total: 10 });
+    await signedInThen({ status: 204 });
+
+    expect(await deleteChild('c1')).toEqual({ ok: true });
+    expect((await store.load('c1')).lessons).toEqual({});
+  });
+
+  it("keeps the child's device progress when the server does not delete the profile", async () => {
+    const store = createProgressStore();
+    await store.completeLesson('c1', { unitId: 'kids-a0-u1', correct: 8, total: 10 });
+    await signedInThen('offline');
+
+    expect(await deleteChild('c1')).toEqual({ ok: false, error: { code: 'offline' } });
+    expect(Object.keys((await store.load('c1')).lessons)).toEqual(['kids-a0-u1']);
   });
 
   it('reports a profile the server does not know', async () => {

@@ -129,12 +129,15 @@ export function createProgressStore({ now = () => new Date() }: StoreOptions = {
     clear(profileId: string): Promise<Progress> {
       return update(profileId, 'account', () => emptyProgress(profileId));
     },
-    /** Deletes every learner's saved progress on this device, including copies of profiles no session names. */
+    /**
+     * Deletes every learner's saved progress on this device, including copies of profiles no session
+     * names and the unreadable copies set aside.
+     */
     async clearAll(): Promise<void> {
-      const keys = await AsyncStorage.getAllKeys();
-      const profileIds = keys
-        .filter((key) => key.startsWith(KEY_PREFIX) && !key.includes('.unreadable.'))
-        .map((key) => key.slice(KEY_PREFIX.length));
+      const keys = (await AsyncStorage.getAllKeys()).filter((key) => key.startsWith(KEY_PREFIX));
+      const unreadable = keys.filter((key) => key.includes('.unreadable.'));
+      const profileIds = keys.filter((key) => !unreadable.includes(key)).map((key) => key.slice(KEY_PREFIX.length));
+      await AsyncStorage.multiRemove(unreadable);
       await Promise.all(profileIds.map((profileId) => update(profileId, 'account', () => emptyProgress(profileId))));
     },
   };
