@@ -1,0 +1,196 @@
+{
+  "id": "work-a2-u8",
+  "track": "work",
+  "level": "a2",
+  "number": 8,
+  "title": "Phỏng vấn xin việc",
+  "goals": [
+    "Có thể kể công việc mình đã làm và làm trong bao lâu",
+    "Có thể nói mình biết làm gì và muốn làm gì",
+    "Có thể hiểu các câu hỏi thường gặp khi phỏng vấn xin việc"
+  ],
+  "note_vi": "Khi phỏng vấn, người ta hay kể việc đã làm. Tiếng Việt giữ nguyên động từ và thêm “đã” hoặc từ chỉ thời gian: “Tôi đã làm y tá 3 năm.” Tiếng Anh đổi chính động từ: thêm -ed cho việc đã xong: “work” thành “worked”: “I worked as a nurse for 3 years.” (Trước đây tôi làm y tá 3 năm.) “worked” nghĩa là việc đó đã kết thúc, bây giờ không còn làm nữa. “am” thành “was”: “I was a cook.” (Tôi từng là đầu bếp.) “for” + thời gian cho biết việc kéo dài bao lâu: “for 3 years” (trong 3 năm). “can” còn dùng để nói mình biết làm gì: “I can use a computer.” (Tôi biết dùng máy tính.) Sau “want” dùng “to” + động từ: “I want to work here.” (Tôi muốn làm việc ở đây.)",
+  "source": "original",
+  "words": [
+    {
+      "id": "work-a2-u8-job-interview",
+      "en": "job interview",
+      "vi": "buổi phỏng vấn xin việc",
+      "example": { "en": "I have a job interview on Monday.", "vi": "Tôi có buổi phỏng vấn xin việc vào thứ Hai." }
+    },
+    {
+      "id": "work-a2-u8-tell-me-about-yourself",
+      "en": "Tell me about yourself",
+      "vi": "Hãy giới thiệu về bản thân anh/chị",
+      "example": { "en": "Good morning, Lan. Tell me about yourself.", "vi": "Chào buổi sáng, Lan. Chị hãy giới thiệu về bản thân." }
+    },
+    {
+      "id": "work-a2-u8-i-worked-as",
+      "en": "I worked as a ...",
+      "vi": "Tôi đã làm ...",
+      "example": { "en": "I worked as a driver.", "vi": "Tôi đã làm tài xế." }
+    },
+    {
+      "id": "work-a2-u8-i-was",
+      "en": "I was a ...",
+      "vi": "Tôi từng là ...",
+      "example": { "en": "I was a cook.", "vi": "Tôi từng là đầu bếp." }
+    },
+    {
+      "id": "work-a2-u8-for-3-years",
+      "en": "for 3 years",
+      "vi": "trong 3 năm",
+      "audio": "for three years",
+      "example": { "en": "I worked as a nurse for 3 years.", "vi": "Trước đây tôi làm y tá 3 năm." }
+    },
+    {
+      "id": "work-a2-u8-experience",
+      "en": "experience",
+      "vi": "kinh nghiệm",
+      "example": { "en": "I have 5 years of experience.", "vi": "Tôi có 5 năm kinh nghiệm." }
+    },
+    {
+      "id": "work-a2-u8-i-can-use",
+      "en": "I can use ...",
+      "vi": "Tôi biết dùng ...",
+      "example": { "en": "I can use a computer.", "vi": "Tôi biết dùng máy tính." }
+    },
+    {
+      "id": "work-a2-u8-i-want-to",
+      "en": "I want to ...",
+      "vi": "Tôi muốn ...",
+      "example": { "en": "I want to work here.", "vi": "Tôi muốn làm việc ở đây." }
+    },
+    {
+      "id": "work-a2-u8-why-do-you-want-this-job",
+      "en": "Why do you want this job?",
+      "vi": "Vì sao anh/chị muốn làm công việc này?",
+      "example": { "en": "Thank you, Tom. Why do you want this job?", "vi": "Cảm ơn anh Tom. Vì sao anh muốn làm công việc này?" }
+    },
+    {
+      "id": "work-a2-u8-when-can-you-start",
+      "en": "When can you start?",
+      "vi": "Khi nào anh/chị có thể bắt đầu đi làm?",
+      "example": { "en": "When can you start? On Monday?", "vi": "Khi nào anh/chị có thể bắt đầu đi làm? Thứ Hai được không?" }
+    }
+  ],
+  "exercises": [
+    {
+      "id": "work-a2-u8-e01",
+      "type": "choose_meaning",
+      "prompt": "work-a2-u8-experience",
+      "options": ["buổi phỏng vấn xin việc", "kinh nghiệm", "vấn đề"],
+      "answer": "kinh nghiệm"
+    },
+    {
+      "id": "work-a2-u8-e02",
+      "type": "choose_english",
+      "prompt": "Tôi đã làm tài xế.",
+      "options": ["I work as a driver.", "I want to work as a driver.", "I worked as a driver."],
+      "answer": "I worked as a driver.",
+      "hint_vi": "Việc đã làm xong: động từ thêm -ed, “work” thành “worked”."
+    },
+    {
+      "id": "work-a2-u8-e03",
+      "type": "listen_choose",
+      "audio": "I was a cook for 2 years.",
+      "options": ["I was a cook for 2 years.", "I'm a cook.", "I was a cook for 5 years."],
+      "answer": "I was a cook for 2 years."
+    },
+    {
+      "id": "work-a2-u8-e04",
+      "type": "build_sentence",
+      "prompt": "Trước đây tôi làm y tá 3 năm.",
+      "tiles": ["nurse", "worked", "for", "I", "3", "as", "years", "a", "work"],
+      "answer": ["I", "worked", "as", "a", "nurse", "for", "3", "years"],
+      "accepted": [["for", "3", "years", "I", "worked", "as", "a", "nurse"]],
+      "hint_vi": "“for” + thời gian: “for 3 years”."
+    },
+    {
+      "id": "work-a2-u8-e05",
+      "type": "type_answer",
+      "prompt": "Tôi đã làm giáo viên.",
+      "answer": "I worked as a teacher.",
+      "accepted": [
+        "I was a teacher",
+        "I used to be a teacher",
+        "I used to work as a teacher",
+        "I used to teach",
+        "I have worked as a teacher",
+        "I've worked as a teacher",
+        "I have been a teacher",
+        "I've been a teacher"
+      ]
+    },
+    {
+      "id": "work-a2-u8-e06",
+      "type": "choose_meaning",
+      "prompt": "work-a2-u8-tell-me-about-yourself",
+      "options": ["Vì sao anh/chị muốn làm công việc này?", "Hãy giới thiệu về bản thân anh/chị", "Khi nào anh/chị có thể bắt đầu đi làm?"],
+      "answer": "Hãy giới thiệu về bản thân anh/chị"
+    },
+    {
+      "id": "work-a2-u8-e07",
+      "type": "listen_choose",
+      "audio": "Why do you want this job?",
+      "options": ["When can you start?", "Why do you want this job?", "What do you do?"],
+      "answer": "Why do you want this job?"
+    },
+    {
+      "id": "work-a2-u8-e08",
+      "type": "build_sentence",
+      "prompt": "Tôi biết dùng máy tính.",
+      "tiles": ["use", "a", "I", "computer", "can", "to"],
+      "answer": ["I", "can", "use", "a", "computer"],
+      "hint_vi": "Sau “can” động từ giữ nguyên, không có “to”."
+    },
+    {
+      "id": "work-a2-u8-e09",
+      "type": "choose_english",
+      "prompt": "Tôi có 5 năm kinh nghiệm.",
+      "options": ["I have a job interview.", "I have 5 years of experience.", "I worked here for 5 years."],
+      "answer": "I have 5 years of experience."
+    },
+    {
+      "id": "work-a2-u8-e10",
+      "type": "type_answer",
+      "prompt": "kinh nghiệm",
+      "answer": "experience",
+      "accepted": ["work experience"]
+    },
+    {
+      "id": "work-a2-u8-e11",
+      "type": "build_sentence",
+      "prompt": "Khi nào anh/chị có thể bắt đầu đi làm?",
+      "tiles": ["start", "When", "you", "can", "is", "are"],
+      "answer": ["When", "can", "you", "start"]
+    },
+    {
+      "id": "work-a2-u8-e12",
+      "type": "choose_meaning",
+      "prompt": "work-a2-u8-i-want-to",
+      "options": ["Tôi nghĩ ...", "Tôi muốn ...", "Tôi đã làm ..."],
+      "answer": "Tôi muốn ..."
+    },
+    {
+      "id": "work-a2-u8-e13",
+      "type": "listen_choose",
+      "audio": "I worked as an accountant.",
+      "options": ["I work as an accountant.", "I worked as an accountant.", "I want to work as an accountant."],
+      "answer": "I worked as an accountant.",
+      "hint_vi": "Nghe kỹ đuôi -ed ở cuối “worked”."
+    },
+    {
+      "id": "work-a2-u8-e14",
+      "type": "speak",
+      "text": "I want to work here.",
+      "vi": "Tôi muốn làm việc ở đây."
+    },
+    {
+      "id": "work-a2-u8-e15",
+      "type": "speak",
+      "text": "I worked as a driver for 3 years.",
+      "vi": "Trước đây tôi làm tài xế 3 năm."
+    }
+  ]
+}

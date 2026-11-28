@@ -1,0 +1,184 @@
+{
+  "id": "work-a2-u7",
+  "track": "work",
+  "level": "a2",
+  "number": 7,
+  "title": "Họp và nêu ý kiến",
+  "goals": [
+    "Có thể nêu ý kiến của mình trong cuộc họp bằng “I think ...”",
+    "Có thể nói mình đồng ý hay không đồng ý và hỏi ý kiến người khác",
+    "Có thể đề xuất việc nên làm bằng “We should ...” và “Let's ...”"
+  ],
+  "note_vi": "Để nêu ý kiến, nói “I think” rồi một câu đầy đủ: “I think it's a good idea.” (Tôi nghĩ đó là một ý hay.) Tiếng Việt chỉ cần thêm “không” trước động từ: “Tôi không đồng ý.” Tiếng Anh phải thêm “don't” (viết tắt của “do not”) trước động từ: “I don't agree.”, không nói “I not agree.” “Should” giống “nên”: đứng trước động từ, và động từ giữ nguyên, không thêm “to” hay -s: “We should start at 9 o'clock.” (Chúng ta nên bắt đầu lúc 9 giờ.) “Let's” (viết tắt của “let us”) rủ mọi người cùng làm, giống “Chúng ta ... nhé”: “Let's start.” (Chúng ta bắt đầu nhé.)",
+  "source": "original",
+  "words": [
+    {
+      "id": "work-a2-u7-i-think",
+      "en": "I think ...",
+      "vi": "Tôi nghĩ ...",
+      "example": { "en": "I think it's a good idea.", "vi": "Tôi nghĩ đó là một ý hay." }
+    },
+    {
+      "id": "work-a2-u7-a-good-idea",
+      "en": "a good idea",
+      "vi": "một ý hay",
+      "example": { "en": "It's a good idea.", "vi": "Đó là một ý hay." }
+    },
+    {
+      "id": "work-a2-u7-i-agree",
+      "en": "I agree",
+      "vi": "Tôi đồng ý",
+      "example": { "en": "Yes, I agree.", "vi": "Vâng, tôi đồng ý." }
+    },
+    {
+      "id": "work-a2-u7-i-dont-agree",
+      "en": "I don't agree",
+      "vi": "Tôi không đồng ý",
+      "example": { "en": "Sorry, I don't agree.", "vi": "Xin lỗi, tôi không đồng ý." }
+    },
+    {
+      "id": "work-a2-u7-what-do-you-think",
+      "en": "What do you think?",
+      "vi": "Anh/chị nghĩ sao?",
+      "example": { "en": "Nam, what do you think?", "vi": "Nam, anh nghĩ sao?" }
+    },
+    {
+      "id": "work-a2-u7-we-should",
+      "en": "We should ...",
+      "vi": "Chúng ta nên ...",
+      "example": { "en": "We should start at 9 o'clock.", "vi": "Chúng ta nên bắt đầu lúc 9 giờ." }
+    },
+    {
+      "id": "work-a2-u7-lets-start",
+      "en": "Let's start",
+      "vi": "Chúng ta bắt đầu nhé",
+      "example": { "en": "Good morning. Let's start the meeting.", "vi": "Chào buổi sáng. Chúng ta bắt đầu cuộc họp nhé." }
+    },
+    {
+      "id": "work-a2-u7-problem",
+      "en": "problem",
+      "vi": "vấn đề",
+      "example": { "en": "We have a problem.", "vi": "Chúng ta có một vấn đề." }
+    },
+    {
+      "id": "work-a2-u7-any-questions",
+      "en": "Any questions?",
+      "vi": "Mọi người có câu hỏi gì không?",
+      "example": { "en": "Thank you. Any questions?", "vi": "Cảm ơn. Mọi người có câu hỏi gì không?" }
+    }
+  ],
+  "exercises": [
+    {
+      "id": "work-a2-u7-e01",
+      "type": "choose_meaning",
+      "prompt": "work-a2-u7-i-agree",
+      "options": ["Tôi không đồng ý", "Tôi đồng ý", "Anh/chị nghĩ sao?"],
+      "answer": "Tôi đồng ý"
+    },
+    {
+      "id": "work-a2-u7-e02",
+      "type": "choose_english",
+      "prompt": "Tôi không đồng ý.",
+      "options": ["I agree.", "I don't agree.", "Let's start."],
+      "answer": "I don't agree.",
+      "hint_vi": "Tiếng Anh thêm “don't” trước động từ, không nói “I not agree”."
+    },
+    {
+      "id": "work-a2-u7-e03",
+      "type": "listen_choose",
+      "audio": "I think it's a good idea.",
+      "options": ["I think it's a good idea.", "I don't think it's a good idea.", "It's a good idea."],
+      "answer": "I think it's a good idea."
+    },
+    {
+      "id": "work-a2-u7-e04",
+      "type": "build_sentence",
+      "prompt": "Tôi không đồng ý.",
+      "tiles": ["agree", "not", "I", "don't"],
+      "answer": ["I", "don't", "agree"],
+      "hint_vi": "Dùng “don't”, không dùng “not” một mình trước động từ."
+    },
+    {
+      "id": "work-a2-u7-e05",
+      "type": "choose_meaning",
+      "prompt": "work-a2-u7-what-do-you-think",
+      "options": ["Anh/chị làm nghề gì?", "Anh/chị nghĩ sao?", "Tôi nghĩ ..."],
+      "answer": "Anh/chị nghĩ sao?"
+    },
+    {
+      "id": "work-a2-u7-e06",
+      "type": "build_sentence",
+      "prompt": "Chúng ta nên bắt đầu lúc 9 giờ.",
+      "tiles": ["start", "should", "o'clock", "We", "9", "at", "on"],
+      "answer": ["We", "should", "start", "at", "9", "o'clock"],
+      "accepted": [
+        ["at", "9", "o'clock", "We", "should", "start"],
+        ["We", "should", "start", "at", "9"],
+        ["at", "9", "We", "should", "start"]
+      ],
+      "hint_vi": "Sau “should” động từ giữ nguyên: “should start”."
+    },
+    {
+      "id": "work-a2-u7-e07",
+      "type": "type_answer",
+      "prompt": "Chúng ta bắt đầu nhé.",
+      "answer": "Let's start.",
+      "accepted": ["Let us start", "Let's begin", "Let us begin", "OK, let's start", "Okay, let's start", "OK, let's begin", "Let's get started", "Shall we start", "Shall we begin"]
+    },
+    {
+      "id": "work-a2-u7-e08",
+      "type": "listen_choose",
+      "audio": "We have a problem.",
+      "options": ["We have a meeting.", "We have a problem.", "I have a meeting."],
+      "answer": "We have a problem."
+    },
+    {
+      "id": "work-a2-u7-e09",
+      "type": "choose_english",
+      "prompt": "Mọi người có câu hỏi gì không?",
+      "options": ["What do you think?", "How can I help you?", "Any questions?"],
+      "answer": "Any questions?"
+    },
+    {
+      "id": "work-a2-u7-e10",
+      "type": "build_sentence",
+      "prompt": "Tôi nghĩ đó là một ý hay.",
+      "tiles": ["idea", "I", "a", "good", "think", "it's", "an"],
+      "answer": ["I", "think", "it's", "a", "good", "idea"],
+      "accepted": [["it's", "a", "good", "idea", "I", "think"]]
+    },
+    {
+      "id": "work-a2-u7-e11",
+      "type": "type_answer",
+      "prompt": "vấn đề",
+      "answer": "problem",
+      "accepted": ["a problem", "the problem", "problems", "issue", "an issue", "the issue", "issues"]
+    },
+    {
+      "id": "work-a2-u7-e12",
+      "type": "choose_meaning",
+      "prompt": "work-a2-u7-we-should",
+      "options": ["Chúng ta bắt đầu nhé", "Tôi nghĩ ...", "Chúng ta nên ..."],
+      "answer": "Chúng ta nên ..."
+    },
+    {
+      "id": "work-a2-u7-e13",
+      "type": "build_sentence",
+      "prompt": "Chúng ta có một vấn đề.",
+      "tiles": ["a", "problem", "We", "have", "are", "an"],
+      "answer": ["We", "have", "a", "problem"]
+    },
+    {
+      "id": "work-a2-u7-e14",
+      "type": "speak",
+      "text": "I agree. It's a good idea.",
+      "vi": "Tôi đồng ý. Đó là một ý hay."
+    },
+    {
+      "id": "work-a2-u7-e15",
+      "type": "speak",
+      "text": "What do you think?",
+      "vi": "Anh/chị nghĩ sao?"
+    }
+  ]
+}
