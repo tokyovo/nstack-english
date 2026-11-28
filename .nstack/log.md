@@ -170,3 +170,23 @@
 - [x] 8. No new warnings or errors. first recorded counts
 - [x] 9. Access is enforced. check-security exit 0 (no non-public features yet; headers ok, no secrets in bundle, 0 high/critical advisories)
 - [x] Done when: all ticked. Not verified: iOS build (CI macOS job, runs on the PR); Android flows (no KVM, parked).
+
+## 2026-11-28 build learn-core design fixes
+- Read: build/SKILL.md a069840
+- [x] 1. Branch. nstack/learn-core
+- [x] 2. Starting state. fast checks pass at 33e1c64
+- [x] 3. Dispatch. builder: leave-lesson link (critique: no way out of a lesson on web) and lang="en" on English content (foundation review nit)
+- [x] 4. Read the reply. done f82418e; Jest red 2 failed -> green; e2e lang red 1 failed -> green
+- [x] 5. Prove it yourself. merged: typecheck 0, lint 0, jest 130 pass
+- [x] 6. Record. this entry; backlog: lang on the type_answer input
+- [x] Done when: committed, items ticked.
+
+## 2026-11-28 build learn-core content fixes
+- Read: build/SKILL.md a069840
+- [x] 1. Branch. nstack/learn-core
+- [x] 2. Starting state. fast checks pass
+- [x] 3. Dispatch. builder with the native reader recheck findings (2 must-fix ambiguous build_sentence, 5 wording)
+- [x] 4. Read the reply. done 61bbabb; fresh reader passed every changed item
+- [x] 5. Prove it yourself. merged: jest 128 pass (content test)
+- [x] 6. Record. this entry; minors in backlog
+- [x] Done when: committed, items ticked.
