@@ -121,7 +121,7 @@ Acceptance criteria:
 5. In child mode `/premium` is behind the parent gate. needs-human.md lists the store and card steps (App Store Connect subscription product, Play Console product, a card processor account, webhooks that insert entitlement rows).
 
 - [x] T23 Entitlements table, plan in /api/me (child follows parent), grant CLI. Proof: `npm run test:server`. Access: owner, child (read plan). Migration: yes. Needs: family
-- [ ] T24 Premium unit bodies served by the server only: manifest generator and test, `GET /api/units/:id` with deny proofs, bundle test. Proof: server tests, Jest manifest test, dist grep test. Access: premium. Needs: T23
+- [x] T24 Premium unit bodies served by the server only: manifest generator and test, `GET /api/units/:id` with deny proofs, bundle test. Proof: server tests, Jest manifest test, dist grep test. Access: premium. Needs: T23
 - [ ] T25 App: locks on track screens, `/premium` screen, fetch and cache premium units, parent gate in child mode, drive seed grants the demo account. Proof: Jest, e2e `e2e/premium.spec.ts`, axe. Needs: T23, T24
 
 ## Done

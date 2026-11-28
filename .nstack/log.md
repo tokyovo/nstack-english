@@ -249,3 +249,14 @@
 - [x] 6. Record. this entry
 - [x] Done when: committed, items ticked.
 - Decision: GET /api/plan added for any session because /api/me refuses child tokens (family); a child's plan follows its parent. Grant CLI requires an explicit --db and never creates or migrates a database.
+
+## 2026-11-28 build T24
+- Read: build/SKILL.md a069840
+- [x] 1. Branch. nstack/plans
+- [x] 2. Starting state. fast checks pass at a3e9388
+- [x] 3. Dispatch. builder in worktree
+- [x] 4. Read the reply. done e1a94a9; 401/403 red with premium and plan checks removed; manifest test red on a changed title; bundle test red with a premium unit imported
+- [x] 5. Prove it yourself. merged: checks below
+- [x] 6. Record. this entry, backlog
+- [x] Done when: committed, items ticked.
+- Decision: free = first 3 units per track in teaching order (FREE_UNITS_PER_TRACK in src/content/access.ts, one rule for app, server, manifest and bundle test).
