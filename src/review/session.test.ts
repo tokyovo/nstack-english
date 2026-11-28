@@ -1,4 +1,4 @@
-import type { Unit } from '@/content';
+import { units, type Unit } from '@/content';
 import { emptyProgress, type Progress } from '@/progress/schema';
 import { reviewSession } from '@/review/session';
 
@@ -179,4 +179,66 @@ describe('review session', () => {
     expect(atStart.exercise.options[0]).toBe('Xin chào');
     expect(atEnd.exercise.options[3]).toBe('Xin chào');
   });
+
+  // A template such as "My name is ..." is not a sentence anyone can type or say as written.
+  const templates = unit('work-a0-u2', [
+    ["I'm a ... / I'm an ...", 'Tôi là (một) ...'],
+    ['My name is ...', 'Tên tôi là ...'],
+    ['Where is the ...?', '... ở đâu?'],
+    ['Nice to meet you', 'Rất vui được gặp bạn'],
+    ['Hi', 'Chào'],
+    ['Job', 'Nghề'],
+  ]);
+
+  it('never asks a template to be typed or said, only recognised by meaning or sound', () => {
+    const session = reviewSession(completed('work-a0-u2'), [templates], aDayLater, first, { speak: true });
+
+    expect(session.map((item) => [item.wordId, item.exercise.type])).toEqual([
+      ["work-a0-u2-i'm-a-...-/-i'm-an-...", 'choose_meaning'],
+      ['work-a0-u2-my-name-is-...', 'listen_choose'],
+      ['work-a0-u2-where-is-the-...?', 'choose_meaning'],
+      ['work-a0-u2-nice-to-meet-you', 'speak'],
+      ['work-a0-u2-hi', 'listen_choose'],
+      ['work-a0-u2-job', 'type_answer'],
+    ]);
+  });
+
+  it('asks nothing aloud when every due word is a template', () => {
+    const onlyTemplates = unit('work-a0-u2', [
+      ['My name is ...', 'Tên tôi là ...'],
+      ['Where is the ...?', '... ở đâu?'],
+    ]);
+
+    const session = reviewSession(completed('work-a0-u2'), [onlyTemplates], aDayLater, first, { speak: true });
+
+    expect(session.map((item) => item.exercise.type)).toEqual(['choose_meaning', 'listen_choose']);
+  });
+
+  it('asks a lone template by its meaning, even with no other word to choose from', () => {
+    const lone = unit('work-a0-u3', [['Where is the ...?', '... ở đâu?']]);
+
+    const [item] = reviewSession(completed('work-a0-u3'), [lone], aDayLater, first, { speak: true });
+
+    expect(item.exercise).toEqual({
+      id: 'work-a0-u3-where-is-the-...?',
+      type: 'choose_meaning',
+      prompt: 'work-a0-u3-where-is-the-...?',
+      options: ['... ở đâu?'],
+      answer: '... ở đâu?',
+    });
+  });
+
+  it.each(units.map((u) => [u.id, u] as const))(
+    'in %s, asks to type or say only complete English, never a template with "..."',
+    (_id, real) => {
+      const asked = [false, true].flatMap((speak) =>
+        reviewSession(completed(real.id), [real], aDayLater, Math.random, { speak }).flatMap(({ exercise }) =>
+          exercise.type === 'type_answer' ? [exercise.answer] : exercise.type === 'speak' ? [exercise.text] : []
+        )
+      );
+
+      expect(asked.length).toBeGreaterThan(0);
+      expect(asked.filter((text) => text.includes('...'))).toEqual([]);
+    }
+  );
 });

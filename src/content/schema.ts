@@ -35,6 +35,14 @@ export type Word = {
   source?: string;
 };
 
+/**
+ * A pattern to fill in, such as "My name is ..." or "Where is the ...?": taught and recognised,
+ * but not a sentence the learner can type or say as written.
+ */
+export function isTemplate(english: string): boolean {
+  return english.includes('...') || english.includes('…');
+}
+
 type ExerciseBase = { id: string; hint_vi?: string; source?: string };
 
 export type Exercise = ExerciseBase &

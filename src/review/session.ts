@@ -1,7 +1,7 @@
 // A review session: the due words, each asked once as an exercise the lesson player already knows.
 // Options are drawn only from words the learner has met in the same track. Where the device can
 // hear speech, one word per session is said aloud instead.
-import type { Exercise, Unit, Word } from '@/content';
+import { isTemplate, type Exercise, type Unit, type Word } from '@/content';
 import type { Progress } from '@/progress';
 
 import { dueWords, learnedWords, type ScheduledWord } from './schedule';
@@ -34,13 +34,15 @@ function optionsFor(answer: string, pool: readonly string[], random: () => numbe
 
 function exerciseFor(word: Word, kind: Kind, sameTrack: readonly Word[], random: () => number): Exercise {
   const audio = word.audio ?? word.en;
-  if (kind === 'choose_meaning') {
+  // A template cannot be typed as written, so it is recognised by its meaning instead.
+  const asked = kind === 'type_answer' && isTemplate(word.en) ? 'choose_meaning' : kind;
+  if (asked === 'choose_meaning') {
     const options = optionsFor(word.vi, sameTrack.map((w) => w.vi), random);
-    if (options.length > 1) return { id: word.id, type: kind, prompt: word.id, options, answer: word.vi };
+    if (options.length > 1 || isTemplate(word.en)) return { id: word.id, type: asked, prompt: word.id, options, answer: word.vi };
   }
-  if (kind === 'listen_choose') {
+  if (asked === 'listen_choose') {
     const options = optionsFor(word.en, sameTrack.map((w) => w.en), random);
-    if (options.length > 1) return { id: word.id, type: kind, audio, options, answer: word.en };
+    if (options.length > 1) return { id: word.id, type: asked, audio, options, answer: word.en };
   }
   // Too few learned words to offer a choice: the learner spells it instead.
   return { id: word.id, type: 'type_answer', prompt: word.vi, answer: word.en };
@@ -50,9 +52,16 @@ function speakExercise(word: Word): Exercise {
   return { id: word.id, type: 'speak', text: word.en, vi: word.vi };
 }
 
-/** The longest phrase, the first on a tie: recognisers hear a phrase more reliably than a short word. */
-function longestIndex(words: readonly Word[]): number {
-  return words.reduce((best, word, index) => (word.en.length > words[best].en.length ? index : best), 0);
+/**
+ * The longest complete phrase, the first on a tie: recognisers hear a phrase more reliably than a
+ * short word. -1 when every word is a template, which cannot be said as written.
+ */
+function longestPhraseIndex(words: readonly Word[]): number {
+  return words.reduce(
+    (best, word, index) =>
+      !isTemplate(word.en) && (best === -1 || word.en.length > words[best].en.length) ? index : best,
+    -1
+  );
 }
 
 type Options = {
@@ -71,7 +80,7 @@ export function reviewSession(
   const learned = learnedWords(progress, units);
   const wordsOf = (track: ScheduledWord['track']) => learned.filter((e) => e.track === track).map((e) => e.word);
   const due = dueWords(progress, units, now).slice(0, SESSION_SIZE);
-  const spoken = speak && due.length > 0 ? longestIndex(due.map((entry) => entry.word)) : -1;
+  const spoken = speak ? longestPhraseIndex(due.map((entry) => entry.word)) : -1;
   return due.map((entry, index) => ({
     wordId: entry.word.id,
     exercise:

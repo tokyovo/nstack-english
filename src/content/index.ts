@@ -18,7 +18,7 @@ import { inTeachingOrder } from './check';
 import { parseUnit, tracks, type Track, type Unit, type Word } from './schema';
 
 export type { Exercise, ExerciseType, Level, Track, Unit, Word } from './schema';
-export { levels, tracks } from './schema';
+export { isTemplate, levels, tracks } from './schema';
 
 const files: unknown[] = [
   everydayA0U1,
