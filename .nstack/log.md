@@ -391,3 +391,13 @@
 - [x] 5. Prove it yourself. merged: jest and typecheck above
 - [x] 6. Record. this entry; T32 planned for checks builders asked for
 - [x] Done when: committed, items ticked.
+
+## 2026-11-28 build T32
+- Read: build/SKILL.md a069840
+- [x] 1. Branch. nstack/content-a2
+- [x] 2. Starting state. fast checks pass at 42a6e09
+- [x] 3. Dispatch. builder in worktree
+- [x] 4. Read the reply. done bd89dd2; speak rule red 2, comma variants red 3, testTimeout 20000
+- [x] 5. Prove it yourself. merged: jest below
+- [x] 6. Record. this entry
+- [x] Done when: committed, items ticked.
