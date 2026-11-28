@@ -14,4 +14,5 @@ export const screens: Screen[] = [
   { name: 'account', path: '/account' },
   { name: 'profiles', path: '/profiles' },
   { name: 'review', path: '/review' },
+  { name: 'premium', path: '/premium' },
 ];
