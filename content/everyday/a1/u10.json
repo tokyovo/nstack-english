@@ -102,7 +102,8 @@
       "type": "build_sentence",
       "prompt": "Nhà tôi có bốn phòng.",
       "tiles": ["four", "There", "in", "rooms", "are", "my", "house", "is"],
-      "answer": ["There", "are", "four", "rooms", "in", "my", "house"]
+      "answer": ["There", "are", "four", "rooms", "in", "my", "house"],
+      "accepted": [["in", "my", "house", "There", "are", "four", "rooms"]]
     },
     {
       "id": "everyday-a1-u10-e05",
@@ -137,7 +138,8 @@
       "type": "build_sentence",
       "prompt": "Lan đang ở trong bếp.",
       "tiles": ["is", "Lan", "kitchen", "the", "in", "on"],
-      "answer": ["Lan", "is", "in", "the", "kitchen"]
+      "answer": ["Lan", "is", "in", "the", "kitchen"],
+      "fixedOrder": "\"in the kitchen\" completes \"is\" (where Lan is); \"In the kitchen Lan is\" is not English"
     },
     {
       "id": "everyday-a1-u10-e10",

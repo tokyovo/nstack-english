@@ -58,6 +58,8 @@ export type Exercise = ExerciseBase &
         answer: string[];
         /** Other correct orders of the tiles, e.g. "Lan is my name" for "My name is Lan". */
         accepted?: string[][];
+        /** Why a time or place phrase at one end cannot move to the other, e.g. "in" is part of "live in". */
+        fixedOrder?: string;
       }
     | { type: 'type_answer'; prompt: string; answer: string; accepted?: string[] }
     | { type: 'speak'; /** English the learner says */ text: string; vi: string }
@@ -89,7 +91,7 @@ const exerciseKeys: Record<ExerciseType, string[]> = {
   choose_meaning: ['prompt', 'options', 'answer'],
   choose_english: ['prompt', 'options', 'answer'],
   listen_choose: ['audio', 'options', 'answer'],
-  build_sentence: ['prompt', 'tiles', 'answer', 'accepted'],
+  build_sentence: ['prompt', 'tiles', 'answer', 'accepted', 'fixedOrder'],
   type_answer: ['prompt', 'answer', 'accepted'],
   speak: ['text', 'vi'],
 };
@@ -252,6 +254,7 @@ function parseExercise(r: Reader, value: unknown, at: string, unitId: string): E
       const accepted = r.list(fields, 'accepted', id, []).map((order, i) =>
         r.texts({ [i]: order }, String(i), `${id}.accepted`)
       );
+      const fixedOrder = r.optionalText(fields, 'fixedOrder', id);
       const exercise = {
         ...base,
         type: 'build_sentence' as const,
@@ -259,6 +262,7 @@ function parseExercise(r: Reader, value: unknown, at: string, unitId: string): E
         tiles: r.texts(fields, 'tiles', id),
         answer: r.texts(fields, 'answer', id),
         ...(accepted.length > 0 ? { accepted } : {}),
+        ...(fixedOrder ? { fixedOrder } : {}),
       };
       checkTiles(r, id, exercise.tiles, exercise.answer, accepted);
       return exercise;

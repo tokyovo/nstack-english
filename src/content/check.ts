@@ -1,5 +1,6 @@
 // Rules that span all units: unique ids, listed sources, that every English word an exercise or
-// example shows was taught in its unit or an earlier one, and that nothing asks for a template.
+// example shows was taught in its unit or an earlier one, that nothing asks for a template, and
+// that a sentence to build accepts its time or place phrase at either end.
 import { isTemplate, levels, type Exercise, type Unit, type Word } from './schema';
 
 /** Lowercased English words of a text; apostrophes kept ("i'm"), punctuation and digits dropped. */
@@ -105,7 +106,44 @@ function wordOrder(units: readonly Unit[]): string[] {
   return errors;
 }
 
+/** Words that start a time or place phrase English lets stand at either end ("at six", "every day"). */
+const phraseHeads = ['at', 'in', 'on', 'every', 'from', 'next', 'last'];
+/** Words that are such a phrase on their own. */
+const phraseWords = ['today', 'yesterday', 'tomorrow'];
+
+function isPhraseStart(tiles: readonly string[], i: number): boolean {
+  const word = tiles[i].toLowerCase();
+  return phraseWords.includes(word) || (phraseHeads.includes(word) && i < tiles.length - 1);
+}
+
+/** The same tiles with the first `k` moved to the end, as text compared like a learner's answer. */
+function rotated(tiles: readonly string[], k: number): string {
+  return [...tiles.slice(k), ...tiles.slice(0, k)].join(' ').toLowerCase();
+}
+
+/**
+ * "Turn right at the station" is also right as "At the station, turn right": a build_sentence
+ * whose answer starts or ends with a time or place phrase must accept it moved to the other end,
+ * or say in fixedOrder why it cannot move ("I live in Hanoi").
+ */
+function unmovedPhrases(units: readonly Unit[]): string[] {
+  return units.flatMap((u) =>
+    u.exercises.flatMap((exercise) => {
+      if (exercise.type !== 'build_sentence' || exercise.fixedOrder) return [];
+      const { answer } = exercise;
+      const starts = isPhraseStart(answer, 0);
+      const ends = answer.some((_, i) => i > 0 && isPhraseStart(answer, i));
+      if (!starts && !ends) return [];
+      const accepted = new Set((exercise.accepted ?? []).map((order) => order.join(' ').toLowerCase()));
+      if (answer.some((_, k) => k > 0 && accepted.has(rotated(answer, k)))) return [];
+      return [
+        `${exercise.id}: "${answer.join(' ')}" has a time or place phrase at one end; accept the order with it moved to the other end, or set fixedOrder to the reason it cannot move`,
+      ];
+    })
+  );
+}
+
 /** Every cross-unit problem in the given units, as "<id>: <what>"; empty when all is well. */
 export function checkContent(units: readonly Unit[], sourceIds: readonly string[]): string[] {
-  return [...duplicateIds(units), ...unlistedSources(units, sourceIds), ...wordOrder(units), ...templatesAsked(units)];
+  return [...duplicateIds(units), ...unlistedSources(units, sourceIds), ...wordOrder(units), ...templatesAsked(units), ...unmovedPhrases(units)];
 }
