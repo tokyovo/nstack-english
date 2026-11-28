@@ -1,17 +1,14 @@
-import { readdirSync, readFileSync } from 'node:fs';
-import { join } from 'node:path';
 import type { DatabaseSync } from 'node:sqlite';
 
 import { Hono, type Context } from 'hono';
 import { bodyLimit } from 'hono/body-limit';
 
-import { parseUnit } from '../src/content/schema.ts';
+import type { Unit } from '../src/content/schema.ts';
 import { mergeProgress } from '../src/progress/merge.ts';
 import { emptyProgress, parseProgress, type Progress } from '../src/progress/schema.ts';
 import { requireUserMiddleware, type AuthEnv, type SessionScope, type User } from './accounts.ts';
 
 const MAX_DOCUMENT = 1024 * 1024;
-const CONTENT_DIR = join(import.meta.dirname, '..', 'content');
 
 const notFound = { error: 'not_found' };
 const invalidProgress = { error: 'invalid_progress' };
@@ -23,9 +20,9 @@ const invalidProgress = { error: 'invalid_progress' };
  * and items that are not in the content are dropped, and the merge keeps a few answers per item,
  * so a stored document stays small.
  */
-export function progressRoutes(db: DatabaseSync, now: () => Date) {
+export function progressRoutes(db: DatabaseSync, now: () => Date, units: readonly Unit[]) {
   const app = new Hono<AuthEnv>();
-  const known = contentIds(CONTENT_DIR);
+  const known = contentIds(units);
   app.use('/profiles/:id/progress', requireUserMiddleware(db, now));
 
   app.get('/profiles/:id/progress', (c) => {
@@ -57,15 +54,12 @@ export function progressRoutes(db: DatabaseSync, now: () => Date) {
 
 type ContentIds = { units: Set<string>; items: Set<string> };
 
-/** Unit ids, and the word and exercise ids answers are saved under, of every unit in `dir`. */
-function contentIds(dir: string): ContentIds {
+/** Unit ids, and the word and exercise ids answers are saved under, of every unit, free and premium. */
+function contentIds(units: readonly Unit[]): ContentIds {
   const ids: ContentIds = { units: new Set(), items: new Set() };
-  for (const file of readdirSync(dir, { recursive: true, encoding: 'utf8' })) {
-    if (!file.endsWith('.json')) continue;
-    const result = parseUnit(JSON.parse(readFileSync(join(dir, file), 'utf8')));
-    if (!result.ok) throw new Error(`Invalid content unit ${file}:\n${result.errors.join('\n')}`);
-    ids.units.add(result.unit.id);
-    for (const { id } of [...result.unit.words, ...result.unit.exercises]) ids.items.add(id);
+  for (const unit of units) {
+    ids.units.add(unit.id);
+    for (const { id } of [...unit.words, ...unit.exercises]) ids.items.add(id);
   }
   return ids;
 }

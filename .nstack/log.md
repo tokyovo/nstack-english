@@ -239,6 +239,27 @@
 - [x] Done when: committed, items ticked.
 - Decision: expo-secure-store config plugin not added (it adds a Face ID usage string); Android backup rules for it go to the backlog.
 
+## 2026-11-28 build T23
+- Read: build/SKILL.md a069840
+- [x] 1. Branch. nstack/plans (from nstack/family)
+- [x] 2. Starting state. fast checks pass at 3702dcc
+- [x] 3. Dispatch. builder in worktree
+- [x] 4. Read the reply. done fdb8cce; 15 tests red before code; /api/plan red with requireUser removed; migration 0004 expand-only with data tests
+- [x] 5. Prove it yourself. merged: test:server pass (below), typecheck 0
+- [x] 6. Record. this entry
+- [x] Done when: committed, items ticked.
+- Decision: GET /api/plan added for any session because /api/me refuses child tokens (family); a child's plan follows its parent. Grant CLI requires an explicit --db and never creates or migrates a database.
+
+## 2026-11-28 build T24
+- Read: build/SKILL.md a069840
+- [x] 1. Branch. nstack/plans
+- [x] 2. Starting state. fast checks pass at a3e9388
+- [x] 3. Dispatch. builder in worktree
+- [x] 4. Read the reply. done e1a94a9; 401/403 red with premium and plan checks removed; manifest test red on a changed title; bundle test red with a premium unit imported
+- [x] 5. Prove it yourself. merged: checks below
+- [x] 6. Record. this entry, backlog
+- [x] Done when: committed, items ticked.
+- Decision: free = first 3 units per track in teaching order (FREE_UNITS_PER_TRACK in src/content/access.ts, one rule for app, server, manifest and bundle test).
 ## 2026-11-28 build T20
 - Read: build/SKILL.md a069840
 - [x] 1. Branch. nstack/family (from nstack/accounts-sync)
@@ -447,6 +468,26 @@
 - [x] 5. Prove it yourself. fast-forwarded: typecheck 0, lint 0, jest 364, test:server 85; check-features 0
 - [x] 6. Record. this entry, Features rows, backlog
 - [x] Done when: committed, items ticked.
+
+## 2026-11-28 build T25 (with sync of family into plans)
+- Read: build/SKILL.md a069840
+- [x] 1. Branch. nstack/plans
+- [x] 2. Starting state. fast checks pass at 8cb2736
+- [x] 3. Dispatch. builder: merge nstack/family, then T25
+- [x] 4. Read the reply. done 31a4569; merge moved callers of the removed `units` export to bundledUnits; T25 drive seed test red -> green, premium Jest 9 red vs stub -> green, premium e2e red without the seed grant -> green
+- [x] 5. Prove it yourself. fast-forwarded: typecheck 0, jest 379, check-features 0
+- [x] 6. Record. this entry, Features rows, needs-human payments item, T25b planned
+- [x] Done when: committed, items ticked.
+
+## 2026-11-28 build T25b
+- Read: build/SKILL.md a069840
+- [x] 1. Branch. nstack/plans
+- [x] 2. Starting state. fast checks pass at c4350f8
+- [x] 3. Dispatch. builder in worktree
+- [x] 4. Read the reply. done c414549; fetch/copy review tests red -> green; sign-out premium copies test red -> green; also fixed premium lessons showing raw word ids (getWord searched bundled units only; ExerciseStep now takes the unit's words)
+- [x] 5. Prove it yourself. fast-forwarded: jest below
+- [x] 6. Record. this entry, backlog
+- [x] Done when: committed, items ticked.
 ## 2026-11-28 review accounts-sync
 - Read: review/SKILL.md c151f88
 - [x] 1. Dispatch. reviewer at 2ae1aff: fix-needed. Important: parallel sign-ins bypass the rate limit (60 at once -> 59-60 x 401, 0-1 x 429); progress documents grow without limit (event loop blocked by a 17 MB merge; a real learner passes the 1 MB body cap after ~21,000 answers and sync fails silently for good)
@@ -581,3 +622,25 @@
 - [x] 3. Act on every finding. builder fixed all (da25f8e): sign-out clearAll red -> green; delete clears the child's copy red -> green; owner PATCH 400 red -> green; nickname control/bidi rule red -> green (shared readNickname). Synced with main (PR #5 head; -s ours main; check-sync ok after counting work-branch merges). jest 451, test:server 92, drive check passed, e2e 44, check-features 0
 - [x] 4. Review the fixes. round 2 at 26ded27: both reviewers pass (general: no findings; security: 1 nit to backlog)
 - [x] Done when: round 2 clean, verify passed after the fixes (jest 451, server 92, e2e 44), nit in backlog.
+
+## 2026-11-28 verify plans
+- Read: verify/SKILL.md adc6a8a
+- [x] 1. Clean tree. head after check-sync commit
+- [x] 2. Project checks. typecheck 0, lint 0, jest 471, test:server 116, test:drive 6, drive check passed (40 screenshots), e2e 51 passed
+- [x] 3. Every acceptance criterion in scope has a passing check. 1 entitlements.test (free -> premium -> free by clock; child follows parent; grant idempotent); 2 units.test (401, 403 free, 403 free child, 200 premium and child, free units public); 3 bundle.spec (no premium exercise id in dist) + manifest.test; 4 premium.spec + premium Jest (locks, /premium, premium lesson offline after first open, premium words in review); 5 /premium behind the parent gate (premium.spec) and the payments item in needs-human.md. check-features 0
+- [x] 4. Every new check bites. T23 15 red before code, /api/plan red without requireUser; T24 401/403 red with checks removed, manifest red on a changed title, bundle red with a premium unit imported; T25 seed/premium tests red; T25b review and sign-out tests red
+- [x] 5. The real thing runs. e2e with the seeded Premium demo account against the drive server
+- [x] 6. Every changed screen looks right. /track with locks and /premium at 390 light and 1280 dark (T25 builder); premium tag drawn with Views, not emoji
+- [x] 7. Nothing got weaker. getWord removed (callers pass the unit's words); no tests removed
+- [x] 8. No new warnings or errors. lint 0
+- [x] 9. Access is enforced. check-security exit 0, 12 deny proofs (after correcting three proof names in verify.md)
+- [x] Done when: all ticked. Not verified: Android (no KVM); real store and card payments (parked).
+- Lesson: check-sync missed intentional conflict resolutions made while merging a shipped PR head; it now counts files a sync merge changed against both parents, and still reports the original -X ours revert (checked at 1fa46b3).
+
+## 2026-11-28 review plans
+- Read: review/SKILL.md c151f88
+- [x] 1. Dispatch. reviewer at 31f4680: fix-needed. Important: /profiles words due counts bundled units only (regression: parent sees 0 while the child's home shows 10). Nit: "next lesson" button leads to the paywall without saying Premium.
+- [x] 2. Second reviewer. focus security and failure modes, at 31f4680: fix-needed. Important: review uses a kept premium copy without asking the server, so words keep coming after Premium ends. Nits: choose_meaning prompt only searched in the unit's words (latent); grant --ref "" and unmigrated db crash; callApi has no timeout (review waits on a stalled fetch).
+- [x] 3. Act on every finding. builder fixed all six (2c7d6f5), each red then green (review drops an ended Premium's copy online; /profiles due count matches home; next-unit Premium wording; choose_meaning check narrowed; grant refuses empty ref and unmigrated db; 10 s callApi timeout). After merge: jest 475, test:server 117, drive check passed, e2e 52, check-sync ok
+- [x] 4. Review the fixes. round 2 at 1b59129: both pass (general: 1 nit; security: 2 nits), all to backlog
+- [x] Done when: round 2 clean; verify after the fixes (jest 475, server 117, e2e 52, drive check); nits in backlog.

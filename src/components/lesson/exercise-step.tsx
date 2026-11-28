@@ -10,7 +10,7 @@ import { SpeakAnswer } from '@/components/lesson/speak-answer';
 import { TypeAnswer } from '@/components/lesson/type-answer';
 import { EnglishText, ThemedText } from '@/components/themed-text';
 import { Radius, Space } from '@/constants/theme';
-import { getWord, type Exercise } from '@/content';
+import type { Exercise, Word } from '@/content';
 import { useTheme } from '@/hooks/use-theme';
 import { t } from '@/i18n';
 import { rightAnswer } from '@/lesson/answers';
@@ -18,6 +18,8 @@ import { useCanSpeak } from '@/lesson/speech';
 
 type Props = {
   exercise: Exercise;
+  /** The words a choose_meaning prompt names by id: the unit's, or the review's. */
+  words: readonly Word[];
   /** Called once, when the learner commits an answer. */
   onAnswer: (correct: boolean) => void;
   onContinue: () => void;
@@ -59,7 +61,7 @@ function Feedback({ exercise, correct }: { exercise: Exercise; correct: boolean 
 }
 
 /** One exercise: instruction, prompt, the answer control, then feedback and "Tiếp tục". */
-export function ExerciseStep({ exercise, onAnswer, onContinue, random }: Props) {
+export function ExerciseStep({ exercise, words, onAnswer, onContinue, random }: Props) {
   const canSpeak = useCanSpeak();
   const [correct, setCorrect] = useState<boolean | null>(null);
   const answered = correct !== null;
@@ -76,7 +78,7 @@ export function ExerciseStep({ exercise, onAnswer, onContinue, random }: Props) 
   switch (exercise.type) {
     case 'choose_meaning':
       instruction = t('lesson.chooseMeaning');
-      prompt = <EnglishPrompt text={getWord(exercise.prompt)?.en ?? exercise.prompt} />;
+      prompt = <EnglishPrompt text={words.find((word) => word.id === exercise.prompt)?.en ?? exercise.prompt} />;
       control = <ChoiceList options={exercise.options} answer={exercise.answer} english={false} onCheck={check} random={random} />;
       break;
     case 'choose_english':

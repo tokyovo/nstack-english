@@ -1,4 +1,7 @@
-import { units, type Unit } from '@/content';
+import { join } from 'node:path';
+
+import type { Unit } from '@/content';
+import { readUnits } from '@/content/files';
 import { emptyProgress, type Progress } from '@/progress/schema';
 import { reviewSession } from '@/review/session';
 
@@ -228,7 +231,7 @@ describe('review session', () => {
     });
   });
 
-  it.each(units.map((u) => [u.id, u] as const))(
+  it.each(readUnits(join(__dirname, '../../content')).map((u) => [u.id, u] as const))(
     'in %s, asks to type or say only complete English, never a template with "..."',
     (_id, real) => {
       const asked = [false, true].flatMap((speak) =>

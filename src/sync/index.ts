@@ -6,6 +6,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 
 import { endChildSession, familySyncSessions, onSessionChange, signOut, syncSession, type SyncSession } from '@/account';
 import { callApi } from '@/api/client';
+import { clearPremiumUnits } from '@/premium';
 import { createProgressStore, onProgressChange } from '@/progress';
 import { parseProgress } from '@/progress/schema';
 
@@ -116,8 +117,13 @@ export async function leaveChildProfile(): Promise<void> {
 async function claimDeviceCopies(ownerProfileId: string) {
   const owner = await AsyncStorage.getItem(DEVICE_ACCOUNT_KEY);
   if (owner === ownerProfileId) return;
-  if (owner !== null) await store.clearAll();
+  if (owner !== null) await clearDeviceCopies();
   await AsyncStorage.setItem(DEVICE_ACCOUNT_KEY, ownerProfileId);
+}
+
+/** Every learner's progress copy on the device, and the premium unit bodies kept for them. */
+async function clearDeviceCopies(): Promise<void> {
+  await Promise.all([store.clearAll(), clearPremiumUnits()]);
 }
 
 /** `signedOut` when the device's progress is gone with the session; otherwise why it could not be sent. */
@@ -126,7 +132,7 @@ export type SignOutResult = 'signedOut' | 'offline' | 'failed';
 /**
  * Signs out so the next person on this device finds none of the family's progress: every learner's
  * device copy (the parent's and each child's) is sent to the account first, then every copy on the
- * device is cleared and an active child's session ends with the parent's. When a copy cannot be sent the parent stays
+ * device is cleared, with the premium units kept there, and an active child's session ends with the parent's. When a copy cannot be sent the parent stays
  * signed in with nothing lost, unless they chose `discardUnsynced`.
  */
 export async function signOutOfDevice({ discardUnsynced = false } = {}): Promise<SignOutResult> {
@@ -137,7 +143,7 @@ export async function signOutOfDevice({ discardUnsynced = false } = {}): Promise
   await signOut();
   await syncProgress();
   // Every copy, not only the profiles listed now: a child deleted on another device left one too.
-  await store.clearAll();
+  await clearDeviceCopies();
   await AsyncStorage.removeItem(DEVICE_ACCOUNT_KEY);
   return 'signedOut';
 }

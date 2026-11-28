@@ -34,7 +34,7 @@ describe('checkContent', () => {
     ], { names: ['Lan'] });
     const u2 = unit('everyday-a0-u2', [thanks], [
       { id: 'everyday-a0-u2-e1', type: 'build_sentence', prompt: 'Cảm ơn, tạm biệt.', tiles: ['Thank', 'you', 'goodbye'], answer: ['Thank', 'you', 'goodbye'] },
-      { id: 'everyday-a0-u2-e2', type: 'choose_meaning', prompt: 'everyday-a0-u1-hello', options: ['Xin chào', 'Cảm ơn', 'Tạm biệt'], answer: 'Xin chào' },
+      { id: 'everyday-a0-u2-e2', type: 'choose_meaning', prompt: 'everyday-a0-u2-thanks', options: ['Xin chào', 'Cảm ơn', 'Tạm biệt'], answer: 'Cảm ơn' },
       { id: 'everyday-a0-u2-e3', type: 'type_answer', prompt: 'Cảm ơn', answer: 'Thank you', accepted: ['Thanks'] },
     ]);
     expect(checkContent([u2, u1], ['original'])).toEqual([]);
@@ -88,14 +88,19 @@ describe('checkContent', () => {
     ]);
   });
 
-  it('reports a choose_meaning prompt that is not a word taught so far, or whose answer is not its meaning', () => {
+  it('reports a choose_meaning prompt that is not a word of its unit, or whose answer is not its meaning', () => {
     const u1 = unit('everyday-a0-u1', [hello, bye], [
       { id: 'everyday-a0-u1-e1', type: 'choose_meaning', prompt: 'everyday-a0-u2-thanks', options: ['Cảm ơn', 'Xin chào', 'Tạm biệt'], answer: 'Cảm ơn' },
       { id: 'everyday-a0-u1-e2', type: 'choose_meaning', prompt: 'everyday-a0-u1-bye', options: ['Cảm ơn', 'Xin chào', 'Tạm biệt'], answer: 'Xin chào' },
     ]);
-    expect(checkContent([u1, unit('everyday-a0-u2', [thanks], [])], ['original'])).toEqual([
-      'everyday-a0-u1-e1: prompt "everyday-a0-u2-thanks" is not a word taught in this unit or earlier',
+    // The lesson shows the prompt's English from the unit's own words, so an earlier unit's word is refused too.
+    const u2 = unit('everyday-a0-u2', [thanks], [
+      { id: 'everyday-a0-u2-e1', type: 'choose_meaning', prompt: 'everyday-a0-u1-hello', options: ['Cảm ơn', 'Xin chào', 'Tạm biệt'], answer: 'Xin chào' },
+    ]);
+    expect(checkContent([u1, u2], ['original'])).toEqual([
+      'everyday-a0-u1-e1: prompt "everyday-a0-u2-thanks" is not a word of this unit',
       'everyday-a0-u1-e2: answer must be the meaning of "Goodbye" ("Tạm biệt")',
+      'everyday-a0-u2-e1: prompt "everyday-a0-u1-hello" is not a word of this unit',
     ]);
   });
 

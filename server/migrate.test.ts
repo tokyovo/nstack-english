@@ -227,4 +227,54 @@ describe('migrate', () => {
     db.prepare("DELETE FROM profiles WHERE id = 'child'").run();
     assert.deepEqual(db.prepare('SELECT token_hash FROM sessions').all().map((row) => row.token_hash), ['account']);
   });
+
+  test('0004_entitlements keeps every existing row and reruns cleanly', () => {
+    const repoMigrations = join(import.meta.dirname, 'migrations');
+    for (const name of ['0001_accounts.sql', '0002_progress.sql', '0003_family.sql']) {
+      copyFileSync(join(repoMigrations, name), join(migrationsDir, name));
+    }
+    migrate(db, migrationsDir);
+    const addUser = db.prepare('INSERT INTO users (id, email, password_hash, created_at) VALUES (?, ?, ?, ?)');
+    const addProfile = db.prepare('INSERT INTO profiles (id, user_id, kind, name, picture, created_at) VALUES (?, ?, ?, ?, ?, ?)');
+    const addSession = db.prepare('INSERT INTO sessions (token_hash, user_id, profile_id, created_at, expires_at) VALUES (?, ?, ?, ?, ?)');
+    const addProgress = db.prepare('INSERT INTO progress (profile_id, document, updated_at) VALUES (?, ?, ?)');
+    for (let i = 0; i < 300; i += 1) {
+      addUser.run(`u${i}`, `user${i}@example.com`, 'scrypt$16384$8$1$salt$key', i);
+      addProfile.run(`p${i}`, `u${i}`, 'owner', i % 3 ? '' : 'Tên rất dài '.repeat(100), null, i);
+      addProfile.run(`c${i}`, `u${i}`, 'child', 'Bé Na', '🐱', i);
+      addSession.run(`h${i}`, `u${i}`, null, i, i + 1);
+      addSession.run(`k${i}`, `u${i}`, `c${i}`, i, i + 1);
+      if (i % 2) addProgress.run(`c${i}`, JSON.stringify({ schemaVersion: 1, profileId: `c${i}`, lessons: {}, answers: {} }), i);
+    }
+    const tables = ['users', 'profiles', 'sessions', 'progress'];
+    const rows = () => tables.map((table) => db.prepare(`SELECT * FROM ${table} ORDER BY rowid`).all());
+    const before = rows();
+
+    copyFileSync(join(repoMigrations, '0004_entitlements.sql'), join(migrationsDir, '0004_entitlements.sql'));
+    assert.deepEqual(migrate(db, migrationsDir), ['0004_entitlements.sql']);
+
+    assert.deepEqual(rows(), before);
+    assert.deepEqual(before.map((table) => table.length), [300, 600, 600, 150]);
+    assert.equal(db.prepare('SELECT count(*) AS n FROM entitlements').get()?.n, 0);
+    db.prepare("INSERT INTO entitlements VALUES ('e1', 'u1', 'manual', 0, 10, 'ref', 0)").run();
+    const schemaAfter = schema(db);
+    assert.deepEqual(migrate(db, migrationsDir), []);
+    assert.deepEqual(schema(db), schemaAfter);
+    assert.equal(db.prepare('SELECT count(*) AS n FROM entitlements').get()?.n, 1);
+  });
+
+  test('entitlements: known sources only, one row per source and reference, deleted with the user', () => {
+    migrate(db, join(import.meta.dirname, 'migrations'));
+    db.exec('PRAGMA foreign_keys = ON');
+    db.prepare("INSERT INTO users (id, email, password_hash, created_at) VALUES ('u', 'a@b.co', 'x', 0)").run();
+    const add = db.prepare('INSERT INTO entitlements VALUES (?, ?, ?, 0, ?, ?, 0)');
+    for (const source of ['manual', 'app_store', 'google_play', 'card']) add.run(`e-${source}`, 'u', source, 10, 'ref');
+
+    assert.throws(() => add.run('paypal', 'u', 'paypal', 10, 'ref'), /CHECK constraint failed/);
+    assert.throws(() => add.run('again', 'u', 'card', 10, 'ref'), /UNIQUE constraint failed/);
+    assert.throws(() => add.run('backwards', 'u', 'manual', 0, 'other'), /CHECK constraint failed/);
+    assert.throws(() => add.run('orphan', 'nobody', 'manual', 10, 'orphan'), /FOREIGN KEY constraint failed/);
+    db.prepare("DELETE FROM users WHERE id = 'u'").run();
+    assert.equal(db.prepare('SELECT count(*) AS n FROM entitlements').get()?.n, 0);
+  });
 });

@@ -2,7 +2,8 @@
 // summary. Calls go out with the parent's account token (server/profiles.ts, server/progress.ts).
 import { accountToken } from '@/account';
 import { callApi, type ApiReply } from '@/api/client';
-import { units } from '@/content';
+import { tracks, unitsOf } from '@/content';
+import { reviewUnits } from '@/premium';
 import { createProgressStore, isLessonCompleted } from '@/progress';
 import { parseProgress } from '@/progress/schema';
 import { readNickname, type ProfilePicture } from '@/profiles/child-profile';
@@ -51,7 +52,7 @@ export async function deleteChild(profileId: string): Promise<ProfileResult> {
   return result;
 }
 
-/** Lessons finished and words due at `now`; undefined when the progress cannot be read now. */
+/** Lessons finished and words due at `now` (over the units home reviews); undefined when the progress cannot be read now. */
 export async function loadProgressSummary(profileId: string, now: Date): Promise<ProgressSummary | undefined> {
   const token = await accountToken();
   if (!token) return undefined;
@@ -59,8 +60,8 @@ export async function loadProgressSummary(profileId: string, now: Date): Promise
   const progress = reply.status === 200 ? parseProgress(reply.body, profileId) : null;
   if (!progress) return undefined;
   return {
-    lessonsCompleted: units.filter((unit) => isLessonCompleted(progress, unit.id)).length,
-    wordsDue: dueWords(progress, units, now).length,
+    lessonsCompleted: tracks.flatMap(unitsOf).filter((unit) => isLessonCompleted(progress, unit.id)).length,
+    wordsDue: dueWords(progress, await reviewUnits(progress), now).length,
   };
 }
 

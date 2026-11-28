@@ -44,6 +44,9 @@
 - (unscored) Review speak phrase: skip words with a placeholder ("My name is ..."). Evidence: T15 builder
 - (unscored) Speech scoring: "12" heard for "One, two" reads as twelve. Evidence: review-speak fix builder
 - (unscored) Deleting a child on /profiles does not clear that child's device copy. Evidence: T22b builder
+- (unscored) Premium unit copies on the device: cleared at sign-out (T25b covers it). Evidence: T25 builder
+- (unscored) /profiles "words due" counts bundled units only (premium words missing). Evidence: T25b builder
+- (unscored) A free learner with a finished premium unit and no copy asks the server (403) on every progress change; remember the refusal. Evidence: T25b builder
 - (unscored) After a forced sign-out, guest answers made before a different account signs in are cleared with the previous account's copy. Evidence: accounts-sync fix builder
 - (unscored) Sessions have a fixed 90-day life: renew on use (sliding expiry) so daily learners are not signed out without warning on day 90. Evidence: accounts-sync review round 2
 - (unscored) Validate lesson records at the server boundary (bestCorrect <= total, ISO times); today nonsense values from the owner's own client are kept forever. Evidence: accounts-sync review round 2
@@ -51,3 +54,8 @@
 - (unscored) Sign-up reveals existing emails (409) with no rate limit. Evidence: accounts-sync security review round 2
 - (unscored) Content test: build_sentence accepted orders are listed by hand; a missed valid order was found twice by readers. Consider checking tile permutations against a small grammar, or flagging units with movable time phrases. Evidence: T27 builder, T5/T10 readers
 - (unscored) Nickname check: blank-rendering letters (Hangul filler U+3164, U+115F/1160) pass as visible. Evidence: family security review round 2
+- (unscored) drive android-build: pass -PreactNativeArchitectures=x86_64 for emulator builds (10.5 min vs 23 min for 4 ABIs) and export ANDROID_HOME. Evidence: 2026-11-28 build
+- (unscored) /profiles fetches finished premium units per profile on each load (one request per unit per profile); cache per session. Evidence: plans fix builder
+- (unscored) grant CLI: a --db file that is not SQLite crashes with a stack trace instead of exit 2. Evidence: plans review round 2
+- (unscored) grant CLI: a grant counts from now, not from the end of current Premium, yet prints the new end date; extend from the current end (or print the real plan end). Evidence: plans security review round 2
+- (unscored) Review waits up to 10 s on a hanging network before using a valid premium copy; use the copy first and refresh in the background. Evidence: plans security review round 2

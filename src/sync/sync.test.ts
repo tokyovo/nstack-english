@@ -1,7 +1,10 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { waitFor } from '@testing-library/react-native';
+import { join } from 'node:path';
 
 import { loadAccount, signIn, signOut, startChildSession, syncSession } from '@/account';
+import { readUnits } from '@/content/files';
+import { loadPremiumUnit } from '@/premium';
 import { createProgressStore, LOCAL_PROFILE_ID, type Progress } from '@/progress';
 import { mergeProgress } from '@/progress/merge';
 import { leaveChildProfile, signOutOfDevice, startSync, syncProgress, syncState } from '@/sync';
@@ -31,6 +34,8 @@ const signedInBody = {
   ],
 };
 
+const premiumUnit = readUnits(join(__dirname, '../../content')).find((unit) => unit.id === 'everyday-a0-u4');
+
 const completion = (at: string) => ({
   firstCompletedAt: at,
   lastCompletedAt: at,
@@ -42,8 +47,9 @@ const completion = (at: string) => ({
 /**
  * A stand-in for the API server (server/accounts.ts, server/profiles.ts, server/progress.ts): the
  * demo account owns profile p1, whose progress PUT merges like the real server, and the child c1,
- * whose progress the child's token child-tok and the parent's tok-1 reach; `online` switches the network
- * and `childFails` makes the child's progress answer 500; GET /api/me lists `profiles`.
+ * whose progress the child's token child-tok and the parent's tok-1 reach; the account is Premium, so
+ * the premium unit everyday-a0-u4 answers its tokens (server/units.ts); `online` switches the network,
+ * `childFails` makes the child's progress answer 500, and GET /api/me lists `profiles`.
  */
 function fakeServer(stored: Progress = { schemaVersion: 1, profileId: 'p1', lessons: {}, answers: {} }) {
   const server = {
@@ -68,6 +74,7 @@ function fakeServer(stored: Progress = { schemaVersion: 1, profileId: 'p1', less
     if (path === '/api/profiles/c1/session') {
       return json(201, { token: 'child-tok', profile: signedInBody.profiles[1] });
     }
+    if (path === '/api/units/everyday-a0-u4') return json(200, { unit: premiumUnit });
     if (path === '/api/profiles/c1/progress' && init?.method === 'PUT') {
       // The child's own token and the parent's whole-account token both reach the child's progress.
       const auth = new Headers(init.headers).get('authorization');
@@ -281,6 +288,18 @@ describe('signing out of this device', () => {
     expect(await syncSession()).toBeUndefined();
     server.online = true;
     expect(server.stored.lessons).toEqual({});
+  });
+
+  it('leaves no premium unit on the device: the next sign-in needs the network to open one', async () => {
+    const server = fakeServer();
+    await signIn(demo.email, demo.password);
+    expect((await loadPremiumUnit('everyday-a0-u4')).status).toBe('ready');
+
+    expect(await signOutOfDevice()).toBe('signedOut');
+
+    await signIn(demo.email, demo.password);
+    server.online = false;
+    expect(await loadPremiumUnit('everyday-a0-u4')).toEqual({ status: 'offline' });
   });
 
   it('lets the next sign-in on the device start from that account only', async () => {

@@ -8,9 +8,10 @@ import { WordCard } from '@/components/lesson/word-card';
 import { StepBar } from '@/components/step-bar';
 import { ThemedText } from '@/components/themed-text';
 import { Radius, Space } from '@/constants/theme';
-import { unitsOf, type Exercise, type Unit, type Word } from '@/content';
+import { unitsOf, type Exercise, type Unit, type UnitSummary, type Word } from '@/content';
 import { useTheme } from '@/hooks/use-theme';
 import { t } from '@/i18n';
+import { usePlan } from '@/premium/use-premium';
 import { isLessonCompleted, type createProgressStore } from '@/progress';
 import { useAnswerSaver } from '@/progress/use-answer-saver';
 
@@ -33,7 +34,7 @@ function stepsOf(unit: Unit): Step[] {
   ];
 }
 
-function nextUnitAfter(unit: Unit): Unit | undefined {
+function nextUnitAfter(unit: Unit): UnitSummary | undefined {
   const track = unitsOf(unit.track);
   return track[track.findIndex((u) => u.id === unit.id) + 1];
 }
@@ -97,6 +98,20 @@ function Intro({ unit, completed, onStart }: { unit: Unit; completed: boolean; o
   );
 }
 
+/** The next unit's button; a premium one sends a free learner to /premium, and says so. */
+function NextUnitButton({ next }: { next: UnitSummary }) {
+  const plan = usePlan();
+  const locked = next.access === 'premium' && plan.kind === 'free';
+  return (
+    <Link href={locked ? '/premium' : `/lesson/${next.id}`} asChild>
+      <ActionButton
+        label={t(locked ? 'lesson.nextUnitPremium' : 'lesson.nextUnit', { title: next.title })}
+        testID="next-unit"
+      />
+    </Link>
+  );
+}
+
 function Result({ unit, correct }: { unit: Unit; correct: number }) {
   const total = unit.exercises.length;
   const next = nextUnitAfter(unit);
@@ -112,11 +127,7 @@ function Result({ unit, correct }: { unit: Unit; correct: number }) {
         <ThemedText>{correct === total ? t('lesson.resultPerfect') : t('lesson.resultKeepGoing')}</ThemedText>
       </View>
       <View style={styles.footer}>
-        {next ? (
-          <Link href={`/lesson/${next.id}`} asChild>
-            <ActionButton label={t('lesson.nextUnit', { title: next.title })} testID="next-unit" />
-          </Link>
-        ) : null}
+        {next ? <NextUnitButton next={next} /> : null}
         <Link href={`/track/${unit.track}`} asChild>
           <ActionButton
             label={t('lesson.backToTrack')}
@@ -198,6 +209,7 @@ export function LessonPlayer({ unit, store, profileId }: LessonPlayerProps) {
             <ExerciseStep
               key={step.exercise.id}
               exercise={step.exercise}
+              words={unit.words}
               onAnswer={(isCorrect) => onAnswer(step.exercise, isCorrect)}
               onContinue={() => advance(phase.index)}
             />

@@ -219,17 +219,21 @@ describe('profile progress', () => {
       assert.deepEqual(await response.json(), { error: 'invalid_progress' });
     });
 
-    test('drops units and items that are not in the content, keeping the rest', async () => {
+    test('drops units and items that are not in the content, keeping the rest, premium units too', async () => {
       const { token, profileId } = await signUp();
       const sent = document(profileId);
       sent.lessons['made-up-unit'] = { ...sent.lessons['everyday-a0-u1'] };
+      sent.lessons['kids-a2-u10'] = { ...sent.lessons['everyday-a0-u1'] };
       sent.answers['everyday-a0-u1-hello'] = [{ at: '2026-11-27T08:01:00.000Z', correct: true }];
+      sent.answers['kids-a2-u10-happy'] = [{ at: '2026-11-27T08:03:00.000Z', correct: true }];
       sent.answers['junk-000001'] = [{ at: '2026-11-27T08:02:00.000Z', correct: false }];
 
       const response = await putProgress(profileId, sent, token);
 
       const expected = document(profileId);
+      expected.lessons['kids-a2-u10'] = { ...expected.lessons['everyday-a0-u1'] };
       expected.answers['everyday-a0-u1-hello'] = [{ at: '2026-11-27T08:01:00.000Z', correct: true }];
+      expected.answers['kids-a2-u10-happy'] = [{ at: '2026-11-27T08:03:00.000Z', correct: true }];
       assert.equal(response.status, 200);
       assert.deepEqual(await response.json(), expected);
       assert.deepEqual(await (await getProgress(profileId, token)).json(), expected);

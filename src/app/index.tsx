@@ -10,9 +10,10 @@ import { ListRow } from '@/components/list-row';
 import { nothingDueHint } from '@/components/review/review-session';
 import { ThemedText } from '@/components/themed-text';
 import { Border, FontSize, MaxContentWidth, Radius, Space } from '@/constants/theme';
-import { tracks, units, unitsOf, type Track } from '@/content';
+import { tracks, unitsOf, type Track } from '@/content';
 import { useTheme } from '@/hooks/use-theme';
 import { t } from '@/i18n';
+import { useReviewUnits } from '@/premium/use-premium';
 import { isLessonCompleted } from '@/progress';
 import { useProgress, type ProgressState } from '@/progress/use-progress';
 import { dueWords, whyNothingDue } from '@/review/schedule';
@@ -54,10 +55,11 @@ function AccountRow({ child }: { child: Profile | null }) {
   );
 }
 
-/** How many words are due now, or why there are none; nothing until progress is read. */
+/** How many words are due now, or why there are none; nothing until progress and its units are read. */
 function ReviewPanel({ state }: { state: ProgressState }) {
   const theme = useTheme();
-  if (state.status !== 'ready') return null;
+  const units = useReviewUnits(state.status === 'ready' ? state.progress : undefined);
+  if (state.status !== 'ready' || !units) return null;
   const due = dueWords(state.progress, units, new Date()).length;
 
   return (

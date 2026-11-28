@@ -185,10 +185,11 @@ async function startInstance({ build }) {
 /** The demo learner `drive seed` creates; a throwaway account in a temporary database. */
 const DEMO_ACCOUNT = { email: 'demo@hocenglish.test', password: 'hoc-english-demo' };
 const DEMO_CHILD = { name: 'Bé Na', picture: '🐱' };
+const DEMO_PREMIUM_DAYS = 365;
 
 /**
  * Seeds demo data through the app's own API and returns what was seeded: the demo account
- * with one child profile. Seeding again is fine: what exists already counts as seeded.
+ * with one child profile, granted Premium. Seeding again is fine: what exists already counts as seeded.
  * @param {Instance} instance @returns {Promise<string[]>}
  */
 async function seedInstance(instance) {
@@ -200,7 +201,19 @@ async function seedInstance(instance) {
     const child = await post(instance, '/api/profiles', DEMO_CHILD, token);
     if (!child.ok) throw new UsageError(`seeding the demo child failed: ${child.status} ${await child.text()}`);
   }
-  return [`account ${DEMO_ACCOUNT.email}`, `child profile ${DEMO_CHILD.name}`];
+  grantDemoPremium(instance);
+  return [`account ${DEMO_ACCOUNT.email}`, `child profile ${DEMO_CHILD.name}`, `premium ${DEMO_ACCOUNT.email}`];
+}
+
+/**
+ * Premium for the demo account through the grant command (`npm run grant`), not an HTTP endpoint;
+ * the fixed reference makes a second seed keep the first grant.
+ * @param {Instance} instance
+ */
+function grantDemoPremium(instance) {
+  const args = ['server/grant.ts', '--db', instance.db, DEMO_ACCOUNT.email, String(DEMO_PREMIUM_DAYS), '--ref', 'drive-seed'];
+  const result = spawnSync(process.execPath, args, { cwd: ROOT, encoding: 'utf8' });
+  if (result.status !== 0) throw new UsageError(`granting the demo account Premium failed: ${result.stderr}`);
 }
 
 /** @param {Instance} instance @param {string} path @param {unknown} body @param {string} [token] */
@@ -241,7 +254,7 @@ async function requireInstance() {
 function buildIfNeeded() {
   const built = join(DIST, 'index.html');
   const builtAt = existsSync(built) ? statSync(built).mtimeMs : 0;
-  const sources = ['src', 'assets', 'app.json', 'package.json', 'package-lock.json'].map((p) => join(ROOT, p));
+  const sources = ['src', 'content', 'assets', 'app.json', 'package.json', 'package-lock.json'].map((p) => join(ROOT, p));
   if (builtAt > 0 && sources.every((source) => newestMtime(source) < builtAt)) return;
   process.stderr.write('Exporting the web app to dist/ ...\n');
   const result = spawnSync('npx', ['expo', 'export', '--platform', 'web', '--output-dir', 'dist'], {
