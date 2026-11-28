@@ -10,7 +10,7 @@ appId: app.hocenglish
 - launchApp:
     clearState: false
 - assertVisible: "Ôn tập"
-- assertVisible: "Bạn đã ôn hết từ đến hạn. Hãy quay lại sau nhé."
+- assertVisible: "Từ bạn vừa học sẽ đến lúc ôn sau ít phút. Hãy quay lại sau nhé."
 
 # Reopen home once a minute until the words are due.
 - repeat:
@@ -31,36 +31,21 @@ appId: app.hocenglish
     id: "due-count"
 - tapOn:
     id: "review-start"
-- assertVisible: "Từ 1/9"
+- assertVisible: "Từ 1/[0-9]+"
 
-# Answer each step with the first option, or type an answer; right or wrong, each is recorded.
+# Each step (options, typing, or speaking where the device can recognise speech) is answered by
+# steps/answer-step.yaml; right or wrong, each answer is recorded.
 - repeat:
     while:
-      notVisible: "Xong phần ôn tập!"
-    times: 20
+      notVisible:
+        id: "score"
+    times: 80
     commands:
-      - runFlow:
-          when:
-            visible:
-              id: "option-0"
-          commands:
-            - tapOn:
-                id: "option-0"
-      - runFlow:
-          when:
-            visible:
-              id: "answer-input"
-          commands:
-            - tapOn:
-                id: "answer-input"
-            - inputText: "hello"
-            - hideKeyboard
-            - tapOn:
-                id: "check"
-      - tapOn:
-          id: "continue"
+      - runFlow: steps/answer-step.yaml
 
 - assertVisible: "Xong phần ôn tập!"
+- assertVisible:
+    id: "score"
 - tapOn:
     id: "home"
 - assertVisible: "Bạn đã ôn hết từ đến hạn. Hãy quay lại sau nhé."
