@@ -1,29 +1,11 @@
 // A learner completes everyday A0 u1 on web, reloads, and sees it completed.
 // Runs against the served web export (`npx expo export --platform web`); baseURL comes from the config.
-import { AxeBuilder } from '@axe-core/playwright';
 import { expect, test, type Page } from '@playwright/test';
-import { readFileSync } from 'node:fs';
-import { join } from 'node:path';
 
-import { parseUnit, type Exercise, type Unit } from '../src/content/schema';
-
-function loadUnit(path: string): Unit {
-  const result = parseUnit(JSON.parse(readFileSync(join(import.meta.dirname, '..', 'content', path), 'utf8')));
-  if (!result.ok) throw new Error(result.errors.join('\n'));
-  return result.unit;
-}
+import type { Exercise } from '../src/content/schema';
+import { button, collectErrors, expectNoSeriousAxeViolations, loadUnit, withoutSpeechRecognition } from './learner.ts';
 
 const unit = loadUnit('everyday/a0/u1.json');
-
-function button(page: Page, name: string) {
-  return page.getByRole('button', { name, exact: true });
-}
-
-async function expectNoSeriousAxeViolations(page: Page) {
-  const { violations } = await new AxeBuilder({ page }).withTags(['wcag2a', 'wcag2aa', 'wcag21aa']).analyze();
-  const serious = violations.filter((v) => v.impact === 'serious' || v.impact === 'critical');
-  expect(serious.map((v) => `${v.id}: ${v.nodes.map((n) => n.target.join(' ')).join(', ')}`)).toEqual([]);
-}
 
 /** The English being taught is marked lang="en", so screen readers pronounce it as English on a vi page. */
 async function expectEnglish(page: Page, text: string) {
@@ -92,23 +74,8 @@ async function playToSpeak(page: Page): Promise<Extract<Exercise, { type: 'speak
   throw new Error(`${unit.id} has no speak exercise`);
 }
 
-/**
- * Headless Chromium has the Web Speech API but no working recogniser behind it. Taking it away, as in
- * a browser without recognition, makes a speak exercise run the same way every time.
- */
-async function withoutSpeechRecognition(page: Page) {
-  await page.addInitScript(() => {
-    Reflect.deleteProperty(window, 'SpeechRecognition');
-    Reflect.deleteProperty(window, 'webkitSpeechRecognition');
-  });
-}
-
 test('a learner completes everyday A0 u1, reloads, and sees it completed', async ({ page }) => {
-  const errors: string[] = [];
-  page.on('pageerror', (error) => errors.push(error.message));
-  page.on('console', (message) => {
-    if (message.type() === 'error') errors.push(message.text());
-  });
+  const errors = collectErrors(page);
   await withoutSpeechRecognition(page);
 
   await page.goto(`/lesson/${unit.id}`);

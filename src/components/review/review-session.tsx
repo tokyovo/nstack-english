@@ -1,16 +1,19 @@
 import { Link } from 'expo-router';
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { StyleSheet, View } from 'react-native';
 
 import { ActionButton } from '@/components/lesson/action-button';
 import { ExerciseStep } from '@/components/lesson/exercise-step';
+import { StepBar } from '@/components/step-bar';
 import { ThemedText } from '@/components/themed-text';
 import { Space } from '@/constants/theme';
 import { units } from '@/content';
 import { useTheme } from '@/hooks/use-theme';
 import { t } from '@/i18n';
-import { LOCAL_PROFILE_ID, type Answer, type createProgressStore } from '@/progress';
+import { LOCAL_PROFILE_ID, type createProgressStore } from '@/progress';
+import { useAnswerSaver } from '@/progress/use-answer-saver';
 import { reviewSession, type ReviewItem } from '@/review/session';
+import { canRecognise } from '@/speech/recognition';
 
 type ProgressStore = ReturnType<typeof createProgressStore>;
 
@@ -32,33 +35,6 @@ type Props = {
   random?: () => number;
 };
 
-/** Saves each answer as it is given; one that fails is kept and saved again when the review ends. */
-function useAnswerSaver(store: ProgressStore) {
-  const writes = useRef<Promise<void>[]>([]);
-  const unsaved = useRef<Answer[]>([]);
-
-  function record(answer: Answer) {
-    const write = store.recordAnswer(LOCAL_PROFILE_ID, answer).then(
-      () => undefined,
-      () => {
-        unsaved.current.push(answer);
-      }
-    );
-    writes.current.push(write);
-  }
-
-  async function flush() {
-    await Promise.all(writes.current);
-    writes.current = [];
-    while (unsaved.current.length > 0) {
-      await store.recordAnswer(LOCAL_PROFILE_ID, unsaved.current[0]);
-      unsaved.current.shift();
-    }
-  }
-
-  return { record, flush };
-}
-
 function HomeButton() {
   return (
     <Link href="/" asChild>
@@ -78,18 +54,6 @@ function Nothing({ learned }: { learned: boolean }) {
       </View>
       <View style={styles.footer}>
         <HomeButton />
-      </View>
-    </View>
-  );
-}
-
-function StepBar({ current, total }: { current: number; total: number }) {
-  const theme = useTheme();
-  return (
-    <View style={styles.stepBar}>
-      <ThemedText type="meta">{t('review.step', { current, total })}</ThemedText>
-      <View style={[styles.track, { backgroundColor: theme.line }]} aria-hidden>
-        <View style={[styles.bar, { backgroundColor: theme.accent, width: `${(current / total) * 100}%` }]} />
       </View>
     </View>
   );
@@ -127,7 +91,7 @@ export function ReviewSession({ store, now = systemClock, random = Math.random }
     store.load(LOCAL_PROFILE_ID).then(
       (progress) => {
         if (!current) return;
-        const items = reviewSession(progress, units, now(), random);
+        const items = reviewSession(progress, units, now(), random, { speak: canRecognise() });
         setPhase(
           items.length > 0
             ? { kind: 'step', items, index: 0 }
@@ -177,7 +141,11 @@ export function ReviewSession({ store, now = systemClock, random = Math.random }
       const item = items[index];
       return (
         <View style={styles.fill}>
-          <StepBar current={index + 1} total={items.length} />
+          <StepBar
+            label={t('review.step', { current: index + 1, total: items.length })}
+            current={index + 1}
+            total={items.length}
+          />
           <ExerciseStep
             key={item.wordId}
             exercise={item.exercise}
@@ -211,7 +179,4 @@ const styles = StyleSheet.create({
   fill: { flexGrow: 1, gap: Space.xl },
   section: { gap: Space.sm },
   footer: { marginTop: 'auto', gap: Space.md, paddingTop: Space.lg },
-  stepBar: { gap: Space.xs },
-  track: { height: 6, borderRadius: 3, overflow: 'hidden' },
-  bar: { height: 6, borderRadius: 3 },
 });

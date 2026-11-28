@@ -1,5 +1,6 @@
 // A review session: the due words, each asked once as an exercise the lesson player already knows.
-// Options are drawn only from words the learner has met in the same track.
+// Options are drawn only from words the learner has met in the same track. Where the device can
+// hear speech, one word per session is said aloud instead.
 import type { Exercise, Unit, Word } from '@/content';
 import type { Progress } from '@/progress';
 
@@ -45,19 +46,37 @@ function exerciseFor(word: Word, kind: Kind, sameTrack: readonly Word[], random:
   return { id: word.id, type: 'type_answer', prompt: word.vi, answer: word.en };
 }
 
+function speakExercise(word: Word): Exercise {
+  return { id: word.id, type: 'speak', text: word.en, vi: word.vi };
+}
+
+/** The longest phrase, the first on a tie: recognisers hear a phrase more reliably than a short word. */
+function longestIndex(words: readonly Word[]): number {
+  return words.reduce((best, word, index) => (word.en.length > words[best].en.length ? index : best), 0);
+}
+
+type Options = {
+  /** The device can hear the learner speak, so one word is said aloud. */
+  speak?: boolean;
+};
+
 /** Up to SESSION_SIZE due words at `now`, the longest-waiting first, each with its exercise. */
 export function reviewSession(
   progress: Progress,
   units: readonly Unit[],
   now: Date,
-  random: () => number = Math.random
+  random: () => number = Math.random,
+  { speak = false }: Options = {}
 ): ReviewItem[] {
   const learned = learnedWords(progress, units);
   const wordsOf = (track: ScheduledWord['track']) => learned.filter((e) => e.track === track).map((e) => e.word);
-  return dueWords(progress, units, now)
-    .slice(0, SESSION_SIZE)
-    .map((entry, index) => ({
-      wordId: entry.word.id,
-      exercise: exerciseFor(entry.word, ROTATION[index % ROTATION.length], wordsOf(entry.track), random),
-    }));
+  const due = dueWords(progress, units, now).slice(0, SESSION_SIZE);
+  const spoken = speak && due.length > 0 ? longestIndex(due.map((entry) => entry.word)) : -1;
+  return due.map((entry, index) => ({
+    wordId: entry.word.id,
+    exercise:
+      index === spoken
+        ? speakExercise(entry.word)
+        : exerciseFor(entry.word, ROTATION[index % ROTATION.length], wordsOf(entry.track), random),
+  }));
 }

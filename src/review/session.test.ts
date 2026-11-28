@@ -137,6 +137,39 @@ describe('review session', () => {
     expect(session.map((item) => item.exercise.type)).toEqual(['type_answer']);
   });
 
+  it('asks no word aloud unless the device can hear speech', () => {
+    const session = reviewSession(completed('everyday-a0-u1'), [greetings], aDayLater, first);
+
+    expect(session.some((item) => item.exercise.type === 'speak')).toBe(false);
+  });
+
+  it('asks the longest due phrase aloud, once per session, when the device can hear speech', () => {
+    const session = reviewSession(completed('everyday-a0-u1'), [greetings], aDayLater, first, { speak: true });
+
+    expect(session.map((item) => [item.wordId, item.exercise.type])).toEqual([
+      ['everyday-a0-u1-hello', 'choose_meaning'],
+      ['everyday-a0-u1-goodbye', 'listen_choose'],
+      ['everyday-a0-u1-thank-you', 'speak'],
+      ['everyday-a0-u1-sorry', 'choose_meaning'],
+      ['everyday-a0-u1-yes', 'listen_choose'],
+      ['everyday-a0-u1-no', 'type_answer'],
+    ]);
+    expect(session[2].exercise).toEqual({
+      id: 'everyday-a0-u1-thank-you',
+      type: 'speak',
+      text: 'Thank you',
+      vi: 'Cảm ơn',
+    });
+  });
+
+  it('asks the only due word aloud when it is the whole session', () => {
+    const lone = unit('work-a0-u1', [['Office', 'Văn phòng']]);
+
+    const session = reviewSession(completed('work-a0-u1'), [lone], aDayLater, first, { speak: true });
+
+    expect(session.map((item) => item.exercise.type)).toEqual(['speak']);
+  });
+
   it('puts the answer where the random number says', () => {
     const progress = completed('everyday-a0-u1');
     const [atStart] = reviewSession(progress, [greetings], aDayLater, () => 0);

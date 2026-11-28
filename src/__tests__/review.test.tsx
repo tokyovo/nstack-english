@@ -7,6 +7,7 @@ import HomeScreen from '@/app/index';
 import ReviewScreen from '@/app/review';
 import { getUnit, type Exercise, type Unit, type Word } from '@/content';
 import { createProgressStore, LOCAL_PROFILE_ID } from '@/progress';
+import { fakeDevice } from '@/speech/__fixtures__/fake-recognition';
 
 jest.mock('@react-native-async-storage/async-storage', () =>
   jest.requireActual('@react-native-async-storage/async-storage/jest/async-storage-mock')
@@ -18,6 +19,8 @@ jest.mock('expo-speech', () => ({
   stop: jest.fn(() => Promise.resolve()),
   getAvailableVoicesAsync: jest.fn(() => Promise.resolve([])),
 }));
+
+jest.mock('expo-speech-recognition', () => jest.requireActual('@/speech/__fixtures__/fake-recognition'));
 
 const DAY = 24 * 60 * 60 * 1000;
 
@@ -73,6 +76,9 @@ const ROTATION = ['choose_meaning', 'listen_choose', 'type_answer'] as const;
 
 beforeEach(async () => {
   await AsyncStorage.clear();
+  fakeDevice.reset();
+  // Most devices here cannot hear speech, so no review step is said aloud (answerRight throws on one).
+  fakeDevice.available = false;
 });
 
 describe('Review (/review)', () => {
@@ -120,6 +126,36 @@ describe('Review (/review)', () => {
     expect(progress.answers[unit.words[0].id]).toEqual([expect.objectContaining({ correct: false })]);
     expect(progress.answers[unit.words[1].id]).toEqual([expect.objectContaining({ correct: true })]);
     expect(Object.keys(progress.answers)).toHaveLength(total);
+  });
+
+  it('asks one word aloud where the device can hear speech, and records what was heard under the word id', async () => {
+    fakeDevice.available = true;
+    await finishLessonAgo(DAY);
+    await openApp('/review');
+    const spoken: string[] = [];
+
+    for (const [i, word] of unit.words.entries()) {
+      await screen.findByText(`Từ ${i + 1}/${unit.words.length}`);
+      if (screen.queryByText('Nói câu này bằng tiếng Anh')) {
+        expect(screen.getByText(word.en)).toBeOnTheScreen();
+        expect(screen.getByText(word.vi)).toBeOnTheScreen();
+        await press('Nói');
+        await press('Cho phép dùng micrô');
+        await screen.findByText('Đang nghe... Bạn hãy nói câu ở trên.');
+        await act(() => fakeDevice.hear(word.en.toLowerCase()));
+        spoken.push(word.id);
+      } else {
+        await answerRight(word, ROTATION[i % 3]);
+      }
+      expect(await screen.findByText('Đúng rồi!')).toBeOnTheScreen();
+      await press('Tiếp tục');
+    }
+
+    expect(await screen.findByRole('heading', { name: 'Xong phần ôn tập!' })).toBeOnTheScreen();
+    // The longest phrase of everyday A0 u1.
+    expect(spoken).toEqual(['everyday-a0-u1-nice-to-meet-you']);
+    const progress = await createProgressStore().load(LOCAL_PROFILE_ID);
+    expect(progress.answers[spoken[0]]).toEqual([expect.objectContaining({ correct: true })]);
   });
 
   it('says when the answers could not be saved, and saves them on "Thử lại"', async () => {
