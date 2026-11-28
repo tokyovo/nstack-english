@@ -15,3 +15,4 @@
 - (unscored) Replace Expo-branded icon and splash artwork with the app's own. Evidence: T1 builder
 - (unscored) android-build: build only x86_64 for the emulator (reactNativeArchitectures) to cut the 23 min first build. Evidence: T3 builder
 - (unscored) Jest timeout under CPU load (one flaky failure during gradle). Evidence: T3 builder
+- (unscored) UI-string checker: options as a function, tabBarLabel, navigation.setOptions titles. Evidence: review fix builder
