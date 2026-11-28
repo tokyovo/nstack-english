@@ -1,7 +1,7 @@
 // The learner's account on this device: sign up, sign in, sign out, and the saved session.
 // The server's answers (server/accounts.ts) are checked here and turned into typed values.
 import { callApi, type ApiReply } from '@/api/client';
-import { isProfilePicture, type ProfilePicture } from '@/profiles/pictures';
+import { isProfilePicture, type ProfilePicture } from '@/profiles/child-profile';
 
 import { deleteSession, readSession, writeSession } from './session-storage';
 

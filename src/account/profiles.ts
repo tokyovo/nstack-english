@@ -5,7 +5,7 @@ import { callApi, type ApiReply } from '@/api/client';
 import { units } from '@/content';
 import { isLessonCompleted } from '@/progress';
 import { parseProgress } from '@/progress/schema';
-import type { ProfilePicture } from '@/profiles/pictures';
+import type { ProfilePicture } from '@/profiles/child-profile';
 import { dueWords } from '@/review/schedule';
 
 /** Everything a child profile holds: a nickname and a picture, nothing else. */

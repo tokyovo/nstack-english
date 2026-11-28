@@ -4,11 +4,8 @@ import type { DatabaseSync } from 'node:sqlite';
 import { Hono, type Context } from 'hono';
 import { bodyLimit } from 'hono/body-limit';
 
-import { isProfilePicture } from '../src/profiles/pictures.ts';
+import { isProfilePicture, MAX_CHILDREN, MAX_NICKNAME } from '../src/profiles/child-profile.ts';
 import { profileOf, requireAccountMiddleware, startProfileSession, type AuthEnv, type Profile } from './accounts.ts';
-
-export const MAX_CHILDREN = 4;
-const MAX_NAME = 20;
 
 type ErrorBody = { error: string; field?: 'name' | 'picture' };
 
@@ -87,7 +84,7 @@ function readNickname(value: unknown): string | undefined {
   if (typeof value !== 'string') return undefined;
   const nickname = value.normalize('NFC').trim();
   const length = [...nickname].length;
-  return length >= 1 && length <= MAX_NAME ? nickname : undefined;
+  return length >= 1 && length <= MAX_NICKNAME ? nickname : undefined;
 }
 
 /** The JSON object in the request body; undefined when it is not one. */
