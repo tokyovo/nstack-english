@@ -217,3 +217,24 @@
 - [x] 6. Record. this entry, backlog
 - [x] Done when: committed on nstack/accounts-sync, items ticked.
 - Decision: sign-in failures stored in a table (limit survives restarts); sessions 90 days; error bodies are codes the app maps to Vietnamese.
+
+## 2026-11-28 build T17
+- Read: build/SKILL.md a069840
+- [x] 1. Branch. nstack/accounts-sync
+- [x] 2. Starting state. fast checks pass at 5d0425a
+- [x] 3. Dispatch. builder in worktree
+- [x] 4. Read the reply. done 4c4fab0; merge tests red 7/9 vs stub; deny proofs red (owner check id-only, requireUser stubbed); migrate checks 1, 2, 4 pass, 3 and 5 n/a, 6 revert = drop table
+- [x] 5. Prove it yourself. merged: test:server 60 pass 0 fail, jest 166
+- [x] 6. Record. this entry, backlog
+- [x] Done when: committed, items ticked.
+
+## 2026-11-28 build T18
+- Read: build/SKILL.md a069840
+- [x] 1. Branch. nstack/accounts-sync
+- [x] 2. Starting state. fast checks pass after T17
+- [x] 3. Dispatch. builder in worktree
+- [x] 4. Read the reply. done 2f49f51; module and screen tests red vs stubs; mutations red (401 not clearing session, field mapping, password kept, aria-describedby, focus)
+- [x] 5. Prove it yourself. merged: typecheck 0, lint 0, jest 183, test:server 60
+- [x] 6. Record. this entry, backlog
+- [x] Done when: committed, items ticked.
+- Decision: expo-secure-store config plugin not added (it adds a Face ID usage string); Android backup rules for it go to the backlog.
