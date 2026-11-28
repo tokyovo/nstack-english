@@ -1,41 +1,77 @@
 // Finds interface text written straight into JSX instead of coming from the
 // messages file through t(). Used by ui-strings.test.ts; not part of the app.
+//
+// The rule is inverted on purpose: inside a JSX element every string with a
+// letter is reported, wherever it sits (children, props, nested objects,
+// arrays, callbacks, conditionals), unless it is the value of a prop or object
+// key in NON_UI_KEYS or the message key passed to t(). An unknown prop or key
+// is reported, so a new way of showing text cannot slip through unnoticed.
 import ts from 'typescript';
 
 export type UiStringFinding = { file: string; line: number; text: string };
 
-/** Props whose value a user sees or hears. */
-const TEXT_PROPS = new Set([
-  'accessibilityLabel',
-  'accessibilityHint',
-  'placeholder',
-  'title',
-  'alt',
-  'aria-label',
-  'label',
+/** Props and object keys whose values are never shown or read out to a user. */
+const NON_UI_KEYS = new Set([
+  // identity, keys and routes
+  'key',
+  'testID',
+  'nativeID',
+  'name',
+  'href',
+  'pathname',
+  // accessibility semantics (not labels or hints)
+  'role',
+  'accessibilityRole',
+  'accessibilityLanguage',
+  'lang',
+  'importantForAccessibility',
+  // input behaviour
+  'keyboardType',
+  'autoComplete',
+  'autoCapitalize',
+  'textContentType',
+  'inputMode',
+  'returnKeyType',
+  'enterKeyHint',
+  // style, layout and component variants
+  'style',
+  'fontFamily',
+  'type',
+  'resizeMode',
+  'pointerEvents',
+  'animation',
+  'presentation',
 ]);
 
 const LETTER = /\p{L}/u;
 
-function isStringLiteral(node: ts.Node): node is ts.StringLiteral | ts.NoSubstitutionTemplateLiteral {
-  return ts.isStringLiteral(node) || ts.isNoSubstitutionTemplateLiteral(node);
+/** Shown in place of each `${...}` substitution; contains no letter, so `${n}` alone is allowed. */
+const SUBSTITUTION = '${…}';
+
+const COMPARISONS = new Set([
+  ts.SyntaxKind.EqualsEqualsEqualsToken,
+  ts.SyntaxKind.ExclamationEqualsEqualsToken,
+  ts.SyntaxKind.EqualsEqualsToken,
+  ts.SyntaxKind.ExclamationEqualsToken,
+  ts.SyntaxKind.InKeyword,
+]);
+
+function isNonUiKey(name: ts.PropertyName | ts.JsxAttributeName): boolean {
+  return (ts.isIdentifier(name) || ts.isStringLiteral(name)) && NON_UI_KEYS.has(name.text);
 }
 
-/** String literals an expression can evaluate to directly: `"a"`, `c ? "a" : "b"`, `c && "a"`. */
-function literalsIn(expression: ts.Expression): (ts.StringLiteral | ts.NoSubstitutionTemplateLiteral)[] {
-  if (isStringLiteral(expression)) return [expression];
-  if (ts.isParenthesizedExpression(expression)) return literalsIn(expression.expression);
-  if (ts.isConditionalExpression(expression)) {
-    return [...literalsIn(expression.whenTrue), ...literalsIn(expression.whenFalse)];
+function isJsx(node: ts.Node): boolean {
+  return ts.isJsxElement(node) || ts.isJsxSelfClosingElement(node) || ts.isJsxFragment(node);
+}
+
+/** The key in `t("key", ...)`, or a string compared or used as an index (`x === "web"`, `o["k"]`): never rendered. */
+function isNeverRendered(literal: ts.Node): boolean {
+  const parent = literal.parent;
+  if (ts.isCallExpression(parent)) {
+    return ts.isIdentifier(parent.expression) && parent.expression.text === 't' && parent.arguments[0] === literal;
   }
-  if (ts.isBinaryExpression(expression)) {
-    const operator = expression.operatorToken.kind;
-    if (operator === ts.SyntaxKind.AmpersandAmpersandToken) return literalsIn(expression.right);
-    if (operator === ts.SyntaxKind.BarBarToken || operator === ts.SyntaxKind.QuestionQuestionToken) {
-      return [...literalsIn(expression.left), ...literalsIn(expression.right)];
-    }
-  }
-  return [];
+  if (ts.isBinaryExpression(parent)) return COMPARISONS.has(parent.operatorToken.kind);
+  return ts.isElementAccessExpression(parent) && parent.argumentExpression === literal;
 }
 
 export function findUiStringLiterals(source: string, file: string): UiStringFinding[] {
@@ -49,23 +85,38 @@ export function findUiStringLiterals(source: string, file: string): UiStringFind
     findings.push({ file, line, text });
   }
 
-  function reportLiterals(expression: ts.Expression | undefined) {
-    if (!expression) return;
-    for (const literal of literalsIn(expression)) report(literal.text, literal.getStart());
-  }
-
-  function visit(node: ts.Node) {
+  function reportLiteral(node: ts.Node): boolean {
     if (ts.isJsxText(node)) {
       report(node.text, node.pos + node.text.search(/\S|$/));
-    } else if (ts.isJsxExpression(node) && (ts.isJsxElement(node.parent) || ts.isJsxFragment(node.parent))) {
-      reportLiterals(node.expression);
-    } else if (ts.isJsxAttribute(node) && TEXT_PROPS.has(node.name.getText(sourceFile)) && node.initializer) {
-      if (ts.isStringLiteral(node.initializer)) report(node.initializer.text, node.initializer.getStart());
-      else if (ts.isJsxExpression(node.initializer)) reportLiterals(node.initializer.expression);
+      return true;
     }
-    ts.forEachChild(node, visit);
+    if (ts.isStringLiteral(node) || ts.isNoSubstitutionTemplateLiteral(node)) {
+      if (!isNeverRendered(node)) report(node.text, node.getStart());
+      return true;
+    }
+    if (ts.isTemplateExpression(node)) {
+      report(node.head.text + node.templateSpans.map((span) => SUBSTITUTION + span.literal.text).join(''), node.getStart());
+    }
+    return false;
   }
 
-  visit(sourceFile);
+  function visit(node: ts.Node, inJsx: boolean) {
+    if (ts.isTypeNode(node)) return;
+    if (ts.isJsxAttribute(node) && isNonUiKey(node.name)) return;
+    if (ts.isPropertyAssignment(node)) {
+      if (!isNonUiKey(node.name)) visit(node.initializer, inJsx);
+      return;
+    }
+    if (inJsx && reportLiteral(node)) return;
+    const childInJsx = inJsx || isJsx(node);
+    // A template's static parts were reported whole; only its substitutions are visited.
+    if (ts.isTemplateExpression(node)) {
+      node.templateSpans.forEach((span) => visit(span.expression, childInJsx));
+      return;
+    }
+    ts.forEachChild(node, (child) => visit(child, childInJsx));
+  }
+
+  visit(sourceFile, false);
   return findings;
 }

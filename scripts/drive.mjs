@@ -420,8 +420,9 @@ function isAlive(pid) {
 /** Alive and running server/main.ts, so a reused pid is never killed. @param {number} pid */
 function isOurServer(pid) {
   if (!isAlive(pid)) return false;
-  const cmdline = `/proc/${pid}/cmdline`;
-  return !existsSync('/proc') || (existsSync(cmdline) && readFileSync(cmdline, 'utf8').includes('server/main.ts'));
+  // `ps -o command=` prints the full command line on Linux and macOS alike.
+  const result = spawnSync('ps', ['-p', String(pid), '-o', 'command='], { encoding: 'utf8' });
+  return result.status === 0 && result.stdout.includes(join(ROOT, 'server', 'main.ts'));
 }
 
 /** @param {string} path */

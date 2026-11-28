@@ -190,3 +190,10 @@
 - [x] 5. Prove it yourself. merged: jest 128 pass (content test)
 - [x] 6. Record. this entry; minors in backlog
 - [x] Done when: committed, items ticked.
+## 2026-11-28 review foundation
+- Read: review/SKILL.md c151f88
+- [x] 1. Dispatch. reviewer at 4a5f679: fix-needed, 1 important (UI-string checker misses template literals, +, options titles), 2 nits (lang="en" on web, drive pid check on macOS)
+- [x] 2. Second reviewer. n/a: no auth, payments, migrations of data, concurrency or public API (health only)
+- [x] 3. Act on every finding. important + pid nit: fresh builder, merged (red 5 failed -> green 14; drive pid test red -> green); lang nit: moved to learn-core where the English content screens are (builder dispatched)
+- [ ] 4. Review the fixes. fix is 101+/19- lines: new reviewer round dispatched
+- [ ] Done when: the latest round has no important findings, verify passed after the last fix, and nits are fixed or in backlog.md.
