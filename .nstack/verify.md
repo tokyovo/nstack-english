@@ -4,8 +4,8 @@
 | typecheck | fast | npm run typecheck | pass (2026-11-28, 01e8708) |
 | lint | fast | npm run lint | pass, 0 warnings (2026-11-28, 01e8708) |
 | unit | fast | npm test | pass, 486 tests (2026-11-28, 01e8708) |
-| server | fast | npm run test:server | pass, 21 tests (2026-11-28, 15ad710) |
-| drive | fast | npm run test:drive | pass, 6 tests (2026-11-28, 15ad710) |
+| server | fast | npm run test:server | pass, 128 tests (2026-11-28, 837c791) |
+| drive | fast | npm run test:drive | pass (2026-11-28, 837c791) |
 | e2e | full | npm run e2e | pass, 52 tests (2026-11-28, 01e8708) |
 | drive check | full | npm run drive -- check | pass (2026-11-28, 01e8708) |
 | android | full | npm run drive -- android-build && npm run drive -- android-start && npm run drive -- android-test | build 579 s (x86_64); Maestro lesson + review pass on emulator-5554 (2026-11-28, 01e8708); review waits 10 real minutes, run it alone with a long timeout |

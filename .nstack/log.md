@@ -827,19 +827,19 @@
 - [x] 1. Branch. nstack/colour from origin/main 7aae365
 - [x] 2. Starting state. main fast checks pass (ship plans entry)
 - [x] 3. Dispatch. builder in worktree, Parallel: 3
-- [ ] 4. Read the reply
-- [ ] 5. Prove it yourself.
-- [ ] 6. Record.
-- [ ] Done when: the ticket is committed on the slice's branch with items 1-6 ticked in its log entry, or is parked in `plan.md`.
+- [x] 4. Read the reply. done 0ea57b2: tokens (brand, tracks base/deep/tint/text/fill/lip, dark), theme.test pairings, Tactile primitive with lip and states, hex scan; theme and Tactile tests red first. Decisions: white text only on fills >= 4.5:1 (track fills use -deep over a darker lip); control borders use muted for 3:1; MaxContentWidth {narrow 480, wide 640}
+- [x] 5. Prove it yourself. merged into nstack/colour (worktree ../nstack-english-colour): ci 0, typecheck 0, lint 0, jest 494, test:server pass, test:drive pass; drive screens 40 shots, but 7 were blank white -> race under load (networkidle before first paint): drive screens now waits for rendered text and reports a blank screen (1b36d41); rerun 40 shots, none blank
+- [x] 6. Record. this entry; backlog: picture sizes as tokens
+- [x] Done when: merged on nstack/colour, items ticked.
 ## 2026-11-28 build T41
 - Read: build/SKILL.md a069840
 - [x] 1. Branch. nstack/colour from origin/main 7aae365
 - [x] 2. Starting state. main fast checks pass (ship plans entry)
 - [x] 3. Dispatch. builder in worktree, Parallel: 3
-- [ ] 4. Read the reply
-- [ ] 5. Prove it yourself.
-- [ ] 6. Record.
-- [ ] Done when: the ticket is committed on the slice's branch with items 1-6 ticked in its log entry, or is parked in `plan.md`.
+- [x] 4. Read the reply. done 9c157f7: scripts/pictures.ts (fluentui-emoji 1ffb34c7, 155 PNGs 4.2 MB), Picture component, picture-or-abstract enforced in parseUnit, avatars mapped from emoji keys, emoji scan; red first on missing picture and bad slug; pictures run twice identical
+- [x] 5. Prove it yourself. merged at 1b36d41: ci 0, typecheck 0, lint 0, jest 507, test:server pass. Native reader (fresh agent): problems in 10 words (nurse/doctor confusion, engineer, hungry, sad, friend x2, face, lunch, kitchen, summer, it's o'clock) -> fixer builder dispatched on nstack/colour
+- [ ] 6. Record. (after the fixer)
+- [ ] Done when: committed on the slice's branch with items 1-6 ticked in its log entry, or is parked in `plan.md`.
 
 ## 2026-11-28 verify hardening
 - Read: verify/SKILL.md adc6a8a
@@ -861,3 +861,38 @@
 | backup rule bites | allowBackup 'true' in plugin, jest native-config | 1 failed -> restored 4 pass |
 | security | check-security . <drive url> | 4 ok, exit 0 |
 | screens | /tmp/launcher.png | own icon on the launcher |
+
+## 2026-11-28 review hardening
+- Read: review/SKILL.md c151f88
+- [x] 1. Dispatch. reviewer in worktree at 837c791
+- [x] 2. Second reviewer. auth changes (T33, T34): second reviewer, Focus: security and failure modes, in parallel
+- [ ] 3. Act on every finding. reviewer 1: pass, nits: verify.md server/drive rows stale (fixed now: test:server 128), per-address 30 vs 5 (logged decision, kept). reviewer 2: important: merged release manifest has USE_BIOMETRIC/USE_FINGERPRINT (androidx.biometric via expo-secure-store) and the introspect test cannot see library manifests -> fixer builder; nit: no test proves counting before scrypt -> same fixer
+- [ ] 4. Review the fixes
+- [ ] Done when: the latest round has no important findings, `verify` passed after the last fix, and nits are fixed or in `backlog.md`.
+## 2026-11-28 build T42
+- Read: build/SKILL.md a069840
+- [x] 1. Branch. nstack/colour at 1b36d41
+- [x] 2. Starting state. fast checks pass at 1b36d41 (jest 507)
+- [x] 3. Dispatch. builder in worktree, Parallel: 6
+- [ ] 4. Read the reply
+- [ ] 5. Prove it yourself.
+- [ ] 6. Record.
+- [ ] Done when: the ticket is committed on the slice's branch with items 1-6 ticked in its log entry, or is parked in `plan.md`.
+## 2026-11-28 build T43
+- Read: build/SKILL.md a069840
+- [x] 1. Branch. nstack/colour at 1b36d41
+- [x] 2. Starting state. fast checks pass at 1b36d41 (jest 507)
+- [x] 3. Dispatch. builder in worktree, Parallel: 6
+- [ ] 4. Read the reply
+- [ ] 5. Prove it yourself.
+- [ ] 6. Record.
+- [ ] Done when: the ticket is committed on the slice's branch with items 1-6 ticked in its log entry, or is parked in `plan.md`.
+## 2026-11-28 build T44
+- Read: build/SKILL.md a069840
+- [x] 1. Branch. nstack/colour at 1b36d41
+- [x] 2. Starting state. fast checks pass at 1b36d41 (jest 507)
+- [x] 3. Dispatch. builder in worktree, Parallel: 6
+- [ ] 4. Read the reply
+- [ ] 5. Prove it yourself.
+- [ ] 6. Record.
+- [ ] Done when: the ticket is committed on the slice's branch with items 1-6 ticked in its log entry, or is parked in `plan.md`.
