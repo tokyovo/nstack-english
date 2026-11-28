@@ -23,13 +23,13 @@
       "id": "work-a0-u1-good-morning",
       "en": "Good morning",
       "vi": "Chào buổi sáng",
-      "example": { "en": "Good morning, Mr. Brown.", "vi": "Chào buổi sáng, ông Brown." }
+      "example": { "en": "Good morning, Mr. Brown.", "vi": "Chào ông Brown ạ." }
     },
     {
       "id": "work-a0-u1-good-afternoon",
       "en": "Good afternoon",
       "vi": "Chào buổi chiều",
-      "example": { "en": "Good afternoon, Ms. Hoa.", "vi": "Chào buổi chiều, chị Hoa." }
+      "example": { "en": "Good afternoon, Ms. Hoa.", "vi": "Chào chị Hoa ạ." }
     },
     {
       "id": "work-a0-u1-im",
@@ -60,7 +60,7 @@
     {
       "id": "work-a0-u1-see-you-tomorrow",
       "en": "See you tomorrow",
-      "vi": "Hẹn gặp lại ngày mai",
+      "vi": "Hẹn mai gặp lại",
       "example": { "en": "Goodbye, Tom. See you tomorrow.", "vi": "Tạm biệt Tom. Mai gặp lại nhé." }
     },
     {
@@ -131,8 +131,8 @@
       "id": "work-a0-u1-e09",
       "type": "choose_meaning",
       "prompt": "work-a0-u1-see-you-tomorrow",
-      "options": ["Chào buổi sáng", "Hẹn gặp lại ngày mai", "Rất vui được gặp anh/chị"],
-      "answer": "Hẹn gặp lại ngày mai"
+      "options": ["Chào buổi sáng", "Hẹn mai gặp lại", "Rất vui được gặp anh/chị"],
+      "answer": "Hẹn mai gặp lại"
     },
     {
       "id": "work-a0-u1-e10",

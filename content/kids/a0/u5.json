@@ -8,7 +8,7 @@
     "Con gọi được tên tám bộ phận cơ thể",
     "Con làm theo được câu “Touch your nose!”"
   ],
-  "note_vi": "Chơi trò “Touch your ...!” (Chạm vào ...!): bố mẹ nói “Touch your nose!”, con chạm vào mũi. Sau đó đổi vai cho con nói.",
+  "note_vi": "Chơi trò “Touch your ...!” (Con chạm vào ... nào!): bố mẹ nói “Touch your nose!”, con chạm vào mũi. Sau đó đổi vai cho con nói.",
   "source": "original",
   "words": [
     { "id": "kids-a0-u5-eye", "en": "eye", "vi": "mắt", "picture": "👀" },
@@ -22,10 +22,10 @@
     {
       "id": "kids-a0-u5-touch-your",
       "en": "Touch your ...!",
-      "vi": "Chạm vào ...!",
+      "vi": "Con chạm vào ... nào!",
       "audio": "Touch your",
       "picture": "👆",
-      "example": { "en": "Touch your nose!", "vi": "Chạm vào mũi!" }
+      "example": { "en": "Touch your nose!", "vi": "Con chạm vào mũi nào!" }
     }
   ],
   "exercises": [
@@ -67,7 +67,7 @@
     {
       "id": "kids-a0-u5-e06",
       "type": "build_sentence",
-      "prompt": "Chạm vào tai!",
+      "prompt": "Con chạm vào tai nào!",
       "tiles": ["ear", "Touch", "your", "eye"],
       "answer": ["Touch", "your", "ear"]
     },
@@ -95,7 +95,7 @@
     {
       "id": "kids-a0-u5-e10",
       "type": "build_sentence",
-      "prompt": "Chạm vào miệng!",
+      "prompt": "Con chạm vào miệng nào!",
       "tiles": ["your", "mouth", "Touch", "nose"],
       "answer": ["Touch", "your", "mouth"]
     },

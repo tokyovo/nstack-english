@@ -33,7 +33,7 @@
     {
       "id": "work-a0-u3-pen",
       "en": "pen",
-      "vi": "bút",
+      "vi": "bút (cây viết)",
       "example": { "en": "Where is the pen?", "vi": "Cái bút ở đâu?" }
     },
     {
@@ -101,7 +101,7 @@
       "id": "work-a0-u3-e05",
       "type": "build_sentence",
       "prompt": "Máy in ở đâu?",
-      "tiles": ["the", "Where", "printer", "is", "here"],
+      "tiles": ["the", "Where", "printer", "is", "I'm"],
       "answer": ["Where", "is", "the", "printer"]
     },
     {
@@ -130,8 +130,8 @@
       "id": "work-a0-u3-e09",
       "type": "choose_meaning",
       "prompt": "work-a0-u3-pen",
-      "options": ["bút", "bàn làm việc", "phòng họp"],
-      "answer": "bút"
+      "options": ["bút (cây viết)", "bàn làm việc", "phòng họp"],
+      "answer": "bút (cây viết)"
     },
     {
       "id": "work-a0-u3-e10",

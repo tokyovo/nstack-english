@@ -8,7 +8,7 @@
     "Con gọi được tên tám loại quả",
     "Con nói được màu của một loại quả: “It's a yellow banana.”"
   ],
-  "note_vi": "Khi đi chợ hay ăn hoa quả, bố mẹ hỏi con “Apple?”, “Banana?” để con nói tên quả bằng tiếng Anh.",
+  "note_vi": "Khi đi chợ hay ăn hoa quả, bố mẹ hỏi con “Apple?”, “Banana?” để con nói tên quả bằng tiếng Anh. Ở miền Nam, bố mẹ cứ nói “trái” thay cho “quả” (trái táo, trái cây), và quả dứa là “trái thơm”.",
   "source": "original",
   "words": [
     { "id": "kids-a0-u4-apple", "en": "apple", "vi": "quả táo", "picture": "🍎" },
@@ -18,7 +18,7 @@
     { "id": "kids-a0-u4-grapes", "en": "grapes", "vi": "quả nho", "picture": "🍇" },
     { "id": "kids-a0-u4-watermelon", "en": "watermelon", "vi": "quả dưa hấu", "picture": "🍉" },
     { "id": "kids-a0-u4-strawberry", "en": "strawberry", "vi": "quả dâu tây", "picture": "🍓" },
-    { "id": "kids-a0-u4-pineapple", "en": "pineapple", "vi": "quả dứa (trái thơm)", "picture": "🍍" }
+    { "id": "kids-a0-u4-pineapple", "en": "pineapple", "vi": "quả dứa", "picture": "🍍" }
   ],
   "exercises": [
     {
@@ -46,7 +46,7 @@
       "id": "kids-a0-u4-e04",
       "type": "choose_meaning",
       "prompt": "kids-a0-u4-pear",
-      "options": ["quả chuối", "quả lê", "quả dứa (trái thơm)"],
+      "options": ["quả chuối", "quả lê", "quả dứa"],
       "answer": "quả lê"
     },
     {
@@ -75,8 +75,8 @@
       "id": "kids-a0-u4-e08",
       "type": "choose_meaning",
       "prompt": "kids-a0-u4-pineapple",
-      "options": ["quả dưa hấu", "quả dâu tây", "quả dứa (trái thơm)"],
-      "answer": "quả dứa (trái thơm)"
+      "options": ["quả dưa hấu", "quả dâu tây", "quả dứa"],
+      "answer": "quả dứa"
     },
     {
       "id": "kids-a0-u4-e09",
