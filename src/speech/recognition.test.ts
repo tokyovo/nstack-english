@@ -1,7 +1,7 @@
 import { ExpoSpeechRecognitionModule } from 'expo-speech-recognition';
 
 import { fakeDevice } from './__fixtures__/fake-recognition';
-import { askForMicrophone, canRecognise, listenForEnglish, microphonePermission } from './recognition';
+import { askForMicrophone, canRecognise, listenForEnglish, microphonePermission, STOP_GRACE_MS } from './recognition';
 
 jest.mock('expo-speech-recognition', () => jest.requireActual('./__fixtures__/fake-recognition'));
 
@@ -79,6 +79,57 @@ describe('listenForEnglish', () => {
     fakeDevice.emit('end');
 
     await expect(listening.heard).resolves.toEqual({ kind: 'nothing' });
+  });
+
+  describe('with a recogniser that never answers', () => {
+    beforeEach(() => {
+      jest.useFakeTimers();
+      // Like headless Chromium: start() and stop() are accepted and no event ever comes.
+      jest.mocked(ExpoSpeechRecognitionModule.stop).mockImplementationOnce(() => undefined);
+      jest.mocked(ExpoSpeechRecognitionModule.abort).mockImplementationOnce(() => undefined);
+    });
+
+    afterEach(() => {
+      jest.useRealTimers();
+    });
+
+    it('gives up after 15 seconds of listening', async () => {
+      const listening = listenForEnglish();
+      let settled = false;
+      listening.heard.then(() => (settled = true));
+
+      await jest.advanceTimersByTimeAsync(14_999);
+      expect(settled).toBe(false);
+      await jest.advanceTimersByTimeAsync(1);
+
+      await expect(listening.heard).resolves.toEqual({ kind: 'failed' });
+      expect(ExpoSpeechRecognitionModule.abort).toHaveBeenCalledTimes(1);
+      expect(fakeDevice.listening()).toBe(false);
+    });
+
+    it('gives up 3 seconds after the learner says they are done', async () => {
+      const listening = listenForEnglish();
+      await jest.advanceTimersByTimeAsync(1_000);
+
+      listening.stop();
+      await jest.advanceTimersByTimeAsync(3_000);
+
+      await expect(listening.heard).resolves.toEqual({ kind: 'failed' });
+    });
+  });
+
+  it('does nothing on stop once listening has ended', async () => {
+    const listening = listenForEnglish();
+    fakeDevice.hear('hello');
+    await listening.heard;
+    jest.mocked(ExpoSpeechRecognitionModule.stop).mockImplementationOnce(() => undefined);
+    jest.useFakeTimers();
+
+    listening.stop();
+    await jest.advanceTimersByTimeAsync(STOP_GRACE_MS);
+
+    expect(ExpoSpeechRecognitionModule.abort).not.toHaveBeenCalled();
+    jest.useRealTimers();
   });
 
   it('reports a failure when the recogniser cannot start', async () => {

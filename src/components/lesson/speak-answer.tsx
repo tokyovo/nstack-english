@@ -93,9 +93,14 @@ export function SpeakAnswer({ exercise, canListen, answered, onCheck }: Props) {
     else setPhase({ kind: 'selfCheck', reason: 'denied' });
   }
 
-  function selfCheck(correct: boolean) {
-    if (!answered) onCheck(correct);
-  }
+  const decline = (
+    <ActionButton
+      label={t('lesson.micDecline')}
+      kind="secondary"
+      onPress={() => setPhase({ kind: 'selfCheck', reason: 'declined' })}
+      testID="mic-decline"
+    />
+  );
 
   switch (phase.kind) {
     case 'ready':
@@ -112,6 +117,7 @@ export function SpeakAnswer({ exercise, canListen, answered, onCheck }: Props) {
             onPress={speak}
             testID="speak"
           />
+          {phase.heardNothing ? decline : null}
         </View>
       );
     case 'explain':
@@ -119,12 +125,7 @@ export function SpeakAnswer({ exercise, canListen, answered, onCheck }: Props) {
         <View style={styles.body}>
           <ThemedText>{t('lesson.micWhy')}</ThemedText>
           <ActionButton label={t('lesson.micAllow')} onPress={allow} testID="mic-allow" />
-          <ActionButton
-            label={t('lesson.micDecline')}
-            kind="secondary"
-            onPress={() => setPhase({ kind: 'selfCheck', reason: 'declined' })}
-            testID="mic-decline"
-          />
+          {decline}
         </View>
       );
     case 'listening':
@@ -151,22 +152,15 @@ export function SpeakAnswer({ exercise, canListen, answered, onCheck }: Props) {
         </View>
       );
     case 'selfCheck': {
+      // Once marked, the feedback below says all there is to say.
+      if (answered) return null;
       const notice = notices[phase.reason];
       return (
         <View style={styles.body}>
           {notice ? <ThemedText role="alert">{notice}</ThemedText> : null}
           <ThemedText>{canListen ? t('lesson.selfCheckListen') : t('lesson.selfCheckRead')}</ThemedText>
-          {answered ? null : (
-            <>
-              <ActionButton label={t('lesson.selfPass')} onPress={() => selfCheck(true)} testID="self-pass" />
-              <ActionButton
-                label={t('lesson.selfFail')}
-                kind="secondary"
-                onPress={() => selfCheck(false)}
-                testID="self-fail"
-              />
-            </>
-          )}
+          <ActionButton label={t('lesson.selfPass')} onPress={() => onCheck(true)} testID="self-pass" />
+          <ActionButton label={t('lesson.selfFail')} kind="secondary" onPress={() => onCheck(false)} testID="self-fail" />
         </View>
       );
     }

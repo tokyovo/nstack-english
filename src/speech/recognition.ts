@@ -74,14 +74,25 @@ function hearingOfError(error: string): Hearing {
   return { kind: 'failed' };
 }
 
-/** Listens once, until the learner stops talking or `stop()` is called. */
+/** Longest a phrase may take; past it the recogniser is taken as stuck. */
+export const LISTEN_LIMIT_MS = 15_000;
+/** How long the recogniser may take to end after the learner taps "Nói xong". */
+export const STOP_GRACE_MS = 3_000;
+
+/**
+ * Listens once, until the learner stops talking or `stop()` is called. A recogniser that never
+ * ends (headless Chromium accepts start() and then stays silent) is aborted and reported as failed.
+ */
 export function listenForEnglish(): { heard: Promise<Hearing>; stop: () => void } {
   const module = recogniser();
   if (!module) return { heard: Promise.resolve({ kind: 'failed' }), stop: () => undefined };
 
+  let giveUp: (delay: number) => void = () => undefined;
   const heard = new Promise<Hearing>((resolve) => {
     let transcripts: string[] = [];
     let error: Hearing | undefined;
+    let timer: ReturnType<typeof setTimeout> | undefined;
+    let done = false;
     const subscriptions = [
       module.addListener('result', (event) => {
         if (event.isFinal) transcripts = event.results.map((result) => result.transcript);
@@ -93,10 +104,21 @@ export function listenForEnglish(): { heard: Promise<Hearing>; stop: () => void 
     ];
 
     function finish(failure?: Hearing) {
+      done = true;
+      clearTimeout(timer);
       subscriptions.forEach((subscription) => subscription.remove());
       if (transcripts.length > 0) resolve({ kind: 'heard', transcripts });
       else resolve(failure ?? error ?? { kind: 'nothing' });
     }
+
+    giveUp = (delay) => {
+      if (done) return;
+      clearTimeout(timer);
+      timer = setTimeout(() => {
+        finish({ kind: 'failed' });
+        module.abort();
+      }, delay);
+    };
 
     try {
       module.start({
@@ -108,10 +130,17 @@ export function listenForEnglish(): { heard: Promise<Hearing>; stop: () => void 
         iosTaskHint: 'confirmation',
         androidIntentOptions: { EXTRA_LANGUAGE_MODEL: 'web_search' },
       });
+      giveUp(LISTEN_LIMIT_MS);
     } catch {
       finish({ kind: 'failed' });
     }
   });
 
-  return { heard, stop: () => module.stop() };
+  return {
+    heard,
+    stop: () => {
+      giveUp(STOP_GRACE_MS);
+      module.stop();
+    },
+  };
 }

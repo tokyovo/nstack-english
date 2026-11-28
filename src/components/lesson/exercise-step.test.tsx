@@ -279,6 +279,18 @@ describe('speak', () => {
     await startSpeaking();
   });
 
+  it('offers self-check after nothing was heard, so a silent microphone is not a dead end', async () => {
+    fakeDevice.permission = 'granted';
+    await renderStep(exercise('e15'));
+    await startSpeaking();
+    await act(() => fakeDevice.fail('no-speech'));
+
+    await press('Không dùng micrô, tự chấm');
+    await press('Tôi nói được rồi');
+
+    expect(onAnswer).toHaveBeenCalledWith(true);
+  });
+
   it('falls back to listen, repeat and self-check when the microphone is refused', async () => {
     fakeDevice.answer = 'denied';
     await renderStep(exercise('e15'));
@@ -338,6 +350,7 @@ describe('speak', () => {
 
     expect(onAnswer).toHaveBeenCalledWith(false);
     expect(screen.getByText("Đáp án đúng: I'm fine, thank you.")).toBeOnTheScreen();
+    expect(screen.queryByText('Bấm “Nghe” để nghe câu mẫu, nói to theo, rồi tự chấm.')).toBeNull();
   });
 
   it('asks to read aloud when the device can neither recognise nor speak English', async () => {
