@@ -644,3 +644,17 @@
 - [x] 3. Act on every finding. builder fixed all six (2c7d6f5), each red then green (review drops an ended Premium's copy online; /profiles due count matches home; next-unit Premium wording; choose_meaning check narrowed; grant refuses empty ref and unmigrated db; 10 s callApi timeout). After merge: jest 475, test:server 117, drive check passed, e2e 52, check-sync ok
 - [x] 4. Review the fixes. round 2 at 1b59129: both pass (general: 1 nit; security: 2 nits), all to backlog
 - [x] Done when: round 2 clean; verify after the fixes (jest 475, server 117, e2e 52, drive check); nits in backlog.
+
+## 2026-11-28 improve
+- Read: improve/SKILL.md c8daf07
+- [x] 1. Gather evidence
+  - [x] 1.1. Broken things. main fast checks pass at 7aae365; CI on main green for PRs #5 and #6 (PR #7 merge run pending)
+  - [x] 1.2. Known problems. gh issue list: none; needs-human: KVM retried (still blocked), payments and pricing open; backlog 59 lines
+  - [x] 1.3. Gaps against the goal. all "Done when" items have passing checks except running on Android (parked: no KVM)
+  - [x] 1.4. Outside demand. research.md is from 2026-11-27 (fresh); remaining needs: daily habit/streak (#8), pronunciation drills (#5); #1 needs payments (parked)
+  - [x] 1.5. Risk. npm audit --omit=dev: 20 moderate, 0 high/critical; review nits on auth (sign-up limit, fixed session life)
+  - [x] 1.6. User experience. drive screens on main (40 shots, /tmp/shots-main); home has no next step; Expo icon/splash still shipped
+  - [x] 1.7. Code health. small duplications only (ActionButton)
+- [x] 2. Score. 32 candidates in backlog.md, sorted by scripts/score; done items removed; 5 rejected with reasons
+- [x] 3. Decide. bar 8: slice hardening planned (scores 12, 10, 10, 10, 9, 9, 9); habit, polish and pronunciation queued as later slices
+- [x] Done when: every source checked, candidates scored or rejected, slice planned.
