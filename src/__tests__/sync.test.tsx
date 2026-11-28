@@ -24,7 +24,7 @@ jest.mock('expo-secure-store', () => {
 const signedInBody = {
   token: 'tok-1',
   user: { id: 'u1', email: 'demo@hocenglish.test' },
-  profiles: [{ id: 'p1', kind: 'owner', name: '' }],
+  profiles: [{ id: 'p1', kind: 'owner', name: '', picture: null }],
 };
 
 /** The account's progress on the server: everyday A0 u1 completed on another device. */

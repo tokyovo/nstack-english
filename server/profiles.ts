@@ -4,14 +4,9 @@ import type { DatabaseSync } from 'node:sqlite';
 import { Hono, type Context } from 'hono';
 import { bodyLimit } from 'hono/body-limit';
 
+import { isProfilePicture, MAX_CHILDREN, MAX_NICKNAME } from '../src/profiles/child-profile.ts';
 import { profileOf, requireAccountMiddleware, startProfileSession, type AuthEnv, type Profile } from './accounts.ts';
 
-/** The pictures a child profile may have: animal emoji only, never an upload or a photo. */
-export const PROFILE_PICTURES = ['🐱', '🐶', '🐰', '🐻', '🐼', '🦊', '🐯', '🐨'] as const;
-export const MAX_CHILDREN = 4;
-const MAX_NAME = 20;
-
-type Picture = (typeof PROFILE_PICTURES)[number];
 type ErrorBody = { error: string; field?: 'name' | 'picture' };
 
 const notFound: ErrorBody = { error: 'not_found' };
@@ -34,7 +29,7 @@ export function profileRoutes(db: DatabaseSync, now: () => Date) {
     if (!body) return c.json(invalidBody, 400);
     const name = readNickname(body.name);
     if (name === undefined) return c.json(invalidName, 400);
-    if (!isPicture(body.picture)) return c.json(invalidPicture, 400);
+    if (!isProfilePicture(body.picture)) return c.json(invalidPicture, 400);
     const userId = c.get('user').id;
     // No await between the count and the insert, so two requests cannot both add a fifth child.
     const children = db.prepare("SELECT count(*) AS n FROM profiles WHERE user_id = ? AND kind = 'child'").get(userId);
@@ -57,7 +52,7 @@ export function profileRoutes(db: DatabaseSync, now: () => Date) {
     if (!body || (body.name === undefined && body.picture === undefined)) return c.json(invalidBody, 400);
     const name = body.name === undefined ? current.name : readNickname(body.name);
     if (name === undefined) return c.json(invalidName, 400);
-    if (body.picture !== undefined && !isPicture(body.picture)) return c.json(invalidPicture, 400);
+    if (body.picture !== undefined && !isProfilePicture(body.picture)) return c.json(invalidPicture, 400);
     const profile: Profile = { ...current, name, picture: body.picture ?? current.picture };
     db.prepare('UPDATE profiles SET name = ?, picture = ? WHERE id = ?').run(profile.name, profile.picture, profile.id);
     return c.json({ profile });
@@ -89,11 +84,7 @@ function readNickname(value: unknown): string | undefined {
   if (typeof value !== 'string') return undefined;
   const nickname = value.normalize('NFC').trim();
   const length = [...nickname].length;
-  return length >= 1 && length <= MAX_NAME ? nickname : undefined;
-}
-
-function isPicture(value: unknown): value is Picture {
-  return PROFILE_PICTURES.some((picture) => picture === value);
+  return length >= 1 && length <= MAX_NICKNAME ? nickname : undefined;
 }
 
 /** The JSON object in the request body; undefined when it is not one. */

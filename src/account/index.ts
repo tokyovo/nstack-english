@@ -1,11 +1,13 @@
 // The learner's account on this device: sign up, sign in, sign out, and the saved session.
 // The server's answers (server/accounts.ts) are checked here and turned into typed values.
 import { callApi, type ApiReply } from '@/api/client';
+import { isProfilePicture, type ProfilePicture } from '@/profiles/child-profile';
 
 import { deleteSession, readSession, writeSession } from './session-storage';
 
 export type User = { id: string; email: string };
-export type Profile = { id: string; kind: 'owner' | 'child'; name: string };
+/** A child's `picture` is one of PROFILE_PICTURES; the owner has none. */
+export type Profile = { id: string; kind: 'owner' | 'child'; name: string; picture: ProfilePicture | null };
 
 export type AccountState =
   | { status: 'loading' }
@@ -79,6 +81,11 @@ export async function syncSession(): Promise<SyncSession | undefined> {
   return session && owner && { token: session.token, profileId: owner.id };
 }
 
+/** The saved session's token, for calls made as the parent's whole account. */
+export async function accountToken(): Promise<string | undefined> {
+  return (await savedSession())?.token;
+}
+
 /**
  * The saved account, checked with the server: a session the server no longer knows is
  * forgotten; while offline the saved one is trusted.
@@ -137,7 +144,14 @@ function parseAccount(value: unknown): Omit<Session, 'token'> | undefined {
   if (typeof id !== 'string' || typeof email !== 'string') return undefined;
   const profiles = value.profiles.flatMap((profile): Profile[] =>
     isRecord(profile) && typeof profile.id === 'string'
-      ? [{ id: profile.id, kind: profile.kind === 'child' ? 'child' : 'owner', name: String(profile.name ?? '') }]
+      ? [
+          {
+            id: profile.id,
+            kind: profile.kind === 'child' ? 'child' : 'owner',
+            name: String(profile.name ?? ''),
+            picture: isProfilePicture(profile.picture) ? profile.picture : null,
+          },
+        ]
       : []
   );
   return { user: { id, email }, profiles };

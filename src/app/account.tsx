@@ -7,6 +7,7 @@ import { signIn, signOut, signUp, type AccountError, type Profile, type User } f
 import { useAccount } from '@/account/use-account';
 import { BackLink } from '@/components/back-link';
 import { ActionButton } from '@/components/lesson/action-button';
+import { ListRow } from '@/components/list-row';
 import { TextField } from '@/components/text-field';
 import { ThemedText } from '@/components/themed-text';
 import { MaxContentWidth, Space } from '@/constants/theme';
@@ -144,6 +145,13 @@ function SignedIn({ user, onSignedOut }: { user: User; onSignedOut: () => void }
   return (
     <View style={styles.section}>
       <ThemedText type="lead">{t('account.signedInAs', { email: user.email })}</ThemedText>
+      <ListRow
+        href="/profiles"
+        testID="account-profiles"
+        accessibilityLabel={t('account.profilesLabel', { title: t('account.profiles'), hint: t('account.profilesHint') })}>
+        <ThemedText type="label">{t('account.profiles')}</ThemedText>
+        <ThemedText>{t('account.profilesHint')}</ThemedText>
+      </ListRow>
       <ActionButton
         kind="secondary"
         label={label}
