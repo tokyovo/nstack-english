@@ -1,0 +1,135 @@
+{
+  "id": "kids-a2-u10",
+  "track": "kids",
+  "level": "a2",
+  "number": 10,
+  "title": "Cảm xúc",
+  "goals": [
+    "Con nói được mình đang thấy thế nào: vui, buồn, mệt, đói",
+    "Con hỏi được “How are you?” và trả lời bằng “I'm ...”"
+  ],
+  "note_vi": "Tiếng Việt nói “Con vui.”, “Mẹ mệt.”: chỉ cần người và cảm xúc. Tiếng Anh phải có thêm một từ nhỏ ở giữa: “I am happy.” (Con vui.), nói nhanh thành “I'm happy.”. Không nói “I happy.”. Khi nói về người khác thì dùng “is”: “Mom is tired.” (Mẹ mệt.), “Dad is hungry.” (Bố đói.). Muốn hỏi con thấy thế nào, bố mẹ hỏi “How are you?”, con đáp “I'm happy!” hoặc “I'm tired.”.",
+  "source": "original",
+  "words": [
+    { "id": "kids-a2-u10-happy", "en": "happy", "vi": "vui", "picture": "😀" },
+    { "id": "kids-a2-u10-sad", "en": "sad", "vi": "buồn", "picture": "😢" },
+    { "id": "kids-a2-u10-angry", "en": "angry", "vi": "tức giận", "picture": "😠" },
+    { "id": "kids-a2-u10-scared", "en": "scared", "vi": "sợ", "picture": "😨" },
+    { "id": "kids-a2-u10-tired", "en": "tired", "vi": "mệt", "picture": "😫" },
+    { "id": "kids-a2-u10-hungry", "en": "hungry", "vi": "đói", "picture": "😋" },
+    {
+      "id": "kids-a2-u10-i-m",
+      "en": "I'm ...",
+      "vi": "Con thấy ...",
+      "audio": "I'm happy.",
+      "picture": "👉",
+      "example": { "en": "I'm happy.", "vi": "Con vui." }
+    },
+    { "id": "kids-a2-u10-how-are-you", "en": "How are you?", "vi": "Con thấy thế nào?", "picture": "🙂" }
+  ],
+  "exercises": [
+    {
+      "id": "kids-a2-u10-e01",
+      "type": "choose_meaning",
+      "prompt": "kids-a2-u10-happy",
+      "options": ["buồn", "vui", "mệt"],
+      "answer": "vui"
+    },
+    {
+      "id": "kids-a2-u10-e02",
+      "type": "listen_choose",
+      "audio": "sad",
+      "options": ["sad", "happy", "scared"],
+      "answer": "sad"
+    },
+    {
+      "id": "kids-a2-u10-e03",
+      "type": "choose_english",
+      "prompt": "sợ",
+      "options": ["angry", "tired", "scared"],
+      "answer": "scared"
+    },
+    {
+      "id": "kids-a2-u10-e04",
+      "type": "choose_meaning",
+      "prompt": "kids-a2-u10-tired",
+      "options": ["đói", "mệt", "tức giận"],
+      "answer": "mệt"
+    },
+    {
+      "id": "kids-a2-u10-e05",
+      "type": "listen_choose",
+      "audio": "I'm hungry.",
+      "options": ["I'm happy.", "I'm angry.", "I'm hungry."],
+      "answer": "I'm hungry."
+    },
+    {
+      "id": "kids-a2-u10-e06",
+      "type": "build_sentence",
+      "prompt": "Con vui.",
+      "tiles": ["sad", "I'm", "happy"],
+      "answer": ["I'm", "happy"]
+    },
+    {
+      "id": "kids-a2-u10-e07",
+      "type": "choose_english",
+      "prompt": "Con thấy thế nào?",
+      "options": ["I love you.", "How are you?", "Let's play!"],
+      "answer": "How are you?"
+    },
+    {
+      "id": "kids-a2-u10-e08",
+      "type": "choose_meaning",
+      "prompt": "kids-a2-u10-angry",
+      "options": ["tức giận", "sợ", "vui"],
+      "answer": "tức giận"
+    },
+    {
+      "id": "kids-a2-u10-e09",
+      "type": "build_sentence",
+      "prompt": "Mẹ buồn.",
+      "tiles": ["sad", "is", "I'm", "Mom"],
+      "answer": ["Mom", "is", "sad"],
+      "hint_vi": "Nói về người khác thì dùng “is”."
+    },
+    {
+      "id": "kids-a2-u10-e10",
+      "type": "listen_choose",
+      "audio": "Dad is tired.",
+      "options": ["Dad is angry.", "Dad is tired.", "Dad is hungry."],
+      "answer": "Dad is tired."
+    },
+    {
+      "id": "kids-a2-u10-e11",
+      "type": "choose_meaning",
+      "prompt": "kids-a2-u10-hungry",
+      "options": ["mệt", "buồn", "đói"],
+      "answer": "đói"
+    },
+    {
+      "id": "kids-a2-u10-e12",
+      "type": "type_answer",
+      "prompt": "vui",
+      "answer": "happy"
+    },
+    {
+      "id": "kids-a2-u10-e13",
+      "type": "build_sentence",
+      "prompt": "Bố đói.",
+      "tiles": ["hungry", "Dad", "I'm", "is"],
+      "answer": ["Dad", "is", "hungry"]
+    },
+    {
+      "id": "kids-a2-u10-e14",
+      "type": "speak",
+      "text": "I'm happy!",
+      "vi": "Con vui lắm!"
+    },
+    {
+      "id": "kids-a2-u10-e15",
+      "type": "speak",
+      "text": "How are you?",
+      "vi": "Con thấy thế nào?"
+    }
+  ]
+}

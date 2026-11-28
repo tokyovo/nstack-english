@@ -1,0 +1,137 @@
+{
+  "id": "kids-a2-u9",
+  "track": "kids",
+  "level": "a2",
+  "number": 9,
+  "title": "Một ngày của em",
+  "goals": [
+    "Con kể được việc mình làm mỗi ngày: thức dậy, ăn sáng, đi ngủ",
+    "Con chào được bố mẹ bằng “Good morning!” và “Good night!”"
+  ],
+  "note_vi": "Tiếng Việt hay bỏ người làm: “Dậy rồi!”, “Ăn sáng thôi!”. Tiếng Anh thì kể việc mình làm luôn bắt đầu bằng “I” (con): “I get up.” (Con thức dậy.), “I eat breakfast.” (Con ăn sáng.). Việc ngày nào cũng làm thì giữ nguyên động từ và thêm “every day” (mỗi ngày) ở cuối câu: “I eat breakfast every day.” Lời chào cũng khác: sáng dậy nói “Good morning!”, còn “Good night!” chỉ nói lúc đi ngủ (Chúc ngủ ngon!), không dùng để chào buổi tối. Bố mẹ kể một ngày của mình, con kể lại một ngày của con.",
+  "source": "original",
+  "words": [
+    { "id": "kids-a2-u9-morning", "en": "morning", "vi": "buổi sáng", "picture": "🌅" },
+    { "id": "kids-a2-u9-get-up", "en": "get up", "vi": "thức dậy", "picture": "⏰" },
+    { "id": "kids-a2-u9-eat", "en": "eat", "vi": "ăn", "picture": "🍴" },
+    { "id": "kids-a2-u9-breakfast", "en": "breakfast", "vi": "bữa sáng", "picture": "🍳" },
+    { "id": "kids-a2-u9-lunch", "en": "lunch", "vi": "bữa trưa", "picture": "🍱" },
+    { "id": "kids-a2-u9-dinner", "en": "dinner", "vi": "bữa tối", "picture": "🍲" },
+    { "id": "kids-a2-u9-go-to-bed", "en": "go to bed", "vi": "đi ngủ", "picture": "🛏️" },
+    {
+      "id": "kids-a2-u9-every-day",
+      "en": "every day",
+      "vi": "mỗi ngày",
+      "picture": "📅",
+      "example": { "en": "I eat breakfast every day.", "vi": "Ngày nào con cũng ăn sáng." }
+    },
+    { "id": "kids-a2-u9-good-morning", "en": "Good morning!", "vi": "Chào buổi sáng!", "picture": "🌞" },
+    { "id": "kids-a2-u9-good-night", "en": "Good night!", "vi": "Chúc ngủ ngon!", "picture": "😴" }
+  ],
+  "exercises": [
+    {
+      "id": "kids-a2-u9-e01",
+      "type": "choose_meaning",
+      "prompt": "kids-a2-u9-breakfast",
+      "options": ["bữa trưa", "bữa sáng", "bữa tối"],
+      "answer": "bữa sáng"
+    },
+    {
+      "id": "kids-a2-u9-e02",
+      "type": "listen_choose",
+      "audio": "Good morning!",
+      "options": ["Good night!", "I love you.", "Good morning!"],
+      "answer": "Good morning!"
+    },
+    {
+      "id": "kids-a2-u9-e03",
+      "type": "choose_english",
+      "prompt": "đi ngủ",
+      "options": ["get up", "go to bed", "eat"],
+      "answer": "go to bed"
+    },
+    {
+      "id": "kids-a2-u9-e04",
+      "type": "choose_meaning",
+      "prompt": "kids-a2-u9-get-up",
+      "options": ["thức dậy", "đi ngủ", "ăn"],
+      "answer": "thức dậy"
+    },
+    {
+      "id": "kids-a2-u9-e05",
+      "type": "listen_choose",
+      "audio": "dinner",
+      "options": ["lunch", "breakfast", "dinner"],
+      "answer": "dinner"
+    },
+    {
+      "id": "kids-a2-u9-e06",
+      "type": "build_sentence",
+      "prompt": "Con ăn sáng.",
+      "tiles": ["breakfast", "I", "dinner", "eat"],
+      "answer": ["I", "eat", "breakfast"],
+      "hint_vi": "Câu tiếng Anh bắt đầu bằng “I” (con)."
+    },
+    {
+      "id": "kids-a2-u9-e07",
+      "type": "choose_english",
+      "prompt": "Chúc ngủ ngon!",
+      "options": ["Good morning!", "Let's play!", "Good night!"],
+      "answer": "Good night!"
+    },
+    {
+      "id": "kids-a2-u9-e08",
+      "type": "choose_meaning",
+      "prompt": "kids-a2-u9-every-day",
+      "options": ["buổi sáng", "mỗi ngày", "bữa trưa"],
+      "answer": "mỗi ngày"
+    },
+    {
+      "id": "kids-a2-u9-e09",
+      "type": "build_sentence",
+      "prompt": "Con thức dậy.",
+      "tiles": ["up", "I", "bed", "get"],
+      "answer": ["I", "get", "up"]
+    },
+    {
+      "id": "kids-a2-u9-e10",
+      "type": "listen_choose",
+      "audio": "I go to bed.",
+      "options": ["I get up.", "I go to bed.", "I eat lunch."],
+      "answer": "I go to bed."
+    },
+    {
+      "id": "kids-a2-u9-e11",
+      "type": "choose_meaning",
+      "prompt": "kids-a2-u9-morning",
+      "options": ["buổi sáng", "bữa sáng", "mỗi ngày"],
+      "answer": "buổi sáng"
+    },
+    {
+      "id": "kids-a2-u9-e12",
+      "type": "type_answer",
+      "prompt": "bữa trưa",
+      "answer": "lunch"
+    },
+    {
+      "id": "kids-a2-u9-e13",
+      "type": "build_sentence",
+      "prompt": "Ngày nào con cũng ăn sáng.",
+      "tiles": ["every", "eat", "I", "day", "breakfast", "lunch"],
+      "answer": ["I", "eat", "breakfast", "every", "day"],
+      "hint_vi": "“every day” (mỗi ngày) đứng ở cuối câu."
+    },
+    {
+      "id": "kids-a2-u9-e14",
+      "type": "speak",
+      "text": "Good morning!",
+      "vi": "Chào buổi sáng!"
+    },
+    {
+      "id": "kids-a2-u9-e15",
+      "type": "speak",
+      "text": "Good night, Mom!",
+      "vi": "Chúc mẹ ngủ ngon!"
+    }
+  ]
+}
