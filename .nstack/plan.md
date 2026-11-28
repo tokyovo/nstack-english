@@ -105,7 +105,7 @@ Acceptance criteria:
 5. No child email, real name field, birthday or location anywhere (the child form has only nickname and picture); no third-party trackers (dependency list unchanged apart from first-party Expo modules).
 
 - [ ] T20 Server: child profile create/rename/delete with limits; child-scoped sessions; 403 for child tokens on account and profile endpoints. Proof: `npm run test:server` (deny proofs seen failing). Access: owner (manage), child (own progress). Migration: yes. Needs: accounts-sync
-- [ ] T21 App profiles screen: list with per-profile progress summary, add/rename/delete with confirmation. Proof: Jest, e2e `e2e/profiles.spec.ts`, axe. Access: parent. Needs: T20
+- [x] T21 App profiles screen: list with per-profile progress summary, add/rename/delete with confirmation. Proof: Jest, e2e `e2e/profiles.spec.ts`, axe. Access: parent. Needs: T20
 - [ ] T22 Active profile and child mode: token switching, parent gate on /account and /profiles, kids track first, separate progress and sync. Proof: Jest, e2e `e2e/child-mode.spec.ts`. Access: parent / child. Needs: T20, T21
 
 ## Slice: plans (branch nstack/plans)

@@ -238,3 +238,25 @@
 - [x] 6. Record. this entry, backlog
 - [x] Done when: committed, items ticked.
 - Decision: expo-secure-store config plugin not added (it adds a Face ID usage string); Android backup rules for it go to the backlog.
+
+## 2026-11-28 build T20
+- Read: build/SKILL.md a069840
+- [x] 1. Branch. nstack/family (from nstack/accounts-sync)
+- [x] 2. Starting state. fast checks pass
+- [x] 3. Dispatch. builder in worktree
+- [x] 4. Read the reply. done 8910780; deny proofs red with checks removed (ownership, auth, child scope, child 403); migration 0003 expand-only, data test on 300 users
+- [x] 5. Prove it yourself. merged: test:server 85 pass, jest 192, typecheck 0
+- [x] 6. Record. this entry
+- [x] Done when: committed, items ticked.
+- Decision: child tokens may sign themselves out; a session's scope is a union account|profile.
+
+## 2026-11-28 build T21
+- Read: build/SKILL.md a069840
+- [x] 1. Branch. nstack/family
+- [x] 2. Starting state. fast checks pass
+- [x] 3. Dispatch. builder in worktree
+- [x] 4. Read the reply. done 6e4710c; module 15/15 and screen 8/8 red vs stubs; summary e2e red with wordsDue mutated; critique 9/9 at 390/1280 light/dark
+- [x] 5. Prove it yourself. merged: typecheck, lint, jest, test:server (below)
+- [x] 6. Record. this entry, backlog
+- [x] Done when: committed, items ticked.
+- Decision: delete confirmation and edit inline (Alert does not work on web); child profile limits in one shared module imported by the server.
