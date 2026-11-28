@@ -56,3 +56,6 @@
 - (unscored) Nickname check: blank-rendering letters (Hangul filler U+3164, U+115F/1160) pass as visible. Evidence: family security review round 2
 - (unscored) drive android-build: pass -PreactNativeArchitectures=x86_64 for emulator builds (10.5 min vs 23 min for 4 ABIs) and export ANDROID_HOME. Evidence: 2026-11-28 build
 - (unscored) /profiles fetches finished premium units per profile on each load (one request per unit per profile); cache per session. Evidence: plans fix builder
+- (unscored) grant CLI: a --db file that is not SQLite crashes with a stack trace instead of exit 2. Evidence: plans review round 2
+- (unscored) grant CLI: a grant counts from now, not from the end of current Premium, yet prints the new end date; extend from the current end (or print the real plan end). Evidence: plans security review round 2
+- (unscored) Review waits up to 10 s on a hanging network before using a valid premium copy; use the copy first and refresh in the background. Evidence: plans security review round 2

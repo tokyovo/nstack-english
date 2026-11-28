@@ -642,5 +642,5 @@
 - [x] 1. Dispatch. reviewer at 31f4680: fix-needed. Important: /profiles words due counts bundled units only (regression: parent sees 0 while the child's home shows 10). Nit: "next lesson" button leads to the paywall without saying Premium.
 - [x] 2. Second reviewer. focus security and failure modes, at 31f4680: fix-needed. Important: review uses a kept premium copy without asking the server, so words keep coming after Premium ends. Nits: choose_meaning prompt only searched in the unit's words (latent); grant --ref "" and unmigrated db crash; callApi has no timeout (review waits on a stalled fetch).
 - [x] 3. Act on every finding. builder fixed all six (2c7d6f5), each red then green (review drops an ended Premium's copy online; /profiles due count matches home; next-unit Premium wording; choose_meaning check narrowed; grant refuses empty ref and unmigrated db; 10 s callApi timeout). After merge: jest 475, test:server 117, drive check passed, e2e 52, check-sync ok
-- [ ] 4. Review the fixes. round 2: two reviewers dispatched
-- [ ] Done when: the latest round has no important findings, verify passed after the last fix, and nits are fixed or in backlog.md.
+- [x] 4. Review the fixes. round 2 at 1b59129: both pass (general: 1 nit; security: 2 nits), all to backlog
+- [x] Done when: round 2 clean; verify after the fixes (jest 475, server 117, e2e 52, drive check); nits in backlog.
