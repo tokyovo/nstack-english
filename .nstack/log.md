@@ -573,3 +573,11 @@
 - [x] 9. Access is enforced. check-security exit 0, 8 deny proofs
 - [x] Done when: all ticked. Not verified: Android (no KVM).
 - Note: scripts/check-sync flags files changed inside an earlier merge commit (46b5ca6) as reverted; they equal family's own tip. Known limit of the script (it counts non-merge commits only).
+
+## 2026-11-28 review family
+- Read: review/SKILL.md c151f88
+- [x] 1. Dispatch. reviewer at 043bf20: fix-needed, 1 important: a deleted child's device copy survives sign-out (sign-out clears only listed profiles and removes the owner mark, so the next account's claim does not clear it)
+- [x] 2. Second reviewer. focus security and failure modes, at 043bf20: fix-needed, the same important finding; nits: owner profile accepts a name/picture by PATCH; nicknames accept invisible and control characters; T20 unticked in plan (fixed)
+- [ ] 3. Act on every finding. one fix builder for the important finding and both code nits
+- [ ] 4. Review the fixes
+- [ ] Done when: the latest round has no important findings, verify passed after the last fix, and nits are fixed or in backlog.md.
