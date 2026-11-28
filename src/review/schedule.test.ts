@@ -1,4 +1,5 @@
 import type { Unit } from '@/content';
+import { mergeProgress } from '@/progress/merge';
 import { emptyProgress, type AnswerRecord, type Progress } from '@/progress/schema';
 import { dueWords, learnedWords } from '@/review/schedule';
 
@@ -200,5 +201,38 @@ describe('review schedule', () => {
       ['one', 'everyday-a0-u2', 'everyday'],
       ['two', 'everyday-a0-u2', 'everyday'],
     ]);
+  });
+});
+
+describe('review schedule with answer histories cut to the last 7', () => {
+  /** A seeded generator (mulberry32), so every run checks the same histories. */
+  function random(seed: number): () => number {
+    let state = seed;
+    return () => {
+      state = (state + 0x6d2b79f5) | 0;
+      let t = Math.imul(state ^ (state >>> 15), 1 | state);
+      t = (t + Math.imul(t ^ (t >>> 7), 61 | t)) ^ t;
+      return ((t ^ (t >>> 14)) >>> 0) / 4294967296;
+    };
+  }
+
+  it('gives every word the same box and due time as its full history, over 2000 random histories', () => {
+    const next = random(20261128);
+    const wordId = 'everyday-a0-u1-hello';
+    for (let run = 0; run < 2000; run += 1) {
+      const length = Math.floor(next() * 30);
+      // Answers from a day before the lesson (ignored by the schedule) to 60 days after.
+      let time = completedAt - DAY;
+      const answers: AnswerRecord[] = Array.from({ length }, () => {
+        time += Math.floor(next() * 4 * DAY);
+        return { at: new Date(time).toISOString(), correct: next() < 0.75 };
+      });
+      const full = progressWith({ 'everyday-a0-u1': COMPLETED }, { [wordId]: answers });
+
+      const cut = mergeProgress(full, emptyProgress('local'));
+
+      expect(cut.answers[wordId].length).toBeLessThanOrEqual(7);
+      expect(scheduleOf(cut, wordId)).toEqual(scheduleOf(full, wordId));
+    }
   });
 });

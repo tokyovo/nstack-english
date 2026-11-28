@@ -1,6 +1,6 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
-import { mergeProgress } from './merge';
+import { mergeAnswers, mergeProgress } from './merge';
 import { emptyProgress, parseProgress, type LessonCompletion, type Progress } from './schema';
 
 export {
@@ -61,7 +61,7 @@ function withAnswer(progress: Progress, answer: Answer, at: string): Progress {
   const history = progress.answers[answer.itemId] ?? [];
   return {
     ...progress,
-    answers: { ...progress.answers, [answer.itemId]: [...history, { at, correct: answer.correct }] },
+    answers: { ...progress.answers, [answer.itemId]: mergeAnswers(history, [{ at, correct: answer.correct }]) },
   };
 }
 

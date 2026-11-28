@@ -102,6 +102,35 @@ describe('mergeProgress', () => {
     ]);
   });
 
+  it('keeps only the last 7 answers to an item, so a history stops growing', () => {
+    const times = Array.from({ length: 10 }, (_, i) => `2026-11-2${i}T08:00:00.000Z`);
+    const a = progress({}, { item: times.slice(0, 6).map((at) => ({ at, correct: true })) });
+    const b = progress({}, { item: times.slice(6).map((at) => ({ at, correct: false })) });
+
+    expect(mergeProgress(a, b).answers.item).toEqual([
+      { at: '2026-11-23T08:00:00.000Z', correct: true },
+      { at: '2026-11-24T08:00:00.000Z', correct: true },
+      { at: '2026-11-25T08:00:00.000Z', correct: true },
+      { at: '2026-11-26T08:00:00.000Z', correct: false },
+      { at: '2026-11-27T08:00:00.000Z', correct: false },
+      { at: '2026-11-28T08:00:00.000Z', correct: false },
+      { at: '2026-11-29T08:00:00.000Z', correct: false },
+    ]);
+  });
+
+  it('still converges in any order when histories are cut to the last 7', () => {
+    const history = (day: number, count: number, correct: boolean) =>
+      Array.from({ length: count }, (_, i) => ({ at: `2026-11-${10 + day + i}T08:00:00.000Z`, correct }));
+    const a = progress({}, { item: history(0, 5, true) });
+    const b = progress({}, { item: history(3, 5, false) });
+    const c = progress({}, { item: history(6, 5, true) });
+
+    const abc = mergeProgress(mergeProgress(a, b), c);
+    expect(mergeProgress(a, mergeProgress(b, c))).toEqual(abc);
+    expect(mergeProgress(mergeProgress(c, a), b)).toEqual(abc);
+    expect(mergeProgress(abc, b)).toEqual(abc);
+  });
+
   it('is idempotent: merging a document with itself, or merging the same one twice, changes nothing', () => {
     expect(mergeProgress(phone, phone)).toEqual(phone);
 
