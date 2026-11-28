@@ -108,4 +108,39 @@ describe('migrate', () => {
     assert.deepEqual(migrate(db, repoMigrations), []);
     assert.deepEqual(schema(db), schemaAfterFirst);
   });
+
+  test('rerunning the repository migrations keeps account rows as they were', () => {
+    const repoMigrations = join(import.meta.dirname, 'migrations');
+    migrate(db, repoMigrations);
+    const addUser = db.prepare('INSERT INTO users (id, email, password_hash, created_at) VALUES (?, ?, ?, ?)');
+    const addProfile = db.prepare('INSERT INTO profiles (id, user_id, kind, name, created_at) VALUES (?, ?, ?, ?, ?)');
+    for (let i = 0; i < 200; i += 1) {
+      addUser.run(`u${i}`, `user${i}@example.com`, 'scrypt$16384$8$1$salt$key', i);
+      addProfile.run(`p${i}`, `u${i}`, 'owner', i % 2 ? '' : 'Tên rất dài '.repeat(100), i);
+    }
+    addProfile.run('child', 'u0', 'child', 'Bé Na', 1);
+    db.prepare('INSERT INTO sessions (token_hash, user_id, created_at, expires_at) VALUES (?, ?, ?, ?)').run('h', 'u1', 1, 2);
+    db.prepare('INSERT INTO signin_failures (email, failed_at) VALUES (?, ?)').run('user1@example.com', 1);
+    const tables = ['users', 'profiles', 'sessions', 'signin_failures'];
+    const before = tables.map((table) => db.prepare(`SELECT * FROM ${table} ORDER BY rowid`).all());
+
+    assert.deepEqual(migrate(db, repoMigrations), []);
+
+    assert.deepEqual(
+      tables.map((table) => db.prepare(`SELECT * FROM ${table} ORDER BY rowid`).all()),
+      before,
+    );
+    assert.equal(db.prepare('SELECT count(*) AS n FROM profiles').get()?.n, 201);
+  });
+
+  test('the accounts schema allows one owner profile per user', () => {
+    migrate(db, join(import.meta.dirname, 'migrations'));
+    db.prepare("INSERT INTO users (id, email, password_hash, created_at) VALUES ('u', 'a@b.co', 'x', 0)").run();
+    const addProfile = db.prepare("INSERT INTO profiles (id, user_id, kind, created_at) VALUES (?, 'u', ?, 0)");
+    addProfile.run('owner', 'owner');
+    addProfile.run('child', 'child');
+
+    assert.throws(() => addProfile.run('second-owner', 'owner'), /UNIQUE constraint failed/);
+    assert.throws(() => addProfile.run('admin', 'admin'), /CHECK constraint failed/);
+  });
 });
