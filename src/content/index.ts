@@ -16,6 +16,9 @@ import workA0U3 from '../../content/work/a0/u3.json';
 import workA1U4 from '../../content/work/a1/u4.json';
 import workA1U5 from '../../content/work/a1/u5.json';
 import workA1U6 from '../../content/work/a1/u6.json';
+import workA2U7 from '../../content/work/a2/u7.json';
+import workA2U8 from '../../content/work/a2/u8.json';
+import workA2U9 from '../../content/work/a2/u9.json';
 import kidsA0U1 from '../../content/kids/a0/u1.json';
 import kidsA0U2 from '../../content/kids/a0/u2.json';
 import kidsA0U3 from '../../content/kids/a0/u3.json';
@@ -48,6 +51,9 @@ const files: unknown[] = [
   workA1U4,
   workA1U5,
   workA1U6,
+  workA2U7,
+  workA2U8,
+  workA2U9,
   kidsA0U1,
   kidsA0U2,
   kidsA0U3,
