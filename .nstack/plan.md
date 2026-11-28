@@ -52,7 +52,7 @@ Acceptance criteria:
 - [x] T23 Entitlements table, plan in /api/me (child follows parent), grant CLI. Proof: `npm run test:server`. Access: owner, child (read plan). Migration: yes. Needs: family
 - [x] T24 Premium unit bodies served by the server only: manifest generator and test, `GET /api/units/:id` with deny proofs, bundle test. Proof: server tests, Jest manifest test, dist grep test. Access: premium. Needs: T23
 - [x] T25 App: locks on track screens, `/premium` screen, fetch and cache premium units, parent gate in child mode, drive seed grants the demo account. Proof: Jest, e2e `e2e/premium.spec.ts`, axe. Needs: T23, T24
-- [ ] T25b Premium words in review and family devices: review sessions include words from premium units the learner has finished (from the device copies of fetched units), and sign-out clears the premium unit copies with the rest. Proof: Jest (review session with a finished premium unit), sync sign-out test. Needs: T25
+- [x] T25b Premium words in review and family devices: review sessions include words from premium units the learner has finished (from the device copies of fetched units), and sign-out clears the premium unit copies with the rest. Proof: Jest (review session with a finished premium unit), sync sign-out test. Needs: T25
 
 ## Done
 - foundation: T1-T4, PR #1

@@ -478,3 +478,13 @@
 - [x] 5. Prove it yourself. fast-forwarded: typecheck 0, jest 379, check-features 0
 - [x] 6. Record. this entry, Features rows, needs-human payments item, T25b planned
 - [x] Done when: committed, items ticked.
+
+## 2026-11-28 build T25b
+- Read: build/SKILL.md a069840
+- [x] 1. Branch. nstack/plans
+- [x] 2. Starting state. fast checks pass at c4350f8
+- [x] 3. Dispatch. builder in worktree
+- [x] 4. Read the reply. done c414549; fetch/copy review tests red -> green; sign-out premium copies test red -> green; also fixed premium lessons showing raw word ids (getWord searched bundled units only; ExerciseStep now takes the unit's words)
+- [x] 5. Prove it yourself. fast-forwarded: jest below
+- [x] 6. Record. this entry, backlog
+- [x] Done when: committed, items ticked.

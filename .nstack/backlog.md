@@ -45,3 +45,5 @@
 - (unscored) Speech scoring: "12" heard for "One, two" reads as twelve. Evidence: review-speak fix builder
 - (unscored) Deleting a child on /profiles does not clear that child's device copy. Evidence: T22b builder
 - (unscored) Premium unit copies on the device: cleared at sign-out (T25b covers it). Evidence: T25 builder
+- (unscored) /profiles "words due" counts bundled units only (premium words missing). Evidence: T25b builder
+- (unscored) A free learner with a finished premium unit and no copy asks the server (403) on every progress change; remember the refusal. Evidence: T25b builder
