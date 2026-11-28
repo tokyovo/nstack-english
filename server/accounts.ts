@@ -28,6 +28,8 @@ const MAX_FAILURES = 10;
 const FAILURE_WINDOW = 15 * 60 * 1000;
 /** Sign-ups allowed per email, and by default per client address, in `SIGNUP_WINDOW`. */
 export const MAX_SIGNUPS = 5;
+/** Sign-ups per client address per window: higher than per email, because mobile networks in Vietnam put many people behind one address (CGNAT). */
+export const MAX_SIGNUPS_PER_ADDRESS = 30;
 const SIGNUP_WINDOW = 15 * 60 * 1000;
 
 const unauthorized: ErrorBody = { error: 'unauthorized' };
@@ -40,7 +42,7 @@ const tooManySignups: ErrorBody = { error: 'too_many_signups' };
  * `now` is injected so tests can move the clock. `signupsPerAddress` caps sign-ups from one
  * client address per 15 minutes.
  */
-export function accountRoutes(db: DatabaseSync, now: () => Date, signupsPerAddress = MAX_SIGNUPS) {
+export function accountRoutes(db: DatabaseSync, now: () => Date, signupsPerAddress = MAX_SIGNUPS_PER_ADDRESS) {
   const app = new Hono<AuthEnv>();
   const requireUser = requireUserMiddleware(db, now);
   const requireAccount = requireAccountMiddleware(db, now);

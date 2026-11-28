@@ -5,6 +5,7 @@ import { join } from 'node:path';
 import { DatabaseSync } from 'node:sqlite';
 import { after, before, beforeEach, describe, test } from 'node:test';
 
+import { MAX_SIGNUPS_PER_ADDRESS } from './accounts.ts';
 import { startServer, type RunningServer } from './server.ts';
 
 /** The body of a signup, signin or /api/me answer. */
@@ -441,6 +442,7 @@ describe('accounts', () => {
 });
 
 describe('sign-up rate limit per client address', () => {
+  const LIMIT = MAX_SIGNUPS_PER_ADDRESS;
   let dir: string;
   let server: RunningServer;
   let clock = Date.parse('2026-11-28T09:00:00Z');
@@ -474,22 +476,22 @@ describe('sign-up rate limit per client address', () => {
     return signUp(JSON.stringify({ email: `newcomer${emailCounter}@example.com`, password: 'correct horse' }));
   }
 
-  test('20 sign-ups from one address at once, each a new email: 5 accounts, the rest answer 429', async () => {
-    const responses = await Promise.all(Array.from({ length: 20 }, () => freshSignUp()));
+  test('more sign-ups than the address limit at once, each a new email: the limit is reached, the rest answer 429', async () => {
+    const responses = await Promise.all(Array.from({ length: LIMIT + 15 }, () => freshSignUp()));
 
     const statuses = responses.map((response) => response.status);
-    assert.equal(statuses.filter((status) => status === 201).length, 5);
+    assert.equal(statuses.filter((status) => status === 201).length, LIMIT);
     assert.equal(statuses.filter((status) => status === 429).length, 15);
   });
 
   test('bodies that are not JSON count too', async () => {
-    for (let i = 0; i < 5; i += 1) assert.equal((await signUp('{not json')).status, 400, `attempt ${i + 1}`);
+    for (let i = 0; i < LIMIT; i += 1) assert.equal((await signUp('{not json')).status, 400, `attempt ${i + 1}`);
 
     assert.equal((await freshSignUp()).status, 429);
   });
 
   test('after 15 minutes the address may sign up again', async () => {
-    for (let i = 0; i < 5; i += 1) assert.equal((await freshSignUp()).status, 201, `sign-up ${i + 1}`);
+    for (let i = 0; i < LIMIT; i += 1) assert.equal((await freshSignUp()).status, 201, `sign-up ${i + 1}`);
     clock += 15 * MINUTE - 1;
     assert.equal((await freshSignUp()).status, 429);
 

@@ -19,7 +19,7 @@ import { unitRoutes } from './units.ts';
  * `webDir`: the exported web app, served on every non-API path.
  * `now`: the clock (tests move it); defaults to the system clock.
  * `contentDir`: the unit files; defaults to the repo's content/.
- * `signupsPerAddress`: sign-ups allowed from one client address per 15 minutes; defaults to 5.
+ * `signupsPerAddress`: sign-ups allowed from one client address per 15 minutes; defaults to 30 (MAX_SIGNUPS_PER_ADDRESS).
  */
 export type ServerConfig = {
   port: number;
