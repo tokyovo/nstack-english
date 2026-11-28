@@ -14,9 +14,9 @@
 How an agent runs and uses the app on its own, without touching anyone's data.
 - **Tool:** `npm run drive -- <command>`; `npm run drive -- --help` lists start, seed, screens, check, stop, android-build, android-start, android-test, android-stop
 - **Start:** `drive start --json` re-exports dist/ when src/, assets/, app.json or package files changed, starts server/main.ts (API + dist/) on a free 127.0.0.1 port with a temporary database under /tmp, prints `{"url","db","pid"}`; reuses a healthy running instance (state in .drive/)
-- **Seed:** `drive seed` prints `{"seeded":[]}` (no app tables yet)
-- **Sign in:** none (no accounts yet)
-- **Screens:** /, /track/everyday, /track/kids, /track/nope, /lesson/everyday-a0-u1, /lesson/nope, /review (list in e2e/screens.ts, shared with the axe e2e)
+- **Seed:** `drive seed` creates the demo account (prints `{"seeded":["account demo@hocenglish.test"]}`; a second run counts the 409 as already seeded)
+- **Sign in:** demo@hocenglish.test / hoc-english-demo on /account (temporary drive database only); API: POST /api/auth/signin, then `Authorization: Bearer <token>`
+- **Screens:** /, /track/everyday, /track/kids, /track/nope, /lesson/everyday-a0-u1, /lesson/nope, /account, /review (list in e2e/screens.ts, shared with the axe e2e)
 - **Evidence:** `drive screens <dir>` (every screen at 1280 and 390 px, light and dark; exits 1 on console errors, page errors or failed same-origin requests)
 - **Health:** `drive check` starts its own instance, seeds, screenshots every screen, stops, deletes the database; exit 0 means this section is true
 - **Clean up:** `drive stop [--dry-run]` stops the recorded pid (checked to be server/main.ts) and deletes the temporary database
@@ -30,7 +30,13 @@ How an agent runs and uses the app on its own, without touching anyone's data.
 | Take a lesson (words, listening, exercises, result) | /lesson/<unitId> | public | `e2e/lesson.spec.ts` "a learner completes everyday A0 u1, reloads, and sees it completed" | - |
 | Leave a lesson keeping answers | /lesson/<unitId>, Rời bài học | public | `e2e/lesson.spec.ts` "a learner leaves mid-lesson for the track list and keeps the answers given" | - |
 | Progress saved on the device | (all lesson screens) | public | `src/progress/progress-store.test.ts` "keeps a completed lesson after the app is closed and opened again" | - |
-| Lesson content checked | content/ | - | `src/content/content.test.ts` "passes the cross-unit checks with the sources listed in SOURCES.md" | - |
+| Lesson content checked | content/ | public | `src/content/content.test.ts` "passes the cross-unit checks with the sources listed in SOURCES.md" | - |
 | Review due words (spaced repetition) | /, Ôn tập ngay; /review | public | `e2e/review.spec.ts` "a learner reviews the words of a lesson a day later and sees the due count drop"; `src/review/schedule.test.ts` "brings a word answered wrongly back before the same word answered rightly" | - |
 | Speaking practice with fallback | /lesson/<unitId>, speak step | public | `e2e/lesson.spec.ts` "a speak exercise falls back to self-check where the browser has no recogniser"; `src/speech/score.test.ts` | - |
+| Sign up | /account; POST /api/auth/signup | public | `e2e/account.spec.ts` "a learner creates an account, stays signed in after a reload, and signs out" | - |
+| Sign in (rate limited) | /account; POST /api/auth/signin | public | `server/accounts.test.ts` "after 10 failures for an email, even the right password answers 429" | - |
+| Account (me) | GET /api/me | signed-in | `server/accounts.test.ts` "the token signs the new user in for GET /api/me" | `server/accounts.test.ts` "a malformed Authorization header answers 401" |
+| Sign out (saves, then clears the device) | /account, Đăng xuất | signed-in | `e2e/sync.spec.ts` "after A signs out on a shared device, B signs in and has none of A lessons" | `server/accounts.test.ts` "signed out answers 401" |
+| Sync progress across devices | (automatic when signed in); GET/PUT /api/profiles/:id/progress | owner of profile | `e2e/sync.spec.ts` "a lesson completed on one device shows as completed after signing in on another" | `server/progress.test.ts` "another user's profile answers 404 and changes nothing" |
+| Offline notice | (root layout, signed in) | public | `e2e/sync.spec.ts` "a signed-in learner offline is told progress will sync later" | - |
 | API health | GET /api/health | public | `server/server.test.ts` "GET /api/health answers" | - |

@@ -207,6 +207,57 @@
 - [ ] 4. Review the fixes. fix is 101+/19- lines: new reviewer round dispatched
 - [ ] Done when: the latest round has no important findings, verify passed after the last fix, and nits are fixed or in backlog.md.
 
+## 2026-11-28 build T16
+- Read: build/SKILL.md a069840
+- [x] 1. Branch. nstack/accounts-sync (from nstack/review-speak)
+- [x] 2. Starting state. fast checks pass at fe19242
+- [x] 3. Dispatch. builder in worktree
+- [x] 4. Read the reply. done eea7568; deny proofs red with auth checks removed (requireUser, expiry, rate limit); migrate checks 1 and 4 run, 2 and 5 n/a, 6 revertable (tables unused)
+- [x] 5. Prove it yourself. merged: test:server 46 pass 0 fail; jest 157; typecheck 0
+- [x] 6. Record. this entry, backlog
+- [x] Done when: committed on nstack/accounts-sync, items ticked.
+- Decision: sign-in failures stored in a table (limit survives restarts); sessions 90 days; error bodies are codes the app maps to Vietnamese.
+
+## 2026-11-28 build T17
+- Read: build/SKILL.md a069840
+- [x] 1. Branch. nstack/accounts-sync
+- [x] 2. Starting state. fast checks pass at 5d0425a
+- [x] 3. Dispatch. builder in worktree
+- [x] 4. Read the reply. done 4c4fab0; merge tests red 7/9 vs stub; deny proofs red (owner check id-only, requireUser stubbed); migrate checks 1, 2, 4 pass, 3 and 5 n/a, 6 revert = drop table
+- [x] 5. Prove it yourself. merged: test:server 60 pass 0 fail, jest 166
+- [x] 6. Record. this entry, backlog
+- [x] Done when: committed, items ticked.
+
+## 2026-11-28 build T18
+- Read: build/SKILL.md a069840
+- [x] 1. Branch. nstack/accounts-sync
+- [x] 2. Starting state. fast checks pass after T17
+- [x] 3. Dispatch. builder in worktree
+- [x] 4. Read the reply. done 2f49f51; module and screen tests red vs stubs; mutations red (401 not clearing session, field mapping, password kept, aria-describedby, focus)
+- [x] 5. Prove it yourself. merged: typecheck 0, lint 0, jest 183, test:server 60
+- [x] 6. Record. this entry, backlog
+- [x] Done when: committed, items ticked.
+- Decision: expo-secure-store config plugin not added (it adds a Face ID usage string); Android backup rules for it go to the backlog.
+
+## 2026-11-28 build T19
+- Read: build/SKILL.md a069840
+- [x] 1. Branch. nstack/accounts-sync
+- [x] 2. Starting state. fast checks pass at 9bc8447
+- [x] 3. Dispatch. builder in worktree
+- [x] 4. Read the reply. done dd66e89; sync Jest red vs stub; sync e2e red with PUT disabled
+- [x] 5. Prove it yourself. merged: typecheck 0, lint 0, jest 192, test:server 60, e2e 25 passed
+- [x] 6. Record. this entry, backlog; shared-device sign-out leak becomes ticket T19b (below)
+- [x] Done when: committed, items ticked.
+
+## 2026-11-28 build T19b
+- Read: build/SKILL.md a069840
+- [x] 1. Branch. nstack/accounts-sync
+- [x] 2. Starting state. fast checks pass at cb5b9d7
+- [x] 3. Dispatch. builder in worktree
+- [x] 4. Read the reply. done 214af1e; 5 sync tests and 3 screen tests red vs stub
+- [x] 5. Prove it yourself. merged: typecheck 0, lint 0, jest and e2e below
+- [x] 6. Record. this entry, backlog
+- [x] Done when: committed, items ticked.
 ## 2026-11-28 build T12
 - Read: build/SKILL.md a069840
 - [x] 1. Branch. nstack/review-speak
@@ -305,8 +356,6 @@
 - [x] 1. Dispatch. reviewer at 49fd51e: fix-needed. Important: review uses template words ("My name is ...") for speak and type_answer, marking correct sentences wrong. Nit: joined digits ("123") fail counting speak items.
 - [x] 2. Second reviewer. n/a: no auth, payments, migrations, concurrency or public API
 - [x] 3. Act on every finding. builder fixed both (89fea76): session red 9 failed, check red 1, score red 3 -> green; after merge jest 248, e2e 23 passed
-- [ ] 4. Review the fixes. Round 2 at ee4792f: 1 important (Maestro flows hardcode exercise counts and positions, broken by the new speak items; review flow cannot answer a speak step), 1 nit ("reviewed all" message before any review). Fixed in b7e27a2 (with learn-core synced in): flows loop over one shared answer-step subflow until the result; new Jest guard src/__tests__/maestro-flows.test.ts red 7 against old flows; home message rule whyNothingDue red 2 -> green. jest 270, e2e 24, drive check passed, check-features 0. Round 3 dispatched.
-- [ ] Done when: the latest round has no important findings, verify passed after the last fix, and nits are fixed or in backlog.md.
 - [x] 4. Review the fixes. Round 2 at ee4792f: 1 important (Maestro flows hardcode exercise counts and positions, broken by the new speak items; review flow cannot answer a speak step), 1 nit ("reviewed all" message before any review). Fixed in b7e27a2 (with learn-core synced in): flows loop over one shared answer-step subflow until the result; new Jest guard src/__tests__/maestro-flows.test.ts red 7 against old flows; home message rule whyNothingDue red 2 -> green. jest 270, e2e 24, drive check passed, check-features 0. Round 3 at 90b69ea: 1 important (double tap on Nói starts two recognisers and records the answer twice). Fixed by the controller in cd96d79 (speak-answer.tsx +19/-4, one finding): new test red (start called 2, onAnswer 2) -> green; small-fix exception used.
 - [x] Done when: last important finding fixed under the small-fix exception; verify after sync with main at 3a4789a: typecheck 0, lint 0, jest 271, test:server 21, test:drive 6, drive check passed, e2e 24 passed, check-features 0, check-security 0 (after giving the content row an access level); nits in backlog.
 - Lesson: Maestro flows that never run went stale twice (option positions after shuffle, exercise counts after new content). Check added: src/__tests__/maestro-flows.test.ts rejects fixed counts, fixed-length repeats and answer taps outside the shared subflow.
@@ -333,6 +382,37 @@
 - [x] 7. Confirm and clean up. main pulled: typecheck 0, lint 0, jest 158, test:server 21; branch and worktree deleted local and remote (tree identical). CI on main: see next entry
 - [x] Done when: PR #2 merged, fast checks pass on main.
 
+## 2026-11-28 ship review-speak
+- Read: ship/SKILL.md b51cd2a
+- [x] 1. Commit. slice commits on nstack/review-speak
+- [x] 2. Sync. merged origin/main (learn-core squash) -X ours; verify re-run at 3a4789a
+- [x] 3. Push. nstack/review-speak
+- [x] 4. Open the PR. #3
+- [x] 5. Wait for CI. run 46095645949 at 789adea: ubuntu success, iOS success
+- [x] 6. Merge. squash d60033a
+- [x] 7. Confirm and clean up. main: typecheck 0, lint 0, jest 271, test:server 21; branch deleted local and remote
+- [x] Done when: PR #3 merged, fast checks pass on main.
+
+## 2026-11-28 verify accounts-sync
+- Read: verify/SKILL.md adc6a8a
+- [x] 1. Clean tree. b69d296 code (later commits .nstack only and sync with main touching only .nstack)
+- [x] 2. Project checks. typecheck 0, lint 0, jest 314, test:server 60, test:drive 6, drive check passed (32 screenshots), e2e 33 passed
+- [x] 3. Every acceptance criterion in scope has a passing check. 1 accounts.test (409, 401 same body, 400 weak, 401 me, 429 rate limit); 2 progress.test + merge.test (idempotent, commutative); 3 account.spec + account Jest (errors by field, focus, input kept); 4 sync.spec (two contexts, offline notice, shared-device sign-out, offline sign-out asks); 5 migrate checks in T16/T17 logs, drive seed demo account. check-features 0
+- [x] 4. Every new check bites. builders' red runs logged per ticket (T16-T19b); deny proofs seen failing with checks removed (T16, T17)
+- [x] 5. The real thing runs. e2e against the drive server with real accounts and sync
+- [x] 6. Every changed screen looks right. /account (sign up, sign in, errors, signed in, sign-out confirm) screenshots by T18/T19b builders at 390/1280 light/dark: 9/9; offline notice bar checked by T19 builder
+- [x] 7. Nothing got weaker. no tests removed; sync.spec gained a speak case for the merged content
+- [x] 8. No new warnings or errors. lint 0
+- [x] 9. Access is enforced. check-security exit 0 after the offline-notice row was marked public (it is UI, not a protected resource); deny proofs listed in Features
+- [x] Done when: all ticked. Not verified: Android flows (no KVM).
+
+## 2026-11-28 review accounts-sync
+- Read: review/SKILL.md c151f88
+- [x] 1. Dispatch. reviewer at 2ae1aff: fix-needed. Important: parallel sign-ins bypass the rate limit (60 at once -> 59-60 x 401, 0-1 x 429); progress documents grow without limit (event loop blocked by a 17 MB merge; a real learner passes the 1 MB body cap after ~21,000 answers and sync fails silently for good)
+- [x] 2. Second reviewer. focus security and failure modes, at 2ae1aff: fix-needed. Important: the same rate-limit race (right password accepted after 59 parallel wrong ones); a session the server ends (401, e.g. day 90) leaves the previous learner's device copy, which the next sign-in merges into another account
+- [x] 3. Act on every finding. builder fixed all three (1250794): rate-limit concurrency test red (60 x 401) -> green; answer cut red (28 kept) -> green with a 2000-history property test against the schedule; unknown ids, failed-sync notice and expired-session leak each red -> green. Checks after: typecheck 0, lint 0, jest 322, test:server 64, test:drive 6, drive check passed, e2e 33, check-sync ok
+- [x] 4. Review the fixes. round 2 at c1b383b: both reviewers (general; security and failure modes) pass, no important findings; 4 nits to backlog
+- [x] Done when: round 2 has no important findings, verify passed at 1250794 (code) after the fixes, nits in backlog.md.
 ## 2026-11-28 build T27
 - Read: build/SKILL.md a069840
 - [x] 1. Branch. nstack/content-a1
@@ -426,3 +506,15 @@
 - [x] 4. Review the fixes. small-fix exception: the fix is a restore to main's reviewed code with its test passing; no new round
 - [x] Done when: no important findings open; verify passed after the fix.
 - Lesson: syncing a stacked branch with a squash-merged main using `merge -X ours` silently reverts main's fixes the branch forked before. Check added: scripts/check-sync <shipped PR head>... lists files that differ from main though no own commit changed them; run it after every sync.
+
+## 2026-11-28 ship content A1-A2
+- Read: ship/SKILL.md b51cd2a
+- [x] 1. Commit. slice commits on nstack/content-a2 (content-a1 stacked under it)
+- [x] 2. Sync. with main after PR #3; reverted files found and restored; scripts/check-sync ok
+- [x] 3. Push. nstack/content-a2
+- [x] 4. Open the PR. #4
+- [x] 5. Wait for CI. run 46099287696 at 0f55923: ubuntu success, iOS success
+- [x] 6. Merge. squash 94b07a6 (tree equal to the PR head)
+- [x] 7. Confirm and clean up. content-a1 and content-a2 branches and worktrees deleted; main checks run with the next sync
+- [x] Done when: PR #4 merged.
+- Lesson (sync procedure): sync a stacked branch by merging the shipped PR's head commit (real ancestry, real conflicts), then `git merge -s ours origin/main` after checking the squash tree equals that head; then run scripts/check-sync <shipped heads>. Never `-X ours`.

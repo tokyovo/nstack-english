@@ -2,6 +2,8 @@ import { Link } from 'expo-router';
 import { ScrollView, StyleSheet, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
+import { type AccountState } from '@/account';
+import { useAccount } from '@/account/use-account';
 import { ActionButton } from '@/components/lesson/action-button';
 import { ListRow } from '@/components/list-row';
 import { nothingDueHint } from '@/components/review/review-session';
@@ -21,6 +23,28 @@ function progressLine(track: Track, state: ProgressState): string | null {
   if (state.status !== 'ready') return null;
   const done = units.filter((unit) => isLessonCompleted(state.progress, unit.id)).length;
   return t('track.progress', { done, total: units.length });
+}
+
+/** "Đã đăng nhập: lan@example.com", an invitation when signed out, nothing while it loads. */
+function accountLine(account: AccountState): string | null {
+  if (account.status === 'signedIn') return t('home.signedIn', { email: account.user.email });
+  if (account.status === 'signedOut') return t('home.signedOut');
+  return null;
+}
+
+function AccountRow() {
+  const [account] = useAccount();
+  const title = t('home.account');
+  const line = accountLine(account);
+  return (
+    <ListRow
+      href="/account"
+      testID="home-account"
+      accessibilityLabel={line ? t('home.accountLabel', { title, state: line }) : title}>
+      <ThemedText type="label">{title}</ThemedText>
+      {line && <ThemedText type="meta">{line}</ThemedText>}
+    </ListRow>
+  );
 }
 
 /** How many words are due now, or why there are none; nothing until progress is read. */
@@ -95,6 +119,8 @@ export default function HomeScreen() {
               );
             })}
           </View>
+
+          <AccountRow />
         </View>
       </ScrollView>
     </SafeAreaView>
