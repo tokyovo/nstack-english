@@ -19,10 +19,10 @@ Answers for builders (plan check):
 - Proof of android-build time: log the measured time; `--all-abis` passes no -PreactNativeArchitectures.
 
 - [x] T33 Sliding session expiry. Proof: `npm run test:server`. Access: signed-in. Needs: none
-- [ ] T34 Sign-up rate limit. Proof: `npm run test:server` (concurrent test seen failing). Access: public. Needs: none
+- [x] T34 Sign-up rate limit. Proof: `npm run test:server` (concurrent test seen failing). Access: public. Needs: none
 - [ ] T35 Native config: unused deps, permissions, secure-store plugin and backup rules, android-build x86_64. Proof: config test, `npm run drive -- android-build` time logged. Needs: none
-- [ ] T36 Original icon, adaptive icon, splash and favicon from an SVG source and a render script. Proof: asset test, screenshots of the web favicon and splash colours. Needs: none
-- [ ] T37 Result screens replace instead of push. Proof: Jest, Maestro flow syntax. Needs: none
+- [x] T36 Original icon, adaptive icon, splash and favicon from an SVG source and a render script. Proof: asset test, screenshots of the web favicon and splash colours. Needs: none
+- [x] T37 Result screens replace instead of push. Proof: Jest, Maestro flow syntax. Needs: none
 
 Later slices (from the backlog, in order): habit (Học tiếp on home and a fair daily goal/streak, score 9), polish (score-8 items: focus outlines, profiles focus, self-check wording, "12" scoring, kids type_answer), pronunciation drills (score 8).
 

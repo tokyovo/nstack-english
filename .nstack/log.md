@@ -701,3 +701,34 @@
 - [x] 5. Prove it yourself. merged: test:server pass (below)
 - [x] 6. Record. this entry
 - [x] Done when: committed, items ticked.
+
+## 2026-11-28 build T37
+- Read: build/SKILL.md a069840
+- [x] 1. Branch. nstack/hardening
+- [x] 2. Starting state. fast checks pass at 32f107b
+- [x] 3. Dispatch. builder in worktree
+- [x] 4. Read the reply. done 3f7dae9; 3 lesson nav tests and 1 review test red first; maestro guard test for the back step red; check-syntax 0
+- [x] 5. Prove it yourself. merged; then the track link changed from replace to dismissTo (back from the track went to a second copy of it): test red (1 failed) -> green, lesson-player 12 pass
+- [x] 6. Record. this entry
+- [x] Done when: committed, items ticked.
+
+## 2026-11-28 build T34
+- Read: build/SKILL.md a069840
+- [x] 1. Branch. nstack/hardening
+- [x] 2. Starting state. fast checks pass at 32f107b
+- [x] 3. Dispatch. builder in worktree
+- [x] 4. Read the reply. done d61df9f; concurrent sign-up tests red (19 x 409, 20 x 201) -> green; migration 0005 run twice on a seeded copy: no-op second time, data kept
+- [x] 5. Prove it yourself. merged; per-address default raised to 30 and tests read the constant; test:server 128 pass
+- [x] 6. Record. this entry, backlog
+- [x] Done when: committed, items ticked.
+- Decision: per-address sign-up limit 30 per 15 min (mobile CGNAT in Vietnam puts many people behind one address); per email 5. Socket peer is the address until a TRUST_PROXY setting exists.
+
+## 2026-11-28 build T36
+- Read: build/SKILL.md a069840
+- [x] 1. Branch. nstack/hardening
+- [x] 2. Starting state. fast checks pass at 32f107b
+- [x] 3. Dispatch. builder in worktree
+- [x] 4. Read the reply. done 365d0f8; brand tests red 3/3 (Expo artwork present) -> green; render is byte-identical twice
+- [x] 5. Prove it yourself. merged; looked at /tmp/t36-preview/icons-192.png and splash-dark.png: white "a" on the purple ô-ly grid, legible at 48 px, round/adaptive/monochrome variants correct
+- [x] 6. Record. this entry
+- [x] Done when: committed, items ticked.
