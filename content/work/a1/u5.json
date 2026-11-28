@@ -1,0 +1,179 @@
+{
+  "id": "work-a1-u5",
+  "track": "work",
+  "level": "a1",
+  "number": 5,
+  "title": "Điện thoại và tin nhắn",
+  "goals": [
+    "Có thể xin nói chuyện với một người qua điện thoại",
+    "Có thể nhận lời nhắn khi người đó không có ở đây",
+    "Có thể nhờ người khác gọi lại hoặc gửi email"
+  ],
+  "note_vi": "“Can” đứng trước động từ để xin phép hoặc nhờ ai làm gì. Xin phép: “Can I speak to Ms. Hoa?” (Cho tôi gặp chị Hoa được không?, khi gọi điện). Nhờ: “Can you call me back?” (Anh/chị gọi lại cho tôi được không?). Động từ sau “can” luôn giữ nguyên: không thêm “to”, không thêm -s. Trả lời lịch sự: “Yes, of course.” (Vâng, tất nhiên rồi.) Khi người kia không có mặt, nói “Just a moment.” (Xin chờ một chút.) rồi “He's not here.” (Anh ấy không có ở đây.)",
+  "source": "original",
+  "words": [
+    {
+      "id": "work-a1-u5-can-i-speak-to",
+      "en": "Can I speak to ...?",
+      "vi": "Cho tôi gặp ... được không?",
+      "audio": "Can I speak to",
+      "example": { "en": "Hello. Can I speak to Mr. Brown?", "vi": "Xin chào. Cho tôi gặp ông Brown được không?" }
+    },
+    {
+      "id": "work-a1-u5-just-a-moment",
+      "en": "Just a moment",
+      "vi": "Xin chờ một chút",
+      "example": { "en": "Just a moment, Ms. Hoa.", "vi": "Xin chờ một chút, chị Hoa." }
+    },
+    {
+      "id": "work-a1-u5-hes-not-here",
+      "en": "He's not here",
+      "vi": "Anh ấy không có ở đây",
+      "example": { "en": "Tom? He's not here.", "vi": "Anh Tom à? Anh ấy không có ở đây." }
+    },
+    {
+      "id": "work-a1-u5-can-i-take-a-message",
+      "en": "Can I take a message?",
+      "vi": "Anh/chị có muốn để lại lời nhắn không?",
+      "example": { "en": "He's not here. Can I take a message?", "vi": "Anh ấy không có ở đây. Anh/chị có muốn để lại lời nhắn không?" }
+    },
+    {
+      "id": "work-a1-u5-can-you-call-me-back",
+      "en": "Can you call me back?",
+      "vi": "Anh/chị gọi lại cho tôi được không?",
+      "example": { "en": "I have a meeting. Can you call me back?", "vi": "Tôi có cuộc họp. Anh/chị gọi lại cho tôi được không?" }
+    },
+    {
+      "id": "work-a1-u5-whats-your-phone-number",
+      "en": "What's your phone number?",
+      "vi": "Số điện thoại của anh/chị là gì?",
+      "example": { "en": "Nice to meet you. What's your phone number?", "vi": "Rất vui được gặp anh/chị. Số điện thoại của anh/chị là gì?" }
+    },
+    {
+      "id": "work-a1-u5-send-an-email",
+      "en": "send an email",
+      "vi": "gửi email",
+      "example": { "en": "Can you send an email to Mr. Brown?", "vi": "Anh/chị gửi email cho ông Brown được không?" }
+    },
+    {
+      "id": "work-a1-u5-thank-you",
+      "en": "Thank you",
+      "vi": "Cảm ơn",
+      "example": { "en": "Thank you, Lan. Goodbye.", "vi": "Cảm ơn chị Lan. Tạm biệt." }
+    },
+    {
+      "id": "work-a1-u5-yes-of-course",
+      "en": "Yes, of course",
+      "vi": "Vâng, tất nhiên rồi",
+      "example": { "en": "Can you call me back? Yes, of course.", "vi": "Anh/chị gọi lại cho tôi được không? Vâng, tất nhiên rồi." }
+    }
+  ],
+  "exercises": [
+    {
+      "id": "work-a1-u5-e01",
+      "type": "choose_meaning",
+      "prompt": "work-a1-u5-just-a-moment",
+      "options": ["Cảm ơn", "Xin chờ một chút", "Vâng, tất nhiên rồi"],
+      "answer": "Xin chờ một chút"
+    },
+    {
+      "id": "work-a1-u5-e02",
+      "type": "choose_english",
+      "prompt": "Cảm ơn",
+      "options": ["Goodbye", "Thank you", "Just a moment"],
+      "answer": "Thank you"
+    },
+    {
+      "id": "work-a1-u5-e03",
+      "type": "listen_choose",
+      "audio": "Can I speak to Mr. Brown?",
+      "options": ["Can I speak to Mr. Brown?", "Can I speak to Ms. Hoa?", "Can you call me back?"],
+      "answer": "Can I speak to Mr. Brown?"
+    },
+    {
+      "id": "work-a1-u5-e04",
+      "type": "build_sentence",
+      "prompt": "Anh/chị gọi lại cho tôi được không?",
+      "tiles": ["back", "call", "Can", "me", "you", "I"],
+      "answer": ["Can", "you", "call", "me", "back"]
+    },
+    {
+      "id": "work-a1-u5-e05",
+      "type": "choose_meaning",
+      "prompt": "work-a1-u5-can-i-take-a-message",
+      "options": ["Anh/chị có muốn để lại lời nhắn không?", "Anh/chị gọi lại cho tôi được không?", "Số điện thoại của anh/chị là gì?"],
+      "answer": "Anh/chị có muốn để lại lời nhắn không?"
+    },
+    {
+      "id": "work-a1-u5-e06",
+      "type": "choose_english",
+      "prompt": "Anh ấy không có ở đây.",
+      "options": ["It's here.", "He's not here.", "Just a moment."],
+      "answer": "He's not here."
+    },
+    {
+      "id": "work-a1-u5-e07",
+      "type": "build_sentence",
+      "prompt": "Cho tôi gặp chị Hoa được không?",
+      "tiles": ["speak", "Hoa", "Can", "to", "I", "Ms.", "you"],
+      "answer": ["Can", "I", "speak", "to", "Ms.", "Hoa"],
+      "hint_vi": "Xin phép: “Can I” + động từ."
+    },
+    {
+      "id": "work-a1-u5-e08",
+      "type": "listen_choose",
+      "audio": "What's your phone number?",
+      "options": ["What's your phone number?", "What do you do?", "What time do you start work?"],
+      "answer": "What's your phone number?"
+    },
+    {
+      "id": "work-a1-u5-e09",
+      "type": "type_answer",
+      "prompt": "Cảm ơn",
+      "answer": "Thank you",
+      "accepted": ["Thanks", "Thank you very much", "Thanks a lot"]
+    },
+    {
+      "id": "work-a1-u5-e10",
+      "type": "choose_meaning",
+      "prompt": "work-a1-u5-send-an-email",
+      "options": ["gửi email", "Cảm ơn", "Xin chờ một chút"],
+      "answer": "gửi email"
+    },
+    {
+      "id": "work-a1-u5-e11",
+      "type": "build_sentence",
+      "prompt": "Anh/chị gửi email cho ông Brown được không?",
+      "tiles": ["send", "Can", "email", "an", "Mr.", "you", "to", "Brown", "a"],
+      "answer": ["Can", "you", "send", "an", "email", "to", "Mr.", "Brown"],
+      "accepted": [["Can", "you", "send", "Mr.", "Brown", "an", "email"]],
+      "hint_vi": "“email” bắt đầu bằng âm nguyên âm nên dùng “an”."
+    },
+    {
+      "id": "work-a1-u5-e12",
+      "type": "listen_choose",
+      "audio": "Yes, of course.",
+      "options": ["Yes, of course.", "Thank you.", "Just a moment."],
+      "answer": "Yes, of course."
+    },
+    {
+      "id": "work-a1-u5-e13",
+      "type": "choose_english",
+      "prompt": "Vâng, tất nhiên rồi.",
+      "options": ["He's not here.", "Yes, of course.", "Thank you."],
+      "answer": "Yes, of course."
+    },
+    {
+      "id": "work-a1-u5-e14",
+      "type": "speak",
+      "text": "Can I take a message?",
+      "vi": "Anh/chị có muốn để lại lời nhắn không?"
+    },
+    {
+      "id": "work-a1-u5-e15",
+      "type": "speak",
+      "text": "Can you call me back?",
+      "vi": "Anh/chị gọi lại cho tôi được không?"
+    }
+  ]
+}

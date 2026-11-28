@@ -8,6 +8,9 @@ import everydayA0U5 from '../../content/everyday/a0/u5.json';
 import workA0U1 from '../../content/work/a0/u1.json';
 import workA0U2 from '../../content/work/a0/u2.json';
 import workA0U3 from '../../content/work/a0/u3.json';
+import workA1U4 from '../../content/work/a1/u4.json';
+import workA1U5 from '../../content/work/a1/u5.json';
+import workA1U6 from '../../content/work/a1/u6.json';
 import kidsA0U1 from '../../content/kids/a0/u1.json';
 import kidsA0U2 from '../../content/kids/a0/u2.json';
 import kidsA0U3 from '../../content/kids/a0/u3.json';
@@ -29,6 +32,9 @@ const files: unknown[] = [
   workA0U1,
   workA0U2,
   workA0U3,
+  workA1U4,
+  workA1U5,
+  workA1U6,
   kidsA0U1,
   kidsA0U2,
   kidsA0U3,
