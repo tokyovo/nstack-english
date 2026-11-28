@@ -9,7 +9,7 @@
     "Có thể dùng quá khứ của một số động từ: went, had, was, were",
     "Có thể hỏi và trả lời: “Did you go to work yesterday?”"
   ],
-  "note_vi": "Tiếng Việt không đổi động từ khi nói về quá khứ: chỉ thêm “hôm qua” hoặc “đã” (Tôi đi làm → Hôm qua tôi đi làm). Tiếng Anh thì phải đổi động từ, kể cả khi đã có “yesterday”. Phần lớn động từ thêm -ed: work → worked, cook → cooked. Một số động từ đổi hẳn, phải học thuộc: go → went, have/has → had. “be” đổi thành “was” (sau I, he, she, it) và “were” (sau you, they). Khi hỏi, dùng “Did” ở đầu câu và động từ trở về dạng gốc: “Did you go to work?” (không nói “Did you went?”).",
+  "note_vi": "Tiếng Việt không đổi động từ khi nói về quá khứ: chỉ thêm “hôm qua” hoặc “đã” (Tôi đi làm → Hôm qua tôi đi làm). Tiếng Anh thì phải đổi động từ, kể cả khi đã có “yesterday”. Phần lớn động từ thêm -ed: work → worked, cook → cooked. Một số động từ đổi hẳn, phải học thuộc: go → went, have/has → had. “be” đổi thành “was” (sau I, he, she, it) và “were” (sau you, they). Khi hỏi, dùng “Did” ở đầu câu và động từ trở về dạng gốc: “Did you go to work?” (không nói “Did you went?”). Lưu ý: “go home”, “went home” không có “to” (không nói “went to home”).",
   "source": "original",
   "names": ["Lan", "Nam"],
   "words": [
@@ -35,7 +35,7 @@
       "id": "everyday-a2-u14-were",
       "en": "were",
       "vi": "đã là, đã ở (quá khứ của are)",
-      "example": { "en": "You were at the restaurant.", "vi": "Bạn đã ở nhà hàng." }
+      "example": { "en": "You were at the restaurant yesterday.", "vi": "Hôm qua bạn ở nhà hàng." }
     },
     {
       "id": "everyday-a2-u14-went",
@@ -154,13 +154,13 @@
       "id": "everyday-a2-u14-e11",
       "type": "choose_meaning",
       "prompt": "everyday-a2-u14-had",
-      "options": ["đã có, đã ăn, đã bị (quá khứ của have, has)", "đã đi (quá khứ của go)", "có (dùng sau he, she)"],
+      "options": ["đã có, đã ăn, đã bị (quá khứ của have, has)", "đã đi (quá khứ của go)", "có (dùng sau he, she, it hoặc tên một người)"],
       "answer": "đã có, đã ăn, đã bị (quá khứ của have, has)"
     },
     {
       "id": "everyday-a2-u14-e12",
       "type": "type_answer",
-      "prompt": "Hôm qua Lan đi đến nhà ga.",
+      "prompt": "Hôm qua Lan ra ga.",
       "answer": "Lan went to the station yesterday.",
       "accepted": ["Yesterday Lan went to the station.", "Yesterday, Lan went to the station."]
     },
@@ -173,9 +173,9 @@
     {
       "id": "everyday-a2-u14-e14",
       "type": "choose_english",
-      "prompt": "Bạn đã ở nhà hàng.",
-      "options": ["You was at the restaurant.", "You were at the restaurant.", "You are at the restaurant."],
-      "answer": "You were at the restaurant.",
+      "prompt": "Hôm qua bạn ở nhà hàng.",
+      "options": ["You was at the restaurant yesterday.", "You were at the restaurant yesterday.", "You are at the restaurant yesterday."],
+      "answer": "You were at the restaurant yesterday.",
       "hint_vi": "Sau “you” thì dùng “were”."
     },
     {

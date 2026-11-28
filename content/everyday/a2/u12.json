@@ -40,7 +40,7 @@
     {
       "id": "everyday-a2-u12-has",
       "en": "has",
-      "vi": "có (dùng sau he, she)",
+      "vi": "có (dùng sau he, she, it hoặc tên một người)",
       "example": { "en": "She has a headache.", "vi": "Cô ấy bị đau đầu." }
     },
     {
@@ -116,7 +116,8 @@
       "id": "everyday-a2-u12-e06",
       "type": "type_answer",
       "prompt": "Tôi bị ho.",
-      "answer": "I have a cough."
+      "answer": "I have a cough.",
+      "accepted": ["I've got a cough."]
     },
     {
       "id": "everyday-a2-u12-e07",
@@ -158,7 +159,8 @@
       "id": "everyday-a2-u12-e12",
       "type": "type_answer",
       "prompt": "Bạn nên nghỉ ngơi.",
-      "answer": "You should rest."
+      "answer": "You should rest.",
+      "accepted": ["You should get some rest."]
     },
     {
       "id": "everyday-a2-u12-e13",

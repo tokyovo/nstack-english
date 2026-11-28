@@ -9,7 +9,7 @@
     "Có thể hỏi người khác định làm gì: “What are you going to do this weekend?”",
     "Có thể nói về thời gian sắp tới: tomorrow, this weekend, next week"
   ],
-  "note_vi": "Tiếng Việt dùng “sẽ” hoặc “định” cho mọi việc trong tương lai. Tiếng Anh, khi nói về kế hoạch đã quyết định, dùng “be going to” + động từ dạng gốc: “I'm going to visit my mother.” (Tôi định đi thăm mẹ). Phần “be” đổi theo người nói: I'm going to, you are going to, we are going to, he is / she is going to. Động từ sau “to” không thêm -s, -ed: “She is going to stay home.” (không nói “going to stays”). Muốn hỏi, đưa “are” hoặc “is” lên đầu câu: “Are you going to visit Hanoi?”. Lưu ý: “going to” + nơi chốn (I'm going to the beach) nghĩa là “đang đi đến” đâu đó, không phải kế hoạch.",
+  "note_vi": "Tiếng Việt dùng “sẽ” hoặc “định” cho mọi việc trong tương lai. Tiếng Anh, khi nói về kế hoạch đã quyết định, dùng “be going to” + động từ dạng gốc: “I'm going to visit my mother.” (Tôi định đi thăm mẹ). Phần “be” đổi theo chủ ngữ: I'm going to, you are / we are going to, he is / she is going to. Động từ sau “to” không thêm -s, -ed: “She is going to stay home.” (không nói “going to stays”). Muốn hỏi, đưa “are” hoặc “is” lên đầu câu: “Are you going to visit Hanoi?”. Lưu ý: trong “I'm going to the beach”, “to” đi với nơi chốn (đi đến đâu), không phải “going to” + động từ. Câu này vẫn có thể nói về kế hoạch: “I'm going to the beach tomorrow.” (Ngày mai tôi đi biển).",
   "source": "original",
   "names": ["Lan", "Nam", "Hanoi", "Da Nang"],
   "words": [
@@ -29,7 +29,7 @@
       "id": "everyday-a2-u15-tomorrow",
       "en": "tomorrow",
       "vi": "ngày mai",
-      "example": { "en": "I'm going to work tomorrow.", "vi": "Ngày mai tôi sẽ đi làm." }
+      "example": { "en": "I'm going to visit Lan tomorrow.", "vi": "Ngày mai tôi định đi thăm Lan." }
     },
     {
       "id": "everyday-a2-u15-weekend",
@@ -58,13 +58,13 @@
     {
       "id": "everyday-a2-u15-friends",
       "en": "friends",
-      "vi": "những người bạn",
+      "vi": "bạn bè",
       "example": { "en": "We are going to visit friends.", "vi": "Chúng tôi sẽ đi thăm bạn bè." }
     },
     {
       "id": "everyday-a2-u15-stay",
       "en": "stay",
-      "vi": "ở lại",
+      "vi": "ở lại, ở (nhà)",
       "example": { "en": "I'm going to stay home.", "vi": "Tôi sẽ ở nhà." }
     },
     {
@@ -124,7 +124,11 @@
         "Tomorrow I'm going to stay home.",
         "Tomorrow I am going to stay home.",
         "Tomorrow, I'm going to stay home.",
-        "Tomorrow I'm going to stay at home."
+        "Tomorrow I'm going to stay at home.",
+        "Tomorrow I am going to stay at home.",
+        "Tomorrow, I am going to stay home.",
+        "Tomorrow, I'm going to stay at home.",
+        "Tomorrow, I am going to stay at home."
       ]
     },
     {
@@ -153,7 +157,7 @@
       "id": "everyday-a2-u15-e10",
       "type": "choose_meaning",
       "prompt": "everyday-a2-u15-visit",
-      "options": ["ở lại", "thăm, đến thăm", "nghỉ ngơi"],
+      "options": ["ở lại, ở (nhà)", "thăm, đến thăm", "nghỉ ngơi"],
       "answer": "thăm, đến thăm"
     },
     {

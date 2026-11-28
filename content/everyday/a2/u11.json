@@ -53,7 +53,7 @@
       "id": "everyday-a2-u11-bill",
       "en": "bill",
       "vi": "hóa đơn (tính tiền)",
-      "example": { "en": "The bill, please.", "vi": "Làm ơn tính tiền." }
+      "example": { "en": "The bill, please.", "vi": "Cho tôi tính tiền." }
     },
     {
       "id": "everyday-a2-u11-fish",
@@ -116,7 +116,7 @@
       "type": "type_answer",
       "prompt": "Cho tôi một ly cà phê. (nói lịch sự, bắt đầu bằng “I'd like”)",
       "answer": "I'd like a coffee, please.",
-      "accepted": ["I'd like a coffee please.", "I would like a coffee, please.", "I would like a coffee please.", "I'd like a coffee."]
+      "accepted": ["I'd like a coffee please.", "I would like a coffee, please.", "I would like a coffee please.", "I'd like a coffee.", "I would like a coffee."]
     },
     {
       "id": "everyday-a2-u11-e07",
@@ -136,10 +136,10 @@
       "id": "everyday-a2-u11-e09",
       "type": "build_sentence",
       "prompt": "Cho tôi món mì và trà.",
-      "tiles": ["like", "noodles", "I'd", "and", "tea", "want"],
+      "tiles": ["like", "noodles", "I'd", "and", "tea", "is"],
       "answer": ["I'd", "like", "noodles", "and", "tea"],
       "accepted": [["I'd", "like", "tea", "and", "noodles"]],
-      "hint_vi": "Nói lịch sự: “I'd like …”, không dùng “want”."
+      "hint_vi": "Gọi món lịch sự: “I'd like …”."
     },
     {
       "id": "everyday-a2-u11-e10",
@@ -160,7 +160,7 @@
       "type": "type_answer",
       "prompt": "Món cá ngon quá.",
       "answer": "The fish is delicious.",
-      "accepted": ["The fish's delicious."]
+      "accepted": ["The fish's delicious.", "This fish is delicious."]
     },
     {
       "id": "everyday-a2-u11-e13",

@@ -40,8 +40,8 @@
     {
       "id": "everyday-a2-u13-warm",
       "en": "warm",
-      "vi": "ấm áp",
-      "example": { "en": "It's warm in Da Nang.", "vi": "Ở Đà Nẵng trời ấm áp." }
+      "vi": "ấm",
+      "example": { "en": "It's warm in Da Nang.", "vi": "Ở Đà Nẵng trời ấm." }
     },
     {
       "id": "everyday-a2-u13-sunny",
@@ -102,13 +102,14 @@
       "type": "build_sentence",
       "prompt": "Thời tiết ở Hà Nội thế nào?",
       "tiles": ["the", "What's", "like", "weather", "in", "Hanoi", "is"],
-      "answer": ["What's", "the", "weather", "like", "in", "Hanoi"]
+      "answer": ["What's", "the", "weather", "like", "in", "Hanoi"],
+      "accepted": [["What's", "the", "weather", "in", "Hanoi", "like"]]
     },
     {
       "id": "everyday-a2-u13-e05",
       "type": "choose_meaning",
       "prompt": "everyday-a2-u13-cold",
-      "options": ["nóng", "lạnh", "ấm áp"],
+      "options": ["nóng", "lạnh", "ấm"],
       "answer": "lạnh"
     },
     {
@@ -116,7 +117,7 @@
       "type": "type_answer",
       "prompt": "Hôm nay trời nắng.",
       "answer": "It's sunny today.",
-      "accepted": ["It is sunny today.", "Today it's sunny.", "Today it is sunny."]
+      "accepted": ["It is sunny today.", "Today it's sunny.", "Today it is sunny.", "Today, it's sunny.", "Today, it is sunny."]
     },
     {
       "id": "everyday-a2-u13-e07",
@@ -144,8 +145,8 @@
       "id": "everyday-a2-u13-e10",
       "type": "choose_meaning",
       "prompt": "everyday-a2-u13-warm",
-      "options": ["lạnh", "có nắng", "ấm áp"],
-      "answer": "ấm áp"
+      "options": ["lạnh", "có nắng", "ấm"],
+      "answer": "ấm"
     },
     {
       "id": "everyday-a2-u13-e11",
@@ -159,7 +160,7 @@
       "type": "type_answer",
       "prompt": "Hôm nay trời rất lạnh.",
       "answer": "It's very cold today.",
-      "accepted": ["It is very cold today.", "Today it's very cold.", "Today it is very cold."]
+      "accepted": ["It is very cold today.", "Today it's very cold.", "Today it is very cold.", "Today, it's very cold.", "Today, it is very cold."]
     },
     {
       "id": "everyday-a2-u13-e13",
