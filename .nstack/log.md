@@ -234,3 +234,14 @@
 - [x] 8. No new warnings or errors. lint 0 warnings
 - [x] 9. Access is enforced. n/a: no routes, tables or auth touched (app-only, public)
 - [x] Done when: all ticked. Not verified: Android Maestro lesson flow (no KVM, parked).
+- [x] 6. Merge (ship foundation, continued). gh pr merge 1 --squash -> MERGED 37f40e0
+- [x] 7. Confirm and clean up. main pulled; typecheck 0, lint 0, jest 30, test:server 21, test:drive 6; CI on 37f40e0: ubuntu success, iOS success; nstack/foundation deleted locally and on origin (tree identical to main)
+- [x] Done when: PR #1 merged, CI green on main, fast checks pass there.
+
+## 2026-11-28 review learn-core
+- Read: review/SKILL.md c151f88
+- [x] 1. Dispatch. reviewer at 1a403d7: fix-needed. Important: web shows a silent "Nghe" with no voices and hides listen text (AC4); options never shuffled (answer at index 0 in 60/114). Nit: answers keyed by exercise id vs review-speak plan premise.
+- [x] 2. Second reviewer. n/a: no auth, payments, migrations, concurrency or public API in learn-core
+- [ ] 3. Act on every finding. Both important: fix builder dispatched. Nit: already handled by T11 on review-speak (the schedule reads review answers recorded under word ids, and ignores lesson answers keyed by exercise id; src/review/schedule.test.ts passes), so no change here.
+- [ ] 4. Review the fixes
+- [ ] Done when: the latest round has no important findings, verify passed after the last fix, and nits are fixed or in backlog.md.
