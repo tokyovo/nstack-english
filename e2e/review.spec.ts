@@ -1,31 +1,13 @@
 // A learner finishes a lesson, comes back a day later, reviews the due words and sees the count drop.
 // The browser's clock is set by Playwright (`page.clock`), so the app needs no test-only switch.
-import { AxeBuilder } from '@axe-core/playwright';
 import { expect, test, type Page } from '@playwright/test';
-import { readFileSync } from 'node:fs';
-import { join } from 'node:path';
 
-import { parseUnit, type Exercise, type Unit } from '../src/content/schema';
-
-function loadUnit(path: string): Unit {
-  const result = parseUnit(JSON.parse(readFileSync(join(import.meta.dirname, '..', 'content', path), 'utf8')));
-  if (!result.ok) throw new Error(result.errors.join('\n'));
-  return result.unit;
-}
+import type { Exercise } from '../src/content/schema';
+import { button, collectErrors, expectNoSeriousAxeViolations, loadUnit, withoutSpeech } from './learner.ts';
 
 const unit = loadUnit('everyday/a0/u1.json');
 const START = new Date('2026-11-27T08:00:00+07:00');
 const DAY = 24 * 60 * 60 * 1000;
-
-function button(page: Page, name: string) {
-  return page.getByRole('button', { name, exact: true });
-}
-
-async function expectNoSeriousAxeViolations(page: Page) {
-  const { violations } = await new AxeBuilder({ page }).withTags(['wcag2a', 'wcag2aa', 'wcag21aa']).analyze();
-  const serious = violations.filter((v) => v.impact === 'serious' || v.impact === 'critical');
-  expect(serious.map((v) => `${v.id}: ${v.nodes.map((n) => n.target.join(' ')).join(', ')}`)).toEqual([]);
-}
 
 async function answerLessonExercise(page: Page, exercise: Exercise) {
   switch (exercise.type) {
@@ -82,17 +64,8 @@ async function answerReviewStep(page: Page) {
 }
 
 test('a learner reviews the words of a lesson a day later and sees the due count drop', async ({ page }) => {
-  const errors: string[] = [];
-  page.on('pageerror', (error) => errors.push(error.message));
-  page.on('console', (message) => {
-    if (message.type() === 'error') errors.push(message.text());
-  });
-  // Without an English voice, listening steps show the English text (as on devices with no voice).
-  await page.addInitScript(() => {
-    delete (window as { speechSynthesis?: unknown }).speechSynthesis;
-    Reflect.deleteProperty(window, 'SpeechRecognition');
-    Reflect.deleteProperty(window, 'webkitSpeechRecognition');
-  });
+  const errors = collectErrors(page);
+  await withoutSpeech(page);
   await page.clock.install({ time: START });
 
   await page.goto('/');
