@@ -9,7 +9,7 @@
     "Có thể hiểu giá tiền đơn giản: “Ten dollars.”",
     "Có thể nói một món đồ rẻ hay đắt"
   ],
-  "note_vi": "“a” và “an” nghĩa là “một”, đứng trước một đồ vật đếm được: “a shirt” (một cái áo sơ mi). Dùng “an” khi từ phía sau bắt đầu bằng một nguyên âm, thường là a, e, i, o, u: “an apple”, “an umbrella”. “the” dùng khi người nói và người nghe đều biết đang nói về vật nào: “The shirt is cheap.” (Cái áo sơ mi đó rẻ). Hỏi giá thì nói “How much is this?”. Khi có từ hai trở lên, danh từ thường thêm -s: “ten dollars”.",
+  "note_vi": "“a” và “an” nghĩa là “một”, đứng trước một đồ vật đếm được: “a shirt” (một cái áo sơ mi). Dùng “an” khi từ phía sau bắt đầu bằng một nguyên âm, thường là a, e, i, o, u: “an apple”, “an umbrella”. “the” dùng khi người nói và người nghe đều biết đang nói về vật nào: “The shirt is cheap.” (Cái áo sơ mi đó rẻ). Hỏi giá thì nói “How much is this?”. Khi số lượng từ hai trở lên, danh từ thường thêm -s: “ten dollars”.",
   "source": "original",
   "names": ["Lan", "Nam"],
   "words": [
@@ -156,7 +156,8 @@
       "id": "everyday-a1-u7-e12",
       "type": "type_answer",
       "prompt": "Đây là một quả táo.",
-      "answer": "This is an apple."
+      "answer": "This is an apple.",
+      "accepted": ["It's an apple.", "It is an apple."]
     },
     {
       "id": "everyday-a1-u7-e13",

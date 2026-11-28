@@ -147,7 +147,8 @@
       "type": "build_sentence",
       "prompt": "Hôm nay là thứ mấy?",
       "tiles": ["day", "What", "it", "is", "today", "time"],
-      "answer": ["What", "day", "is", "it", "today"]
+      "answer": ["What", "day", "is", "it", "today"],
+      "accepted": [["What", "day", "is", "today"]]
     },
     {
       "id": "everyday-a1-u8-e11",
@@ -160,7 +161,8 @@
       "id": "everyday-a1-u8-e12",
       "type": "type_answer",
       "prompt": "Mấy giờ rồi?",
-      "answer": "What time is it?"
+      "answer": "What time is it?",
+      "accepted": ["What's the time?", "What is the time?"]
     },
     {
       "id": "everyday-a1-u8-e13",
