@@ -25,7 +25,6 @@ export const vi = {
   'account.toSignUp': 'Chưa có tài khoản? Tạo tài khoản mới',
   'account.toSignIn': 'Đã có tài khoản? Đăng nhập',
   'account.signedInAs': 'Bạn đã đăng nhập bằng {email}.',
-  'account.signedInNote': 'Bạn học trên thiết bị nào cũng dùng được tài khoản này.',
   'account.signOut': 'Đăng xuất',
   'account.signingOut': 'Đang đăng xuất...',
   'account.error.invalid_email': 'Email chưa đúng. Hãy kiểm tra lại, ví dụ: lan@gmail.com.',

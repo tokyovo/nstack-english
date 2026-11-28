@@ -144,7 +144,6 @@ function SignedIn({ user, onSignedOut }: { user: User; onSignedOut: () => void }
   return (
     <View style={styles.section}>
       <ThemedText type="lead">{t('account.signedInAs', { email: user.email })}</ThemedText>
-      <ThemedText>{t('account.signedInNote')}</ThemedText>
       <ActionButton
         kind="secondary"
         label={label}
