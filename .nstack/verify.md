@@ -30,7 +30,7 @@ How an agent runs and uses the app on its own, without touching anyone's data.
 | Take a lesson (words, listening, exercises, result) | /lesson/<unitId> | public | `e2e/lesson.spec.ts` "a learner completes everyday A0 u1, reloads, and sees it completed" | - |
 | Leave a lesson keeping answers | /lesson/<unitId>, Rời bài học | public | `e2e/lesson.spec.ts` "a learner leaves mid-lesson for the track list and keeps the answers given" | - |
 | Progress saved on the device | (all lesson screens) | public | `src/progress/progress-store.test.ts` "keeps a completed lesson after the app is closed and opened again" | - |
-| Lesson content checked | content/ | - | `src/content/content.test.ts` "passes the cross-unit checks with the sources listed in SOURCES.md" | - |
+| Lesson content checked | content/ | public | `src/content/content.test.ts` "passes the cross-unit checks with the sources listed in SOURCES.md" | - |
 | Review due words (spaced repetition) | /, Ôn tập ngay; /review | public | `e2e/review.spec.ts` "a learner reviews the words of a lesson a day later and sees the due count drop"; `src/review/schedule.test.ts` "brings a word answered wrongly back before the same word answered rightly" | - |
 | Speaking practice with fallback | /lesson/<unitId>, speak step | public | `e2e/lesson.spec.ts` "a speak exercise falls back to self-check where the browser has no recogniser"; `src/speech/score.test.ts` | - |
 | API health | GET /api/health | public | `server/server.test.ts` "GET /api/health answers" | - |
