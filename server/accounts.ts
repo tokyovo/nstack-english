@@ -47,16 +47,13 @@ export function accountRoutes(db: DatabaseSync, now: () => Date) {
   app.post('/auth/signin', async (c) => {
     const input = await readCredentials(c);
     if ('error' in input) return c.json(invalidCredentials, 401);
-    if (recentFailures(db, input.email, now()) >= MAX_FAILURES) {
+    if (!countAttempt(db, input.email, now())) {
       return c.json({ error: 'too_many_attempts' } satisfies ErrorBody, 429);
     }
     const row = db.prepare('SELECT id, email, password_hash FROM users WHERE email = ?').get(input.email);
     // An unknown email still pays for one scrypt, so timing does not reveal which emails exist.
     const matches = await verifyPassword(input.password, row ? String(row.password_hash) : await dummyHash());
-    if (!row || !matches) {
-      db.prepare('INSERT INTO signin_failures (email, failed_at) VALUES (?, ?)').run(input.email, now().getTime());
-      return c.json(invalidCredentials, 401);
-    }
+    if (!row || !matches) return c.json(invalidCredentials, 401);
     db.prepare('DELETE FROM signin_failures WHERE email = ?').run(input.email);
     return c.json(signedIn(db, { id: String(row.id), email: String(row.email) }, now()));
   });
@@ -149,12 +146,18 @@ function userForToken(db: DatabaseSync, token: string, at: Date): User | undefin
   return row ? { id: String(row.id), email: String(row.email) } : undefined;
 }
 
-/** Failed sign-ins for `email` in the last 15 minutes; older ones are deleted. */
-function recentFailures(db: DatabaseSync, email: string, at: Date): number {
-  const since = at.getTime() - FAILURE_WINDOW;
-  db.prepare('DELETE FROM signin_failures WHERE failed_at <= ?').run(since);
+/**
+ * Counts a sign-in attempt for `email` as a failure before its password is checked, so parallel
+ * attempts cannot all pass the limit while scrypt runs (a right password clears the count).
+ * False when 10 attempts in the last 15 minutes already failed; older ones are deleted.
+ * Synchronous from check to insert, so no other request runs in between.
+ */
+function countAttempt(db: DatabaseSync, email: string, at: Date): boolean {
+  db.prepare('DELETE FROM signin_failures WHERE failed_at <= ?').run(at.getTime() - FAILURE_WINDOW);
   const row = db.prepare('SELECT count(*) AS n FROM signin_failures WHERE email = ?').get(email);
-  return Number(row?.n);
+  if (Number(row?.n) >= MAX_FAILURES) return false;
+  db.prepare('INSERT INTO signin_failures (email, failed_at) VALUES (?, ?)').run(email, at.getTime());
+  return true;
 }
 
 function profilesOf(db: DatabaseSync, userId: string): Profile[] {
