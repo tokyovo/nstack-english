@@ -35,7 +35,7 @@ Acceptance criteria:
 
 - [x] T11 Spaced-repetition schedule and due queue from the progress store. Proof: Jest `src/review/schedule.test.ts` (seen failing). Needs: none
 - [x] T12 Review screen and home due count. Proof: Jest, e2e `e2e/review.spec.ts`, axe via e2e/screens.ts. Access: public. Needs: T11
-- [ ] T13 Speak exercise: schema type, recognition module with forgiving scoring, permission explanation, fallback, in the lesson player. Proof: Jest `src/speech/*.test.ts`, lesson Jest, e2e fallback step. Needs: none
+- [x] T13 Speak exercise: schema type, recognition module with forgiving scoring, permission explanation, fallback, in the lesson player. Proof: Jest `src/speech/*.test.ts`, lesson Jest, e2e fallback step. Needs: none
 - [ ] T14 Content: 2 speak items per existing unit. Proof: content test, native reader verdict. Content: yes. Needs: T13 (schema)
 - [ ] T15 Speak in review sessions (one speak item per session when supported). Proof: Jest. Needs: T12, T13
 

@@ -27,3 +27,6 @@
 - (unscored) Result screens link to "/" by push, so Android back returns to the finished lesson/review; use replace/dismiss. Evidence: T12 builder
 - (unscored) Share the answer saver and step bar between lesson-player and review-session; share e2e learner helpers. Evidence: T12 builder
 - (unscored) UI-string checker: strings outside JSX that reach the user (Alert.alert, confirm, consts rendered later). Evidence: review round 3
+- (unscored) Prune default Android READ/WRITE_EXTERNAL_STORAGE permissions from the app config. Evidence: T13 builder
+- (unscored) Self-check feedback says "Đúng rồi!" for a self-mark; use wording that fits self-assessment. Evidence: T13 builder
+- (unscored) Progress documents grow without limit (all answers kept): compact old answers before the 1 MB cap. Evidence: T17 builder
