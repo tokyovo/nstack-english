@@ -405,3 +405,11 @@
 - [x] 8. No new warnings or errors. lint 0
 - [x] 9. Access is enforced. check-security exit 0 after the offline-notice row was marked public (it is UI, not a protected resource); deny proofs listed in Features
 - [x] Done when: all ticked. Not verified: Android flows (no KVM).
+
+## 2026-11-28 review accounts-sync
+- Read: review/SKILL.md c151f88
+- [x] 1. Dispatch. reviewer at 2ae1aff: fix-needed. Important: parallel sign-ins bypass the rate limit (60 at once -> 59-60 x 401, 0-1 x 429); progress documents grow without limit (event loop blocked by a 17 MB merge; a real learner passes the 1 MB body cap after ~21,000 answers and sync fails silently for good)
+- [x] 2. Second reviewer. focus security and failure modes, at 2ae1aff: fix-needed. Important: the same rate-limit race (right password accepted after 59 parallel wrong ones); a session the server ends (401, e.g. day 90) leaves the previous learner's device copy, which the next sign-in merges into another account
+- [ ] 3. Act on every finding. one fix builder dispatched with all three
+- [ ] 4. Review the fixes
+- [ ] Done when: the latest round has no important findings, verify passed after the last fix, and nits are fixed or in backlog.md.
