@@ -144,6 +144,20 @@ export async function syncSession(): Promise<SyncSession | undefined> {
   return session && owner && { token: session.token, profileId: owner.id, deviceProfileId: deviceProfileIdOf(undefined) };
 }
 
+/**
+ * Every learner's sync target on this device (the parent's and each child's), all reached with the
+ * parent's account token; undefined while signed out.
+ */
+export async function familySyncSessions(): Promise<SyncSession[] | undefined> {
+  const session = await savedSession();
+  if (!session) return undefined;
+  return session.profiles.map((profile) => ({
+    token: session.token,
+    profileId: profile.id,
+    deviceProfileId: deviceProfileIdOf(profile.kind === 'child' ? profile : undefined),
+  }));
+}
+
 /** The saved session's token, for calls made as the parent's whole account. */
 export async function accountToken(): Promise<string | undefined> {
   return (await savedSession())?.token;

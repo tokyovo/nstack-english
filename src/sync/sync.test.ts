@@ -42,13 +42,15 @@ const completion = (at: string) => ({
 /**
  * A stand-in for the API server (server/accounts.ts, server/profiles.ts, server/progress.ts): the
  * demo account owns profile p1, whose progress PUT merges like the real server, and the child c1,
- * whose progress only the child's token child-tok reaches; `online` switches the network.
+ * whose progress the child's token child-tok and the parent's tok-1 reach; `online` switches the network
+ * and `childFails` makes the child's progress answer 500.
  */
 function fakeServer(stored: Progress = { schemaVersion: 1, profileId: 'p1', lessons: {}, answers: {} }) {
   const server = {
     stored,
     child: { schemaVersion: 1, profileId: 'c1', lessons: {}, answers: {} } as Progress,
     online: true,
+    childFails: false,
     puts: [] as unknown[],
     signedOut: [] as string[],
   };
@@ -65,7 +67,10 @@ function fakeServer(stored: Progress = { schemaVersion: 1, profileId: 'p1', less
       return json(201, { token: 'child-tok', profile: signedInBody.profiles[1] });
     }
     if (path === '/api/profiles/c1/progress' && init?.method === 'PUT') {
-      if (new Headers(init.headers).get('authorization') !== 'Bearer child-tok') return json(404, {});
+      // The child's own token and the parent's whole-account token both reach the child's progress.
+      const auth = new Headers(init.headers).get('authorization');
+      if (auth !== 'Bearer child-tok' && auth !== 'Bearer tok-1') return json(404, {});
+      if (server.childFails) return json(500, { error: 'internal' });
       server.child = mergeProgress(server.child, JSON.parse(String(init.body)) as Progress);
       return json(200, server.child);
     }
@@ -295,6 +300,69 @@ describe('signing out of this device', () => {
     await waitFor(() => expect(syncState()).toBe('synced'));
     expect(Object.keys((await store.load(LOCAL_PROFILE_ID)).lessons)).toEqual(['everyday-a0-u2']);
     expect(Object.keys(server.stored.lessons)).toEqual(['everyday-a0-u2']);
+  });
+});
+
+describe('signing out of a family device', () => {
+  it("saves the parent's and the active child's progress, ends both sessions and leaves neither on the device", async () => {
+    const server = fakeServer();
+    await signIn(demo.email, demo.password);
+    await store.completeLesson(LOCAL_PROFILE_ID, { unitId: 'everyday-a0-u1', correct: 8, total: 10 });
+    await startChildSession('c1');
+    await store.completeLesson('c1', { unitId: 'kids-a0-u1', correct: 8, total: 10 });
+
+    expect(await signOutOfDevice()).toBe('signedOut');
+
+    expect(Object.keys(server.stored.lessons)).toEqual(['everyday-a0-u1']);
+    expect(Object.keys(server.child.lessons)).toEqual(['kids-a0-u1']);
+    expect(server.signedOut.sort()).toEqual(['Bearer child-tok', 'Bearer tok-1']);
+    expect((await store.load(LOCAL_PROFILE_ID)).lessons).toEqual({});
+    expect((await store.load('c1')).lessons).toEqual({});
+    expect(await syncSession()).toBeUndefined();
+  });
+
+  it("saves a child's progress left unsent when the parent took the device back offline, then clears it", async () => {
+    const server = fakeServer();
+    await signIn(demo.email, demo.password);
+    await startChildSession('c1');
+    server.online = false;
+    await store.completeLesson('c1', { unitId: 'kids-a0-u1', correct: 8, total: 10 });
+    await leaveChildProfile();
+    server.online = true;
+
+    expect(await signOutOfDevice()).toBe('signedOut');
+
+    expect(Object.keys(server.child.lessons)).toEqual(['kids-a0-u1']);
+    expect((await store.load('c1')).lessons).toEqual({});
+  });
+
+  it("stays signed in with the child's device copy kept when it cannot be sent", async () => {
+    const server = fakeServer();
+    await signIn(demo.email, demo.password);
+    await startChildSession('c1');
+    server.online = false;
+    await store.completeLesson('c1', { unitId: 'kids-a0-u1', correct: 8, total: 10 });
+    await leaveChildProfile();
+    server.online = true;
+    server.childFails = true;
+
+    expect(await signOutOfDevice()).toBe('failed');
+
+    expect(Object.keys((await store.load('c1')).lessons)).toEqual(['kids-a0-u1']);
+    expect(await syncSession()).toEqual({ token: 'tok-1', profileId: 'p1', deviceProfileId: LOCAL_PROFILE_ID });
+  });
+
+  it("clears the children's copies too when the parent chooses to discard what could not be sent", async () => {
+    const server = fakeServer();
+    await signIn(demo.email, demo.password);
+    await startChildSession('c1');
+    server.online = false;
+    await store.completeLesson('c1', { unitId: 'kids-a0-u1', correct: 8, total: 10 });
+
+    expect(await signOutOfDevice({ discardUnsynced: true })).toBe('signedOut');
+
+    expect((await store.load('c1')).lessons).toEqual({});
+    expect(await syncSession()).toBeUndefined();
   });
 });
 
