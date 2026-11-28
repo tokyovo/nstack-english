@@ -6,6 +6,7 @@ import { existsSync, mkdtempSync, rmSync, writeFileSync } from 'node:fs';
 import { tmpdir } from 'node:os';
 import { join } from 'node:path';
 import { setTimeout as sleep } from 'node:timers/promises';
+import { DatabaseSync } from 'node:sqlite';
 import { after, before, describe, test } from 'node:test';
 
 const DRIVE = join(import.meta.dirname, 'drive.mjs');
@@ -118,7 +119,7 @@ describe('drive tool', () => {
 
     const seeded = drive(stateDir, ['seed']);
     assert.equal(seeded.code, 0, seeded.stderr);
-    const demoSeeded = { seeded: ['account demo@hocenglish.test', 'child profile Bé Na'] };
+    const demoSeeded = { seeded: ['account demo@hocenglish.test', 'child profile Bé Na', 'premium demo@hocenglish.test'] };
     assert.deepEqual(JSON.parse(seeded.stdout), demoSeeded);
     const signIn = await fetch(`${url}/api/auth/signin`, {
       method: 'POST',
@@ -136,6 +137,11 @@ describe('drive tool', () => {
       [['owner', ''], ['child', 'Bé Na']],
       'the demo account has one child profile, also after seeding twice',
     );
+    assert.equal(me.plan.kind, 'premium', 'the demo account is Premium');
+    const conn = new DatabaseSync(db, { readOnly: true });
+    const entitlements = conn.prepare('SELECT count(*) AS n FROM entitlements').get();
+    conn.close();
+    assert.equal(entitlements?.n, 1, 'seeding twice grants Premium once');
 
     const dryRun = drive(stateDir, ['stop', '--dry-run']);
     assert.equal(dryRun.code, 0);
