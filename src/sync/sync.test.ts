@@ -1,10 +1,10 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { waitFor } from '@testing-library/react-native';
 
-import { signIn, signOut } from '@/account';
+import { signIn, signOut, startChildSession } from '@/account';
 import { createProgressStore, LOCAL_PROFILE_ID, type Progress } from '@/progress';
 import { mergeProgress } from '@/progress/merge';
-import { startSync, syncProgress, syncState } from '@/sync';
+import { leaveChildProfile, startSync, syncProgress, syncState } from '@/sync';
 
 jest.mock('@react-native-async-storage/async-storage', () =>
   jest.requireActual('@react-native-async-storage/async-storage/jest/async-storage-mock')
@@ -25,7 +25,10 @@ const demo = { email: 'demo@hocenglish.test', password: 'hoc-english-demo' };
 const signedInBody = {
   token: 'tok-1',
   user: { id: 'u1', email: demo.email },
-  profiles: [{ id: 'p1', kind: 'owner', name: '', picture: null }],
+  profiles: [
+    { id: 'p1', kind: 'owner', name: '', picture: null },
+    { id: 'c1', kind: 'child', name: 'Bé Na', picture: '🐱' },
+  ],
 };
 
 const completion = (at: string) => ({
@@ -37,17 +40,35 @@ const completion = (at: string) => ({
 });
 
 /**
- * A stand-in for the API server (server/accounts.ts, server/progress.ts): the demo account owns
- * profile p1, whose progress PUT merges like the real server; `online` switches the network.
+ * A stand-in for the API server (server/accounts.ts, server/profiles.ts, server/progress.ts): the
+ * demo account owns profile p1, whose progress PUT merges like the real server, and the child c1,
+ * whose progress only the child's token child-tok reaches; `online` switches the network.
  */
 function fakeServer(stored: Progress = { schemaVersion: 1, profileId: 'p1', lessons: {}, answers: {} }) {
-  const server = { stored, online: true, puts: [] as unknown[] };
+  const server = {
+    stored,
+    child: { schemaVersion: 1, profileId: 'c1', lessons: {}, answers: {} } as Progress,
+    online: true,
+    puts: [] as unknown[],
+    signedOut: [] as string[],
+  };
   jest.spyOn(global, 'fetch').mockImplementation(async (input, init) => {
     if (!server.online) throw new TypeError('Failed to fetch');
     const path = String(input);
     const json = (status: number, value: unknown) => new Response(JSON.stringify(value), { status });
     if (path === '/api/auth/signin') return json(200, signedInBody);
-    if (path === '/api/auth/signout') return new Response(null, { status: 204 });
+    if (path === '/api/auth/signout') {
+      server.signedOut.push(new Headers(init?.headers).get('authorization') ?? '');
+      return new Response(null, { status: 204 });
+    }
+    if (path === '/api/profiles/c1/session') {
+      return json(201, { token: 'child-tok', profile: signedInBody.profiles[1] });
+    }
+    if (path === '/api/profiles/c1/progress' && init?.method === 'PUT') {
+      if (new Headers(init.headers).get('authorization') !== 'Bearer child-tok') return json(404, {});
+      server.child = mergeProgress(server.child, JSON.parse(String(init.body)) as Progress);
+      return json(200, server.child);
+    }
     if (path === '/api/profiles/p1/progress' && init?.method === 'PUT') {
       if (new Headers(init.headers).get('authorization') !== 'Bearer tok-1') return json(401, {});
       const body = JSON.parse(String(init.body)) as Progress;
@@ -152,6 +173,50 @@ describe('progress sync', () => {
 
     expect(await syncProgress()).toBe('signedOut');
     expect(server.puts.length).toBe(putsBefore);
+  });
+});
+
+describe('progress sync for a child learning on the device', () => {
+  it("keeps the child's progress in its own device copy and sends it with the child's token", async () => {
+    const server = fakeServer();
+    await store.completeLesson(LOCAL_PROFILE_ID, { unitId: 'everyday-a0-u1', correct: 8, total: 10 });
+    await signIn(demo.email, demo.password);
+    expect(await syncProgress()).toBe('synced');
+    await startChildSession('c1');
+    stopSync = startSync();
+
+    await store.completeLesson('c1', { unitId: 'kids-a0-u1', correct: 8, total: 10 });
+
+    await waitFor(() => expect(Object.keys(server.child.lessons)).toEqual(['kids-a0-u1']));
+    expect(Object.keys(server.stored.lessons)).toEqual(['everyday-a0-u1']);
+    expect(Object.keys((await store.load(LOCAL_PROFILE_ID)).lessons)).toEqual(['everyday-a0-u1']);
+    expect(Object.keys((await store.load('c1')).lessons)).toEqual(['kids-a0-u1']);
+  });
+
+  it("brings the child's account progress to the device when the child starts", async () => {
+    const server = fakeServer();
+    server.child.lessons = { 'kids-a0-u2': completion('2026-11-20T08:00:00.000Z') };
+    await signIn(demo.email, demo.password);
+    stopSync = startSync();
+
+    await startChildSession('c1');
+
+    await waitFor(async () => expect(Object.keys((await store.load('c1')).lessons)).toEqual(['kids-a0-u2']));
+    expect((await store.load(LOCAL_PROFILE_ID)).lessons).toEqual({});
+  });
+
+  it("saves the child's progress, then ends the child's session, when the parent takes the device back", async () => {
+    const server = fakeServer();
+    await signIn(demo.email, demo.password);
+    await startChildSession('c1');
+    await store.completeLesson('c1', { unitId: 'kids-a0-u1', correct: 8, total: 10 });
+
+    await leaveChildProfile();
+
+    expect(Object.keys(server.child.lessons)).toEqual(['kids-a0-u1']);
+    expect(server.signedOut).toEqual(['Bearer child-tok']);
+    expect(await syncProgress()).toBe('synced');
+    expect(server.stored.lessons).toEqual({});
   });
 });
 

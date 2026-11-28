@@ -1,10 +1,10 @@
-// Local-first progress sync. The device always learns as LOCAL_PROFILE_ID; while signed in, that
-// copy is sent to the account's profile, the server merges it with what it has (server/progress.ts)
+// Local-first progress sync. The device learns as LOCAL_PROFILE_ID, or in the child's own copy while
+// a child is learning (src/account syncSession); while signed in, that copy is sent to its profile, the server merges it with what it has (server/progress.ts)
 // and the merged copy comes back and is merged into the device's. One PUT both pushes and pulls,
 // and the merge is a union, so retries and several devices converge.
-import { onSessionChange, syncSession } from '@/account';
+import { endChildSession, onSessionChange, syncSession } from '@/account';
 import { callApi } from '@/api/client';
-import { createProgressStore, LOCAL_PROFILE_ID, onProgressChange } from '@/progress';
+import { createProgressStore, onProgressChange } from '@/progress';
 import { parseProgress } from '@/progress/schema';
 
 /** `idle` until the first sync has run; `failed` is any answer other than offline or the merged copy. */
@@ -57,8 +57,9 @@ export function syncProgress(): Promise<SyncState> {
 export function startSync(): () => void {
   const sync = () => void syncProgress();
   const stopSession = onSessionChange(sync);
-  const stopProgress = onProgressChange(({ profileId, source }) => {
-    if (profileId === LOCAL_PROFILE_ID && source === 'device') sync();
+  // Only the active learner's copy is synced; a change to any copy on the device starts a run.
+  const stopProgress = onProgressChange(({ source }) => {
+    if (source === 'device') sync();
   });
   return () => {
     stopSession();
@@ -69,7 +70,7 @@ export function startSync(): () => void {
 async function syncOnce(): Promise<SyncState> {
   const session = await syncSession();
   if (!session) return 'signedOut';
-  const device = await store.load(LOCAL_PROFILE_ID);
+  const device = await store.load(session.deviceProfileId);
   const reply = await callApi(`/api/profiles/${encodeURIComponent(session.profileId)}/progress`, {
     method: 'PUT',
     body: { ...device, profileId: session.profileId },
@@ -78,8 +79,18 @@ async function syncOnce(): Promise<SyncState> {
   if (reply.status === 'offline') return 'offline';
   const merged = reply.status === 200 ? parseProgress(reply.body, session.profileId) : null;
   if (!merged) return 'failed';
-  await store.mergeIn(LOCAL_PROFILE_ID, { ...merged, profileId: LOCAL_PROFILE_ID });
+  await store.mergeIn(session.deviceProfileId, { ...merged, profileId: session.deviceProfileId });
   return 'synced';
+}
+
+/**
+ * The parent takes the device back from a child: the child's progress is sent first, then the
+ * child's token is ended. Unsent progress stays in the child's device copy and goes with the
+ * child's next session.
+ */
+export async function leaveChildProfile(): Promise<void> {
+  await syncProgress();
+  await endChildSession();
 }
 
 function setState(next: SyncState) {

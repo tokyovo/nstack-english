@@ -1,6 +1,7 @@
 // The learner's account on this device: sign up, sign in, sign out, and the saved session.
 // The server's answers (server/accounts.ts) are checked here and turned into typed values.
 import { callApi, type ApiReply } from '@/api/client';
+import { LOCAL_PROFILE_ID } from '@/progress/schema';
 import { isProfilePicture, type ProfilePicture } from '@/profiles/child-profile';
 
 import { deleteSession, readSession, writeSession } from './session-storage';
@@ -32,10 +33,21 @@ export type AccountError = { code: AccountErrorCode; field?: AccountField };
 
 export type AccountResult = { ok: true; user: User; profiles: Profile[] } | { ok: false; error: AccountError };
 
-type Session = { token: string; user: User; profiles: Profile[] };
+/** A child learning on this device: its own profile-scoped token, kept beside the parent's. */
+type ChildSession = { token: string; profile: Profile };
 
-/** What progress sync needs: the session token and the account profile this device learns as. */
-export type SyncSession = { token: string; profileId: string };
+type Session = { token: string; user: User; profiles: Profile[]; child?: ChildSession };
+
+/**
+ * What progress sync needs: the token to send, the account profile to sync, and the device copy
+ * that profile learns in (LOCAL_PROFILE_ID for the parent, the child's id for a child), so a
+ * child's and a parent's progress never mix on the device.
+ */
+export type SyncSession = { token: string; profileId: string; deviceProfileId: string };
+
+export type ChildSessionResult =
+  | { ok: true }
+  | { ok: false; error: 'not_found' | 'signed_out' | 'offline' | 'unknown' };
 
 const sessionListeners = new Set<() => void>();
 
@@ -71,14 +83,52 @@ export async function signOut(): Promise<void> {
   if (!session) return;
   await deleteSession();
   sessionChanged();
-  await callApi('/api/auth/signout', { method: 'POST', token: session.token });
+  const tokens = session.child ? [session.child.token, session.token] : [session.token];
+  await Promise.all(tokens.map((token) => callApi('/api/auth/signout', { method: 'POST', token })));
 }
 
-/** The saved session's token and owner profile, read on the device without asking the server. */
+/**
+ * Hands the device to one of the parent's children: the server gives a token that reaches only
+ * that child's progress, and from now on the device learns as the child.
+ */
+export async function startChildSession(profileId: string): Promise<ChildSessionResult> {
+  const session = await savedSession();
+  if (!session) return { ok: false, error: 'signed_out' };
+  const reply = await callApi(`/api/profiles/${encodeURIComponent(profileId)}/session`, {
+    method: 'POST',
+    token: session.token,
+  });
+  const child = reply.status === 201 ? parseChildSession(reply.body) : undefined;
+  if (!child) return { ok: false, error: childSessionError(reply) };
+  await writeSession(JSON.stringify({ ...session, child } satisfies Session));
+  sessionChanged();
+  return { ok: true };
+}
+
+/** The parent learns on this device again; the child's token is ended on the server when it can be reached. */
+export async function endChildSession(): Promise<void> {
+  const session = await savedSession();
+  if (!session?.child) return;
+  const { child, ...parent } = session;
+  await writeSession(JSON.stringify(parent satisfies Session));
+  sessionChanged();
+  await callApi('/api/auth/signout', { method: 'POST', token: child.token });
+}
+
+/** The child learning on this device, or undefined while the parent (or nobody) is. */
+export async function activeChild(): Promise<Profile | undefined> {
+  return (await savedSession())?.child?.profile;
+}
+
+/** The saved session's token and learning profile, read on the device without asking the server. */
 export async function syncSession(): Promise<SyncSession | undefined> {
   const session = await savedSession();
+  if (session?.child) {
+    const { token, profile } = session.child;
+    return { token, profileId: profile.id, deviceProfileId: profile.id };
+  }
   const owner = session?.profiles.find((profile) => profile.kind === 'owner');
-  return session && owner && { token: session.token, profileId: owner.id };
+  return session && owner && { token: session.token, profileId: owner.id, deviceProfileId: LOCAL_PROFILE_ID };
 }
 
 /** The saved session's token, for calls made as the parent's whole account. */
@@ -100,9 +150,13 @@ export async function loadAccount(): Promise<AccountState> {
     return { status: 'signedOut' };
   }
   const fresh = reply.status === 200 ? parseAccount(reply.body) : undefined;
-  const current = fresh ? { ...session, ...fresh } : session;
-  if (fresh) await writeSession(JSON.stringify(current));
-  return { status: 'signedIn', user: current.user, profiles: current.profiles };
+  if (!fresh) return { status: 'signedIn', user: session.user, profiles: session.profiles };
+  // A child deleted on another device has no session left on the server either.
+  const { child, ...parent } = session;
+  const childKept = child && fresh.profiles.some((profile) => profile.id === child.profile.id);
+  await writeSession(JSON.stringify({ ...parent, ...fresh, ...(childKept && { child }) } satisfies Session));
+  if (child && !childKept) sessionChanged();
+  return { status: 'signedIn', user: fresh.user, profiles: fresh.profiles };
 }
 
 async function startSession(path: `/api/${string}`, email: string, password: string): Promise<AccountResult> {
@@ -133,28 +187,45 @@ async function savedSession(): Promise<Session | undefined> {
 }
 
 function parseSession(value: unknown): Session | undefined {
-  if (!isRecord(value) || typeof value.token !== 'string' || value.token === '') return undefined;
+  if (!isRecord(value) || !isToken(value.token)) return undefined;
   const account = parseAccount(value);
-  return account && { token: value.token, ...account };
+  const child = parseChildSession(value.child);
+  return account && { token: value.token, ...account, ...(child && { child }) };
 }
 
-function parseAccount(value: unknown): Omit<Session, 'token'> | undefined {
+function parseAccount(value: unknown): Omit<Session, 'token' | 'child'> | undefined {
   if (!isRecord(value) || !isRecord(value.user) || !Array.isArray(value.profiles)) return undefined;
   const { id, email } = value.user;
   if (typeof id !== 'string' || typeof email !== 'string') return undefined;
-  const profiles = value.profiles.flatMap((profile): Profile[] =>
-    isRecord(profile) && typeof profile.id === 'string'
-      ? [
-          {
-            id: profile.id,
-            kind: profile.kind === 'child' ? 'child' : 'owner',
-            name: String(profile.name ?? ''),
-            picture: isProfilePicture(profile.picture) ? profile.picture : null,
-          },
-        ]
-      : []
-  );
-  return { user: { id, email }, profiles };
+  return { user: { id, email }, profiles: value.profiles.flatMap((profile) => parseProfile(profile) ?? []) };
+}
+
+/** A child session from the server's `{token, profile}` answer or the saved session. */
+function parseChildSession(value: unknown): ChildSession | undefined {
+  if (!isRecord(value) || !isToken(value.token)) return undefined;
+  const profile = parseProfile(value.profile);
+  return profile?.kind === 'child' ? { token: value.token, profile } : undefined;
+}
+
+function parseProfile(value: unknown): Profile | undefined {
+  if (!isRecord(value) || typeof value.id !== 'string') return undefined;
+  return {
+    id: value.id,
+    kind: value.kind === 'child' ? 'child' : 'owner',
+    name: String(value.name ?? ''),
+    picture: isProfilePicture(value.picture) ? value.picture : null,
+  };
+}
+
+function childSessionError(reply: ApiReply): Extract<ChildSessionResult, { ok: false }>['error'] {
+  if (reply.status === 'offline') return 'offline';
+  if (reply.status === 401) return 'signed_out';
+  if (reply.status === 404) return 'not_found';
+  return 'unknown';
+}
+
+function isToken(value: unknown): value is string {
+  return typeof value === 'string' && value !== '';
 }
 
 function isRecord(value: unknown): value is Record<string, unknown> {

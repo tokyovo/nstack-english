@@ -4,15 +4,13 @@ import { mergeProgress } from './merge';
 import { emptyProgress, parseProgress, type LessonCompletion, type Progress } from './schema';
 
 export {
+  LOCAL_PROFILE_ID,
   PROGRESS_SCHEMA_VERSION,
   upgradeProgress,
   type AnswerRecord,
   type LessonCompletion,
   type Progress,
 } from './schema';
-
-/** The only profile until accounts and child profiles exist. */
-export const LOCAL_PROFILE_ID = 'local';
 
 const KEY_PREFIX = 'hocenglish.progress.';
 
