@@ -2,8 +2,10 @@ import { useFocusEffect } from 'expo-router';
 import { useCallback, useEffect, useState } from 'react';
 
 import { onSessionChange } from '@/account';
+import type { Unit } from '@/content';
+import type { Progress } from '@/progress';
 
-import { loadPlan, loadPremiumUnit, type Plan, type PremiumUnitResult } from './index';
+import { loadPlan, loadPremiumUnit, reviewUnits, type Plan, type PremiumUnitResult } from './index';
 
 /** The learner's plan, read again each time the screen comes into view and after a switch of learner. */
 export function usePlan(): Plan {
@@ -52,4 +54,26 @@ export function usePremiumUnit(id: string) {
   };
 
   return [state, retry] as const;
+}
+
+/**
+ * The units `progress` is reviewed in (`reviewUnits`); undefined until they are first known. The
+ * last known stay while new progress is worked out, so a count shown does not blink.
+ */
+export function useReviewUnits(progress: Progress | undefined): readonly Unit[] | undefined {
+  const [units, setUnits] = useState<readonly Unit[]>();
+
+  useEffect(() => {
+    if (!progress) return;
+    let current = true;
+    reviewUnits(progress).then(
+      (next) => current && setUnits(next),
+      () => undefined
+    );
+    return () => {
+      current = false;
+    };
+  }, [progress]);
+
+  return units;
 }

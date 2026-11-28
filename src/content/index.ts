@@ -2,7 +2,7 @@
 // Both come from the generated manifest (`npm run content:manifest`); premium bodies are on the server.
 import type { UnitSummary } from './access';
 import { bundledFiles, catalog } from './manifest';
-import { parseUnit, type Track, type Unit, type Word } from './schema';
+import { parseUnit, type Track, type Unit } from './schema';
 
 export type { Access, UnitSummary } from './access';
 export type { Exercise, ExerciseType, Level, Track, Unit, Word } from './schema';
@@ -30,13 +30,4 @@ export const bundledUnits: readonly Unit[] = bundledFiles.map(load);
 /** A bundled unit; undefined for a premium unit, whose body the app does not have. */
 export function getUnit(id: string): Unit | undefined {
   return bundledUnits.find((u) => u.id === id);
-}
-
-/** A word from any unit, e.g. the prompt of a choose_meaning exercise. */
-export function getWord(id: string): Word | undefined {
-  for (const unit of bundledUnits) {
-    const word = unit.words.find((w) => w.id === id);
-    if (word) return word;
-  }
-  return undefined;
 }

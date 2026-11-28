@@ -26,11 +26,13 @@ function exercise(id: string): Exercise {
   return found;
 }
 
+const words = getUnit('everyday-a0-u1')?.words ?? [];
+
 const onAnswer = jest.fn();
 const onContinue = jest.fn();
 
 async function renderStep(item: Exercise, random?: () => number) {
-  await render(<ExerciseStep exercise={item} onAnswer={onAnswer} onContinue={onContinue} random={random} />);
+  await render(<ExerciseStep exercise={item} words={words} onAnswer={onAnswer} onContinue={onContinue} random={random} />);
   await act(() => Promise.resolve());
 }
 
@@ -416,7 +418,7 @@ describe('option order', () => {
     const before = shownOrder();
 
     await press('Tạm biệt');
-    await screen.rerender(<ExerciseStep exercise={item} onAnswer={onAnswer} onContinue={onContinue} random={seeded(4)} />);
+    await screen.rerender(<ExerciseStep exercise={item} words={words} onAnswer={onAnswer} onContinue={onContinue} random={seeded(4)} />);
 
     expect(shownOrder()).toEqual(before);
   });

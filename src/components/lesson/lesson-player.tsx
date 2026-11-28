@@ -198,6 +198,7 @@ export function LessonPlayer({ unit, store, profileId }: LessonPlayerProps) {
             <ExerciseStep
               key={step.exercise.id}
               exercise={step.exercise}
+              words={unit.words}
               onAnswer={(isCorrect) => onAnswer(step.exercise, isCorrect)}
               onContinue={() => advance(phase.index)}
             />

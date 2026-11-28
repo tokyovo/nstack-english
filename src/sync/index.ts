@@ -4,6 +4,7 @@
 // and the merge is a union, so retries and several devices converge.
 import { endChildSession, familySyncSessions, onSessionChange, signOut, syncSession, type SyncSession } from '@/account';
 import { callApi } from '@/api/client';
+import { clearPremiumUnits } from '@/premium';
 import { createProgressStore, LOCAL_PROFILE_ID, onProgressChange } from '@/progress';
 import { parseProgress } from '@/progress/schema';
 
@@ -103,7 +104,7 @@ export type SignOutResult = 'signedOut' | 'offline' | 'failed';
 /**
  * Signs out so the next person on this device finds none of the family's progress: every learner's
  * device copy (the parent's and each child's) is sent to the account first, then all are cleared and
- * an active child's session ends with the parent's. When a copy cannot be sent the parent stays
+ * an active child's session ends with the parent's, and the premium units kept on the device go too. When a copy cannot be sent the parent stays
  * signed in with nothing lost, unless they chose `discardUnsynced`.
  */
 export async function signOutOfDevice({ discardUnsynced = false } = {}): Promise<SignOutResult> {
@@ -114,7 +115,7 @@ export async function signOutOfDevice({ discardUnsynced = false } = {}): Promise
   await signOut();
   await syncProgress();
   const copies = family?.map((session) => session.deviceProfileId) ?? [LOCAL_PROFILE_ID];
-  await Promise.all(copies.map((copy) => store.clear(copy)));
+  await Promise.all([...copies.map((copy) => store.clear(copy)), clearPremiumUnits()]);
   return 'signedOut';
 }
 

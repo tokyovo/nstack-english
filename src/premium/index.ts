@@ -4,8 +4,9 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 
 import { syncSession } from '@/account';
 import { callApi } from '@/api/client';
-import type { Unit } from '@/content';
+import { getUnit, tracks, unitsOf, type Unit, type UnitSummary } from '@/content';
 import { parseUnit } from '@/content/schema';
+import { isLessonCompleted, type Progress } from '@/progress';
 
 /** The learner's plan; `unknown` while the server cannot say (loading, offline). A child has its parent's. */
 export type Plan = { kind: 'free' } | { kind: 'premium'; until: Date } | { kind: 'unknown' };
@@ -48,6 +49,32 @@ export async function loadPremiumUnit(id: string): Promise<PremiumUnitResult> {
   const kept = await keptUnit(id);
   if (kept) return { status: 'ready', unit: kept };
   return { status: reply.status === 'offline' ? 'offline' : 'error' };
+}
+
+/**
+ * The units whose words the learner reviews, in teaching order: every bundled unit, and each
+ * finished premium unit whose body is on the device or, for a Premium learner online, fetched now.
+ * A finished premium unit with neither (finished on another device, then offline or no longer
+ * Premium) is left out until it can be had.
+ */
+export async function reviewUnits(progress: Progress): Promise<Unit[]> {
+  const units = await Promise.all(tracks.flatMap(unitsOf).map((summary) => reviewUnit(summary, progress)));
+  return units.filter((unit) => unit !== undefined);
+}
+
+async function reviewUnit(summary: UnitSummary, progress: Progress): Promise<Unit | undefined> {
+  if (summary.access === 'free') return getUnit(summary.id);
+  if (!isLessonCompleted(progress, summary.id)) return undefined;
+  const kept = await keptUnit(summary.id);
+  if (kept) return kept;
+  const loaded = await loadPremiumUnit(summary.id);
+  return loaded.status === 'ready' ? loaded.unit : undefined;
+}
+
+/** Removes every premium unit kept on this device, for the next person to sign in. */
+export async function clearPremiumUnits(): Promise<void> {
+  const keys = await AsyncStorage.getAllKeys();
+  await AsyncStorage.multiRemove(keys.filter((key) => key.startsWith(KEY_PREFIX)));
 }
 
 async function keptUnit(id: string): Promise<Unit | undefined> {

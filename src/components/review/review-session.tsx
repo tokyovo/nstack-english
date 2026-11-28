@@ -7,9 +7,10 @@ import { ExerciseStep } from '@/components/lesson/exercise-step';
 import { StepBar } from '@/components/step-bar';
 import { ThemedText } from '@/components/themed-text';
 import { Space } from '@/constants/theme';
-import { bundledUnits } from '@/content';
+import type { Word } from '@/content';
 import { useTheme } from '@/hooks/use-theme';
 import { t, type MessageKey } from '@/i18n';
+import { reviewUnits } from '@/premium';
 import { type createProgressStore } from '@/progress';
 import { useAnswerSaver } from '@/progress/use-answer-saver';
 import { whyNothingDue, type NothingDue } from '@/review/schedule';
@@ -22,7 +23,7 @@ type Phase =
   | { kind: 'loading' }
   | { kind: 'loadFailed' }
   | { kind: 'nothing'; why: NothingDue }
-  | { kind: 'step'; items: ReviewItem[]; index: number }
+  | { kind: 'step'; items: ReviewItem[]; words: Word[]; index: number }
   | { kind: 'saving'; total: number }
   | { kind: 'saveFailed'; total: number }
   | { kind: 'result'; total: number };
@@ -97,18 +98,21 @@ export function ReviewSession({ store, profileId, now = systemClock, random = Ma
   // Built once, when the progress is read, so the answers given during the review do not reshuffle it.
   useEffect(() => {
     let current = true;
-    store.load(profileId).then(
-      (progress) => {
-        if (!current) return;
-        const items = reviewSession(progress, bundledUnits, now(), random, { speak: canRecognise() });
-        setPhase(
-          items.length > 0
-            ? { kind: 'step', items, index: 0 }
-            : { kind: 'nothing', why: whyNothingDue(progress, bundledUnits) }
-        );
-      },
-      () => current && setPhase({ kind: 'loadFailed' })
-    );
+    store
+      .load(profileId)
+      .then(async (progress) => ({ progress, units: await reviewUnits(progress) }))
+      .then(
+        ({ progress, units }) => {
+          if (!current) return;
+          const items = reviewSession(progress, units, now(), random, { speak: canRecognise() });
+          setPhase(
+            items.length > 0
+              ? { kind: 'step', items, words: units.flatMap((unit) => unit.words), index: 0 }
+              : { kind: 'nothing', why: whyNothingDue(progress, units) }
+          );
+        },
+        () => current && setPhase({ kind: 'loadFailed' })
+      );
     return () => {
       current = false;
     };
@@ -158,6 +162,7 @@ export function ReviewSession({ store, profileId, now = systemClock, random = Ma
           <ExerciseStep
             key={item.wordId}
             exercise={item.exercise}
+            words={phase.words}
             onAnswer={(isCorrect) => onAnswer(item, isCorrect)}
             onContinue={() =>
               index + 1 < items.length ? setPhase({ ...phase, index: index + 1 }) : finish(items.length)

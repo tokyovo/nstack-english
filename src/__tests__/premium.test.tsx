@@ -5,11 +5,14 @@ import { renderRouter, screen } from 'expo-router/testing-library';
 import { join } from 'node:path';
 
 import { signIn, startChildSession } from '@/account';
+import HomeScreen from '@/app/index';
 import LessonScreen from '@/app/lesson/[unitId]';
 import PremiumScreen from '@/app/premium';
+import ReviewScreen from '@/app/review';
 import TrackScreen from '@/app/track/[track]';
 import { readUnits } from '@/content/files';
 import { loadPremiumUnit } from '@/premium';
+import { createProgressStore, LOCAL_PROFILE_ID } from '@/progress';
 
 jest.mock('@react-native-async-storage/async-storage', () =>
   jest.requireActual('@react-native-async-storage/async-storage/jest/async-storage-mock')
@@ -67,8 +70,9 @@ function renderApp(initialUrl: string) {
   return renderRouter(
     {
       _layout: StackLayout,
-      index: () => null,
+      index: HomeScreen,
       premium: PremiumScreen,
+      review: ReviewScreen,
       'track/[track]': TrackScreen,
       'lesson/[unitId]': LessonScreen,
     },
@@ -157,6 +161,71 @@ describe('a premium lesson', () => {
     expect(await screen.findByRole('heading', { name: 'Premium' })).toBeOnTheScreen();
     server.online = false;
     expect(await loadPremiumUnit('everyday-a0-u4')).toEqual({ status: 'offline' });
+  });
+});
+
+const DAY = 24 * 60 * 60 * 1000;
+
+/** Finishes `unitId` on this device a day ago, as a sync from another device leaves it: its words are due now. */
+function finishedADayAgo(unitId: string) {
+  return createProgressStore({ now: () => new Date(Date.now() - DAY) }).completeLesson(LOCAL_PROFILE_ID, {
+    unitId,
+    correct: 10,
+    total: 10,
+  });
+}
+
+describe('premium words in review', () => {
+  it('fetches a finished premium unit missing from the device, so home and the review count its words alike', async () => {
+    fakeServer('premium');
+    await signIn(user.email, 'hoc-english-demo');
+    await finishedADayAgo('everyday-a0-u4');
+    await renderApp('/');
+
+    expect(await screen.findByText('10 từ cần ôn')).toBeOnTheScreen();
+
+    await userEvent.press(screen.getByRole('link', { name: 'Ôn tập ngay' }));
+
+    expect(await screen.findByText('Từ 1/10')).toBeOnTheScreen();
+    // The first word is asked by its English, not by its id.
+    expect(screen.getByText('water')).toBeOnTheScreen();
+    expect(screen.queryByText('everyday-a0-u4-water')).toBeNull();
+  });
+
+  it('reviews the words of a premium unit kept on the device while offline', async () => {
+    const server = fakeServer('premium');
+    await signIn(user.email, 'hoc-english-demo');
+    expect((await loadPremiumUnit('everyday-a0-u4')).status).toBe('ready');
+    await finishedADayAgo('everyday-a0-u4');
+    server.online = false;
+    await renderApp('/review');
+
+    expect(await screen.findByText('Từ 1/10')).toBeOnTheScreen();
+  });
+
+  it('leaves out, without an error, a finished premium unit a free learner cannot fetch', async () => {
+    fakeServer('free');
+    await signIn(user.email, 'hoc-english-demo');
+    await finishedADayAgo('everyday-a0-u1');
+    await finishedADayAgo('everyday-a0-u4');
+    await renderApp('/');
+
+    expect(await screen.findByText('9 từ cần ôn')).toBeOnTheScreen();
+
+    await userEvent.press(screen.getByRole('link', { name: 'Ôn tập ngay' }));
+
+    expect(await screen.findByText('Từ 1/9')).toBeOnTheScreen();
+  });
+
+  it('leaves out a finished premium unit with no copy on the device while offline', async () => {
+    const server = fakeServer('premium');
+    await signIn(user.email, 'hoc-english-demo');
+    await finishedADayAgo('everyday-a0-u1');
+    await finishedADayAgo('everyday-a0-u4');
+    server.online = false;
+    await renderApp('/');
+
+    expect(await screen.findByText('9 từ cần ôn')).toBeOnTheScreen();
   });
 });
 
