@@ -1,6 +1,7 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { act, fireEvent, screen } from '@testing-library/react-native';
-import { renderRouter } from 'expo-router/testing-library';
+import { renderRouter, screen as routerScreen } from 'expo-router/testing-library';
+import { Text } from 'react-native';
 
 import LessonScreen from '@/app/lesson/[unitId]';
 import { getUnit, type Exercise } from '@/content';
@@ -19,8 +20,16 @@ jest.mock('expo-speech', () => ({
 const unit = getUnit('everyday-a0-u1');
 if (!unit) throw new Error('everyday-a0-u1 is missing');
 
+/** The track list is another screen; a stand-in is enough to land on. */
+function TrackStandIn() {
+  return <Text testID="track-stand-in" />;
+}
+
 async function openLesson(unitId = 'everyday-a0-u1') {
-  await renderRouter({ 'lesson/[unitId]': LessonScreen }, { initialUrl: `/lesson/${unitId}` });
+  await renderRouter(
+    { 'lesson/[unitId]': LessonScreen, 'track/[track]': TrackStandIn },
+    { initialUrl: `/lesson/${unitId}` }
+  );
   await act(() => Promise.resolve());
 }
 
@@ -133,6 +142,45 @@ describe('Lesson screen', () => {
     }
 
     expect(await screen.findByRole('link', { name: 'Về danh sách bài' })).toHaveProp('href', '/track/everyday');
+  });
+
+  it('offers a way to leave on the intro, every step and the result', async () => {
+    await openLesson();
+    const leave = () => screen.getByRole('link', { name: 'Rời bài học, quay lại chủ đề Đời sống' });
+
+    expect(leave()).toHaveProp('href', '/track/everyday');
+    expect(leave()).toHaveTextContent('Rời bài học');
+    await press('Bắt đầu học');
+    for (let i = 0; i < unit.words.length; i++) {
+      expect(leave()).toBeOnTheScreen();
+      await press('Tiếp tục');
+    }
+    for (const exercise of unit.exercises) {
+      expect(leave()).toBeOnTheScreen();
+      await answer(exercise, true);
+      await press('Tiếp tục');
+    }
+    expect(await screen.findByRole('heading', { name: 'Xong bài học!' })).toBeOnTheScreen();
+    expect(leave()).toBeOnTheScreen();
+  });
+
+  it('keeps the answers already given when the learner leaves mid-lesson', async () => {
+    await openLesson();
+    await press('Bắt đầu học');
+    for (let i = 0; i < unit.words.length; i++) await press('Tiếp tục');
+    const [first, second] = unit.exercises;
+    await answer(first, false);
+    await press('Tiếp tục');
+    await answer(second, true);
+
+    await fireEvent.press(screen.getByRole('link', { name: 'Rời bài học, quay lại chủ đề Đời sống' }));
+
+    expect(routerScreen).toHavePathname('/track/everyday');
+    expect(await screen.findByTestId('track-stand-in')).toBeOnTheScreen();
+    const progress = await createProgressStore().load(LOCAL_PROFILE_ID);
+    expect(progress.answers['everyday-a0-u1-e01']).toEqual([expect.objectContaining({ correct: false })]);
+    expect(progress.answers['everyday-a0-u1-e02']).toEqual([expect.objectContaining({ correct: true })]);
+    expect(isLessonCompleted(progress, 'everyday-a0-u1')).toBe(false);
   });
 
   it('says so when the lesson does not exist', async () => {

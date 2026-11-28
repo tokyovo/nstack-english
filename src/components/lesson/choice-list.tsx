@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { Pressable, StyleSheet, View } from 'react-native';
 
-import { ThemedText } from '@/components/themed-text';
+import { EnglishText, ThemedText } from '@/components/themed-text';
 import { Border, MinTouchTarget, Radius, Space } from '@/constants/theme';
 import { useTheme } from '@/hooks/use-theme';
 
@@ -30,6 +30,10 @@ export function ChoiceList({ options, answer, english, onCheck }: Props) {
     return option === chosen ? theme.danger : theme.line;
   }
 
+  function textStyleOf(option: string) {
+    return chosen !== null && option === answer ? { color: theme.success } : null;
+  }
+
   return (
     <View style={styles.list}>
       {options.map((option, index) => (
@@ -51,12 +55,15 @@ export function ChoiceList({ options, answer, english, onCheck }: Props) {
             },
             'focused' in state && state.focused ? { outlineColor: theme.accent, outlineWidth: 2, outlineOffset: 2 } : null,
           ]}>
-          <ThemedText
-            type="lead"
-            accessibilityLanguage={english ? 'en' : 'vi'}
-            style={chosen !== null && option === answer ? { color: theme.success } : null}>
-            {option}
-          </ThemedText>
+          {english ? (
+            <EnglishText type="lead" style={textStyleOf(option)}>
+              {option}
+            </EnglishText>
+          ) : (
+            <ThemedText type="lead" accessibilityLanguage="vi" style={textStyleOf(option)}>
+              {option}
+            </ThemedText>
+          )}
         </Pressable>
       ))}
     </View>

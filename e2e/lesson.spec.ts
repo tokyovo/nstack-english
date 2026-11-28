@@ -25,6 +25,28 @@ async function expectNoSeriousAxeViolations(page: Page) {
   expect(serious.map((v) => `${v.id}: ${v.nodes.map((n) => n.target.join(' ')).join(', ')}`)).toEqual([]);
 }
 
+/** The English being taught is marked lang="en", so screen readers pronounce it as English on a vi page. */
+async function expectEnglish(page: Page, text: string) {
+  await expect(page.getByText(text, { exact: true }).first()).toHaveAttribute('lang', 'en');
+}
+
+/** Checks that the English on screen is marked as English and the Vietnamese is not. */
+async function expectLanguagesMarked(page: Page, exercise: Exercise) {
+  switch (exercise.type) {
+    case 'choose_meaning':
+      await expect(page.getByText(exercise.options[0], { exact: true })).not.toHaveAttribute('lang', 'en');
+      return;
+    case 'choose_english':
+    case 'listen_choose':
+      for (const option of exercise.options) await expectEnglish(page, option);
+      return;
+    case 'build_sentence':
+      for (const tile of exercise.tiles) await expectEnglish(page, tile);
+      return;
+    case 'type_answer':
+  }
+}
+
 /** Answers right with the keyboard where the exercise allows it, so touch and keys are both used. */
 async function answerRight(page: Page, exercise: Exercise) {
   switch (exercise.type) {
@@ -63,12 +85,15 @@ test('a learner completes everyday A0 u1, reloads, and sees it completed', async
 
   for (const word of unit.words) {
     await expect(page.getByTestId('word-card')).toContainText(word.en);
+    await expect(page.getByTestId('word-card').getByText(word.en, { exact: true })).toHaveAttribute('lang', 'en');
+    if (word.example) await expectEnglish(page, word.example.en);
     await button(page, 'Tiếp tục').click();
   }
 
   const [first, ...rest] = unit.exercises;
   // The first answer is wrong on purpose: the feedback gives the right answer in Vietnamese.
   if (first.type !== 'choose_meaning') throw new Error('expected u1 to open with choose_meaning');
+  await expectLanguagesMarked(page, first);
   await button(page, first.options.find((o) => o !== first.answer) ?? '').click();
   await expect(page.getByText('Chưa đúng.')).toBeVisible();
   await expect(page.getByText(`Đáp án đúng: ${first.answer}`)).toBeVisible();
@@ -76,6 +101,7 @@ test('a learner completes everyday A0 u1, reloads, and sees it completed', async
   await button(page, 'Tiếp tục').click();
 
   for (const exercise of rest) {
+    await expectLanguagesMarked(page, exercise);
     await answerRight(page, exercise);
     await expect(page.getByText('Đúng rồi!')).toBeVisible();
     await button(page, 'Tiếp tục').click();
@@ -90,6 +116,29 @@ test('a learner completes everyday A0 u1, reloads, and sees it completed', async
   await expect(page.getByText('Bạn đã học xong bài này.')).toBeVisible();
   await expect(button(page, 'Học lại')).toBeVisible();
   expect(errors).toEqual([]);
+});
+
+test('a learner leaves mid-lesson for the track list and keeps the answers given', async ({ page }) => {
+  await page.goto(`/lesson/${unit.id}`);
+  const leave = page.getByRole('link', { name: 'Rời bài học, quay lại chủ đề Đời sống' });
+  await expect(leave).toHaveText('Rời bài học');
+  await button(page, 'Bắt đầu học').click();
+  for (let i = 0; i < unit.words.length; i++) await button(page, 'Tiếp tục').click();
+  const [first, second] = unit.exercises;
+  await answerRight(page, first);
+  await button(page, 'Tiếp tục').click();
+  await answerRight(page, second);
+  await expect(page.getByText('Đúng rồi!')).toBeVisible();
+
+  const box = await leave.boundingBox();
+  expect(box?.height).toBeGreaterThanOrEqual(44);
+  await leave.click();
+
+  await expect(page).toHaveURL(/\/track\/everyday$/);
+  await expect(page.getByRole('heading', { name: 'Đời sống', level: 1 })).toBeVisible();
+  const saved = await page.evaluate(() => localStorage.getItem('hocenglish.progress.local'));
+  const answers = (JSON.parse(saved ?? '{}') as { answers?: Record<string, unknown[]> }).answers ?? {};
+  expect(Object.keys(answers).sort()).toEqual([first.id, second.id]);
 });
 
 test('an unknown lesson says so and links home', async ({ page }) => {

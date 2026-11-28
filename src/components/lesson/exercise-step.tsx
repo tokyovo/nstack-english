@@ -7,7 +7,7 @@ import { BuildSentence } from '@/components/lesson/build-sentence';
 import { ChoiceList } from '@/components/lesson/choice-list';
 import { ListenButton } from '@/components/lesson/listen-button';
 import { TypeAnswer } from '@/components/lesson/type-answer';
-import { ThemedText } from '@/components/themed-text';
+import { EnglishText, ThemedText } from '@/components/themed-text';
 import { Radius, Space } from '@/constants/theme';
 import { getWord, type Exercise } from '@/content';
 import { useTheme } from '@/hooks/use-theme';
@@ -30,9 +30,7 @@ function VietnamesePrompt({ text }: { text: string }) {
 function EnglishPrompt({ text, testID }: { text: string; testID?: string }) {
   return (
     <GridCard testID={testID}>
-      <ThemedText type="word" accessibilityLanguage="en">
-        {text}
-      </ThemedText>
+      <EnglishText type="word">{text}</EnglishText>
     </GridCard>
   );
 }

@@ -2,7 +2,7 @@ import { StyleSheet, View } from 'react-native';
 
 import { GridCard } from '@/components/grid-card';
 import { ListenButton } from '@/components/lesson/listen-button';
-import { ThemedText } from '@/components/themed-text';
+import { EnglishText, ThemedText } from '@/components/themed-text';
 import { Space } from '@/constants/theme';
 import type { Word } from '@/content';
 import { useTheme } from '@/hooks/use-theme';
@@ -25,18 +25,14 @@ export function WordCard({ word }: { word: Word }) {
             {word.picture}
           </ThemedText>
         ) : null}
-        <ThemedText type="word" accessibilityLanguage="en">
-          {word.en}
-        </ThemedText>
+        <EnglishText type="word">{word.en}</EnglishText>
         <ThemedText type="lead">{word.vi}</ThemedText>
         {canSpeak ? <ListenButton text={word.audio ?? word.en} testID="listen-word" /> : null}
       </GridCard>
       {word.example ? (
         <View style={[styles.example, { borderColor: theme.line }]}>
           <ThemedText type="meta">{t('lesson.example')}</ThemedText>
-          <ThemedText style={{ color: theme.accent }} accessibilityLanguage="en">
-            {word.example.en}
-          </ThemedText>
+          <EnglishText style={{ color: theme.accent }}>{word.example.en}</EnglishText>
           <ThemedText>{word.example.vi}</ThemedText>
         </View>
       ) : null}

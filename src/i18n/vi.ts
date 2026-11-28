@@ -66,6 +66,8 @@ export const vi = {
   'lesson.resultKeepGoing': 'Học lại bài này bất cứ lúc nào để nhớ lâu hơn.',
   'lesson.nextUnit': 'Học bài tiếp theo: {title}',
   'lesson.backToTrack': 'Về danh sách bài',
+  'lesson.leave': 'Rời bài học',
+  'lesson.leaveLabel': 'Rời bài học, quay lại chủ đề {track}',
   'lesson.notFound': 'Không tìm thấy bài học này.',
   'lesson.home': 'Về trang chủ',
 } as const;
