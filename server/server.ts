@@ -20,6 +20,7 @@ import { unitRoutes } from './units.ts';
  * `now`: the clock (tests move it); defaults to the system clock.
  * `contentDir`: the unit files; defaults to the repo's content/.
  * `signupsPerAddress`: sign-ups allowed from one client address per 15 minutes; defaults to 30 (MAX_SIGNUPS_PER_ADDRESS).
+ * `hashPassword`: hashes a new account's password; defaults to scrypt (tests count its calls).
  */
 export type ServerConfig = {
   port: number;
@@ -28,6 +29,7 @@ export type ServerConfig = {
   now?: () => Date;
   contentDir?: string;
   signupsPerAddress?: number;
+  hashPassword?: (password: string) => Promise<string>;
 };
 export type RunningServer = { url: string; close: () => Promise<void> };
 
@@ -77,7 +79,7 @@ function createApp(db: DatabaseSync, config: ServerConfig, units: readonly Unit[
   app.use(secureHeaders({ xFrameOptions: 'DENY', contentSecurityPolicy }));
   app.get('/api/health', (c) => c.json({ ok: true }));
   const now = config.now ?? (() => new Date());
-  app.route('/api', accountRoutes(db, now, config.signupsPerAddress));
+  app.route('/api', accountRoutes(db, now, { signupsPerAddress: config.signupsPerAddress, hash: config.hashPassword }));
   app.route('/api', progressRoutes(db, now, units));
   app.route('/api', profileRoutes(db, now));
   app.route('/api', unitRoutes(db, now, units));
