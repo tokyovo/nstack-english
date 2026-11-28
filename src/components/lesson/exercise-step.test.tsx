@@ -243,6 +243,21 @@ describe('speak', () => {
     expect(askSystem).not.toHaveBeenCalled();
   });
 
+  it('starts listening once and answers once when "Nói" is tapped twice quickly', async () => {
+    fakeDevice.permission = 'granted';
+    await renderStep(exercise('e15'));
+    const speakButton = screen.getByRole('button', { name: 'Nói' });
+
+    await act(async () => {
+      fireEvent.press(speakButton);
+      fireEvent.press(speakButton);
+    });
+    await heard('I am fine thank you');
+
+    expect(ExpoSpeechRecognitionModule.start).toHaveBeenCalledTimes(1);
+    expect(onAnswer).toHaveBeenCalledTimes(1);
+  });
+
   it('marks a phrase heard too differently as wrong and shows the right one', async () => {
     fakeDevice.permission = 'granted';
     await renderStep(exercise('e15'));
