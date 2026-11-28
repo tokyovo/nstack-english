@@ -8,6 +8,7 @@ import AccountScreen from '@/app/account';
 import HomeScreen from '@/app/index';
 import LessonScreen from '@/app/lesson/[unitId]';
 import ProfilesScreen from '@/app/profiles';
+import ReviewScreen from '@/app/review';
 import TrackScreen from '@/app/track/[track]';
 import { createProgressStore, LOCAL_PROFILE_ID } from '@/progress';
 
@@ -72,6 +73,7 @@ function renderApp(initialUrl: string) {
       profiles: ProfilesScreen,
       'track/[track]': TrackScreen,
       'lesson/[unitId]': LessonScreen,
+      review: ReviewScreen,
     },
     { initialUrl }
   );
@@ -125,6 +127,21 @@ describe('child mode', () => {
     await userEvent.press(await screen.findByRole('link', { name: /^Bài 1: .*Đã học xong$/ }));
 
     expect(await screen.findByText('Bạn đã học xong bài này.')).toBeOnTheScreen();
+  });
+
+  it("reviews the child's own words, not the words the parent has due", async () => {
+    fakeServer();
+    const yesterday = new Date(Date.now() - 24 * 60 * 60 * 1000);
+    await createProgressStore({ now: () => yesterday }).completeLesson(LOCAL_PROFILE_ID, {
+      unitId: 'everyday-a0-u1',
+      correct: 10,
+      total: 12,
+    });
+    await switchToNa();
+
+    await renderApp('/review');
+
+    expect(await screen.findByRole('heading', { name: 'Chưa có từ cần ôn' })).toBeOnTheScreen();
   });
 
   it.each(['/account', '/profiles'])('puts %s behind the parent gate while a child is learning', async (path) => {
