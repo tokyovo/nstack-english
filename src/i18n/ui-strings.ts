@@ -17,13 +17,26 @@ const TEXT_PROPS = new Set([
 
 const LETTER = /\p{L}/u;
 
-function isStringLiteral(node: ts.Node): node is ts.StringLiteral | ts.NoSubstitutionTemplateLiteral {
-  return ts.isStringLiteral(node) || ts.isNoSubstitutionTemplateLiteral(node);
-}
+/** Keys of a screen's `options` object that show up as a header or tab title. */
+const OPTION_TEXT_KEYS = new Set(['title', 'headerTitle']);
 
-/** String literals an expression can evaluate to directly: `"a"`, `c ? "a" : "b"`, `c && "a"`. */
-function literalsIn(expression: ts.Expression): (ts.StringLiteral | ts.NoSubstitutionTemplateLiteral)[] {
-  if (isStringLiteral(expression)) return [expression];
+/** Shown in place of each `${...}` substitution; contains no letter, so `${n}` alone is allowed. */
+const SUBSTITUTION = '${…}';
+
+type Literal = { text: string; node: ts.Node };
+
+/**
+ * Literal text an expression can evaluate to directly: `"a"`, `` `a ${n}` ``, `c ? "a" : "b"`,
+ * `c && "a"`, `"a" + name`.
+ */
+function literalsIn(expression: ts.Expression): Literal[] {
+  if (ts.isStringLiteral(expression) || ts.isNoSubstitutionTemplateLiteral(expression)) {
+    return [{ text: expression.text, node: expression }];
+  }
+  if (ts.isTemplateExpression(expression)) {
+    const text = expression.head.text + expression.templateSpans.map((span) => SUBSTITUTION + span.literal.text).join('');
+    return [{ text, node: expression }];
+  }
   if (ts.isParenthesizedExpression(expression)) return literalsIn(expression.expression);
   if (ts.isConditionalExpression(expression)) {
     return [...literalsIn(expression.whenTrue), ...literalsIn(expression.whenFalse)];
@@ -31,11 +44,23 @@ function literalsIn(expression: ts.Expression): (ts.StringLiteral | ts.NoSubstit
   if (ts.isBinaryExpression(expression)) {
     const operator = expression.operatorToken.kind;
     if (operator === ts.SyntaxKind.AmpersandAmpersandToken) return literalsIn(expression.right);
-    if (operator === ts.SyntaxKind.BarBarToken || operator === ts.SyntaxKind.QuestionQuestionToken) {
+    if (
+      operator === ts.SyntaxKind.BarBarToken ||
+      operator === ts.SyntaxKind.QuestionQuestionToken ||
+      operator === ts.SyntaxKind.PlusToken
+    ) {
       return [...literalsIn(expression.left), ...literalsIn(expression.right)];
     }
   }
   return [];
+}
+
+/** Values of `title` and `headerTitle` in `options={{ ... }}`. */
+function optionTextValues(expression: ts.Expression | undefined): ts.Expression[] {
+  if (!expression || !ts.isObjectLiteralExpression(expression)) return [];
+  return expression.properties.flatMap((property) =>
+    ts.isPropertyAssignment(property) && OPTION_TEXT_KEYS.has(property.name.getText()) ? [property.initializer] : []
+  );
 }
 
 export function findUiStringLiterals(source: string, file: string): UiStringFinding[] {
@@ -51,7 +76,7 @@ export function findUiStringLiterals(source: string, file: string): UiStringFind
 
   function reportLiterals(expression: ts.Expression | undefined) {
     if (!expression) return;
-    for (const literal of literalsIn(expression)) report(literal.text, literal.getStart());
+    for (const literal of literalsIn(expression)) report(literal.text, literal.node.getStart());
   }
 
   function visit(node: ts.Node) {
@@ -59,9 +84,15 @@ export function findUiStringLiterals(source: string, file: string): UiStringFind
       report(node.text, node.pos + node.text.search(/\S|$/));
     } else if (ts.isJsxExpression(node) && (ts.isJsxElement(node.parent) || ts.isJsxFragment(node.parent))) {
       reportLiterals(node.expression);
-    } else if (ts.isJsxAttribute(node) && TEXT_PROPS.has(node.name.getText(sourceFile)) && node.initializer) {
-      if (ts.isStringLiteral(node.initializer)) report(node.initializer.text, node.initializer.getStart());
-      else if (ts.isJsxExpression(node.initializer)) reportLiterals(node.initializer.expression);
+    } else if (ts.isJsxAttribute(node) && node.initializer) {
+      const prop = node.name.getText(sourceFile);
+      const value = ts.isJsxExpression(node.initializer) ? node.initializer.expression : undefined;
+      if (TEXT_PROPS.has(prop)) {
+        if (ts.isStringLiteral(node.initializer)) report(node.initializer.text, node.initializer.getStart());
+        else reportLiterals(value);
+      } else if (prop === 'options') {
+        optionTextValues(value).forEach(reportLiterals);
+      }
     }
     ts.forEachChild(node, visit);
   }
