@@ -4,12 +4,13 @@ import type { Exercise } from '@/content';
 type TypeAnswer = Extract<Exercise, { type: 'type_answer' }>;
 type BuildSentence = Extract<Exercise, { type: 'build_sentence' }>;
 
-/** Ignores case, extra spaces, final punctuation and the typographic apostrophe. */
+/** Ignores case, extra spaces, commas, final punctuation and the typographic apostrophe. */
 function normalise(text: string): string {
   return text
     .toLowerCase()
     .replace(/’/g, "'")
-    .replace(/[\s.!?,;:]+$/, '')
+    .replace(/,/g, ' ')
+    .replace(/[\s.!?;:]+$/, '')
     .replace(/\s+/g, ' ')
     .trim();
 }
