@@ -33,6 +33,21 @@ async function expectLanguagesMarked(page: Page, exercise: Exercise) {
   }
 }
 
+/** Gives the page a browser voice list, as a browser with or without English voices has. */
+async function fakeVoices(page: Page, languages: string[]) {
+  await page.addInitScript((langs) => {
+    const voices = langs.map((lang) => ({ lang, name: lang, voiceURI: lang, localService: true, default: false }));
+    const spoken: string[] = [];
+    Object.assign(window, { spoken });
+    window.speechSynthesis.getVoices = () => voices as unknown as SpeechSynthesisVoice[];
+    window.speechSynthesis.speak = (utterance) => void spoken.push(utterance.text);
+  }, languages);
+}
+
+function spoken(page: Page) {
+  return page.evaluate(() => (window as unknown as { spoken: string[] }).spoken);
+}
+
 /** Answers right with the keyboard where the exercise allows it, so touch and keys are both used. */
 async function answerRight(page: Page, exercise: Exercise) {
   switch (exercise.type) {
@@ -55,8 +70,7 @@ async function answerRight(page: Page, exercise: Exercise) {
       return;
     }
     case 'speak':
-      // Without speech recognition the learner listens, repeats aloud and marks themselves.
-      await expect(page.getByText('Bấm “Nghe” để nghe câu mẫu, nói to theo, rồi tự chấm.')).toBeVisible();
+      // Without speech recognition the learner says it aloud and marks themselves.
       await button(page, 'Tôi nói được rồi').click();
   }
 }
@@ -77,6 +91,8 @@ async function playToSpeak(page: Page): Promise<Extract<Exercise, { type: 'speak
 test('a learner completes everyday A0 u1, reloads, and sees it completed', async ({ page }) => {
   const errors = collectErrors(page);
   await withoutSpeechRecognition(page);
+  // A browser with no voices, like headless or Linux Chromium: the listening text is shown instead of "Nghe".
+  await fakeVoices(page, []);
 
   await page.goto(`/lesson/${unit.id}`);
   await expect(page.getByRole('heading', { name: unit.title, level: 1 })).toBeVisible();
@@ -103,6 +119,15 @@ test('a learner completes everyday A0 u1, reloads, and sees it completed', async
 
   for (const exercise of rest) {
     await expectLanguagesMarked(page, exercise);
+    if (exercise.type === 'listen_choose') {
+      await expect(page.getByTestId('listen-text')).toHaveText(exercise.audio);
+      await expect(button(page, 'Nghe')).toHaveCount(0);
+    }
+    if (exercise.type === 'speak') {
+      // No recogniser and no English voice: the learner reads the phrase aloud and marks themselves.
+      await expect(page.getByText('Bạn hãy đọc to câu ở trên, rồi tự chấm.')).toBeVisible();
+      await expect(button(page, 'Nghe')).toHaveCount(0);
+    }
     await answerRight(page, exercise);
     await expect(page.getByText('Đúng rồi!')).toBeVisible();
     await button(page, 'Tiếp tục').click();
@@ -117,6 +142,30 @@ test('a learner completes everyday A0 u1, reloads, and sees it completed', async
   await expect(page.getByText('Bạn đã học xong bài này.')).toBeVisible();
   await expect(button(page, 'Học lại')).toBeVisible();
   expect(errors).toEqual([]);
+});
+
+test('with an English voice, "Nghe" speaks the word and the listening item without showing its text', async ({ page }) => {
+  await fakeVoices(page, ['vi-VN', 'en-US']);
+  await page.goto(`/lesson/${unit.id}`);
+  await button(page, 'Bắt đầu học').click();
+
+  const [word] = unit.words;
+  await button(page, 'Nghe').click();
+  expect(await spoken(page)).toEqual([word.audio ?? word.en]);
+  for (let i = 0; i < unit.words.length; i++) await button(page, 'Tiếp tục').click();
+
+  const index = unit.exercises.findIndex((e) => e.type === 'listen_choose');
+  const listening = unit.exercises[index];
+  if (listening.type !== 'listen_choose') throw new Error('expected a listen_choose item in u1');
+  for (const exercise of unit.exercises.slice(0, index)) {
+    await answerRight(page, exercise);
+    await button(page, 'Tiếp tục').click();
+  }
+  await expect(page.getByTestId('listen-text')).toHaveCount(0);
+  await button(page, 'Nghe').click();
+  expect((await spoken(page)).at(-1)).toBe(listening.audio);
+  await answerRight(page, listening);
+  await expect(page.getByText('Đúng rồi!')).toBeVisible();
 });
 
 test('a learner leaves mid-lesson for the track list and keeps the answers given', async ({ page }) => {

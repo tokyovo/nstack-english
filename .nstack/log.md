@@ -307,3 +307,14 @@
 - [x] 3. Act on every finding. builder fixed both (89fea76): session red 9 failed, check red 1, score red 3 -> green; after merge jest 248, e2e 23 passed
 - [ ] 4. Review the fixes. fix > 20 lines: round 2 dispatched
 - [ ] Done when: the latest round has no important findings, verify passed after the last fix, and nits are fixed or in backlog.md.
+- [x] 6. Merge (ship foundation, continued). gh pr merge 1 --squash -> MERGED 37f40e0
+- [x] 7. Confirm and clean up. main pulled; typecheck 0, lint 0, jest 30, test:server 21, test:drive 6; CI on 37f40e0: ubuntu success, iOS success; nstack/foundation deleted locally and on origin (tree identical to main)
+- [x] Done when: PR #1 merged, CI green on main, fast checks pass there.
+
+## 2026-11-28 review learn-core
+- Read: review/SKILL.md c151f88
+- [x] 1. Dispatch. reviewer at 1a403d7: fix-needed. Important: web shows a silent "Nghe" with no voices and hides listen text (AC4); options never shuffled (answer at index 0 in 60/114). Nit: answers keyed by exercise id vs review-speak plan premise.
+- [x] 2. Second reviewer. n/a: no auth, payments, migrations, concurrency or public API in learn-core
+- [x] 3. Act on every finding. Both important fixed by a builder (855bb91): speech red 4/6 -> green, e2e no-voice walkthrough red -> green, shuffle red -> green. After merge: typecheck 0, lint 0, jest 158, test:server 21, test:drive 6, drive check passed, e2e 19 passed. Nit: already handled by T11 on review-speak (the schedule reads review answers recorded under word ids, and ignores lesson answers keyed by exercise id; src/review/schedule.test.ts passes), so no change here.
+- [x] 4. Review the fixes. Round 2 at a99f702: pass, no findings (mutations on shuffle and voice detection red; e2e 19 passed)
+- [x] Done when: latest round has no important findings; verify passed after the fix (jest 158, e2e 19, drive check passed); nits handled.

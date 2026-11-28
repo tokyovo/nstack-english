@@ -1,10 +1,11 @@
-import { act, fireEvent, render, screen } from '@testing-library/react-native';
+import { act, fireEvent, render, screen, within } from '@testing-library/react-native';
 import * as Speech from 'expo-speech';
 
 import { ExpoSpeechRecognitionModule } from 'expo-speech-recognition';
 
 import { ExerciseStep } from '@/components/lesson/exercise-step';
 import { getUnit, type Exercise } from '@/content';
+import { seeded } from '@/lesson/__fixtures__/seeded';
 import { fakeDevice } from '@/speech/__fixtures__/fake-recognition';
 
 jest.mock('expo-speech', () => ({
@@ -28,8 +29,8 @@ function exercise(id: string): Exercise {
 const onAnswer = jest.fn();
 const onContinue = jest.fn();
 
-async function renderStep(item: Exercise) {
-  await render(<ExerciseStep exercise={item} onAnswer={onAnswer} onContinue={onContinue} />);
+async function renderStep(item: Exercise, random?: () => number) {
+  await render(<ExerciseStep exercise={item} onAnswer={onAnswer} onContinue={onContinue} random={random} />);
   await act(() => Promise.resolve());
 }
 
@@ -360,5 +361,48 @@ describe('speak', () => {
 
     expect(screen.queryByRole('button', { name: 'Nghe' })).toBeNull();
     expect(screen.getByText('Bạn hãy đọc to câu ở trên, rồi tự chấm.')).toBeOnTheScreen();
+  });
+});
+
+describe('option order', () => {
+  const item = exercise('e01');
+  const options = item.type === 'choose_meaning' ? item.options : [];
+
+  /** The option texts top to bottom, as the learner sees them. */
+  function shownOrder() {
+    return options.map((_, i) => within(screen.getByTestId(`option-${i}`)).getByText(/./).props.children as string);
+  }
+
+  it('shows the options in another order each time the item is shown, so the place gives nothing away', async () => {
+    const random = seeded(1);
+    const orders: string[][] = [];
+    for (let showing = 0; showing < 6; showing++) {
+      await renderStep(item, random);
+      orders.push(shownOrder());
+      await screen.unmount();
+    }
+
+    for (const order of orders) expect([...order].sort()).toEqual(['Cảm ơn', 'Tạm biệt', 'Xin chào']);
+    expect(new Set(orders.map((order) => order.indexOf('Xin chào'))).size).toBeGreaterThan(1);
+  });
+
+  it('judges the tapped option by its words, wherever it is shown', async () => {
+    const random = seeded(1);
+    for (let showing = 0; showing < 6; showing++) {
+      await renderStep(item, random);
+      await fireEvent.press(screen.getByTestId(`option-${shownOrder().indexOf('Xin chào')}`));
+      expect(onAnswer).toHaveBeenLastCalledWith(true);
+      await screen.unmount();
+    }
+  });
+
+  it('keeps the order while the item stays on screen', async () => {
+    await renderStep(item, seeded(3));
+    const before = shownOrder();
+
+    await press('Tạm biệt');
+    await screen.rerender(<ExerciseStep exercise={item} onAnswer={onAnswer} onContinue={onContinue} random={seeded(4)} />);
+
+    expect(shownOrder()).toEqual(before);
   });
 });
