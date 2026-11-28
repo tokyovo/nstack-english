@@ -15,7 +15,7 @@ describe('profile progress', () => {
 
   before(async () => {
     dir = mkdtempSync(join(tmpdir(), 'progress-test-'));
-    server = await startServer({ port: 0, dbPath: join(dir, 'app.sqlite') });
+    server = await startServer({ port: 0, dbPath: join(dir, 'app.sqlite'), signupsPerAddress: 1000 });
   });
 
   after(async () => {

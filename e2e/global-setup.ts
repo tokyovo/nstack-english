@@ -12,7 +12,8 @@ const drive = join(import.meta.dirname, '..', 'scripts', 'drive.mjs');
  */
 export default function globalSetup() {
   const stateDir = mkdtempSync(join(tmpdir(), 'e2e-drive-'));
-  const env = { ...process.env, DRIVE_STATE_DIR: stateDir };
+  // Every spec signs up from 127.0.0.1, more than the 5 sign-ups per address a real client gets.
+  const env = { ...process.env, DRIVE_STATE_DIR: stateDir, SIGNUPS_PER_ADDRESS: '1000' };
   const started = execFileSync(process.execPath, [drive, 'start', '--json'], { env, encoding: 'utf8' });
   process.env.E2E_BASE_URL = (JSON.parse(started) as { url: string }).url;
   // The demo account with its child, granted Premium (premium.spec.ts signs in with it).

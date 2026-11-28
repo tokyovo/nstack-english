@@ -169,4 +169,15 @@ describe('readConfig', () => {
       assert.throws(() => readConfig({ PORT }), /PORT/, `PORT=${JSON.stringify(PORT)}`);
     }
   });
+
+  test('reads SIGNUPS_PER_ADDRESS, a whole number above 0', () => {
+    assert.deepEqual(readConfig({ SIGNUPS_PER_ADDRESS: '200' }), {
+      port: 8787,
+      dbPath: './data/dev.sqlite',
+      signupsPerAddress: 200,
+    });
+    for (const SIGNUPS_PER_ADDRESS of ['0', '-5', '2.5', 'many']) {
+      assert.throws(() => readConfig({ SIGNUPS_PER_ADDRESS }), /SIGNUPS_PER_ADDRESS/, SIGNUPS_PER_ADDRESS);
+    }
+  });
 });

@@ -57,6 +57,7 @@ export const vi = {
   'account.error.weak_password': 'Mật khẩu cần ít nhất 8 ký tự.',
   'account.error.invalid_credentials': 'Email hoặc mật khẩu không đúng. Hãy thử lại.',
   'account.error.too_many_attempts': 'Bạn đã nhập sai nhiều lần. Hãy thử lại sau 15 phút.',
+  'account.error.too_many_signups': 'Đã có quá nhiều lần tạo tài khoản. Hãy thử lại sau 15 phút.',
   'account.error.offline': 'Không kết nối được máy chủ. Hãy kiểm tra mạng rồi thử lại.',
   'account.error.unknown': 'Có lỗi xảy ra. Hãy thử lại.',
   'account.profiles': 'Hồ sơ học trong gia đình',
