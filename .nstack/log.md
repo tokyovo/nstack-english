@@ -417,3 +417,12 @@
 - [x] 9. Access is enforced. n/a: no routes, tables or auth
 - [x] Done when: all ticked. Not verified: none beyond the parked Android flows.
 - Decision: content-a1 and content-a2 ship as one PR (content-a2 is stacked on content-a1; one review and one CI cycle). content-a1's review finding (missing word orders) is fixed here by the movable-phrase check.
+
+## 2026-11-28 review content-a2 (with content-a1)
+- Read: review/SKILL.md c151f88
+- [x] 1. Dispatch. content-a1 reviewer at 42987b9: fix-needed (missing valid word orders in 3 items) -> fixed for all 34 units by the movable-phrase check (07c091f). content A1-A2 reviewer at c08693f: fix-needed, 1 important: the -X ours sync with main restored the branch's old speak-answer.tsx and test, undoing main's double-tap guard
+- [x] 2. Second reviewer. n/a: content only
+- [x] 3. Act on every finding. both files restored from origin/main (identical to main again); jest 343, e2e 24
+- [x] 4. Review the fixes. small-fix exception: the fix is a restore to main's reviewed code with its test passing; no new round
+- [x] Done when: no important findings open; verify passed after the fix.
+- Lesson: syncing a stacked branch with a squash-merged main using `merge -X ours` silently reverts main's fixes the branch forked before. Check added: scripts/check-sync <shipped PR head>... lists files that differ from main though no own commit changed them; run it after every sync.
