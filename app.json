@@ -8,12 +8,12 @@
     "scheme": "hocenglish",
     "userInterfaceStyle": "automatic",
     "ios": {
-      "icon": "./assets/expo.icon",
+      "icon": "./assets/images/icon.png",
       "bundleIdentifier": "app.hocenglish"
     },
     "android": {
       "adaptiveIcon": {
-        "backgroundColor": "#F3F6F4",
+        "backgroundColor": "#5B3FA8",
         "foregroundImage": "./assets/images/android-icon-foreground.png",
         "backgroundImage": "./assets/images/android-icon-background.png",
         "monochromeImage": "./assets/images/android-icon-monochrome.png"
@@ -33,7 +33,7 @@
         {
           "backgroundColor": "#F3F6F4",
           "image": "./assets/images/splash-icon.png",
-          "imageWidth": 76,
+          "imageWidth": 160,
           "dark": {
             "backgroundColor": "#121816",
             "image": "./assets/images/splash-icon.png"
