@@ -111,6 +111,10 @@ describe('findUiStringLiterals', () => {
     expect(check('const A = () => <Text>{t("greet", { who: "Bạn" })}</Text>;')).toEqual(['Bạn']);
   });
 
+  it('reports object values under keys that are only allowlisted as props', () => {
+    expect(check('const A = () => <Text>{t("greet", { name: "Bạn", type: "Lỗi" })}<F data={{ name: "Họ và tên" }} /></Text>;')).toEqual(['Bạn', 'Lỗi', 'Họ và tên']);
+  });
+
   it('ignores the props and option keys on the allowlist, including their nested values', () => {
     const source = `const A = () => (
       <View testID="welcome-card" nativeID="card" role="header" accessibilityRole="button"
