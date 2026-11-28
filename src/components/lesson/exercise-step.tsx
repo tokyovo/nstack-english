@@ -6,6 +6,7 @@ import { ActionButton } from '@/components/lesson/action-button';
 import { BuildSentence } from '@/components/lesson/build-sentence';
 import { ChoiceList } from '@/components/lesson/choice-list';
 import { ListenButton } from '@/components/lesson/listen-button';
+import { SpeakAnswer } from '@/components/lesson/speak-answer';
 import { TypeAnswer } from '@/components/lesson/type-answer';
 import { EnglishText, ThemedText } from '@/components/themed-text';
 import { Radius, Space } from '@/constants/theme';
@@ -101,6 +102,17 @@ export function ExerciseStep({ exercise, onAnswer, onContinue }: Props) {
       instruction = t('lesson.typeAnswer');
       prompt = <VietnamesePrompt text={exercise.prompt} />;
       control = <TypeAnswer exercise={exercise} answered={answered} onCheck={check} />;
+      break;
+    case 'speak':
+      instruction = t('lesson.speak');
+      prompt = (
+        <GridCard>
+          <EnglishText type="word">{exercise.text}</EnglishText>
+          <ThemedText>{exercise.vi}</ThemedText>
+          {canSpeak ? <ListenButton text={exercise.text} testID="listen-exercise" /> : null}
+        </GridCard>
+      );
+      control = <SpeakAnswer exercise={exercise} canListen={canSpeak} answered={answered} onCheck={check} />;
       break;
   }
 

@@ -73,4 +73,9 @@ describe('rightAnswer', () => {
   it('gives the answer of a typed exercise', () => {
     expect(rightAnswer(goodbye)).toBe('Goodbye');
   });
+
+  it('gives the English to say of a speak exercise', () => {
+    const speak: Exercise = { id: 'x-e3', type: 'speak', text: "I'm fine, thank you.", vi: 'Tôi khỏe, cảm ơn bạn.' };
+    expect(rightAnswer(speak)).toBe("I'm fine, thank you.");
+  });
 });

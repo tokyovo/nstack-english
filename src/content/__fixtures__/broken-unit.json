@@ -16,7 +16,7 @@
     { "id": "everyday-a0-u1-e01", "type": "choose_meaning", "prompt": "everyday-a0-u1-hello", "options": ["Xin chào", "Tạm biệt", "Chào buổi sáng"], "answer": "Cảm ơn" },
     { "id": "everyday-a0-u1-e02", "type": "choose_english", "prompt": "Xin chào", "options": ["Hello", "Goodbye"], "answer": "Hello" },
     { "id": "everyday-a0-u1-e03", "type": "listen_choose", "audio": "Hello", "options": ["Hello", "Hello", "Goodbye"], "answer": "Hello" },
-    { "id": "everyday-a0-u1-e04", "type": "speak", "text": "Hello" },
+    { "id": "everyday-a0-u1-e04", "type": "match_pairs", "pairs": ["Hello"] },
     { "id": "everyday-a0-u1-e05", "type": "build_sentence", "prompt": "Tên tôi là Lan.", "tiles": ["My", "name", "is"], "answer": ["My", "name", "is", "Lan"] },
     { "id": "everyday-a0-u1-e06", "type": "build_sentence", "prompt": "Chào.", "tiles": ["Hi", "Hello", "Goodbye", "is"], "answer": ["Hi"] },
     { "id": "everyday-a0-u1-e07", "type": "listen_choose", "options": ["Hello", "Hi", "Goodbye"], "answer": "Hello" }

@@ -27,6 +27,8 @@ function shownEnglish(exercise: Exercise): string[] {
       return exercise.tiles;
     case 'type_answer':
       return [exercise.answer];
+    case 'speak':
+      return [exercise.text];
   }
 }
 
