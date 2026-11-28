@@ -86,6 +86,22 @@ describe('drive tool', () => {
     assert.match(stderr, /KVM not available: see \.nstack\/needs-human\.md/);
   });
 
+  test('android-build --dry-run builds the emulator ABI only, with ANDROID_HOME set', () => {
+    const { code, stdout, stderr } = drive(stateDir, ['android-build', '--dry-run'], { ANDROID_HOME: '/opt/sdk' });
+
+    assert.equal(code, 0, stderr);
+    assert.match(stdout, /^ANDROID_HOME=\/opt\/sdk$/m);
+    assert.match(stdout, /^npx expo prebuild --platform android --no-install$/m);
+    assert.match(stdout, /^\.\/gradlew assembleRelease -PreactNativeArchitectures=x86_64$/m);
+  });
+
+  test('android-build --all-abis --dry-run leaves the ABIs to the project default', () => {
+    const { code, stdout, stderr } = drive(stateDir, ['android-build', '--all-abis', '--dry-run']);
+
+    assert.equal(code, 0, stderr);
+    assert.match(stdout, /^\.\/gradlew assembleRelease$/m);
+  });
+
   test('stop leaves alone a live process that reused the recorded pid', async () => {
     const other = spawn(process.execPath, ['-e', 'setTimeout(() => {}, 60_000)'], { stdio: 'ignore' });
     const exited = once(other, 'exit').then(() => 'killed');

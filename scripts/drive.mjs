@@ -63,8 +63,8 @@ const commands = {
     run: commandStop,
   },
   'android-build': {
-    usage: 'android-build',
-    summary: 'expo prebuild, then gradle assembleRelease (JS bundled, no dev server needed)',
+    usage: 'android-build [--all-abis] [--dry-run]',
+    summary: 'expo prebuild, then gradle assembleRelease for x86_64 (--all-abis: every ABI); JS bundled',
     run: commandAndroidBuild,
   },
   'android-start': {
@@ -326,11 +326,22 @@ function report(result, json) {
 
 // ---------- Android ----------
 
-async function commandAndroidBuild() {
+/** @param {string[]} args */
+async function commandAndroidBuild(args) {
   const started = Date.now();
   const env = { ...process.env, ANDROID_HOME };
-  run('npx', ['expo', 'prebuild', '--platform', 'android', '--no-install'], { cwd: ROOT, env });
-  run('./gradlew', ['assembleRelease'], { cwd: join(ROOT, 'android'), env });
+  // The emulator runs x86_64; building one ABI instead of four roughly halves the native compile.
+  const abis = args.includes('--all-abis') ? [] : ['-PreactNativeArchitectures=x86_64'];
+  const steps = /** @type {const} */ ([
+    ['npx', ['expo', 'prebuild', '--platform', 'android', '--no-install'], ROOT],
+    ['./gradlew', ['assembleRelease', ...abis], join(ROOT, 'android')],
+  ]);
+  if (args.includes('--dry-run')) {
+    print(`ANDROID_HOME=${ANDROID_HOME}`);
+    for (const [command, commandArgs] of steps) print([command, ...commandArgs].join(' '));
+    return;
+  }
+  for (const [command, commandArgs, cwd] of steps) run(command, [...commandArgs], { cwd, env });
   print(`Built ${APK} in ${Math.round((Date.now() - started) / 1000)} s`);
 }
 
