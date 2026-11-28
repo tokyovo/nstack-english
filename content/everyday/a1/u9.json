@@ -1,0 +1,182 @@
+{
+  "id": "everyday-a1-u9",
+  "track": "everyday",
+  "level": "a1",
+  "number": 9,
+  "title": "Đi lại và hỏi đường",
+  "goals": [
+    "Có thể nhờ người lạ giúp một cách lịch sự: “Excuse me, can you help me?”",
+    "Có thể hỏi một nơi ở đâu và hiểu chỉ đường rẽ trái, rẽ phải",
+    "Có thể nói mình đi bằng phương tiện gì: “I go by bus.”"
+  ],
+  "note_vi": "“can” nghĩa là “có thể”. Động từ sau “can” giữ nguyên, không thêm -s và không có “to”: “You can go by bus.” (Bạn có thể đi bằng xe buýt). Muốn hỏi, đưa “can” lên đầu câu: “Can you help me?” (Bạn giúp tôi được không?). Nói đi bằng phương tiện gì thì dùng “by” và không cần “a” hay “the”: “by bus”, “by taxi”. Chỉ đường thường bắt đầu bằng động từ: “Turn left.” (Rẽ trái). Trước khi hỏi người lạ, nói “Excuse me” cho lịch sự.",
+  "source": "original",
+  "names": ["Lan", "Nam"],
+  "words": [
+    {
+      "id": "everyday-a1-u9-excuse-me",
+      "en": "Excuse me",
+      "vi": "Xin lỗi (khi muốn hỏi ai)",
+      "example": { "en": "Excuse me, where is the station?", "vi": "Xin lỗi, nhà ga ở đâu ạ?" }
+    },
+    {
+      "id": "everyday-a1-u9-can-you-help-me",
+      "en": "Can you help me?",
+      "vi": "Bạn giúp tôi được không?",
+      "example": { "en": "Excuse me, can you help me?", "vi": "Xin lỗi, bạn giúp tôi được không?" }
+    },
+    {
+      "id": "everyday-a1-u9-station",
+      "en": "station",
+      "vi": "nhà ga",
+      "example": { "en": "Where is the station?", "vi": "Nhà ga ở đâu?" }
+    },
+    {
+      "id": "everyday-a1-u9-go",
+      "en": "go",
+      "vi": "đi",
+      "example": { "en": "I go to the station.", "vi": "Tôi đi đến nhà ga." }
+    },
+    {
+      "id": "everyday-a1-u9-by",
+      "en": "by",
+      "vi": "bằng (phương tiện)",
+      "example": { "en": "I go by taxi.", "vi": "Tôi đi bằng taxi." }
+    },
+    {
+      "id": "everyday-a1-u9-bus",
+      "en": "bus",
+      "vi": "xe buýt",
+      "example": { "en": "I go to work by bus.", "vi": "Tôi đi làm bằng xe buýt." }
+    },
+    {
+      "id": "everyday-a1-u9-taxi",
+      "en": "taxi",
+      "vi": "xe taxi",
+      "example": { "en": "You can go by taxi.", "vi": "Bạn có thể đi bằng taxi." }
+    },
+    {
+      "id": "everyday-a1-u9-turn",
+      "en": "turn",
+      "vi": "rẽ",
+      "example": { "en": "Turn left at the station.", "vi": "Đến nhà ga thì rẽ trái." }
+    },
+    {
+      "id": "everyday-a1-u9-left",
+      "en": "left",
+      "vi": "bên trái",
+      "example": { "en": "Turn left.", "vi": "Rẽ trái." }
+    },
+    {
+      "id": "everyday-a1-u9-right",
+      "en": "right",
+      "vi": "bên phải",
+      "example": { "en": "Turn right.", "vi": "Rẽ phải." }
+    }
+  ],
+  "exercises": [
+    {
+      "id": "everyday-a1-u9-e01",
+      "type": "choose_meaning",
+      "prompt": "everyday-a1-u9-station",
+      "options": ["xe buýt", "nhà ga", "xe taxi"],
+      "answer": "nhà ga"
+    },
+    {
+      "id": "everyday-a1-u9-e02",
+      "type": "choose_english",
+      "prompt": "Xin lỗi, bạn giúp tôi được không?",
+      "options": ["Excuse me, where is the station?", "Nice to meet you.", "Excuse me, can you help me?"],
+      "answer": "Excuse me, can you help me?"
+    },
+    {
+      "id": "everyday-a1-u9-e03",
+      "type": "listen_choose",
+      "audio": "Turn left.",
+      "options": ["Turn left.", "Turn right.", "I go by bus."],
+      "answer": "Turn left."
+    },
+    {
+      "id": "everyday-a1-u9-e04",
+      "type": "build_sentence",
+      "prompt": "Tôi đi làm bằng xe buýt.",
+      "tiles": ["go", "I", "bus", "to", "by", "work", "taxi"],
+      "answer": ["I", "go", "to", "work", "by", "bus"]
+    },
+    {
+      "id": "everyday-a1-u9-e05",
+      "type": "choose_meaning",
+      "prompt": "everyday-a1-u9-right",
+      "options": ["bên trái", "rẽ", "bên phải"],
+      "answer": "bên phải"
+    },
+    {
+      "id": "everyday-a1-u9-e06",
+      "type": "type_answer",
+      "prompt": "Nhà ga ở đâu?",
+      "answer": "Where is the station?",
+      "accepted": ["Where's the station?"]
+    },
+    {
+      "id": "everyday-a1-u9-e07",
+      "type": "listen_choose",
+      "audio": "You can go by taxi.",
+      "options": ["You can go by bus.", "You can go by taxi.", "I can go by taxi."],
+      "answer": "You can go by taxi."
+    },
+    {
+      "id": "everyday-a1-u9-e08",
+      "type": "choose_english",
+      "prompt": "Bạn có thể đi bằng xe buýt.",
+      "options": ["You can to go by bus.", "You can go by bus.", "You go by taxi."],
+      "answer": "You can go by bus.",
+      "hint_vi": "Sau “can”, động từ giữ nguyên và không có “to”."
+    },
+    {
+      "id": "everyday-a1-u9-e09",
+      "type": "build_sentence",
+      "prompt": "Đến nhà ga thì rẽ phải.",
+      "tiles": ["right", "Turn", "station", "the", "at", "left"],
+      "answer": ["Turn", "right", "at", "the", "station"]
+    },
+    {
+      "id": "everyday-a1-u9-e10",
+      "type": "choose_english",
+      "prompt": "xe taxi",
+      "options": ["bus", "station", "taxi"],
+      "answer": "taxi"
+    },
+    {
+      "id": "everyday-a1-u9-e11",
+      "type": "choose_meaning",
+      "prompt": "everyday-a1-u9-by",
+      "options": ["đi", "bằng (phương tiện)", "rẽ"],
+      "answer": "bằng (phương tiện)"
+    },
+    {
+      "id": "everyday-a1-u9-e12",
+      "type": "type_answer",
+      "prompt": "Rẽ trái.",
+      "answer": "Turn left."
+    },
+    {
+      "id": "everyday-a1-u9-e13",
+      "type": "speak",
+      "text": "Excuse me, can you help me?",
+      "vi": "Xin lỗi, bạn giúp tôi được không?"
+    },
+    {
+      "id": "everyday-a1-u9-e14",
+      "type": "listen_choose",
+      "audio": "Where is the station?",
+      "options": ["Where is the station?", "Where do you live?", "Where are you from?"],
+      "answer": "Where is the station?"
+    },
+    {
+      "id": "everyday-a1-u9-e15",
+      "type": "speak",
+      "text": "I go to work by bus.",
+      "vi": "Tôi đi làm bằng xe buýt."
+    }
+  ]
+}
