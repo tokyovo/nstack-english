@@ -111,7 +111,7 @@ async function commandStart(args) {
 
 async function commandSeed() {
   const instance = await requireInstance();
-  print(JSON.stringify({ seeded: seedInstance(instance) }));
+  print(JSON.stringify({ seeded: await seedInstance(instance) }));
 }
 
 /** @param {string[]} args */
@@ -128,7 +128,7 @@ async function commandCheck() {
   const dir = mkdtempSync(join(tmpdir(), 'drive-check-'));
   try {
     print(`Started ${instance.url} (database ${instance.db})`);
-    print(`Seeded: ${JSON.stringify(seedInstance(instance))}`);
+    print(`Seeded: ${JSON.stringify(await seedInstance(instance))}`);
     const result = await takeScreens(instance.url, dir);
     report(result, false);
     if (result.errors.length > 0) throw new UsageError(`check failed: ${result.errors.length} console error(s), see above`);
@@ -182,13 +182,24 @@ async function startInstance({ build }) {
   throw new UsageError(`the server did not answer /api/health; its log:\n${readFileSync(log, 'utf8')}`);
 }
 
+/** The demo learner `drive seed` creates; a throwaway account in a temporary database. */
+const DEMO_ACCOUNT = { email: 'demo@hocenglish.test', password: 'hoc-english-demo' };
+
 /**
- * Seeds demo data and returns what was seeded. No app tables exist yet;
- * later slices fill this in.
- * @param {Instance} _instance @returns {string[]}
+ * Seeds demo data through the app's own API and returns what was seeded.
+ * Seeding again is fine: an existing demo account (409) counts as seeded.
+ * @param {Instance} instance @returns {Promise<string[]>}
  */
-function seedInstance(_instance) {
-  return [];
+async function seedInstance(instance) {
+  const response = await fetch(`${instance.url}/api/auth/signup`, {
+    method: 'POST',
+    headers: { 'content-type': 'application/json' },
+    body: JSON.stringify(DEMO_ACCOUNT),
+  });
+  if (response.status !== 201 && response.status !== 409) {
+    throw new UsageError(`seeding the demo account failed: ${response.status} ${await response.text()}`);
+  }
+  return [`account ${DEMO_ACCOUNT.email}`];
 }
 
 /** @param {Instance} instance */
