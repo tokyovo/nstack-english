@@ -38,11 +38,12 @@ const styles = StyleSheet.create({
   bar: {
     borderBottomWidth: Border,
     paddingBottom: Space.sm,
-    paddingHorizontal: Space.xl,
     alignItems: 'center',
   },
+  // Lines up with the screens' content column below it.
   text: {
     width: '100%',
     maxWidth: MaxContentWidth,
+    paddingHorizontal: Space.xl,
   },
 });
