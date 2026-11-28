@@ -5,7 +5,7 @@ import { join } from 'node:path';
 import { DatabaseSync } from 'node:sqlite';
 import { after, before, beforeEach, describe, test } from 'node:test';
 
-import { MAX_SIGNUPS_PER_ADDRESS } from './accounts.ts';
+import { MAX_SIGNUPS, MAX_SIGNUPS_PER_ADDRESS, hashPassword } from './accounts.ts';
 import { startServer, type RunningServer } from './server.ts';
 
 /** The body of a signup, signin or /api/me answer. */
@@ -498,5 +498,41 @@ describe('sign-up rate limit per client address', () => {
     clock += 1;
 
     assert.equal((await freshSignUp()).status, 201);
+  });
+});
+
+describe('sign-up rate limit before hashing', () => {
+  let dir: string;
+  let server: RunningServer;
+  let hashes = 0;
+
+  before(async () => {
+    dir = mkdtempSync(join(tmpdir(), 'signup-hash-test-'));
+    const countingHash = (password: string) => {
+      hashes += 1;
+      return hashPassword(password);
+    };
+    server = await startServer({ port: 0, dbPath: join(dir, 'app.sqlite'), hashPassword: countingHash });
+  });
+
+  after(async () => {
+    await server.close();
+    rmSync(dir, { recursive: true, force: true });
+  });
+
+  test('a sign-up over the per-email limit answers 429 without hashing its password', async () => {
+    const email = 'limited@example.com';
+    const statuses: number[] = [];
+    for (let i = 0; i < MAX_SIGNUPS + 1; i += 1) {
+      const response = await fetch(`${server.url}/api/auth/signup`, {
+        method: 'POST',
+        headers: { 'content-type': 'application/json' },
+        body: JSON.stringify({ email, password: 'correct horse' }),
+      });
+      statuses.push(response.status);
+    }
+
+    assert.deepEqual(statuses, [201, 409, 409, 409, 409, 429]);
+    assert.equal(hashes, 5);
   });
 });

@@ -23,6 +23,8 @@ const EMULATOR = join(ANDROID_HOME, 'emulator', 'emulator');
 const AVD = process.env.DRIVE_AVD || 'nstack35';
 const MAESTRO = process.env.MAESTRO || join(homedir(), '.maestro', 'bin', 'maestro');
 const APK = join(ROOT, 'android', 'app', 'build', 'outputs', 'apk', 'release', 'app-release.apk');
+/** The release manifest after the libraries' manifests are merged in: what the APK asks for. */
+const MERGED_MANIFEST = join(ROOT, 'android', 'app', 'build', 'intermediates', 'merged_manifest', 'release', 'processReleaseMainManifest', 'AndroidManifest.xml');
 const WIDTHS = [1280, 390];
 const SCHEMES = /** @type {const} */ (['light', 'dark']);
 
@@ -64,8 +66,13 @@ const commands = {
   },
   'android-build': {
     usage: 'android-build [--all-abis] [--dry-run]',
-    summary: 'expo prebuild, then gradle assembleRelease for x86_64 (--all-abis: every ABI); JS bundled',
+    summary: 'expo prebuild, gradle assembleRelease for x86_64 (--all-abis: every ABI), then android-permissions',
     run: commandAndroidBuild,
+  },
+  'android-permissions': {
+    usage: 'android-permissions [manifest]',
+    summary: 'exits 1 when the merged release manifest asks for a permission app.json does not list',
+    run: commandAndroidPermissions,
   },
   'android-start': {
     usage: 'android-start [--json]',
@@ -339,10 +346,31 @@ async function commandAndroidBuild(args) {
   if (args.includes('--dry-run')) {
     print(`ANDROID_HOME=${ANDROID_HOME}`);
     for (const [command, commandArgs] of steps) print([command, ...commandArgs].join(' '));
+    print(`drive android-permissions ${MERGED_MANIFEST}`);
     return;
   }
   for (const [command, commandArgs, cwd] of steps) run(command, [...commandArgs], { cwd, env });
+  await commandAndroidPermissions([MERGED_MANIFEST]);
   print(`Built ${APK} in ${Math.round((Date.now() - started) / 1000)} s`);
+}
+
+/**
+ * Libraries merge their own permissions into the app's manifest (androidx.biometric adds
+ * USE_BIOMETRIC), which `expo config` cannot see; this reads the merged result.
+ * Allowed: app.json's android.permissions, and the package's own signature-level
+ * DYNAMIC_RECEIVER_NOT_EXPORTED_PERMISSION that androidx.core declares.
+ * @param {string[]} args
+ */
+async function commandAndroidPermissions(args) {
+  const manifest = resolve(args.find((a) => !a.startsWith('--')) ?? MERGED_MANIFEST);
+  if (!existsSync(manifest)) throw new UsageError(`No merged manifest at ${manifest}: run \`npm run drive -- android-build\` first.`);
+  const { android } = JSON.parse(readFileSync(join(ROOT, 'app.json'), 'utf8')).expo;
+  const allowed = new Set([...android.permissions, `${android.package}.DYNAMIC_RECEIVER_NOT_EXPORTED_PERMISSION`]);
+  const xml = readFileSync(manifest, 'utf8');
+  const requested = [...xml.matchAll(/<uses-permission(?:-sdk-23)?\s[^>]*android:name="([^"]+)"/g)].map((m) => m[1]).sort();
+  const extra = requested.filter((name) => !allowed.has(name));
+  if (extra.length > 0) throw new UsageError(`${manifest} asks for permissions not allowed: ${extra.join(', ')}`);
+  print(`Permissions: ${requested.join(', ')}`);
 }
 
 /** @param {string[]} args */

@@ -13,6 +13,7 @@ export type Profile = { id: string; kind: 'owner' | 'child'; name: string; pictu
 export type SessionScope = { kind: 'account' } | { kind: 'profile'; profileId: string };
 export type AuthEnv = { Variables: { user: User; token: string; scope: SessionScope } };
 
+export type AccountOptions = { signupsPerAddress?: number; hash?: (password: string) => Promise<string> };
 type Credentials = { email: string; password: string };
 type ErrorBody = { error: string; field?: 'email' | 'password' };
 
@@ -40,9 +41,13 @@ const tooManySignups: ErrorBody = { error: 'too_many_signups' };
 /**
  * Sign-up, sign-in, sign-out and `GET /api/me`, mounted at `/api`.
  * `now` is injected so tests can move the clock. `signupsPerAddress` caps sign-ups from one
- * client address per 15 minutes.
+ * client address per 15 minutes. `hash` hashes a new password (tests count its calls).
  */
-export function accountRoutes(db: DatabaseSync, now: () => Date, signupsPerAddress = MAX_SIGNUPS_PER_ADDRESS) {
+export function accountRoutes(
+  db: DatabaseSync,
+  now: () => Date,
+  { signupsPerAddress = MAX_SIGNUPS_PER_ADDRESS, hash = hashPassword }: AccountOptions = {},
+) {
   const app = new Hono<AuthEnv>();
   const requireUser = requireUserMiddleware(db, now);
   const requireAccount = requireAccountMiddleware(db, now);
@@ -58,7 +63,7 @@ export function accountRoutes(db: DatabaseSync, now: () => Date, signupsPerAddre
     if (input.password.length < MIN_PASSWORD || input.password.length > MAX_PASSWORD) {
       return c.json({ error: 'weak_password', field: 'password' } satisfies ErrorBody, 400);
     }
-    const passwordHash = await hashPassword(input.password);
+    const passwordHash = await hash(input.password);
     const user = createUser(db, input.email, passwordHash, now());
     if (!user) return c.json({ error: 'email_taken', field: 'email' } satisfies ErrorBody, 409);
     return c.json(signedIn(db, user, now()), 201);
@@ -266,7 +271,7 @@ function deriveKey(password: string, salt: Buffer, params = SCRYPT): Promise<Buf
   });
 }
 
-async function hashPassword(password: string): Promise<string> {
+export async function hashPassword(password: string): Promise<string> {
   const salt = randomBytes(16);
   const key = await deriveKey(password, salt);
   const { N, r, p } = SCRYPT;
