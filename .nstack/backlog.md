@@ -23,5 +23,7 @@
 - (unscored) Kids: fewer type_answer items for ages 4-5 (replace with listen_choose or speak). Evidence: native reader 2026-11-28
 - (unscored) Kids colour pictures use one consistent set (hearts vs circles) once older-Android emoji support allows. Evidence: native reader 2026-11-28
 - (unscored) lang="en" on the type_answer English input. Evidence: learn-core fix builder
+- (unscored) android-build: build only x86_64 for the emulator (reactNativeArchitectures) to cut the 23 min first build. Evidence: T3 builder
+- (unscored) Jest timeout under CPU load (one flaky failure during gradle). Evidence: T3 builder
 - (unscored) UI-string checker: options as a function, tabBarLabel, navigation.setOptions titles. Evidence: review fix builder
 - (unscored) UI-string checker: strings outside JSX that reach the user (Alert.alert, confirm, consts rendered later). Evidence: review round 3
