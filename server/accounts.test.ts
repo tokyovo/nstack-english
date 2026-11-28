@@ -14,6 +14,9 @@ type AccountBody = {
   profiles: { id: string; kind: string; name: string }[];
 };
 
+const MINUTE = 60_000;
+const DAY = 24 * 60 * MINUTE;
+
 
 describe('accounts', () => {
   let dir: string;
@@ -187,7 +190,93 @@ describe('accounts', () => {
     });
   });
 
+  describe('sign-in rate limit', () => {
+    async function failSignIn(email: string, times: number) {
+      for (let i = 0; i < times; i += 1) {
+        const response = await post('/api/auth/signin', { email, password: 'not the password' });
+        assert.equal(response.status, 401, `failure ${i + 1}`);
+      }
+    }
+
+    test('after 10 failures for an email, even the right password answers 429', async () => {
+      const { email, password } = await signUp();
+      await failSignIn(email, 10);
+
+      const response = await post('/api/auth/signin', { email, password });
+
+      assert.equal(response.status, 429);
+      assert.deepEqual(await response.json(), { error: 'too_many_attempts' });
+    });
+
+    test('counts failures per email, whatever its case', async () => {
+      const limited = await signUp();
+      const other = await signUp();
+      await failSignIn(limited.email.toUpperCase(), 10);
+
+      assert.equal((await post('/api/auth/signin', { email: limited.email, password: limited.password })).status, 429);
+      assert.equal((await post('/api/auth/signin', { email: other.email, password: other.password })).status, 200);
+    });
+
+    test('counts failures for unknown emails too', async () => {
+      const email = freshEmail();
+      await failSignIn(email, 10);
+
+      assert.equal((await post('/api/auth/signin', { email, password: 'anything at all' })).status, 429);
+    });
+
+    test('9 failures still allow the right password, which clears the count', async () => {
+      const { email, password } = await signUp();
+      await failSignIn(email, 9);
+      assert.equal((await post('/api/auth/signin', { email, password })).status, 200);
+
+      await failSignIn(email, 9);
+
+      assert.equal((await post('/api/auth/signin', { email, password })).status, 200);
+    });
+
+    test('failures older than 15 minutes no longer count', async () => {
+      const { email, password } = await signUp();
+      await failSignIn(email, 10);
+      clock += 15 * MINUTE - 1;
+      assert.equal((await post('/api/auth/signin', { email, password })).status, 429);
+
+      clock += 1;
+
+      assert.equal((await post('/api/auth/signin', { email, password })).status, 200);
+    });
+  });
+
+  describe('POST /api/auth/signout', () => {
+    test('ends that session only, and answers 204', async () => {
+      const { email, password, token } = await signUp();
+      const other = (await (await post('/api/auth/signin', { email, password })).json()) as AccountBody;
+
+      const response = await post('/api/auth/signout', {}, token);
+
+      assert.equal(response.status, 204);
+      assert.equal((await me(token)).status, 401);
+      assert.equal((await me(other.token)).status, 200);
+    });
+
+    test('signed out answers 401', async () => {
+      const response = await post('/api/auth/signout', {});
+
+      assert.equal(response.status, 401);
+      assert.deepEqual(await response.json(), { error: 'unauthorized' });
+    });
+  });
+
   describe('GET /api/me', () => {
+    test('a session expires after 90 days', async () => {
+      const { token } = await signUp();
+      clock += 90 * DAY - 1;
+      assert.equal((await me(token)).status, 200);
+
+      clock += 1;
+
+      assert.equal((await me(token)).status, 401);
+    });
+
     test('signed out answers 401', async () => {
       const response = await me();
 

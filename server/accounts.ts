@@ -6,7 +6,7 @@ import { bodyLimit } from 'hono/body-limit';
 
 export type User = { id: string; email: string };
 export type Profile = { id: string; kind: 'owner' | 'child'; name: string };
-export type AuthEnv = { Variables: { user: User } };
+export type AuthEnv = { Variables: { user: User; token: string } };
 
 type Credentials = { email: string; password: string };
 type ErrorBody = { error: string; field?: 'email' | 'password' };
@@ -17,6 +17,8 @@ const MAX_PASSWORD = 256;
 const MAX_EMAIL = 254;
 const EMAIL_SHAPE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 const DAY = 24 * 60 * 60 * 1000;
+const MAX_FAILURES = 10;
+const FAILURE_WINDOW = 15 * 60 * 1000;
 
 const unauthorized: ErrorBody = { error: 'unauthorized' };
 const invalidCredentials: ErrorBody = { error: 'invalid_credentials' };
@@ -45,11 +47,23 @@ export function accountRoutes(db: DatabaseSync, now: () => Date) {
   app.post('/auth/signin', async (c) => {
     const input = await readCredentials(c);
     if ('error' in input) return c.json(invalidCredentials, 401);
+    if (recentFailures(db, input.email, now()) >= MAX_FAILURES) {
+      return c.json({ error: 'too_many_attempts' } satisfies ErrorBody, 429);
+    }
     const row = db.prepare('SELECT id, email, password_hash FROM users WHERE email = ?').get(input.email);
     // An unknown email still pays for one scrypt, so timing does not reveal which emails exist.
     const matches = await verifyPassword(input.password, row ? String(row.password_hash) : await dummyHash());
-    if (!row || !matches) return c.json(invalidCredentials, 401);
+    if (!row || !matches) {
+      db.prepare('INSERT INTO signin_failures (email, failed_at) VALUES (?, ?)').run(input.email, now().getTime());
+      return c.json(invalidCredentials, 401);
+    }
+    db.prepare('DELETE FROM signin_failures WHERE email = ?').run(input.email);
     return c.json(signedIn(db, { id: String(row.id), email: String(row.email) }, now()));
+  });
+
+  app.post('/auth/signout', requireUser, (c) => {
+    db.prepare('DELETE FROM sessions WHERE token_hash = ?').run(sha256(c.get('token')));
+    return c.body(null, 204);
   });
 
   app.get('/me', requireUser, (c) => {
@@ -63,10 +77,11 @@ export function accountRoutes(db: DatabaseSync, now: () => Date) {
 /** Sets `user` from a valid `Authorization: Bearer` session token, or answers 401. */
 export function requireUserMiddleware(db: DatabaseSync, now: () => Date): MiddlewareHandler<AuthEnv> {
   return async (c, next) => {
-    const match = /^Bearer ([A-Za-z0-9_-]+)$/.exec(c.req.header('authorization') ?? '');
-    const user = match ? userForToken(db, match[1], now()) : undefined;
-    if (!user) return c.json(unauthorized, 401);
+    const token = /^Bearer ([A-Za-z0-9_-]+)$/.exec(c.req.header('authorization') ?? '')?.[1];
+    const user = token === undefined ? undefined : userForToken(db, token, now());
+    if (!token || !user) return c.json(unauthorized, 401);
     c.set('user', user);
+    c.set('token', token);
     await next();
   };
 }
@@ -132,6 +147,14 @@ function userForToken(db: DatabaseSync, token: string, at: Date): User | undefin
     )
     .get(sha256(token), at.getTime());
   return row ? { id: String(row.id), email: String(row.email) } : undefined;
+}
+
+/** Failed sign-ins for `email` in the last 15 minutes; older ones are deleted. */
+function recentFailures(db: DatabaseSync, email: string, at: Date): number {
+  const since = at.getTime() - FAILURE_WINDOW;
+  db.prepare('DELETE FROM signin_failures WHERE failed_at <= ?').run(since);
+  const row = db.prepare('SELECT count(*) AS n FROM signin_failures WHERE email = ?').get(email);
+  return Number(row?.n);
 }
 
 function profilesOf(db: DatabaseSync, userId: string): Profile[] {
