@@ -59,7 +59,7 @@ Acceptance criteria:
 
 - [ ] T29 Everyday A2 u11-u15. Proof: content test, native reader verdict. Content: yes. Needs: none
 - [ ] T30 Work A2 u7-u9. Proof: content test, native reader verdict. Content: yes. Needs: none
-- [ ] T31 Kids A2 u9-u10. Proof: content test, native reader verdict. Content: yes. Needs: none
+- [x] T31 Kids A2 u9-u10. Proof: content test, native reader verdict. Content: yes. Needs: none
 
 ## Done
 - foundation: T1-T4, PR #1
