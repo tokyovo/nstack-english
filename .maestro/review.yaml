@@ -1,0 +1,68 @@
+# Finishes everyday A0 u1, waits until its words are due (10 minutes, box 1), reviews them,
+# and sees home say there is nothing left to review.
+# Run: MAESTRO_CLI_NO_ANALYTICS=1 npm run drive -- android-test .maestro/review.yaml
+# Maestro cannot move the device clock, so this flow waits the real 10 minutes.
+appId: app.hocenglish
+---
+- runFlow: lesson.yaml
+
+- stopApp
+- launchApp:
+    clearState: false
+- assertVisible: "Ôn tập"
+- assertVisible: "Bạn đã ôn hết từ đến hạn. Hãy quay lại sau nhé."
+
+# Reopen home once a minute until the words are due.
+- repeat:
+    while:
+      notVisible:
+        id: "review-start"
+    times: 12
+    commands:
+      - extendedWaitUntil:
+          visible:
+            id: "review-start"
+          timeout: 60000
+          optional: true
+      - stopApp
+      - launchApp:
+          clearState: false
+- assertVisible:
+    id: "due-count"
+- tapOn:
+    id: "review-start"
+- assertVisible: "Từ 1/9"
+
+# Answer each step with the first option, or type an answer; right or wrong, each is recorded.
+- repeat:
+    while:
+      notVisible: "Xong phần ôn tập!"
+    times: 20
+    commands:
+      - runFlow:
+          when:
+            visible:
+              id: "option-0"
+          commands:
+            - tapOn:
+                id: "option-0"
+      - runFlow:
+          when:
+            visible:
+              id: "answer-input"
+          commands:
+            - tapOn:
+                id: "answer-input"
+            - inputText: "hello"
+            - hideKeyboard
+            - tapOn:
+                id: "check"
+      - tapOn:
+          id: "continue"
+
+- assertVisible: "Xong phần ôn tập!"
+- tapOn:
+    id: "home"
+- assertVisible: "Bạn đã ôn hết từ đến hạn. Hãy quay lại sau nhé."
+- assertNotVisible:
+    id: "due-count"

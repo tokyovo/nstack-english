@@ -1,0 +1,125 @@
+// A learner finishes a lesson, comes back a day later, reviews the due words and sees the count drop.
+// The browser's clock is set by Playwright (`page.clock`), so the app needs no test-only switch.
+import { AxeBuilder } from '@axe-core/playwright';
+import { expect, test, type Page } from '@playwright/test';
+import { readFileSync } from 'node:fs';
+import { join } from 'node:path';
+
+import { parseUnit, type Exercise, type Unit } from '../src/content/schema';
+
+function loadUnit(path: string): Unit {
+  const result = parseUnit(JSON.parse(readFileSync(join(import.meta.dirname, '..', 'content', path), 'utf8')));
+  if (!result.ok) throw new Error(result.errors.join('\n'));
+  return result.unit;
+}
+
+const unit = loadUnit('everyday/a0/u1.json');
+const START = new Date('2026-11-27T08:00:00+07:00');
+const DAY = 24 * 60 * 60 * 1000;
+
+function button(page: Page, name: string) {
+  return page.getByRole('button', { name, exact: true });
+}
+
+async function expectNoSeriousAxeViolations(page: Page) {
+  const { violations } = await new AxeBuilder({ page }).withTags(['wcag2a', 'wcag2aa', 'wcag21aa']).analyze();
+  const serious = violations.filter((v) => v.impact === 'serious' || v.impact === 'critical');
+  expect(serious.map((v) => `${v.id}: ${v.nodes.map((n) => n.target.join(' ')).join(', ')}`)).toEqual([]);
+}
+
+async function answerLessonExercise(page: Page, exercise: Exercise) {
+  switch (exercise.type) {
+    case 'choose_meaning':
+    case 'choose_english':
+    case 'listen_choose':
+      await button(page, exercise.answer).click();
+      return;
+    case 'build_sentence':
+      for (const tile of exercise.answer) await button(page, tile).first().click();
+      await button(page, 'Kiểm tra').click();
+      return;
+    case 'type_answer':
+      await page.getByLabel('Câu trả lời bằng tiếng Anh').fill(exercise.answer);
+      await button(page, 'Kiểm tra').click();
+  }
+}
+
+async function finishLesson(page: Page) {
+  await page.goto(`/lesson/${unit.id}`);
+  await button(page, 'Bắt đầu học').click();
+  for (let i = 0; i < unit.words.length; i++) await button(page, 'Tiếp tục').click();
+  for (const exercise of unit.exercises) {
+    await answerLessonExercise(page, exercise);
+    await button(page, 'Tiếp tục').click();
+  }
+  await expect(page.getByRole('heading', { name: 'Xong bài học!' })).toBeVisible();
+}
+
+/** Reads the review exercise on screen and answers it right, using the unit's words. */
+async function answerReviewStep(page: Page) {
+  const instruction = await page.getByRole('heading', { level: 2 }).first().innerText();
+  if (instruction === 'Chọn nghĩa đúng') {
+    const en = await page.locator('[lang="en"]').first().innerText();
+    const word = unit.words.find((w) => w.en === en);
+    await button(page, word?.vi ?? `no word "${en}"`).click();
+  } else if (instruction === 'Chọn câu giống với câu này') {
+    const en = await page.getByTestId('listen-text').innerText();
+    await button(page, en).click();
+  } else if (instruction === 'Viết bằng tiếng Anh') {
+    let typed = 'no word shown';
+    for (const word of unit.words) {
+      if (await page.getByText(word.vi, { exact: true }).isVisible()) typed = word.en;
+    }
+    await page.getByLabel('Câu trả lời bằng tiếng Anh').fill(typed);
+    await page.getByLabel('Câu trả lời bằng tiếng Anh').press('Enter');
+  } else {
+    throw new Error(`unexpected review step "${instruction}"`);
+  }
+}
+
+test('a learner reviews the words of a lesson a day later and sees the due count drop', async ({ page }) => {
+  const errors: string[] = [];
+  page.on('pageerror', (error) => errors.push(error.message));
+  page.on('console', (message) => {
+    if (message.type() === 'error') errors.push(message.text());
+  });
+  // Without an English voice, listening steps show the English text (as on devices with no voice).
+  await page.addInitScript(() => {
+    delete (window as { speechSynthesis?: unknown }).speechSynthesis;
+  });
+  await page.clock.install({ time: START });
+
+  await page.goto('/');
+  const panel = page.getByTestId('review-panel');
+  await expect(panel).toContainText('Chưa có từ cần ôn');
+  await expect(panel).toContainText('Học xong một bài để có từ ôn tập.');
+
+  await finishLesson(page);
+  await page.goto('/');
+  await expect(panel).toContainText('Bạn đã ôn hết từ đến hạn. Hãy quay lại sau nhé.');
+
+  await page.clock.setSystemTime(new Date(START.getTime() + DAY));
+  await page.reload();
+  const total = unit.words.length;
+  await expect(page.getByTestId('due-count')).toHaveText(`${total} từ cần ôn`);
+  await page.getByRole('link', { name: 'Ôn tập ngay' }).click();
+
+  await expect(page).toHaveURL(/\/review$/);
+  for (let i = 1; i <= total; i++) {
+    await expect(page.getByText(`Từ ${i}/${total}`)).toBeVisible();
+    if (i === 1) await expectNoSeriousAxeViolations(page);
+    await answerReviewStep(page);
+    await expect(page.getByText('Đúng rồi!')).toBeVisible();
+    await button(page, 'Tiếp tục').click();
+  }
+
+  await expect(page.getByRole('heading', { name: 'Xong phần ôn tập!' })).toBeVisible();
+  await expect(page.getByText(`Bạn nhớ đúng ${total}/${total} từ.`)).toBeVisible();
+  await expectNoSeriousAxeViolations(page);
+
+  await page.getByRole('link', { name: 'Về trang chủ', exact: true }).click();
+  // The home screen opened before the review stays mounted, hidden, under this one.
+  await expect(page.getByText('Bạn đã ôn hết từ đến hạn. Hãy quay lại sau nhé.')).toBeVisible();
+  await expect(page.getByTestId('due-count').filter({ visible: true })).toHaveCount(0);
+  expect(errors).toEqual([]);
+});
