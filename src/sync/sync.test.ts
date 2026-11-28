@@ -1,7 +1,7 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { waitFor } from '@testing-library/react-native';
 
-import { signIn, signOut, syncSession } from '@/account';
+import { loadAccount, signIn, signOut, syncSession } from '@/account';
 import { createProgressStore, LOCAL_PROFILE_ID, type Progress } from '@/progress';
 import { mergeProgress } from '@/progress/merge';
 import { signOutOfDevice, startSync, syncProgress, syncState } from '@/sync';
@@ -230,6 +230,98 @@ describe('signing out of this device', () => {
     await waitFor(() => expect(syncState()).toBe('synced'));
     expect(Object.keys((await store.load(LOCAL_PROFILE_ID)).lessons)).toEqual(['everyday-a0-u2']);
     expect(Object.keys(server.stored.lessons)).toEqual(['everyday-a0-u2']);
+  });
+});
+
+/**
+ * Two accounts, A (profile pa) and B (profile pb). Each sign-in gets a new token; `expire` ends
+ * every session of an account, as the server does after 90 days or a revoke.
+ */
+function twoAccountServer() {
+  const accounts = { a: { email: 'a@example.com', profileId: 'pa' }, b: { email: 'b@example.com', profileId: 'pb' } };
+  const server = {
+    online: true,
+    puts: [] as { profileId: string; body: Progress }[],
+    expire: (name: 'a' | 'b') => {
+      for (const [token, owner] of sessions) if (owner === name) sessions.delete(token);
+    },
+  };
+  const sessions = new Map<string, 'a' | 'b'>();
+  let issued = 0;
+  jest.spyOn(global, 'fetch').mockImplementation(async (input, init) => {
+    if (!server.online) throw new TypeError('Failed to fetch');
+    const path = String(input);
+    const json = (status: number, value: unknown) => new Response(JSON.stringify(value), { status });
+    const owner = sessions.get(new Headers(init?.headers).get('authorization')?.replace('Bearer ', '') ?? '');
+    const body = (name: 'a' | 'b') => ({
+      user: { id: name, email: accounts[name].email },
+      profiles: [{ id: accounts[name].profileId, kind: 'owner', name: '' }],
+    });
+    if (path === '/api/auth/signin') {
+      const { email } = JSON.parse(String(init?.body)) as { email: string };
+      const name = email === accounts.a.email ? 'a' : 'b';
+      const token = `tok-${name}-${(issued += 1)}`;
+      sessions.set(token, name);
+      return json(200, { token, ...body(name) });
+    }
+    if (path === '/api/auth/signout') return new Response(null, { status: 204 });
+    if (!owner) return json(401, { error: 'unauthorized' });
+    if (path === '/api/me') return json(200, body(owner));
+    const profileId = accounts[owner].profileId;
+    if (path === `/api/profiles/${profileId}/progress` && init?.method === 'PUT') {
+      const sent = JSON.parse(String(init.body)) as Progress;
+      server.puts.push({ profileId, body: sent });
+      return json(200, sent);
+    }
+    return json(404, { error: 'not_found' });
+  });
+  return { server, accounts };
+}
+
+describe('a session that ends without signing out (expired or revoked)', () => {
+  async function aExpiresWithAnUnsyncedLesson() {
+    const { server, accounts } = twoAccountServer();
+    await signIn(accounts.a.email, 'password a');
+    expect(await syncProgress()).toBe('synced');
+    server.online = false;
+    await store.completeLesson(LOCAL_PROFILE_ID, { unitId: 'everyday-a0-u1', correct: 8, total: 10 });
+    expect(await syncProgress()).toBe('offline');
+    server.online = true;
+    server.expire('a');
+    expect(await loadAccount()).toEqual({ status: 'signedOut' });
+    return { server, accounts };
+  }
+
+  it("does not add A's progress to B's account when B signs in next", async () => {
+    const { server, accounts } = await aExpiresWithAnUnsyncedLesson();
+
+    await signIn(accounts.b.email, 'password b');
+    expect(await syncProgress()).toBe('synced');
+
+    const toB = server.puts.filter((put) => put.profileId === 'pb');
+    expect(toB.length).toBeGreaterThan(0);
+    for (const put of toB) expect(put.body.lessons).toEqual({});
+    expect((await store.load(LOCAL_PROFILE_ID)).lessons).toEqual({});
+  });
+
+  it("sends A's unsynced lesson when A signs back in", async () => {
+    const { server, accounts } = await aExpiresWithAnUnsyncedLesson();
+
+    await signIn(accounts.a.email, 'password a');
+    expect(await syncProgress()).toBe('synced');
+
+    const toA = server.puts.filter((put) => put.profileId === 'pa');
+    expect(Object.keys(toA[toA.length - 1].body.lessons)).toEqual(['everyday-a0-u1']);
+  });
+
+  it('still adds guest progress made before any sign-in to the first account', async () => {
+    const { server, accounts } = twoAccountServer();
+    await store.completeLesson(LOCAL_PROFILE_ID, { unitId: 'everyday-a0-u1', correct: 8, total: 10 });
+
+    await signIn(accounts.b.email, 'password b');
+    expect(await syncProgress()).toBe('synced');
+
+    expect(Object.keys(server.puts[0].body.lessons)).toEqual(['everyday-a0-u1']);
   });
 });
 

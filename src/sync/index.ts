@@ -2,6 +2,8 @@
 // copy is sent to the account's profile, the server merges it with what it has (server/progress.ts)
 // and the merged copy comes back and is merged into the device's. One PUT both pushes and pulls,
 // and the merge is a union, so retries and several devices converge.
+import AsyncStorage from '@react-native-async-storage/async-storage';
+
 import { onSessionChange, signOut, syncSession } from '@/account';
 import { callApi } from '@/api/client';
 import { createProgressStore, LOCAL_PROFILE_ID, onProgressChange } from '@/progress';
@@ -11,6 +13,14 @@ import { parseProgress } from '@/progress/schema';
 export type SyncState = 'idle' | 'signedOut' | 'synced' | 'offline' | 'failed';
 
 const store = createProgressStore();
+
+/**
+ * The account profile the device copy belongs to, set when it is first synced to one. A session
+ * that ends without signing out (expired, revoked) leaves the copy and this mark behind, so the
+ * same account signing back in gets its unsynced answers, and any other account starts clean.
+ * No mark: guest progress, which the first sign-in adds to its account.
+ */
+const DEVICE_ACCOUNT_KEY = 'hocenglish.sync.deviceAccount';
 const listeners = new Set<() => void>();
 let state: SyncState = 'idle';
 let running: Promise<SyncState> | undefined;
@@ -69,6 +79,7 @@ export function startSync(): () => void {
 async function syncOnce(): Promise<SyncState> {
   const session = await syncSession();
   if (!session) return 'signedOut';
+  await claimDeviceCopy(session.profileId);
   const device = await store.load(LOCAL_PROFILE_ID);
   const reply = await callApi(`/api/profiles/${encodeURIComponent(session.profileId)}/progress`, {
     method: 'PUT',
@@ -80,6 +91,14 @@ async function syncOnce(): Promise<SyncState> {
   if (!merged) return 'failed';
   await store.mergeIn(LOCAL_PROFILE_ID, { ...merged, profileId: LOCAL_PROFILE_ID });
   return 'synced';
+}
+
+/** Clears a device copy left by another account, then marks it as this profile's. */
+async function claimDeviceCopy(profileId: string) {
+  const owner = await AsyncStorage.getItem(DEVICE_ACCOUNT_KEY);
+  if (owner === profileId) return;
+  if (owner !== null) await store.clear(LOCAL_PROFILE_ID);
+  await AsyncStorage.setItem(DEVICE_ACCOUNT_KEY, profileId);
 }
 
 /** `signedOut` when the device's progress is gone with the session; otherwise why it could not be sent. */
@@ -99,6 +118,7 @@ export async function signOutOfDevice({ discardUnsynced = false } = {}): Promise
   await signOut();
   await syncProgress();
   await store.clear(LOCAL_PROFILE_ID);
+  await AsyncStorage.removeItem(DEVICE_ACCOUNT_KEY);
   return 'signedOut';
 }
 
