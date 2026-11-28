@@ -2,7 +2,7 @@
 // The browser's clock is set by Playwright (`page.clock`), so the app needs no test-only switch.
 import { expect, test, type Page } from '@playwright/test';
 
-import type { Exercise } from '../src/content/schema';
+import { isTemplate, type Exercise } from '../src/content/schema';
 import { button, collectErrors, expectNoSeriousAxeViolations, loadUnit, withoutSpeech } from './learner.ts';
 
 const unit = loadUnit('everyday/a0/u1.json');
@@ -52,8 +52,9 @@ async function answerReviewStep(page: Page) {
     const en = await page.getByTestId('listen-text').innerText();
     await button(page, en).click();
   } else if (instruction === 'Viết bằng tiếng Anh') {
-    let typed = 'no word shown';
-    for (const word of unit.words) {
+    // Only complete words: a template ("My name is ...") is never asked to be typed.
+    let typed = 'no complete word shown';
+    for (const word of unit.words.filter((w) => !isTemplate(w.en))) {
       if (await page.getByText(word.vi, { exact: true }).isVisible()) typed = word.en;
     }
     await page.getByLabel('Câu trả lời bằng tiếng Anh').fill(typed);

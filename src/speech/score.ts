@@ -1,6 +1,6 @@
 // Judges what a speech recogniser heard against the English the learner was asked to say.
 // Forgiving on purpose (research need 5): case, punctuation, contractions and digits do not
-// count, and one misheard word in five still passes.
+// count, counting run together ("123") is split, and one misheard word in five still passes.
 
 /** Share of words that must line up for a pass. */
 export const PASS_SIMILARITY = 0.8;
@@ -23,11 +23,25 @@ const numbers = [
   'eleven', 'twelve', 'thirteen', 'fourteen', 'fifteen', 'sixteen', 'seventeen', 'eighteen', 'nineteen', 'twenty',
 ];
 
+/**
+ * The numbers counted when a recogniser runs counting together into one number ("123" for
+ * "one, two, three", "8910" for "eight, nine, ten"); the number itself when it is not a counting run.
+ */
+function counted(digits: string): string[] {
+  if (Number(digits) < numbers.length) return [digits];
+  for (let firstLength = 1; firstLength < digits.length; firstLength++) {
+    const run = [Number(digits.slice(0, firstLength))];
+    while (run.join('').length < digits.length) run.push(run[run.length - 1] + 1);
+    if (run.join('') === digits) return run.map(String);
+  }
+  return [digits];
+}
+
 /** The words of a phrase as they would be said: lowercase, contractions expanded, 0-20 spelled out. */
 export function spokenWords(text: string): string[] {
   let spoken = text.toLowerCase().replace(/’/g, "'");
   for (const [pattern, full] of contractions) spoken = spoken.replace(pattern, full);
-  const words = spoken.match(/[a-z]+|\d+/g) ?? [];
+  const words = (spoken.match(/[a-z]+|\d+/g) ?? []).flatMap((word) => (/^\d+$/.test(word) ? counted(word) : [word]));
   return words.map((word) => numbers[Number(word)] ?? word);
 }
 

@@ -64,6 +64,21 @@ describe('checkContent', () => {
     ]);
   });
 
+  it('reports a speak or type_answer item whose English is a template with "..."', () => {
+    const name: Word = { id: 'everyday-a0-u1-name', en: 'My name is ...', vi: 'Tên tôi là ...' };
+    const u1 = unit('everyday-a0-u1', [hello, name], [
+      { id: 'everyday-a0-u1-e1', type: 'speak', text: 'My name is ...', vi: 'Tên tôi là ...' },
+      { id: 'everyday-a0-u1-e2', type: 'type_answer', prompt: 'Tên tôi là ...', answer: 'My name is ...' },
+      { id: 'everyday-a0-u1-e3', type: 'type_answer', prompt: 'Xin chào', answer: 'Hello', accepted: ['Hello …'] },
+      { id: 'everyday-a0-u1-e4', type: 'listen_choose', audio: 'Hello', options: ['Hello', 'My name is ...'], answer: 'Hello' },
+    ]);
+    expect(checkContent([u1], ['original'])).toEqual([
+      'everyday-a0-u1-e1: "My name is ..." is a template; ask for a complete sentence',
+      'everyday-a0-u1-e2: "My name is ..." is a template; ask for a complete sentence',
+      'everyday-a0-u1-e3: "Hello …" is a template; ask for a complete sentence',
+    ]);
+  });
+
   it('does not let one track use words another track teaches', () => {
     const work = unit('work-a0-u1', [], [
       { id: 'work-a0-u1-e1', type: 'type_answer', prompt: 'Xin chào', answer: 'Hello' },

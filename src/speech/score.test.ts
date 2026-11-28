@@ -11,6 +11,13 @@ describe('spokenWords', () => {
     expect(spokenWords('I have 2 sisters and 10 pens')).toEqual(['i', 'have', 'two', 'sisters', 'and', 'ten', 'pens']);
   });
 
+  it('splits counting a recogniser wrote as one number back into the numbers counted', () => {
+    expect(spokenWords('123')).toEqual(['one', 'two', 'three']);
+    expect(spokenWords('8910')).toEqual(['eight', 'nine', 'ten']);
+    // Not a counting run, or small enough to be one number: left as it is.
+    expect(spokenWords('2024 12')).toEqual(['2024', 'twelve']);
+  });
+
   it("expands can't and won't to their full words", () => {
     expect(spokenWords("I can't. It won't.")).toEqual(['i', 'can', 'not', 'it', 'will', 'not']);
   });
@@ -32,6 +39,8 @@ describe('judgeSpeech', () => {
     ['My name is Lan.', "my name's Lan"],
     ['I have two sisters.', 'I have 2 sisters'],
     ["I don't know.", 'I do not know'],
+    ['One, two, three.', '123'],
+    ['Eight, nine, ten.', '8910'],
     // One word in five misheard is still 0.8.
     ["I'm fine, thank you.", "I'm fine thank too"],
   ])('passes "%s" said as "%s"', (expected, heard) => {

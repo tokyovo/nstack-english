@@ -5,7 +5,7 @@ import { renderRouter, screen } from 'expo-router/testing-library';
 
 import HomeScreen from '@/app/index';
 import ReviewScreen from '@/app/review';
-import { getUnit, type Exercise, type Unit, type Word } from '@/content';
+import { getUnit, type Unit, type Word } from '@/content';
 import { createProgressStore, LOCAL_PROFILE_ID } from '@/progress';
 import { fakeDevice } from '@/speech/__fixtures__/fake-recognition';
 
@@ -54,30 +54,26 @@ async function press(name: string | RegExp) {
   await fireEvent.press(await screen.findByRole('button', { name }));
 }
 
-/** Answers the review exercise about `word` right. */
-async function answerRight(word: Word, type: Exercise['type']) {
-  switch (type) {
-    case 'choose_meaning':
-      await press(word.vi);
-      return;
-    case 'listen_choose':
-      await press(word.en);
-      return;
-    case 'type_answer':
-      await fireEvent.changeText(screen.getByLabelText('Câu trả lời bằng tiếng Anh'), word.en);
-      await press('Kiểm tra');
-      return;
-    default:
-      throw new Error(`review does not ask ${type}`);
+/**
+ * Answers the review exercise about `word` right, reading which kind it is from the screen: a box to
+ * type in, the meanings to choose from, or else the English to choose from.
+ */
+async function answerRight(word: Word) {
+  const input = screen.queryByLabelText('Câu trả lời bằng tiếng Anh');
+  if (input) {
+    await fireEvent.changeText(input, word.en);
+    await press('Kiểm tra');
+  } else if (screen.queryByRole('button', { name: word.vi })) {
+    await press(word.vi);
+  } else {
+    await press(word.en);
   }
 }
-
-const ROTATION = ['choose_meaning', 'listen_choose', 'type_answer'] as const;
 
 beforeEach(async () => {
   await AsyncStorage.clear();
   fakeDevice.reset();
-  // Most devices here cannot hear speech, so no review step is said aloud (answerRight throws on one).
+  // Most devices here cannot hear speech, so no review step is said aloud.
   fakeDevice.available = false;
 });
 
@@ -114,7 +110,7 @@ describe('Review (/review)', () => {
         await fireEvent.press(wrong);
         expect(screen.getByText(`Đáp án đúng: ${word.vi}`)).toBeOnTheScreen();
       } else {
-        await answerRight(word, ROTATION[i % 3]);
+        await answerRight(word);
         expect(screen.getByText('Đúng rồi!')).toBeOnTheScreen();
       }
       await press('Tiếp tục');
@@ -145,7 +141,7 @@ describe('Review (/review)', () => {
         await act(() => fakeDevice.hear(word.en.toLowerCase()));
         spoken.push(word.id);
       } else {
-        await answerRight(word, ROTATION[i % 3]);
+        await answerRight(word);
       }
       expect(await screen.findByText('Đúng rồi!')).toBeOnTheScreen();
       await press('Tiếp tục');
@@ -162,14 +158,14 @@ describe('Review (/review)', () => {
     await finishLessonAgo(DAY);
     await openApp('/review');
     const last = unit.words.length - 1;
-    for (const [i, word] of unit.words.slice(0, last).entries()) {
-      await answerRight(word, ROTATION[i % 3]);
+    for (const word of unit.words.slice(0, last)) {
+      await answerRight(word);
       await press('Tiếp tục');
     }
     // The last answer fails to save, and again when the review ends.
     jest.mocked(AsyncStorage.setItem).mockRejectedValueOnce(new Error('disk full'));
     jest.mocked(AsyncStorage.setItem).mockRejectedValueOnce(new Error('disk full'));
-    await answerRight(unit.words[last], ROTATION[last % 3]);
+    await answerRight(unit.words[last]);
     await press('Tiếp tục');
 
     expect(await screen.findByText('Chưa lưu được kết quả. Hãy thử lại.')).toBeOnTheScreen();
