@@ -1,0 +1,109 @@
+{
+  "id": "kids-a0-u2",
+  "track": "kids",
+  "level": "a0",
+  "number": 2,
+  "title": "Màu sắc",
+  "goals": [
+    "Con gọi được tên tám màu",
+    "Con nói được màu của một con vật: “It's a red bird.”"
+  ],
+  "note_vi": "Trong tiếng Anh, màu đứng trước tên con vật: “a black cat” là “con mèo đen”. Bố mẹ có thể chỉ đồ vật trong nhà và hỏi con “Red?”, “Blue?”.",
+  "source": "original",
+  "words": [
+    { "id": "kids-a0-u2-red", "en": "red", "vi": "màu đỏ", "picture": "❤️" },
+    { "id": "kids-a0-u2-blue", "en": "blue", "vi": "màu xanh dương", "picture": "💙" },
+    { "id": "kids-a0-u2-yellow", "en": "yellow", "vi": "màu vàng", "picture": "💛" },
+    { "id": "kids-a0-u2-green", "en": "green", "vi": "màu xanh lá cây", "picture": "💚" },
+    { "id": "kids-a0-u2-black", "en": "black", "vi": "màu đen", "picture": "⚫" },
+    { "id": "kids-a0-u2-white", "en": "white", "vi": "màu trắng", "picture": "⚪" },
+    { "id": "kids-a0-u2-purple", "en": "purple", "vi": "màu tím", "picture": "💜" },
+    { "id": "kids-a0-u2-pink", "en": "pink", "vi": "màu hồng", "picture": "💗" }
+  ],
+  "exercises": [
+    {
+      "id": "kids-a0-u2-e01",
+      "type": "choose_meaning",
+      "prompt": "kids-a0-u2-red",
+      "options": ["màu đỏ", "màu vàng", "màu tím"],
+      "answer": "màu đỏ"
+    },
+    {
+      "id": "kids-a0-u2-e02",
+      "type": "listen_choose",
+      "audio": "blue",
+      "options": ["black", "blue", "pink"],
+      "answer": "blue"
+    },
+    {
+      "id": "kids-a0-u2-e03",
+      "type": "choose_english",
+      "prompt": "màu xanh lá cây",
+      "options": ["green", "yellow", "white"],
+      "answer": "green"
+    },
+    {
+      "id": "kids-a0-u2-e04",
+      "type": "choose_meaning",
+      "prompt": "kids-a0-u2-white",
+      "options": ["màu đen", "màu trắng", "màu hồng"],
+      "answer": "màu trắng"
+    },
+    {
+      "id": "kids-a0-u2-e05",
+      "type": "listen_choose",
+      "audio": "yellow",
+      "options": ["yellow", "purple", "red"],
+      "answer": "yellow"
+    },
+    {
+      "id": "kids-a0-u2-e06",
+      "type": "build_sentence",
+      "prompt": "Đó là con mèo đen.",
+      "tiles": ["cat", "a", "black", "It's", "white"],
+      "answer": ["It's", "a", "black", "cat"],
+      "hint_vi": "Màu đứng trước con vật: “black cat”."
+    },
+    {
+      "id": "kids-a0-u2-e07",
+      "type": "choose_english",
+      "prompt": "màu tím",
+      "options": ["pink", "purple", "blue"],
+      "answer": "purple"
+    },
+    {
+      "id": "kids-a0-u2-e08",
+      "type": "listen_choose",
+      "audio": "It's a red bird.",
+      "options": ["It's a red bird.", "It's a blue bird.", "It's a green bird."],
+      "answer": "It's a red bird."
+    },
+    {
+      "id": "kids-a0-u2-e09",
+      "type": "choose_meaning",
+      "prompt": "kids-a0-u2-pink",
+      "options": ["màu hồng", "màu xanh dương", "màu đỏ"],
+      "answer": "màu hồng"
+    },
+    {
+      "id": "kids-a0-u2-e10",
+      "type": "build_sentence",
+      "prompt": "Đó là con chó màu trắng.",
+      "tiles": ["white", "dog", "It's", "a", "cow"],
+      "answer": ["It's", "a", "white", "dog"]
+    },
+    {
+      "id": "kids-a0-u2-e11",
+      "type": "type_answer",
+      "prompt": "màu đỏ",
+      "answer": "red"
+    },
+    {
+      "id": "kids-a0-u2-e12",
+      "type": "choose_english",
+      "prompt": "con vịt màu vàng",
+      "options": ["a yellow duck", "a yellow chicken", "a white duck"],
+      "answer": "a yellow duck"
+    }
+  ]
+}

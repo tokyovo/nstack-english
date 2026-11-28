@@ -118,7 +118,16 @@ describe('drive tool', () => {
 
     const seeded = drive(stateDir, ['seed']);
     assert.equal(seeded.code, 0, seeded.stderr);
-    assert.deepEqual(JSON.parse(seeded.stdout), { seeded: [] });
+    assert.deepEqual(JSON.parse(seeded.stdout), { seeded: ['account demo@hocenglish.test'] });
+    const signIn = await fetch(`${url}/api/auth/signin`, {
+      method: 'POST',
+      headers: { 'content-type': 'application/json' },
+      body: JSON.stringify({ email: 'demo@hocenglish.test', password: 'hoc-english-demo' }),
+    });
+    assert.equal(signIn.status, 200, 'the seeded demo account signs in');
+    const reseeded = drive(stateDir, ['seed']);
+    assert.equal(reseeded.code, 0, `seeding twice is fine: ${reseeded.stderr}`);
+    assert.deepEqual(JSON.parse(reseeded.stdout), { seeded: ['account demo@hocenglish.test'] });
 
     const dryRun = drive(stateDir, ['stop', '--dry-run']);
     assert.equal(dryRun.code, 0);

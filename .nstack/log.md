@@ -86,6 +86,67 @@
 - [x] 6. Record. this entry; backlog lines added
 - [x] Done when: committed on nstack/foundation, items ticked.
 
+## 2026-11-27 build T7
+- Read: build/SKILL.md a069840
+- [x] 1. Branch. nstack/learn-core (from nstack/foundation 93d5aed, rebased onto main after foundation ships)
+- [x] 2. Starting state. fast checks pass at 93d5aed
+- [x] 3. Dispatch. builder in worktree (parallel with T3, T5)
+- [x] 4. Read the reply. done, 00a4d79
+- [x] 5. Prove it yourself. merged: typecheck 0, lint 0, jest 32 pass
+- [x] 6. Record. this entry, backlog
+- [x] Done when: committed on nstack/learn-core, items ticked.
+- Decision: learn-core is built on top of the unshipped foundation branch to save time; it is synced with main before its PR.
+
+## 2026-11-27 build T5
+- Read: build/SKILL.md a069840
+- [x] 1. Branch. nstack/learn-core
+- [x] 2. Starting state. fast checks pass after T7 merge
+- [x] 3. Dispatch. builder in worktree
+- [x] 4. Read the reply. done, d5a3820; native reader "pass with fixes", 1 fix (e09 accepted "Good-bye") plus 2 suggestions applied
+- [x] 5. Prove it yourself. merged: typecheck 0, lint 0, jest 47 pass; broken fixture copied to content/everyday/a0/u2.json -> content test 1 failed, removed
+- [x] 6. Record. this entry, plan note on build_sentence alternatives for T8
+- [x] Done when: committed on nstack/learn-core, items ticked.
+
+## 2026-11-27 build T9
+- Read: build/SKILL.md a069840
+- [x] 1. Branch. nstack/learn-core
+- [x] 2. Starting state. fast checks pass at 076cadf
+- [x] 3. Dispatch. builder in worktree (parallel with T3, T6, T8, T10)
+- [x] 4. Read the reply. done, 49c5b5e; native reader "pass with fixes", required fix (five/nine sound cue) and optional Southern variants applied
+- [x] 5. Prove it yourself. merged: typecheck 0, lint 0, jest 55 pass (content test covers u2-u5)
+- [x] 6. Record. this entry
+- [x] Done when: committed on nstack/learn-core, items ticked.
+
+## 2026-11-27 build T10
+- Read: build/SKILL.md a069840
+- [x] 1. Branch. nstack/learn-core
+- [x] 2. Starting state. fast checks pass at 076cadf
+- [x] 3. Dispatch. builder in worktree
+- [x] 4. Read the reply. done, 17969db; native reader 2 rounds: round 1 one must-fix, round 2 two must-fix (ambiguous word order, wrong colour picture), all fixed; no third pass on round-2 fixes
+- [x] 5. Prove it yourself. merged (index.ts conflict, kept both sides): typecheck 0, lint 0, jest pass (count below)
+- [x] 6. Record. this entry, backlog
+- [x] Done when: committed on nstack/learn-core, items ticked.
+- Decision: kids emoji limited to Unicode 9 for older Android; kids addressed as "con", Northern words with Southern in brackets.
+
+## 2026-11-28 build T6
+- Read: build/SKILL.md a069840
+- [x] 1. Branch. nstack/learn-core
+- [x] 2. Starting state. fast checks pass at 076cadf
+- [x] 3. Dispatch. builder in worktree
+- [x] 4. Read the reply. done, bb4fa6a; Jest screen tests seen red against stubs; tracks e2e 18 passed against a served export
+- [x] 5. Prove it yourself. merged: typecheck 0, lint 0, jest 78 pass. e2e runs at slice verify after sync with foundation (drive tool)
+- [x] 6. Record. this entry, backlog
+- [x] Done when: committed on nstack/learn-core, items ticked.
+
+## 2026-11-28 build T8
+- Read: build/SKILL.md a069840
+- [x] 1. Branch. nstack/learn-core
+- [x] 2. Starting state. fast checks pass after T6 merge
+- [x] 3. Dispatch. builder in worktree
+- [x] 4. Read the reply. done, c39e1f5; completion-save removal seen failing in Jest and e2e; Maestro syntax checked, not run (no KVM)
+- [x] 5. Prove it yourself. merged (conflicts in themed-text.tsx and vi.ts: kept T6's label/meta types and moved T8's small labels to meta with tabular numbers; welcome.* keys dropped): typecheck 0, lint 0, jest 128 pass
+- [x] 6. Record. this entry, backlog
+- [x] Done when: committed on nstack/learn-core, items ticked.
 ## 2026-11-27 build T3
 - Read: build/SKILL.md a069840
 - [x] 1. Branch. nstack/foundation
@@ -110,34 +171,70 @@
 - [x] 9. Access is enforced. check-security exit 0 (no non-public features yet; headers ok, no secrets in bundle, 0 high/critical advisories)
 - [x] Done when: all ticked. Not verified: iOS build (CI macOS job, runs on the PR); Android flows (no KVM, parked).
 
+## 2026-11-28 build T11
+- Read: build/SKILL.md a069840
+- [x] 1. Branch. nstack/review-speak (from nstack/learn-core, synced to main once foundation and learn-core ship)
+- [x] 2. Starting state. fast checks pass on learn-core (jest 130)
+- [x] 3. Dispatch. builder in worktree
+- [x] 4. Read the reply. done, e7489a5; stub red 9/11, mutation (early answers) red
+- [x] 5. Prove it yourself. merged: jest src/review 11 pass
+- [x] 6. Record. this entry
+- [x] Done when: committed on nstack/review-speak, items ticked.
+## 2026-11-28 build learn-core design fixes
+- Read: build/SKILL.md a069840
+- [x] 1. Branch. nstack/learn-core
+- [x] 2. Starting state. fast checks pass at 33e1c64
+- [x] 3. Dispatch. builder: leave-lesson link (critique: no way out of a lesson on web) and lang="en" on English content (foundation review nit)
+- [x] 4. Read the reply. done f82418e; Jest red 2 failed -> green; e2e lang red 1 failed -> green
+- [x] 5. Prove it yourself. merged: typecheck 0, lint 0, jest 130 pass
+- [x] 6. Record. this entry; backlog: lang on the type_answer input
+- [x] Done when: committed, items ticked.
+
+## 2026-11-28 build learn-core content fixes
+- Read: build/SKILL.md a069840
+- [x] 1. Branch. nstack/learn-core
+- [x] 2. Starting state. fast checks pass
+- [x] 3. Dispatch. builder with the native reader recheck findings (2 must-fix ambiguous build_sentence, 5 wording)
+- [x] 4. Read the reply. done 61bbabb; fresh reader passed every changed item
+- [x] 5. Prove it yourself. merged: jest 128 pass (content test)
+- [x] 6. Record. this entry; minors in backlog
+- [x] Done when: committed, items ticked.
 ## 2026-11-28 review foundation
 - Read: review/SKILL.md c151f88
 - [x] 1. Dispatch. reviewer at 4a5f679: fix-needed, 1 important (UI-string checker misses template literals, +, options titles), 2 nits (lang="en" on web, drive pid check on macOS)
 - [x] 2. Second reviewer. n/a: no auth, payments, migrations of data, concurrency or public API (health only)
 - [x] 3. Act on every finding. important + pid nit: fresh builder, merged (red 5 failed -> green 14; drive pid test red -> green); lang nit: moved to learn-core where the English content screens are (builder dispatched)
-- [x] 4. Review the fixes. Round 2 (44c4291): 1 important (screenOptions, options functions, quoted keys, tabBarLabel still missed). Shared premise of both fixes (we can list where text appears) attacked: builder inverted the rule to report every lettered string in JSX outside an allowlist (cdd1a94, red 9 failed -> green 27). Round 3 (4bdbefe): 1 important (allowlisted prop names also exempted object keys, e.g. t("x", { name: "Bạn" })) + 1 nit (strings outside JSX, backlog). Fixed by the controller in 15ad710 (10+/3- lines, one finding): new test red without the fix (1 failed), green with it; small-fix exception used, no round 4.
-- [x] Done when: latest round's important finding fixed under the small-fix exception, verify re-run at 15ad710 (below), nits fixed or in backlog.md.
+- [ ] 4. Review the fixes. fix is 101+/19- lines: new reviewer round dispatched
+- [ ] Done when: the latest round has no important findings, verify passed after the last fix, and nits are fixed or in backlog.md.
 
-## 2026-11-28 verify foundation (after review fixes)
-- Read: verify/SKILL.md adc6a8a
-- [x] 1. Clean tree. 15ad710
-- [x] 2. Project checks. typecheck 0, lint 0, jest 30 pass, test:server 21 pass, test:drive 6 pass, drive check passed, e2e 3 passed
-- [x] 3. Every acceptance criterion in scope has a passing check. as before; check-features exit 0
-- [x] 4. Every new check bites. checker tests red before each fix (5, 9, 1 failed), drive pid test red
-- [x] 5. The real thing runs. drive check
-- [x] 6. Every changed screen looks right. no screen changed since the first verify
-- [x] 7. Nothing got weaker. no tests removed or loosened
-- [x] 8. No new warnings or errors. lint 0 warnings
-- [x] 9. Access is enforced. check-security exit 0 at c24cb0d; no route changed since
-- [x] Done when: all ticked. Not verified: iOS (CI job on the PR), Android flows (no KVM, parked).
+## 2026-11-28 build T16
+- Read: build/SKILL.md a069840
+- [x] 1. Branch. nstack/accounts-sync (from nstack/review-speak)
+- [x] 2. Starting state. fast checks pass at fe19242
+- [x] 3. Dispatch. builder in worktree
+- [x] 4. Read the reply. done eea7568; deny proofs red with auth checks removed (requireUser, expiry, rate limit); migrate checks 1 and 4 run, 2 and 5 n/a, 6 revertable (tables unused)
+- [x] 5. Prove it yourself. merged: test:server 46 pass 0 fail; jest 157; typecheck 0
+- [x] 6. Record. this entry, backlog
+- [x] Done when: committed on nstack/accounts-sync, items ticked.
+- Decision: sign-in failures stored in a table (limit survives restarts); sessions 90 days; error bodies are codes the app maps to Vietnamese.
 
-## 2026-11-28 ship foundation
-- Read: ship/SKILL.md b51cd2a
-- [x] 1. Commit. slice commits on nstack/foundation
-- [x] 2. Sync. origin/main is the initial commit (65220f0), already in the branch
-- [x] 3. Push. nstack/foundation
-- [x] 4. Open the PR. #1 with verification table, merge danger, decisions
-- [x] 5. Wait for CI. run 46088263694 at d4a607a: ubuntu checks pass, iOS simulator build pass (18m35s)
-- [ ] 6. Merge
-- [ ] 7. Confirm and clean up.
-- [ ] Done when: the PR is merged, CI is green on the default branch, and the fast checks pass there, or the PR is parked with a reason.
+## 2026-11-28 build T17
+- Read: build/SKILL.md a069840
+- [x] 1. Branch. nstack/accounts-sync
+- [x] 2. Starting state. fast checks pass at 5d0425a
+- [x] 3. Dispatch. builder in worktree
+- [x] 4. Read the reply. done 4c4fab0; merge tests red 7/9 vs stub; deny proofs red (owner check id-only, requireUser stubbed); migrate checks 1, 2, 4 pass, 3 and 5 n/a, 6 revert = drop table
+- [x] 5. Prove it yourself. merged: test:server 60 pass 0 fail, jest 166
+- [x] 6. Record. this entry, backlog
+- [x] Done when: committed, items ticked.
+
+## 2026-11-28 build T18
+- Read: build/SKILL.md a069840
+- [x] 1. Branch. nstack/accounts-sync
+- [x] 2. Starting state. fast checks pass after T17
+- [x] 3. Dispatch. builder in worktree
+- [x] 4. Read the reply. done 2f49f51; module and screen tests red vs stubs; mutations red (401 not clearing session, field mapping, password kept, aria-describedby, focus)
+- [x] 5. Prove it yourself. merged: typecheck 0, lint 0, jest 183, test:server 60
+- [x] 6. Record. this entry, backlog
+- [x] Done when: committed, items ticked.
+- Decision: expo-secure-store config plugin not added (it adds a Face ID usage string); Android backup rules for it go to the backlog.

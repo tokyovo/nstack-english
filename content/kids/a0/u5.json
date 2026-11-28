@@ -1,0 +1,116 @@
+{
+  "id": "kids-a0-u5",
+  "track": "kids",
+  "level": "a0",
+  "number": 5,
+  "title": "Cơ thể",
+  "goals": [
+    "Con gọi được tên tám bộ phận cơ thể",
+    "Con làm theo được câu “Touch your nose!”"
+  ],
+  "note_vi": "Chơi trò “Touch your ...!” (Con chạm vào ... nào!): bố mẹ nói “Touch your nose!”, con chạm vào mũi. Sau đó đổi vai cho con nói (khi con nói thì là “Bố/Mẹ chạm vào ... nào!”).",
+  "source": "original",
+  "words": [
+    { "id": "kids-a0-u5-eye", "en": "eye", "vi": "mắt", "picture": "👀" },
+    { "id": "kids-a0-u5-ear", "en": "ear", "vi": "tai", "picture": "👂" },
+    { "id": "kids-a0-u5-nose", "en": "nose", "vi": "mũi", "picture": "👃" },
+    { "id": "kids-a0-u5-mouth", "en": "mouth", "vi": "miệng", "picture": "👄" },
+    { "id": "kids-a0-u5-face", "en": "face", "vi": "khuôn mặt", "picture": "🙂" },
+    { "id": "kids-a0-u5-hand", "en": "hand", "vi": "bàn tay", "picture": "✋" },
+    { "id": "kids-a0-u5-arm", "en": "arm", "vi": "cánh tay", "picture": "💪" },
+    { "id": "kids-a0-u5-foot", "en": "foot", "vi": "bàn chân", "picture": "👣" },
+    {
+      "id": "kids-a0-u5-touch-your",
+      "en": "Touch your ...!",
+      "vi": "Con chạm vào ... nào!",
+      "audio": "Touch your",
+      "picture": "👆",
+      "example": { "en": "Touch your nose!", "vi": "Con chạm vào mũi nào!" }
+    }
+  ],
+  "exercises": [
+    {
+      "id": "kids-a0-u5-e01",
+      "type": "choose_meaning",
+      "prompt": "kids-a0-u5-nose",
+      "options": ["mũi", "miệng", "tai"],
+      "answer": "mũi"
+    },
+    {
+      "id": "kids-a0-u5-e02",
+      "type": "listen_choose",
+      "audio": "ear",
+      "options": ["eye", "ear", "arm"],
+      "answer": "ear"
+    },
+    {
+      "id": "kids-a0-u5-e03",
+      "type": "choose_english",
+      "prompt": "miệng",
+      "options": ["mouth", "face", "nose"],
+      "answer": "mouth"
+    },
+    {
+      "id": "kids-a0-u5-e04",
+      "type": "choose_meaning",
+      "prompt": "kids-a0-u5-hand",
+      "options": ["bàn chân", "bàn tay", "cánh tay"],
+      "answer": "bàn tay"
+    },
+    {
+      "id": "kids-a0-u5-e05",
+      "type": "listen_choose",
+      "audio": "Touch your nose!",
+      "options": ["Touch your nose!", "Touch your ear!", "Touch your mouth!"],
+      "answer": "Touch your nose!"
+    },
+    {
+      "id": "kids-a0-u5-e06",
+      "type": "build_sentence",
+      "prompt": "Con chạm vào tai nào!",
+      "tiles": ["ear", "Touch", "your", "eye"],
+      "answer": ["Touch", "your", "ear"]
+    },
+    {
+      "id": "kids-a0-u5-e07",
+      "type": "choose_english",
+      "prompt": "bàn chân",
+      "options": ["arm", "foot", "hand"],
+      "answer": "foot"
+    },
+    {
+      "id": "kids-a0-u5-e08",
+      "type": "choose_meaning",
+      "prompt": "kids-a0-u5-face",
+      "options": ["khuôn mặt", "mắt", "cánh tay"],
+      "answer": "khuôn mặt"
+    },
+    {
+      "id": "kids-a0-u5-e09",
+      "type": "listen_choose",
+      "audio": "arm",
+      "options": ["arm", "hand", "foot"],
+      "answer": "arm"
+    },
+    {
+      "id": "kids-a0-u5-e10",
+      "type": "build_sentence",
+      "prompt": "Con chạm vào miệng nào!",
+      "tiles": ["your", "mouth", "Touch", "nose"],
+      "answer": ["Touch", "your", "mouth"]
+    },
+    {
+      "id": "kids-a0-u5-e11",
+      "type": "type_answer",
+      "prompt": "mắt",
+      "answer": "eye",
+      "accepted": ["eyes"]
+    },
+    {
+      "id": "kids-a0-u5-e12",
+      "type": "type_answer",
+      "prompt": "mũi",
+      "answer": "nose"
+    }
+  ]
+}

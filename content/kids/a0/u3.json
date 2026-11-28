@@ -1,0 +1,110 @@
+{
+  "id": "kids-a0-u3",
+  "track": "kids",
+  "level": "a0",
+  "number": 3,
+  "title": "Số đếm",
+  "goals": [
+    "Con đếm được từ một đến mười bằng tiếng Anh",
+    "Con nghe và nhận ra các số từ một đến mười"
+  ],
+  "note_vi": "Bố mẹ cùng con đếm ngón tay, bậc cầu thang hoặc đồ chơi: “one, two, three...”.",
+  "source": "original",
+  "words": [
+    { "id": "kids-a0-u3-one", "en": "one", "vi": "một", "picture": "1️⃣" },
+    { "id": "kids-a0-u3-two", "en": "two", "vi": "hai", "picture": "2️⃣" },
+    { "id": "kids-a0-u3-three", "en": "three", "vi": "ba", "picture": "3️⃣" },
+    { "id": "kids-a0-u3-four", "en": "four", "vi": "bốn", "picture": "4️⃣" },
+    { "id": "kids-a0-u3-five", "en": "five", "vi": "năm", "picture": "5️⃣" },
+    { "id": "kids-a0-u3-six", "en": "six", "vi": "sáu", "picture": "6️⃣" },
+    { "id": "kids-a0-u3-seven", "en": "seven", "vi": "bảy", "picture": "7️⃣" },
+    { "id": "kids-a0-u3-eight", "en": "eight", "vi": "tám", "picture": "8️⃣" },
+    { "id": "kids-a0-u3-nine", "en": "nine", "vi": "chín", "picture": "9️⃣" },
+    { "id": "kids-a0-u3-ten", "en": "ten", "vi": "mười", "picture": "🔟" }
+  ],
+  "exercises": [
+    {
+      "id": "kids-a0-u3-e01",
+      "type": "choose_meaning",
+      "prompt": "kids-a0-u3-three",
+      "options": ["hai", "ba", "tám"],
+      "answer": "ba"
+    },
+    {
+      "id": "kids-a0-u3-e02",
+      "type": "listen_choose",
+      "audio": "five",
+      "options": ["four", "five", "nine"],
+      "answer": "five"
+    },
+    {
+      "id": "kids-a0-u3-e03",
+      "type": "choose_english",
+      "prompt": "bảy",
+      "options": ["six", "seven", "ten"],
+      "answer": "seven"
+    },
+    {
+      "id": "kids-a0-u3-e04",
+      "type": "choose_meaning",
+      "prompt": "kids-a0-u3-ten",
+      "options": ["mười", "một", "sáu"],
+      "answer": "mười"
+    },
+    {
+      "id": "kids-a0-u3-e05",
+      "type": "listen_choose",
+      "audio": "eight",
+      "options": ["eight", "three", "one"],
+      "answer": "eight"
+    },
+    {
+      "id": "kids-a0-u3-e06",
+      "type": "build_sentence",
+      "prompt": "Đếm: một, hai, ba",
+      "tiles": ["three", "one", "two", "four"],
+      "answer": ["one", "two", "three"],
+      "hint_vi": "Xếp các số theo thứ tự từ nhỏ đến lớn."
+    },
+    {
+      "id": "kids-a0-u3-e07",
+      "type": "choose_english",
+      "prompt": "bốn",
+      "options": ["five", "four", "two"],
+      "answer": "four"
+    },
+    {
+      "id": "kids-a0-u3-e08",
+      "type": "choose_meaning",
+      "prompt": "kids-a0-u3-nine",
+      "options": ["năm", "bảy", "chín"],
+      "answer": "chín"
+    },
+    {
+      "id": "kids-a0-u3-e09",
+      "type": "listen_choose",
+      "audio": "six",
+      "options": ["six", "seven", "ten"],
+      "answer": "six"
+    },
+    {
+      "id": "kids-a0-u3-e10",
+      "type": "build_sentence",
+      "prompt": "Đếm: tám, chín, mười",
+      "tiles": ["ten", "nine", "eight", "seven"],
+      "answer": ["eight", "nine", "ten"]
+    },
+    {
+      "id": "kids-a0-u3-e11",
+      "type": "type_answer",
+      "prompt": "hai",
+      "answer": "two"
+    },
+    {
+      "id": "kids-a0-u3-e12",
+      "type": "type_answer",
+      "prompt": "một",
+      "answer": "one"
+    }
+  ]
+}

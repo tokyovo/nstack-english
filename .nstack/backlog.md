@@ -13,7 +13,17 @@
 - (unscored) Triage 3 moderate npm audit advisories (prod deps). Evidence: T2 builder; secure slice check
 - (unscored) Remove template deps nothing uses (expo-device, expo-web-browser, expo-symbols, expo-glass-effect, @expo/ui, expo-image). Evidence: T1 builder
 - (unscored) Replace Expo-branded icon and splash artwork with the app's own. Evidence: T1 builder
+- (unscored) Restore progress from the `.unreadable.<time>` backup key after an app downgrade. Evidence: T7 builder; research need 2
+- (unscored) Add a formatter (prettier) config; style is only enforced by lint. Evidence: T7 builder
+- (unscored) Content test: sanity assertions per track (work, kids), not only everyday ids. Evidence: T10 builder
+- (unscored) Merge lesson ActionButton with the shared button style. Evidence: T8 builder
+- (unscored) Add accepted order "Lan is my name" to everyday-a0-u1 e06 after a native reader check. Evidence: T8 builder, T5 reader
 - (unscored) android-build: build only x86_64 for the emulator (reactNativeArchitectures) to cut the 23 min first build. Evidence: T3 builder
 - (unscored) Jest timeout under CPU load (one flaky failure during gradle). Evidence: T3 builder
+- (unscored) Kids: fewer type_answer items for ages 4-5 (replace with listen_choose or speak). Evidence: native reader 2026-11-28
+- (unscored) Kids colour pictures use one consistent set (hearts vs circles) once older-Android emoji support allows. Evidence: native reader 2026-11-28
+- (unscored) lang="en" on the type_answer English input. Evidence: learn-core fix builder
 - (unscored) UI-string checker: options as a function, tabBarLabel, navigation.setOptions titles. Evidence: review fix builder
-- (unscored) UI-string checker: strings outside JSX that reach the user (Alert.alert, confirm, consts rendered later). Evidence: review round 3
+- (unscored) Rate-limit signup; prune expired sessions and old signin_failures. Evidence: T16 builder
+- (unscored) expo-secure-store plugin with faceIDPermission false and Android backup rules, so restored backups do not hold undecryptable tokens. Evidence: T18 builder
+- (unscored) Web focus outline draws black over accent/danger input borders (TextField, type-answer); TypeAnswer could reuse TextField. Evidence: T18 builder

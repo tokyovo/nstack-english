@@ -1,0 +1,158 @@
+{
+  "id": "work-a0-u3",
+  "track": "work",
+  "level": "a0",
+  "number": 3,
+  "title": "Văn phòng và đồ dùng",
+  "goals": [
+    "Có thể gọi tên đồ dùng thường gặp trong văn phòng",
+    "Có thể hỏi một thứ ở đâu",
+    "Có thể trả lời đơn giản khi được hỏi đồ ở đâu"
+  ],
+  "note_vi": "Để hỏi một đồ vật ở đâu, nói “Where is the ...?”: “Where is the printer?” (Máy in ở đâu?). Từ “the” đứng trước đồ vật mà cả hai người đều biết là cái nào. Trả lời ngắn: “It's here.” (Ở đây) hoặc “It's there.” (Ở kia).",
+  "source": "original",
+  "words": [
+    {
+      "id": "work-a0-u3-computer",
+      "en": "computer",
+      "vi": "máy tính",
+      "example": { "en": "This is my computer.", "vi": "Đây là máy tính của tôi." }
+    },
+    {
+      "id": "work-a0-u3-phone",
+      "en": "phone",
+      "vi": "điện thoại",
+      "example": { "en": "This is my phone.", "vi": "Đây là điện thoại của tôi." }
+    },
+    {
+      "id": "work-a0-u3-desk",
+      "en": "desk",
+      "vi": "bàn làm việc",
+      "example": { "en": "This is my desk.", "vi": "Đây là bàn làm việc của tôi." }
+    },
+    {
+      "id": "work-a0-u3-pen",
+      "en": "pen",
+      "vi": "bút (cây viết)",
+      "example": { "en": "Where is the pen?", "vi": "Cái bút ở đâu?" }
+    },
+    {
+      "id": "work-a0-u3-printer",
+      "en": "printer",
+      "vi": "máy in",
+      "example": { "en": "Where is the printer?", "vi": "Máy in ở đâu?" }
+    },
+    {
+      "id": "work-a0-u3-meeting-room",
+      "en": "meeting room",
+      "vi": "phòng họp",
+      "example": { "en": "Where is the meeting room?", "vi": "Phòng họp ở đâu?" }
+    },
+    {
+      "id": "work-a0-u3-where-is-the",
+      "en": "Where is the ...?",
+      "vi": "... ở đâu?",
+      "audio": "Where is the",
+      "example": { "en": "Where is the phone?", "vi": "Điện thoại ở đâu?" }
+    },
+    {
+      "id": "work-a0-u3-its-here",
+      "en": "It's here",
+      "vi": "Ở đây",
+      "example": { "en": "Where is the pen? It's here.", "vi": "Cái bút ở đâu? Ở đây." }
+    },
+    {
+      "id": "work-a0-u3-its-there",
+      "en": "It's there",
+      "vi": "Ở kia",
+      "example": { "en": "Where is the printer? It's there.", "vi": "Máy in ở đâu? Ở kia." }
+    }
+  ],
+  "exercises": [
+    {
+      "id": "work-a0-u3-e01",
+      "type": "choose_meaning",
+      "prompt": "work-a0-u3-computer",
+      "options": ["máy tính", "máy in", "điện thoại"],
+      "answer": "máy tính"
+    },
+    {
+      "id": "work-a0-u3-e02",
+      "type": "choose_english",
+      "prompt": "máy in",
+      "options": ["phone", "printer", "computer"],
+      "answer": "printer"
+    },
+    {
+      "id": "work-a0-u3-e03",
+      "type": "listen_choose",
+      "audio": "desk",
+      "options": ["desk", "pen", "phone"],
+      "answer": "desk"
+    },
+    {
+      "id": "work-a0-u3-e04",
+      "type": "choose_meaning",
+      "prompt": "work-a0-u3-meeting-room",
+      "options": ["bàn làm việc", "phòng họp", "máy tính"],
+      "answer": "phòng họp"
+    },
+    {
+      "id": "work-a0-u3-e05",
+      "type": "build_sentence",
+      "prompt": "Máy in ở đâu?",
+      "tiles": ["the", "Where", "printer", "is", "I'm"],
+      "answer": ["Where", "is", "the", "printer"]
+    },
+    {
+      "id": "work-a0-u3-e06",
+      "type": "choose_english",
+      "prompt": "Ở đây",
+      "options": ["It's here", "It's there", "Where is the ...?"],
+      "answer": "It's here"
+    },
+    {
+      "id": "work-a0-u3-e07",
+      "type": "listen_choose",
+      "audio": "Where is the meeting room?",
+      "options": ["Where is the meeting room?", "Where is the printer?", "Where is the phone?"],
+      "answer": "Where is the meeting room?"
+    },
+    {
+      "id": "work-a0-u3-e08",
+      "type": "build_sentence",
+      "prompt": "Đây là bàn làm việc của tôi.",
+      "tiles": ["desk", "This", "my", "is", "the"],
+      "answer": ["This", "is", "my", "desk"],
+      "hint_vi": "“của tôi” là “my”, đứng trước đồ vật: “my desk”."
+    },
+    {
+      "id": "work-a0-u3-e09",
+      "type": "choose_meaning",
+      "prompt": "work-a0-u3-pen",
+      "options": ["bút (cây viết)", "bàn làm việc", "phòng họp"],
+      "answer": "bút (cây viết)"
+    },
+    {
+      "id": "work-a0-u3-e10",
+      "type": "type_answer",
+      "prompt": "điện thoại",
+      "answer": "phone",
+      "accepted": ["a phone", "the phone", "telephone", "a telephone", "the telephone", "mobile phone", "a mobile phone", "mobile", "cell phone", "cellphone"]
+    },
+    {
+      "id": "work-a0-u3-e11",
+      "type": "listen_choose",
+      "audio": "It's there",
+      "options": ["It's here", "It's there", "Nice to meet you"],
+      "answer": "It's there"
+    },
+    {
+      "id": "work-a0-u3-e12",
+      "type": "type_answer",
+      "prompt": "máy tính",
+      "answer": "computer",
+      "accepted": ["a computer", "the computer", "PC", "laptop", "a laptop"]
+    }
+  ]
+}

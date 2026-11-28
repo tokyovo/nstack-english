@@ -7,10 +7,15 @@ import { serveStatic } from '@hono/node-server/serve-static';
 import { Hono } from 'hono';
 import { secureHeaders } from 'hono/secure-headers';
 
+import { accountRoutes } from './accounts.ts';
 import { migrate } from './migrate.ts';
+import { progressRoutes } from './progress.ts';
 
-/** `webDir`: the exported web app, served on every non-API path. */
-export type ServerConfig = { port: number; dbPath: string; webDir?: string };
+/**
+ * `webDir`: the exported web app, served on every non-API path.
+ * `now`: the clock (tests move it); defaults to the system clock.
+ */
+export type ServerConfig = { port: number; dbPath: string; webDir?: string; now?: () => Date };
 export type RunningServer = { url: string; close: () => Promise<void> };
 
 const MIGRATIONS_DIR = join(import.meta.dirname, 'migrations');
@@ -47,11 +52,14 @@ const contentSecurityPolicy = {
   frameAncestors: ["'none'"],
 };
 
-function createApp(webDir: string | undefined) {
+function createApp(db: DatabaseSync, config: ServerConfig) {
   const app = new Hono();
   app.use(secureHeaders({ xFrameOptions: 'DENY', contentSecurityPolicy }));
   app.get('/api/health', (c) => c.json({ ok: true }));
-  if (webDir) serveWebApp(app, webDir);
+  const now = config.now ?? (() => new Date());
+  app.route('/api', accountRoutes(db, now));
+  app.route('/api', progressRoutes(db, now));
+  if (config.webDir) serveWebApp(app, config.webDir);
   return app;
 }
 
@@ -73,6 +81,7 @@ function serveWebApp(app: Hono, webDir: string) {
 export async function startServer(config: ServerConfig): Promise<RunningServer> {
   mkdirSync(dirname(config.dbPath), { recursive: true });
   const db = new DatabaseSync(config.dbPath);
+  db.exec('PRAGMA foreign_keys = ON');
   try {
     migrate(db, MIGRATIONS_DIR);
   } catch (error) {
@@ -80,7 +89,7 @@ export async function startServer(config: ServerConfig): Promise<RunningServer> 
     throw error;
   }
 
-  const server = createAdaptorServer({ fetch: createApp(config.webDir).fetch });
+  const server = createAdaptorServer({ fetch: createApp(db, config).fetch });
   await new Promise<void>((resolve, reject) => {
     server.once('error', reject);
     server.listen(config.port, '127.0.0.1', () => resolve());

@@ -1,5 +1,41 @@
 # Plan
 
+## Slice: foundation (branch nstack/foundation)
+Nothing a learner can use yet: the project gains its verification harness, so every later slice can be proven. The app opens to a Vietnamese welcome screen styled to `design.md`; a local API server answers health checks; an agent can start, seed, screenshot and stop the whole app with one tool; CI runs every check, and builds iOS on a macOS runner.
+
+Architecture (decided here, see log): Expo SDK 58 app in `src/` (Expo Router, `web.output: "single"` static export); API server in `server/` written in TypeScript run directly by Node 24 (type stripping), Hono + @hono/node-server, SQLite through the built-in `node:sqlite`, tests with `node --test`. In drive and CI the server also serves the exported web app from `dist/`, so the web app and the API share one origin. The native apps reach the API through `EXPO_PUBLIC_API_URL`.
+
+Acceptance criteria:
+1. `npm run typecheck`, `npm run lint` (0 warnings) and `npm test` (Jest, jest-expo preset) pass; the template's example screens and components are gone.
+2. Every user-visible string in `src/` comes from `src/i18n/vi.ts` through `t()`: `npm test` includes a test that fails on a JSX text literal or a literal `accessibilityLabel`, `placeholder`, `title` or `alt` prop in `src/**/*.tsx` (proved by seeing it fail on a planted literal).
+3. The welcome screen (`/`) shows the app name and a Vietnamese tagline using the tokens and Be Vietnam Pro font from `design.md`, with the ô-ly grid signature, in light and dark themes.
+4. `npm run test:server` passes: `GET /api/health` returns `{"ok":true}`; the database is created and migrated idempotently from `server/migrations/*.sql` (running the migrator twice leaves the same schema).
+5. `npm run drive -- --help` lists start, seed, screens, check, stop, android-build, android-start, android-test, android-stop; `drive check` exits 0 (starts on a free port with a temporary database, seeds, screenshots every screen at 1280 and 390 px with no console errors, stops, deletes the database).
+6. `npm run e2e` (Playwright against the drive server) passes, including an axe scan of every screen with no serious or critical violations.
+7. `.github/workflows/ci.yml` runs lint, typecheck, Jest, server tests and e2e on ubuntu, and an iOS job on macOS that prebuilds and builds for the simulator with `xcodebuild`.
+
+Out of scope: lessons, accounts, sync, payments (later slices).
+
+Answers for builders (from the plan check):
+- Names: app name "Học Tiếng Anh" in Vietnamese UI, English working name "Hoc English"; slug `hoc-english`; scheme `hocenglish`; bundle id / package `app.hocenglish`; iOS Xcode workspace/scheme follow from prebuild (`HocTiengAnh` or whatever prebuild generates; CI reads it from `ios/*.xcworkspace`). Tagline (vi): "Học tiếng Anh từ con số không, mỗi ngày một chút." Replace template splash/icon colours with `design.md` background/accent; delete `scripts/reset-project.js` and unused template assets/components.
+- Screens: a single list `e2e/screens.ts` (path + name) is the one source for `drive screens`, `drive check` and the axe e2e; each new screen adds a row there. For now just `/`. Screenshots and axe run in light and dark (`colorScheme` emulation in Playwright).
+- UI-string test (`src/i18n/ui-strings.test.ts`): parse with the TypeScript compiler API (`typescript` is already a dependency); fail on JsxText with any letter, string literal or no-substitution template literal directly inside a JSX expression container in children, and string literals in props `accessibilityLabel`, `accessibilityHint`, `placeholder`, `title`, `alt`, `aria-label`, `label`. Text that is only punctuation, digits or whitespace is allowed. A committed fixture (`src/i18n/__fixtures__/planted.tsx.txt`) proves the checker reports a planted literal.
+- `t()`: flat key map typed from `vi.ts` (`t(key: MessageKey, vars?: Record<string, string | number>)`, `{name}` interpolation). Vietnamese is the only language now; the structure allows adding one.
+- Android in T3: the four `android-*` subcommands are real (gradle assembleRelease after `expo prebuild`, emulator start headless with `-accel` per `../mobile`, adb install + Maestro, stop by adb emu kill). When `/dev/kvm` is not writable, `android-start` exits 2 with "KVM not available: see .nstack/needs-human.md". Proof here: `--help` plus that message; `android-build` should be run once and its time recorded if it builds without the emulator.
+- Seed: T2 adds no app tables; `drive seed` runs, prints `{"seeded":[]}` and exits 0. Later slices fill it.
+- Server config: `PORT` (default 8787), `DB_PATH` (default `./data/dev.sqlite`, gitignored; drive uses a temp file), `WEB_DIR` (optional, serve static export with SPA fallback to index.html). App: `EXPO_PUBLIC_API_URL`, unset on web means same-origin relative `/api`.
+- Migrator: table `schema_migrations(name TEXT PRIMARY KEY, checksum TEXT, applied_at TEXT)`, files sorted by name, each in one transaction, edited applied migration (checksum mismatch) is an error.
+- iOS CI: `macos-latest`, default Xcode, `npx expo prebuild --platform ios`, `pod install`, `xcodebuild -workspace ... -scheme ... -sdk iphonesimulator -configuration Debug CODE_SIGNING_ALLOWED=NO build`. Non-blocking (`continue-on-error: true`) until it has passed once; parked if the runner is unavailable.
+- Grid: drawn with Views (no new dependency): 16 px cells, `line` colour at 50% opacity, inside the word card only.
+- Fonts: `@expo-google-fonts/be-vietnam-pro` weights 400/600/700, splash held until loaded (or failed: then system font).
+- Console errors in `drive check`: `console.error`, `pageerror` and failed requests to the app's own origin count; warnings and favicon do not. axe tags: wcag2a, wcag2aa, wcag21aa; fail on serious or critical.
+- Lint and typecheck cover `src/`, `server/`, `scripts/` and `e2e/` with `--max-warnings 0`; server tsconfig uses `allowImportingTsExtensions`, `erasableSyntaxOnly`, `noEmit`. Jest ignores `server/`, `e2e/`, `.claude/`, `dist/`.
+
+- [x] T1 Clean template, tokens, font, i18n and the UI-string test; Vietnamese welcome screen. Proof: `npm run typecheck && npm run lint && npm test` (string test seen failing on a planted literal). Needs: none
+- [x] T2 API server skeleton: Hono app, `node:sqlite` with an idempotent migrator, `/api/health`, `node --test` tests. Proof: `npm run test:server`. Access: public (health). Needs: none. Migration: yes
+- [x] T3 Drive tool and Playwright e2e with axe: `scripts/drive.mjs` (start/seed/screens/check/stop plus android-* subcommands), server serves `dist/`. Proof: `npm run drive -- check`, `npm run e2e`. Needs: T1, T2
+- [x] T4 CI workflow (ubuntu checks plus macOS iOS simulator build). Proof: the workflow run on the PR. Needs: T3
+
 ## Slice: learn-core (branch nstack/learn-core)
 A learner with no account opens the app, picks a track (Đời sống, Công việc, Trẻ em), sees the units of that track by level, opens a lesson, meets each new word on a card and hears it spoken, answers the lesson's exercises with immediate Vietnamese feedback, and finishes on a result screen. Completed lessons and answers stay after the app is closed and opened again. No energy, hearts or per-day limits (research need 4). Every unit from A1 carries a short Vietnamese usage note (research need 3).
 
@@ -12,14 +48,64 @@ Acceptance criteria:
 6. Progress: a local store (`@react-native-async-storage/async-storage`) keeps per-profile lesson completion and per-item answer history, versioned for later sync; Jest proves save/load and a schema version bump. Android Maestro flow `.maestro/lesson.yaml` completes a lesson, restarts the app, sees it completed (runs when KVM is available; parked otherwise).
 7. Screens pass the design critique and axe at 390 and 1280 px, light and dark.
 
-- [ ] T5 Content schema, loader, content test and SOURCES.md, with everyday A0 u1 as the first unit. Proof: `npm test` (content test seen failing on a broken fixture), native reader verdict. Content: yes. Needs: foundation
-- [ ] T6 Track and unit screens (`/`, `/track/<track>`) reading the content index, completion state from the progress store. Proof: Jest screen tests, e2e `e2e/tracks.spec.ts`, axe. Access: public. Needs: T5, T7
-- [ ] T7 Progress store (local, versioned, per profile id "local"). Proof: Jest `src/progress/*.test.ts`. Needs: foundation
-- [ ] T8 Lesson player: word cards with speech, the five exercise types, feedback, result screen, saving to the progress store. Proof: Jest per exercise, e2e `e2e/lesson.spec.ts` (complete, reload, completed), Maestro `.maestro/lesson.yaml` (Android, parked without KVM). Access: public. Needs: T5, T7
-- [ ] T9 Content: everyday A0 u2-u5. Proof: content test, native reader verdict. Content: yes. Needs: T5
-- [ ] T10 Content: work A0 u1-u3 and kids A0 u1-u5. Proof: content test, native reader verdict. Content: yes. Needs: T5
+- [x] T5 Content schema, loader, content test and SOURCES.md, with everyday A0 u1 as the first unit. Proof: `npm test` (content test seen failing on a broken fixture), native reader verdict. Content: yes. Needs: foundation
+- [x] T6 Track and unit screens (`/`, `/track/<track>`) reading the content index, completion state from the progress store. Proof: Jest screen tests, e2e `e2e/tracks.spec.ts`, axe. Access: public. Needs: T5, T7
+- [x] T7 Progress store (local, versioned, per profile id "local"). Proof: Jest `src/progress/*.test.ts`. Needs: foundation
+- [x] T8 Lesson player: word cards with speech, the five exercise types, feedback, result screen, saving to the progress store. Proof: Jest per exercise, e2e `e2e/lesson.spec.ts` (complete, reload, completed), Maestro `.maestro/lesson.yaml` (Android, parked without KVM). Access: public. Needs: T5, T7. Note: a build_sentence can have more than one correct order (e.g. "My name is Lan" / "Lan is my name"): add an optional `accepted` list of alternative orders to build_sentence in the schema and accept any of them.
+- [x] T9 Content: everyday A0 u2-u5. Proof: content test, native reader verdict. Content: yes. Needs: T5
+- [x] T10 Content: work A0 u1-u3 and kids A0 u1-u5. Proof: content test, native reader verdict. Content: yes. Needs: T5
 
-Later slices (in order, planned in full when reached): review-speak (spaced repetition review, speaking practice), accounts-sync (sign up, sign in, sync progress across devices), family (parent account, child profiles, parent gate, per-child progress), plans (free/premium entitlements, server-served premium lessons, payments parked), content-a1, content-a2.
+Later slices (in order, planned in full when reached): plans (free/premium entitlements, server-served premium lessons, payments parked), content-a1, content-a2.
+
+## Slice: review-speak (branch nstack/review-speak)
+Words a learner has met come back for review on a spaced schedule: a word answered wrongly comes back sooner, a word answered right waits longer. Home shows how many words are due; "Ôn tập" runs a short review session built from those words. Lessons and reviews include speaking: on devices with speech recognition the learner taps the microphone and says the phrase; elsewhere (or if the microphone is refused) they listen, repeat aloud and mark themselves.
+
+Design: the schedule is a pure function of data the progress store already keeps (lesson completion times and timestamped answers keyed by word id), so it needs no new stored state and syncs for free later. Leitner boxes with intervals 10 min, 1 d, 3 d, 7 d, 16 d, 35 d: a word enters box 1 when its unit is first completed; a right answer moves it up one box, a wrong one back to box 1 (due in 10 min). Considered SM-2/FSRS: more tuning, harder to explain and test; Leitner is enough for A0-A2 and can be swapped behind the same function. Speech recognition through `expo-speech-recognition` (MIT; iOS, Android, Web Speech API), compared forgivingly: lowercase, strip punctuation, expand common contractions, pass when word-level similarity >= 0.8 (research need 5: unfair scoring).
+
+Acceptance criteria:
+1. `src/review/schedule.ts` unit tests: a word answered wrongly is due before the same word answered rightly; intervals follow the boxes; a word from an uncompleted unit is never due; the clock is injected.
+2. Home shows "Ôn tập" with the due count (or "Chưa có từ cần ôn" with a hint to finish a lesson); `/review` runs up to 20 due words with choose_meaning, listen_choose and type_answer generated from learned words (distractors only from learned words of the same track), records answers under word ids, and ends on a result screen; e2e: complete a lesson, set the clock forward a day, review, see the count drop.
+3. A `speak` exercise type exists in the content schema and the lesson player; units u1-u5 of everyday, u1-u3 of work and u1-u5 of kids each gain 2 speak items, native-reader checked; the content test covers them.
+4. Speaking: the microphone permission is asked only after the learner taps "Nói" and sees why; recognised speech is scored by the forgiving comparison (unit tests with near-miss cases such as "I am fine thank you" vs "I'm fine, thank you."); unsupported or denied falls back to listen-repeat-self-check (Jest proves both paths; web e2e covers the fallback since headless Chromium has no recognition).
+5. Android: Maestro flow `.maestro/review.yaml` (runs when KVM is available; parked otherwise).
+
+- [x] T11 Spaced-repetition schedule and due queue from the progress store. Proof: Jest `src/review/schedule.test.ts` (seen failing). Needs: none
+- [ ] T12 Review screen and home due count. Proof: Jest, e2e `e2e/review.spec.ts`, axe via e2e/screens.ts. Access: public. Needs: T11
+- [ ] T13 Speak exercise: schema type, recognition module with forgiving scoring, permission explanation, fallback, in the lesson player. Proof: Jest `src/speech/*.test.ts`, lesson Jest, e2e fallback step. Needs: none
+- [ ] T14 Content: 2 speak items per existing unit. Proof: content test, native reader verdict. Content: yes. Needs: T13 (schema)
+- [ ] T15 Speak in review sessions (one speak item per session when supported). Proof: Jest. Needs: T12, T13
+
+## Slice: accounts-sync (branch nstack/accounts-sync)
+A learner can create an account with email and password, sign in on another phone or the web, and find the same progress there. Learning without an account keeps working; the first sign-in on a device adds that device's progress to the account (nothing is lost, research need 2). Progress saves locally first and syncs when online; the app says when it is offline.
+
+Design: the server keeps one progress document per profile and merges what a client sends with what it has, using one pure merge function shared by app and server (`src/progress/merge.ts`, no React Native imports; the server imports it by path). The merge is a union: lessons per unit keep the earliest first completion, latest last completion and best score; answers per item are a set of (time, correct) pairs. Union is idempotent and order-independent, so retries and two devices syncing in any order converge (principle 8); no conflict UI is needed. Considered: per-answer rows with a sync cursor (more tables and code, needed only at much larger data sizes). Auth: email + password hashed with scrypt (node:crypto), opaque random session tokens stored hashed, sent as `Authorization: Bearer` from all three apps (no cookies, so no CSRF); tokens kept in expo-secure-store on native and localStorage on web. Each user gets one `owner` profile at sign-up (child profiles come in the family slice).
+
+Acceptance criteria:
+1. `POST /api/auth/signup`, `/signin`, `/signout`, `GET /api/me`: server tests for success, duplicate email (409), wrong password (401, same message as unknown email), weak password (400, min 8 chars), signed-out `/api/me` (401), and sign-in rate limiting (429 after 10 failures per email per 15 min).
+2. `GET` and `PUT /api/profiles/:id/progress`: PUT merges and returns the merged document; another user's profile answers 404; signed-out answers 401 (deny proofs). Merge unit tests: idempotent, commutative, keeps the best of each lesson, unions answers.
+3. `/account` screen: sign up, sign in, sign out, Vietnamese errors next to the field that caused them, typed input kept after an error. Home shows the account state.
+4. Sync: on sign-in the device's local progress is merged into the account; lesson and review answers push after saving; the app pulls on start and on focus; offline shows "Đang ngoại tuyến, tiến độ sẽ được đồng bộ sau". e2e with two browser contexts: A signs up and completes everyday A0 u1; B signs in and sees it completed.
+5. Migrations are repeatable (migrate check 1-4); `drive seed` creates a demo account (Sign in row in verify.md Drive).
+
+- [x] T16 Accounts on the server: users, sessions, profiles tables; signup/signin/signout/me with rate limit. Proof: `npm run test:server` (deny proofs seen failing). Access: public (signup, signin), user (me, signout). Migration: yes. Needs: none
+- [x] T17 Progress merge function and progress endpoints. Proof: Jest `src/progress/merge.test.ts`, server tests incl. other-user 404 and signed-out 401. Access: owner of profile. Needs: T16
+- [x] T18 App sign-up/sign-in/sign-out: API client, token storage, `/account` screen, home account state, drive seed demo account. Proof: Jest, e2e `e2e/account.spec.ts`. Access: public. Needs: T16
+- [ ] T19 Sync: local-first store pushes and pulls for the signed-in profile, first-sign-in merge, offline notice. Proof: Jest, two-context e2e `e2e/sync.spec.ts`. Needs: T17, T18
+
+## Slice: family (branch nstack/family)
+A parent with an account adds child profiles (a nickname and a picture, nothing else), renames or deletes them, and hands the phone to a child: the app then shows only that child's learning, with its own progress, starting on the kids track. Leaving the child's profile, or reaching the account, profiles or (later) plan screens, needs the parent gate. The parent sees each child's progress on the profiles screen (research need 9).
+
+Design: profiles already exist on the server (`kind` owner/child, `name`). Children are added under the owner's account (at most 4). A child profile gets its own session token, scoped to that profile (`sessions.profile_id`): with it the app can only read and sync that child's progress; every account and profile-management endpoint answers 403. So "a child cannot reach account or purchase settings" holds on the server, not only in the UI. The app keeps the parent token in secure storage while a child is active and switches tokens through the parent gate. Parent gate: a multiplication of two numbers from 6 to 9 written in Vietnamese words, answered with digits (a common pattern for kids apps; keeps young children out, never meant as security). Pictures are a fixed set of 8 animal emoji (no uploads, no real photos). Considered: PIN set by the parent (more screens and a reset path for a forgotten PIN); the gate is simpler and can be swapped later.
+
+Acceptance criteria:
+1. `POST /api/profiles` (owner session) creates a child `{name, picture}` (name 1-20 chars, picture from the fixed set; 5th child answers 409); `PATCH /api/profiles/:id` renames or changes the picture; `DELETE /api/profiles/:id` deletes a child and its progress (owner profile cannot be deleted: 400). Another user's child answers 404; signed out 401 (deny proofs).
+2. `POST /api/profiles/:id/session` (owner session) returns a child-scoped token. With it: `GET/PUT /api/profiles/<that child>/progress` work; the owner's or a sibling's progress answers 404; `GET /api/me`, `POST /api/profiles`, `PATCH`/`DELETE /api/profiles/:id`, `POST /api/profiles/:id/session` answer 403 (deny proofs seen failing).
+3. `/profiles` screen (signed-in parent): lists the owner and each child with lessons completed and words due; add (nickname, picture picker), rename, delete with a confirmation that names the child and says the progress is deleted. Vietnamese errors next to the field.
+4. Switching to a child shows the child's name on home, uses the child's progress (separate from the parent's: Jest and e2e), defaults the track list to Trẻ em first; `/account` and `/profiles` show the parent gate while a child is active; a wrong answer keeps the child where they are; a right answer returns to the parent. e2e covers add child, switch, learn as the child, gate, back to parent, both progress sets distinct.
+5. No child email, real name field, birthday or location anywhere (the child form has only nickname and picture); no third-party trackers (dependency list unchanged apart from first-party Expo modules).
+
+- [ ] T20 Server: child profile create/rename/delete with limits; child-scoped sessions; 403 for child tokens on account and profile endpoints. Proof: `npm run test:server` (deny proofs seen failing). Access: owner (manage), child (own progress). Migration: yes. Needs: accounts-sync
+- [ ] T21 App profiles screen: list with per-profile progress summary, add/rename/delete with confirmation. Proof: Jest, e2e `e2e/profiles.spec.ts`, axe. Access: parent. Needs: T20
+- [ ] T22 Active profile and child mode: token switching, parent gate on /account and /profiles, kids track first, separate progress and sync. Proof: Jest, e2e `e2e/child-mode.spec.ts`. Access: parent / child. Needs: T20, T21
 
 ## Done
-- foundation: T1-T4, PR #1

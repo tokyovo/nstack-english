@@ -4,4 +4,12 @@
  */
 export type Screen = { name: string; path: string };
 
-export const screens: Screen[] = [{ name: 'welcome', path: '/' }];
+export const screens: Screen[] = [
+  { name: 'home', path: '/' },
+  { name: 'track', path: '/track/everyday' },
+  { name: 'track-kids', path: '/track/kids' },
+  { name: 'track-not-found', path: '/track/nope' },
+  { name: 'lesson', path: '/lesson/everyday-a0-u1' },
+  { name: 'lesson-not-found', path: '/lesson/nope' },
+  { name: 'account', path: '/account' },
+];
