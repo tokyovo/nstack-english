@@ -41,6 +41,12 @@ const NON_UI_KEYS = new Set([
   'pointerEvents',
   'animation',
   'presentation',
+  'kind',
+  'submitBehavior',
+  'keyboardShouldPersistTaps',
+  // live-region politeness, not text
+  'aria-live',
+  'accessibilityLiveRegion',
 ]);
 
 const LETTER = /\p{L}/u;
@@ -65,7 +71,8 @@ function isJsx(node: ts.Node): boolean {
 }
 
 /** The key in `t("key", ...)`, or a string compared or used as an index (`x === "web"`, `o["k"]`): never rendered. */
-function isNeverRendered(literal: ts.Node): boolean {
+function isNeverRendered(node: ts.Node): boolean {
+  const literal = node;
   const parent = literal.parent;
   if (ts.isCallExpression(parent)) {
     return ts.isIdentifier(parent.expression) && parent.expression.text === 't' && parent.arguments[0] === literal;
@@ -94,7 +101,7 @@ export function findUiStringLiterals(source: string, file: string): UiStringFind
       if (!isNeverRendered(node)) report(node.text, node.getStart());
       return true;
     }
-    if (ts.isTemplateExpression(node)) {
+    if (ts.isTemplateExpression(node) && !isNeverRendered(node)) {
       report(node.head.text + node.templateSpans.map((span) => SUBSTITUTION + span.literal.text).join(''), node.getStart());
     }
     return false;
