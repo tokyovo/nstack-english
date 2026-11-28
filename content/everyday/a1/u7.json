@@ -1,0 +1,181 @@
+{
+  "id": "everyday-a1-u7",
+  "track": "everyday",
+  "level": "a1",
+  "number": 7,
+  "title": "Mua sắm và giá cả",
+  "goals": [
+    "Có thể hỏi giá một món đồ: “How much is this?”",
+    "Có thể hiểu giá tiền đơn giản: “Ten dollars.”",
+    "Có thể nói một món đồ rẻ hay đắt"
+  ],
+  "note_vi": "“a” và “an” nghĩa là “một”, đứng trước một đồ vật đếm được: “a shirt” (một cái áo sơ mi). Dùng “an” khi từ phía sau bắt đầu bằng một nguyên âm, thường là a, e, i, o, u: “an apple”, “an umbrella”. “the” dùng khi người nói và người nghe đều biết đang nói về vật nào: “The shirt is cheap.” (Cái áo sơ mi đó rẻ). Hỏi giá thì nói “How much is this?”. Khi có từ hai trở lên, danh từ thường thêm -s: “ten dollars”.",
+  "source": "original",
+  "names": ["Lan", "Nam"],
+  "words": [
+    {
+      "id": "everyday-a1-u7-how-much-is-this",
+      "en": "How much is this?",
+      "vi": "Cái này bao nhiêu tiền?",
+      "example": { "en": "How much is this bag?", "vi": "Cái túi này bao nhiêu tiền?" }
+    },
+    {
+      "id": "everyday-a1-u7-dollars",
+      "en": "dollars",
+      "vi": "đô la",
+      "example": { "en": "The bag is ten dollars.", "vi": "Cái túi đó giá mười đô la." }
+    },
+    {
+      "id": "everyday-a1-u7-a",
+      "en": "a",
+      "vi": "một (trước phụ âm)",
+      "example": { "en": "This is a pen.", "vi": "Đây là một cái bút." }
+    },
+    {
+      "id": "everyday-a1-u7-an",
+      "en": "an",
+      "vi": "một (trước nguyên âm)",
+      "example": { "en": "This is an apple.", "vi": "Đây là một quả táo." }
+    },
+    {
+      "id": "everyday-a1-u7-the",
+      "en": "the",
+      "vi": "(chỉ vật cả hai người đều biết)",
+      "example": { "en": "The shirt is cheap.", "vi": "Cái áo sơ mi đó rẻ." }
+    },
+    {
+      "id": "everyday-a1-u7-apple",
+      "en": "apple",
+      "vi": "quả táo",
+      "example": { "en": "An apple, please.", "vi": "Cho tôi một quả táo." }
+    },
+    {
+      "id": "everyday-a1-u7-shirt",
+      "en": "shirt",
+      "vi": "áo sơ mi",
+      "example": { "en": "This is a white shirt.", "vi": "Đây là một cái áo sơ mi trắng." }
+    },
+    {
+      "id": "everyday-a1-u7-umbrella",
+      "en": "umbrella",
+      "vi": "cái ô, cái dù",
+      "example": { "en": "I like the blue umbrella.", "vi": "Tôi thích cái ô màu xanh dương." }
+    },
+    {
+      "id": "everyday-a1-u7-cheap",
+      "en": "cheap",
+      "vi": "rẻ",
+      "example": { "en": "This bag is cheap.", "vi": "Cái túi này rẻ." }
+    },
+    {
+      "id": "everyday-a1-u7-expensive",
+      "en": "expensive",
+      "vi": "đắt, mắc",
+      "example": { "en": "The umbrella is expensive.", "vi": "Cái ô đó đắt." }
+    }
+  ],
+  "exercises": [
+    {
+      "id": "everyday-a1-u7-e01",
+      "type": "choose_meaning",
+      "prompt": "everyday-a1-u7-cheap",
+      "options": ["đắt, mắc", "rẻ", "quả táo"],
+      "answer": "rẻ"
+    },
+    {
+      "id": "everyday-a1-u7-e02",
+      "type": "choose_english",
+      "prompt": "Cái này bao nhiêu tiền?",
+      "options": ["How much is this?", "How are you?", "Where are you from?"],
+      "answer": "How much is this?"
+    },
+    {
+      "id": "everyday-a1-u7-e03",
+      "type": "listen_choose",
+      "audio": "Ten dollars.",
+      "options": ["Two dollars.", "Ten dollars.", "Nine dollars."],
+      "answer": "Ten dollars."
+    },
+    {
+      "id": "everyday-a1-u7-e04",
+      "type": "choose_english",
+      "prompt": "Đây là một quả táo.",
+      "options": ["This is a apple.", "This is an apple.", "This is apple."],
+      "answer": "This is an apple.",
+      "hint_vi": "“apple” bắt đầu bằng nguyên âm a, nên dùng “an”."
+    },
+    {
+      "id": "everyday-a1-u7-e05",
+      "type": "build_sentence",
+      "prompt": "Đây là một cái áo sơ mi.",
+      "tiles": ["a", "This", "shirt", "an", "is"],
+      "answer": ["This", "is", "a", "shirt"]
+    },
+    {
+      "id": "everyday-a1-u7-e06",
+      "type": "choose_meaning",
+      "prompt": "everyday-a1-u7-umbrella",
+      "options": ["áo sơ mi", "cái túi", "cái ô, cái dù"],
+      "answer": "cái ô, cái dù"
+    },
+    {
+      "id": "everyday-a1-u7-e07",
+      "type": "type_answer",
+      "prompt": "Cái túi này bao nhiêu tiền?",
+      "answer": "How much is this bag?"
+    },
+    {
+      "id": "everyday-a1-u7-e08",
+      "type": "listen_choose",
+      "audio": "The umbrella is expensive.",
+      "options": ["The umbrella is cheap.", "The umbrella is expensive.", "The apple is expensive."],
+      "answer": "The umbrella is expensive."
+    },
+    {
+      "id": "everyday-a1-u7-e09",
+      "type": "build_sentence",
+      "prompt": "Cái áo sơ mi đó rẻ.",
+      "tiles": ["shirt", "cheap", "The", "is", "a"],
+      "answer": ["The", "shirt", "is", "cheap"]
+    },
+    {
+      "id": "everyday-a1-u7-e10",
+      "type": "choose_english",
+      "prompt": "đắt, mắc",
+      "options": ["cheap", "apple", "expensive"],
+      "answer": "expensive"
+    },
+    {
+      "id": "everyday-a1-u7-e11",
+      "type": "choose_english",
+      "prompt": "một cái ô",
+      "options": ["an umbrella", "a umbrella", "the umbrella"],
+      "answer": "an umbrella"
+    },
+    {
+      "id": "everyday-a1-u7-e12",
+      "type": "type_answer",
+      "prompt": "Đây là một quả táo.",
+      "answer": "This is an apple."
+    },
+    {
+      "id": "everyday-a1-u7-e13",
+      "type": "speak",
+      "text": "How much is this?",
+      "vi": "Cái này bao nhiêu tiền?"
+    },
+    {
+      "id": "everyday-a1-u7-e14",
+      "type": "choose_meaning",
+      "prompt": "everyday-a1-u7-dollars",
+      "options": ["rẻ", "đô la", "áo sơ mi"],
+      "answer": "đô la"
+    },
+    {
+      "id": "everyday-a1-u7-e15",
+      "type": "speak",
+      "text": "The shirt is cheap.",
+      "vi": "Cái áo sơ mi đó rẻ."
+    }
+  ]
+}

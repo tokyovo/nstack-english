@@ -1,0 +1,185 @@
+{
+  "id": "everyday-a1-u8",
+  "track": "everyday",
+  "level": "a1",
+  "number": 8,
+  "title": "Giờ và ngày",
+  "goals": [
+    "Có thể hỏi và nói giờ đúng: “It's seven o'clock.”",
+    "Có thể hỏi và nói hôm nay là thứ mấy",
+    "Có thể nói mình làm gì lúc mấy giờ, vào thứ nào"
+  ],
+  "note_vi": "Nói giờ đúng: “It's seven o'clock.” (Bây giờ là bảy giờ). Trước giờ dùng “at”: “at six o'clock” (lúc sáu giờ). Trước thứ trong tuần dùng “on”: “on Monday” (vào thứ Hai). Tên các thứ trong tuần luôn viết hoa chữ cái đầu: Monday, Saturday, Sunday. Hỏi giờ: “What time is it?”. Hỏi thứ: “What day is it today?”. “It's” là cách nói ngắn của “It is”.",
+  "source": "original",
+  "names": ["Lan", "Nam"],
+  "words": [
+    {
+      "id": "everyday-a1-u8-what-time-is-it",
+      "en": "What time is it?",
+      "vi": "Mấy giờ rồi?",
+      "example": { "en": "Nam, what time is it?", "vi": "Nam ơi, mấy giờ rồi?" }
+    },
+    {
+      "id": "everyday-a1-u8-its-oclock",
+      "en": "It's ... o'clock",
+      "vi": "Bây giờ là ... giờ",
+      "audio": "It's seven o'clock",
+      "example": { "en": "It's seven o'clock.", "vi": "Bây giờ là bảy giờ." }
+    },
+    {
+      "id": "everyday-a1-u8-at",
+      "en": "at",
+      "vi": "lúc (trước giờ)",
+      "example": { "en": "I get up at six o'clock.", "vi": "Tôi thức dậy lúc sáu giờ." }
+    },
+    {
+      "id": "everyday-a1-u8-on",
+      "en": "on",
+      "vi": "vào (trước thứ trong tuần)",
+      "example": { "en": "I work on Saturday.", "vi": "Tôi làm việc vào thứ Bảy." }
+    },
+    {
+      "id": "everyday-a1-u8-get-up",
+      "en": "get up",
+      "vi": "thức dậy",
+      "example": { "en": "On Sunday, I get up at nine.", "vi": "Vào Chủ nhật, tôi thức dậy lúc chín giờ." }
+    },
+    {
+      "id": "everyday-a1-u8-monday",
+      "en": "Monday",
+      "vi": "thứ Hai",
+      "example": { "en": "Today is Monday.", "vi": "Hôm nay là thứ Hai." }
+    },
+    {
+      "id": "everyday-a1-u8-saturday",
+      "en": "Saturday",
+      "vi": "thứ Bảy",
+      "example": { "en": "My sister works on Saturday.", "vi": "Chị gái tôi làm việc vào thứ Bảy." }
+    },
+    {
+      "id": "everyday-a1-u8-sunday",
+      "en": "Sunday",
+      "vi": "Chủ nhật",
+      "example": { "en": "Today is Sunday.", "vi": "Hôm nay là Chủ nhật." }
+    },
+    {
+      "id": "everyday-a1-u8-today",
+      "en": "today",
+      "vi": "hôm nay",
+      "example": { "en": "I work today.", "vi": "Hôm nay tôi làm việc." }
+    },
+    {
+      "id": "everyday-a1-u8-what-day-is-it-today",
+      "en": "What day is it today?",
+      "vi": "Hôm nay là thứ mấy?",
+      "example": { "en": "What day is it today? It's Monday.", "vi": "Hôm nay là thứ mấy? Thứ Hai." }
+    }
+  ],
+  "exercises": [
+    {
+      "id": "everyday-a1-u8-e01",
+      "type": "choose_meaning",
+      "prompt": "everyday-a1-u8-monday",
+      "options": ["thứ Bảy", "Chủ nhật", "thứ Hai"],
+      "answer": "thứ Hai"
+    },
+    {
+      "id": "everyday-a1-u8-e02",
+      "type": "choose_english",
+      "prompt": "Mấy giờ rồi?",
+      "options": ["What day is it today?", "What time is it?", "How are you?"],
+      "answer": "What time is it?"
+    },
+    {
+      "id": "everyday-a1-u8-e03",
+      "type": "listen_choose",
+      "audio": "It's seven o'clock.",
+      "options": ["It's seven o'clock.", "It's six o'clock.", "It's ten o'clock."],
+      "answer": "It's seven o'clock."
+    },
+    {
+      "id": "everyday-a1-u8-e04",
+      "type": "build_sentence",
+      "prompt": "Tôi thức dậy lúc sáu giờ.",
+      "tiles": ["up", "I", "at", "six", "get", "on", "o'clock"],
+      "answer": ["I", "get", "up", "at", "six", "o'clock"],
+      "accepted": [["I", "get", "up", "at", "six"]]
+    },
+    {
+      "id": "everyday-a1-u8-e05",
+      "type": "choose_english",
+      "prompt": "vào thứ Bảy",
+      "options": ["at Saturday", "on Saturday", "in Saturday"],
+      "answer": "on Saturday",
+      "hint_vi": "Trước thứ trong tuần dùng “on”."
+    },
+    {
+      "id": "everyday-a1-u8-e06",
+      "type": "choose_meaning",
+      "prompt": "everyday-a1-u8-today",
+      "options": ["hôm nay", "thứ Hai", "thức dậy"],
+      "answer": "hôm nay"
+    },
+    {
+      "id": "everyday-a1-u8-e07",
+      "type": "type_answer",
+      "prompt": "Hôm nay là thứ Hai.",
+      "answer": "Today is Monday.",
+      "accepted": ["It's Monday today.", "It is Monday today.", "It's Monday.", "It is Monday."]
+    },
+    {
+      "id": "everyday-a1-u8-e08",
+      "type": "listen_choose",
+      "audio": "I work on Sunday.",
+      "options": ["I work on Monday.", "I work on Saturday.", "I work on Sunday."],
+      "answer": "I work on Sunday."
+    },
+    {
+      "id": "everyday-a1-u8-e09",
+      "type": "choose_english",
+      "prompt": "lúc tám giờ",
+      "options": ["at eight o'clock", "on eight o'clock", "in eight o'clock"],
+      "answer": "at eight o'clock",
+      "hint_vi": "Trước giờ dùng “at”."
+    },
+    {
+      "id": "everyday-a1-u8-e10",
+      "type": "build_sentence",
+      "prompt": "Hôm nay là thứ mấy?",
+      "tiles": ["day", "What", "it", "is", "today", "time"],
+      "answer": ["What", "day", "is", "it", "today"]
+    },
+    {
+      "id": "everyday-a1-u8-e11",
+      "type": "choose_meaning",
+      "prompt": "everyday-a1-u8-get-up",
+      "options": ["làm việc", "thức dậy", "sống"],
+      "answer": "thức dậy"
+    },
+    {
+      "id": "everyday-a1-u8-e12",
+      "type": "type_answer",
+      "prompt": "Mấy giờ rồi?",
+      "answer": "What time is it?"
+    },
+    {
+      "id": "everyday-a1-u8-e13",
+      "type": "speak",
+      "text": "It's nine o'clock.",
+      "vi": "Bây giờ là chín giờ."
+    },
+    {
+      "id": "everyday-a1-u8-e14",
+      "type": "choose_english",
+      "prompt": "Chủ nhật",
+      "options": ["Monday", "Sunday", "Saturday"],
+      "answer": "Sunday"
+    },
+    {
+      "id": "everyday-a1-u8-e15",
+      "type": "speak",
+      "text": "I get up at six o'clock.",
+      "vi": "Tôi thức dậy lúc sáu giờ."
+    }
+  ]
+}
