@@ -101,7 +101,11 @@
       "prompt": "Tôi bắt đầu làm việc lúc 9 giờ.",
       "tiles": ["work", "I", "o'clock", "at", "start", "9", "on"],
       "answer": ["I", "start", "work", "at", "9", "o'clock"],
-      "accepted": [["at", "9", "o'clock", "I", "start", "work"]],
+      "accepted": [
+        ["at", "9", "o'clock", "I", "start", "work"],
+        ["I", "start", "work", "at", "9"],
+        ["at", "9", "I", "start", "work"]
+      ],
       "hint_vi": "Trước giờ dùng “at”: “at 9 o'clock”."
     },
     {
@@ -131,7 +135,11 @@
       "prompt": "Tôi tan làm lúc 5 giờ.",
       "tiles": ["finish", "at", "5", "I", "work", "o'clock", "start"],
       "answer": ["I", "finish", "work", "at", "5", "o'clock"],
-      "accepted": [["at", "5", "o'clock", "I", "finish", "work"]]
+      "accepted": [
+        ["at", "5", "o'clock", "I", "finish", "work"],
+        ["I", "finish", "work", "at", "5"],
+        ["at", "5", "I", "finish", "work"]
+      ]
     },
     {
       "id": "work-a1-u4-e09",
@@ -152,7 +160,10 @@
       "prompt": "Tôi làm việc từ thứ Hai đến thứ Sáu.",
       "tiles": ["Friday", "work", "to", "I", "Monday", "from", "at"],
       "answer": ["I", "work", "from", "Monday", "to", "Friday"],
-      "accepted": [["from", "Monday", "to", "Friday", "I", "work"]]
+      "accepted": [
+        ["from", "Monday", "to", "Friday", "I", "work"],
+        ["I", "work", "Monday", "to", "Friday"]
+      ]
     },
     {
       "id": "work-a1-u4-e12",

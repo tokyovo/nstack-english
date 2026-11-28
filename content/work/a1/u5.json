@@ -146,7 +146,10 @@
       "prompt": "Anh/chị gửi email cho ông Brown được không?",
       "tiles": ["send", "Can", "email", "an", "Mr.", "you", "to", "Brown", "a"],
       "answer": ["Can", "you", "send", "an", "email", "to", "Mr.", "Brown"],
-      "accepted": [["Can", "you", "send", "Mr.", "Brown", "an", "email"]],
+      "accepted": [
+        ["Can", "you", "send", "Mr.", "Brown", "an", "email"],
+        ["Can", "you", "email", "Mr.", "Brown"]
+      ],
       "hint_vi": "“email” bắt đầu bằng âm nguyên âm nên dùng “an”."
     },
     {

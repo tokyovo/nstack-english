@@ -152,7 +152,10 @@
       "prompt": "Hôm nay là thứ mấy?",
       "tiles": ["day", "What", "it", "is", "today", "time"],
       "answer": ["What", "day", "is", "it", "today"],
-      "accepted": [["What", "day", "is", "today"]],
+      "accepted": [
+        ["What", "day", "is", "today"],
+        ["What", "day", "is", "it"]
+      ],
       "fixedOrder": "in this question \"today\" stays at the end; \"Today what day is it\" is not natural"
     },
     {
