@@ -1,6 +1,6 @@
 # Plan
 
-Later slices (in order, planned in full when reached): family (parent account, child profiles, parent gate, per-child progress), plans (free/premium entitlements, server-served premium lessons, payments parked), content-a1, content-a2.
+Later slices (in order, planned in full when reached): family (parent account, child profiles, parent gate, per-child progress), plans (free/premium entitlements, server-served premium lessons, payments parked), content-a2.
 
 ## Slice: review-speak (branch nstack/review-speak)
 Words a learner has met come back for review on a spaced schedule: a word answered wrongly comes back sooner, a word answered right waits longer. Home shows how many words are due; "Ôn tập" runs a short review session built from those words. Lessons and reviews include speaking: on devices with speech recognition the learner taps the microphone and says the phrase; elsewhere (or if the microphone is refused) they listen, repeat aloud and mark themselves.
