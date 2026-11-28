@@ -403,3 +403,17 @@
 - [x] 5. Prove it yourself. merged: jest below
 - [x] 6. Record. this entry
 - [x] Done when: committed, items ticked.
+
+## 2026-11-28 verify content-a2 (with content-a1)
+- Read: verify/SKILL.md adc6a8a
+- [x] 1. Clean tree. code at the word-order merge; head 1fa46b3 after a .nstack-only sync with main
+- [x] 2. Project checks. typecheck 0, lint 0, jest 342, test:server 21, test:drive 6, drive check passed, e2e 24 passed
+- [x] 3. Every acceptance criterion in scope has a passing check. content test over all 34 units (schema, word order, 2 speak, note_vi, movable-phrase orders); reader verdicts per batch (T26-T31) and a full build_sentence sweep (81 items); check-features 0
+- [x] 4. Every new check bites. speak rule red 2, comma rule red 3 (T32); movable-phrase check red (flagged 9 items on existing content); broken unit file red (content-a1 verify)
+- [x] 5. The real thing runs. drive check lists the new units on the track screens
+- [x] 6. Every changed screen looks right. n/a: no screen code changed
+- [x] 7. Nothing got weaker. Jest testTimeout raised to 20 s (T32) because component tests timed out under load twice; no assertion loosened
+- [x] 8. No new warnings or errors. lint 0
+- [x] 9. Access is enforced. n/a: no routes, tables or auth
+- [x] Done when: all ticked. Not verified: none beyond the parked Android flows.
+- Decision: content-a1 and content-a2 ship as one PR (content-a2 is stacked on content-a1; one review and one CI cycle). content-a1's review finding (missing word orders) is fixed here by the movable-phrase check.
