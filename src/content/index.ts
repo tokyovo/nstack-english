@@ -19,6 +19,11 @@ export function unitsOf(track: Track): UnitSummary[] {
   return catalog.filter((u) => u.track === track);
 }
 
+/** What the app knows of any unit, free or premium; undefined for an id that is no unit. */
+export function unitSummary(id: string): UnitSummary | undefined {
+  return catalog.find((u) => u.id === id);
+}
+
 /** The units whose words and exercises are in the app (the free ones), grouped like `unitsOf`. */
 export const bundledUnits: readonly Unit[] = bundledFiles.map(load);
 

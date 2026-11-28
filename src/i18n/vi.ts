@@ -138,6 +138,10 @@ export const vi = {
   'unit.notStarted': 'Chưa học',
   'unit.rowLabel': 'Bài {number}: {title}. {status}',
   'unit.rowLabelLoading': 'Bài {number}: {title}',
+  'unit.premium': 'Premium',
+  'unit.rowLabelLocked': 'Bài {number}: {title}. Premium, chưa mở khoá',
+  'unit.rowLabelPremium': 'Bài {number}: {title}. Premium. {status}',
+  'unit.rowLabelPremiumLoading': 'Bài {number}: {title}. Premium',
 
   'lesson.newWord': 'Từ mới',
   'lesson.example': 'Ví dụ',
@@ -197,6 +201,27 @@ export const vi = {
   'lesson.leaveLabel': 'Rời bài học, quay lại chủ đề {track}',
   'lesson.notFound': 'Không tìm thấy bài học này.',
   'lesson.home': 'Về trang chủ',
+  'lesson.loading': 'Đang tải bài học...',
+  'lesson.offline': 'Cần kết nối mạng để tải bài này lần đầu. Hãy kiểm tra mạng rồi thử lại.',
+  'lesson.loadError': 'Chưa tải được bài này. Hãy thử lại.',
+  'lesson.retryLoad': 'Thử lại',
+
+  'premium.title': 'Premium',
+  'premium.back': 'Về trang chủ',
+  'premium.intro':
+    'Gói miễn phí có 3 bài đầu của mỗi chủ đề, cùng ôn tập, luyện nói và đồng bộ tiến độ, không quảng cáo. Premium mở khoá mọi bài còn lại.',
+  'premium.includesHeading': 'Premium có gì',
+  'premium.includes.units': 'Mọi bài học của cả ba chủ đề, không chỉ 3 bài đầu.',
+  'premium.includes.new': 'Các bài mới khi được thêm vào.',
+  'premium.includes.family': 'Các hồ sơ của con trong tài khoản cũng được dùng Premium.',
+  'premium.includes.offline': 'Học không cần mạng sau lần mở bài đầu tiên.',
+  'premium.price': 'Giá: sẽ công bố.',
+  'premium.paymentNotYet': 'Hiện chưa thanh toán được trong ứng dụng.',
+  'premium.howHeading': 'Cách có Premium',
+  'premium.how':
+    'Khi mở thanh toán, bạn mua Premium ngay trên màn hình này. Nếu tài khoản của bạn đã có Premium, hãy đăng nhập bằng tài khoản đó.',
+  'premium.signIn': 'Đăng nhập',
+  'premium.active': 'Tài khoản của bạn đang có Premium đến {date}.',
 
   'review.title': 'Ôn tập',
   'review.dueCount': '{count} từ cần ôn',

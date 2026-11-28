@@ -5,11 +5,14 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 import { useLearner } from '@/account/use-learner';
 import { BackLink } from '@/components/back-link';
 import { ListRow } from '@/components/list-row';
+import { PremiumTag } from '@/components/premium-tag';
 import { ThemedText } from '@/components/themed-text';
 import { Fonts, MaxContentWidth, Space } from '@/constants/theme';
 import { levels, tracks, unitsOf, type Track, type UnitSummary } from '@/content';
 import { useTheme } from '@/hooks/use-theme';
 import { t } from '@/i18n';
+import type { Plan } from '@/premium';
+import { usePlan } from '@/premium/use-premium';
 import { isLessonCompleted } from '@/progress';
 import { useProgress, type ProgressState } from '@/progress/use-progress';
 
@@ -17,19 +20,33 @@ function isTrack(value: unknown): value is Track {
   return tracks.some((track) => track === value);
 }
 
-function UnitRow({ unit, progress }: { unit: UnitSummary; progress: ProgressState }) {
+function rowLabel(unit: UnitSummary, status: string | null, locked: boolean): string {
+  const { number, title } = unit;
+  if (locked) return t('unit.rowLabelLocked', { number, title });
+  if (unit.access === 'premium') {
+    return status ? t('unit.rowLabelPremium', { number, title, status }) : t('unit.rowLabelPremiumLoading', { number, title });
+  }
+  return status ? t('unit.rowLabel', { number, title, status }) : t('unit.rowLabelLoading', { number, title });
+}
+
+function UnitRow({ unit, progress, plan }: { unit: UnitSummary; progress: ProgressState; plan: Plan }) {
   const theme = useTheme();
   const number = t('unit.number', { number: unit.number });
+  // Unknown (loading, offline) opens the lesson, which asks the server or uses the device copy.
+  const locked = unit.access === 'premium' && plan.kind === 'free';
   const completed = progress.status === 'ready' && isLessonCompleted(progress.progress, unit.id);
   const status =
-    progress.status === 'ready' ? t(completed ? 'unit.completed' : 'unit.notStarted') : null;
-  const label = status
-    ? t('unit.rowLabel', { number: unit.number, title: unit.title, status })
-    : t('unit.rowLabelLoading', { number: unit.number, title: unit.title });
+    progress.status === 'ready' && !locked ? t(completed ? 'unit.completed' : 'unit.notStarted') : null;
 
   return (
-    <ListRow href={`/lesson/${unit.id}`} testID={`unit-${unit.id}`} accessibilityLabel={label}>
-      <ThemedText type="meta">{number}</ThemedText>
+    <ListRow
+      href={locked ? '/premium' : `/lesson/${unit.id}`}
+      testID={`unit-${unit.id}`}
+      accessibilityLabel={rowLabel(unit, status, locked)}>
+      <View style={styles.rowTop}>
+        <ThemedText type="meta">{number}</ThemedText>
+        {unit.access === 'premium' && <PremiumTag locked={locked} />}
+      </View>
       <ThemedText type="label">{unit.title}</ThemedText>
       {status && (
         <ThemedText type="meta" style={completed && [styles.completed, { color: theme.success }]}>
@@ -43,6 +60,7 @@ function UnitRow({ unit, progress }: { unit: UnitSummary; progress: ProgressStat
 function TrackUnits({ track }: { track: Track }) {
   const learner = useLearner();
   const progress = useProgress(learner.status === 'ready' ? learner.progressId : undefined);
+  const plan = usePlan();
   const units = unitsOf(track);
   const byLevel = levels
     .map((level) => ({ level, units: units.filter((unit) => unit.level === level) }))
@@ -58,7 +76,7 @@ function TrackUnits({ track }: { track: Track }) {
             {t(`level.${group.level}`)}
           </ThemedText>
           {group.units.map((unit) => (
-            <UnitRow key={unit.id} unit={unit} progress={progress} />
+            <UnitRow key={unit.id} unit={unit} progress={progress} plan={plan} />
           ))}
         </View>
       ))}
@@ -108,5 +126,11 @@ const styles = StyleSheet.create({
   },
   completed: {
     fontFamily: Fonts.semiBold,
+  },
+  rowTop: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    gap: Space.md,
   },
 });
