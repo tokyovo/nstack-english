@@ -1,6 +1,7 @@
 import { createHash, randomBytes, randomUUID, scrypt, timingSafeEqual } from 'node:crypto';
 import type { DatabaseSync } from 'node:sqlite';
 
+import { getConnInfo } from '@hono/node-server/conninfo';
 import { Hono, type Context, type MiddlewareHandler } from 'hono';
 import { bodyLimit } from 'hono/body-limit';
 
@@ -12,10 +13,13 @@ export type Profile = { id: string; kind: 'owner' | 'child'; name: string; pictu
 export type SessionScope = { kind: 'account' } | { kind: 'profile'; profileId: string };
 export type AuthEnv = { Variables: { user: User; token: string; scope: SessionScope } };
 
+export type AccountOptions = { signupsPerAddress?: number; hash?: (password: string) => Promise<string> };
 type Credentials = { email: string; password: string };
 type ErrorBody = { error: string; field?: 'email' | 'password' };
 
 const SESSION_DAYS = 90;
+/** A session is renewed when used with less than this left: at most once a day, so most reads stay reads. */
+const RENEW_BELOW_DAYS = SESSION_DAYS - 1;
 const MIN_PASSWORD = 8;
 const MAX_PASSWORD = 256;
 const MAX_EMAIL = 254;
@@ -23,28 +27,43 @@ const EMAIL_SHAPE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 const DAY = 24 * 60 * 60 * 1000;
 const MAX_FAILURES = 10;
 const FAILURE_WINDOW = 15 * 60 * 1000;
+/** Sign-ups allowed per email, and by default per client address, in `SIGNUP_WINDOW`. */
+export const MAX_SIGNUPS = 5;
+/** Sign-ups per client address per window: higher than per email, because mobile networks in Vietnam put many people behind one address (CGNAT). */
+export const MAX_SIGNUPS_PER_ADDRESS = 30;
+const SIGNUP_WINDOW = 15 * 60 * 1000;
 
 const unauthorized: ErrorBody = { error: 'unauthorized' };
 const forbidden: ErrorBody = { error: 'forbidden' };
 const invalidCredentials: ErrorBody = { error: 'invalid_credentials' };
+const tooManySignups: ErrorBody = { error: 'too_many_signups' };
 
 /**
  * Sign-up, sign-in, sign-out and `GET /api/me`, mounted at `/api`.
- * `now` is injected so tests can move the clock.
+ * `now` is injected so tests can move the clock. `signupsPerAddress` caps sign-ups from one
+ * client address per 15 minutes. `hash` hashes a new password (tests count its calls).
  */
-export function accountRoutes(db: DatabaseSync, now: () => Date) {
+export function accountRoutes(
+  db: DatabaseSync,
+  now: () => Date,
+  { signupsPerAddress = MAX_SIGNUPS_PER_ADDRESS, hash = hashPassword }: AccountOptions = {},
+) {
   const app = new Hono<AuthEnv>();
   const requireUser = requireUserMiddleware(db, now);
   const requireAccount = requireAccountMiddleware(db, now);
   app.use('/auth/*', bodyLimit({ maxSize: 4 * 1024, onError: (c) => c.json({ error: 'invalid_body' }, 413) }));
 
   app.post('/auth/signup', async (c) => {
+    // The socket peer: no proxy sits in front of the server, so forwarded headers are not trusted.
+    const address = getConnInfo(c).remote.address ?? 'unknown';
+    if (!countSignup(db, 'address', address, signupsPerAddress, now())) return c.json(tooManySignups, 429);
     const input = await readCredentials(c);
     if ('error' in input) return c.json(input, 400);
+    if (!countSignup(db, 'email', input.email, MAX_SIGNUPS, now())) return c.json(tooManySignups, 429);
     if (input.password.length < MIN_PASSWORD || input.password.length > MAX_PASSWORD) {
       return c.json({ error: 'weak_password', field: 'password' } satisfies ErrorBody, 400);
     }
-    const passwordHash = await hashPassword(input.password);
+    const passwordHash = await hash(input.password);
     const user = createUser(db, input.email, passwordHash, now());
     if (!user) return c.json({ error: 'email_taken', field: 'email' } satisfies ErrorBody, 409);
     return c.json(signedIn(db, user, now()), 201);
@@ -168,14 +187,20 @@ function insertSession(db: DatabaseSync, userId: string, profileId: string | nul
   return token;
 }
 
+/** The live session for `token`, if any; its expiry slides to 90 days from `at` (no absolute maximum). */
 function sessionForToken(db: DatabaseSync, token: string, at: Date): { user: User; scope: SessionScope } | undefined {
+  const tokenHash = sha256(token);
   const row = db
     .prepare(
-      `SELECT users.id, users.email, sessions.profile_id FROM sessions JOIN users ON users.id = sessions.user_id
+      `SELECT users.id, users.email, sessions.profile_id, sessions.expires_at FROM sessions
+       JOIN users ON users.id = sessions.user_id
        WHERE sessions.token_hash = ? AND sessions.expires_at > ?`,
     )
-    .get(sha256(token), at.getTime());
+    .get(tokenHash, at.getTime());
   if (!row) return undefined;
+  if (Number(row.expires_at) - at.getTime() < RENEW_BELOW_DAYS * DAY) {
+    db.prepare('UPDATE sessions SET expires_at = ? WHERE token_hash = ?').run(at.getTime() + SESSION_DAYS * DAY, tokenHash);
+  }
   const scope: SessionScope =
     row.profile_id === null ? { kind: 'account' } : { kind: 'profile', profileId: String(row.profile_id) };
   return { user: { id: String(row.id), email: String(row.email) }, scope };
@@ -192,6 +217,20 @@ function countAttempt(db: DatabaseSync, email: string, at: Date): boolean {
   const row = db.prepare('SELECT count(*) AS n FROM signin_failures WHERE email = ?').get(email);
   if (Number(row?.n) >= MAX_FAILURES) return false;
   db.prepare('INSERT INTO signin_failures (email, failed_at) VALUES (?, ?)').run(email, at.getTime());
+  return true;
+}
+
+/**
+ * Records a sign-up attempt for `value` before any password is hashed, whatever it answers,
+ * so parallel attempts cannot all pass while scrypt runs. False, recording nothing, when
+ * `limit` attempts in the last 15 minutes already did; older ones are deleted.
+ * Synchronous from check to insert, so no other request runs in between.
+ */
+function countSignup(db: DatabaseSync, kind: 'email' | 'address', value: string, limit: number, at: Date): boolean {
+  db.prepare('DELETE FROM signup_attempts WHERE attempted_at <= ?').run(at.getTime() - SIGNUP_WINDOW);
+  const row = db.prepare('SELECT count(*) AS n FROM signup_attempts WHERE kind = ? AND value = ?').get(kind, value);
+  if (Number(row?.n) >= limit) return false;
+  db.prepare('INSERT INTO signup_attempts (kind, value, attempted_at) VALUES (?, ?, ?)').run(kind, value, at.getTime());
   return true;
 }
 
@@ -232,7 +271,7 @@ function deriveKey(password: string, salt: Buffer, params = SCRYPT): Promise<Buf
   });
 }
 
-async function hashPassword(password: string): Promise<string> {
+export async function hashPassword(password: string): Promise<string> {
   const salt = randomBytes(16);
   const key = await deriveKey(password, salt);
   const { N, r, p } = SCRYPT;

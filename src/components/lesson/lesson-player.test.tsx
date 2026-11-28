@@ -1,10 +1,11 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { act, fireEvent, screen } from '@testing-library/react-native';
-import { renderRouter, screen as routerScreen } from 'expo-router/testing-library';
+import { Stack } from 'expo-router';
+import { renderRouter, screen as routerScreen, testRouter } from 'expo-router/testing-library';
 import { Text } from 'react-native';
 
 import LessonScreen from '@/app/lesson/[unitId]';
-import { getUnit, type Exercise } from '@/content';
+import { getUnit, type Exercise, type Unit } from '@/content';
 import { createProgressStore, isLessonCompleted, LOCAL_PROFILE_ID } from '@/progress';
 
 jest.mock('@react-native-async-storage/async-storage', () =>
@@ -63,6 +64,47 @@ async function answer(exercise: Exercise, right: boolean) {
       // Jest has no speech recogniser, so the learner repeats aloud and marks themselves.
       await press(right ? 'Tôi nói được rồi' : 'Tôi chưa nói được');
   }
+}
+
+/** Home and /premium are other screens too; stand-ins are enough to land on. */
+function HomeStandIn() {
+  return <Text testID="home-stand-in" />;
+}
+
+function PremiumStandIn() {
+  return <Text testID="premium-stand-in" />;
+}
+
+function StackLayout() {
+  return <Stack screenOptions={{ headerShown: false }} />;
+}
+
+/** Opens a lesson the way a learner does: home, then the track, then the lesson on top of them. */
+async function openLessonFromTrack(unitId: string) {
+  await renderRouter(
+    {
+      _layout: StackLayout,
+      index: HomeStandIn,
+      'track/[track]': TrackStandIn,
+      'lesson/[unitId]': LessonScreen,
+      premium: PremiumStandIn,
+    },
+    { initialUrl: '/' }
+  );
+  await testRouter.push('/track/everyday');
+  await testRouter.push(`/lesson/${unitId}`);
+  await act(() => Promise.resolve());
+}
+
+/** Plays every step of a bundled unit, answering each exercise right, up to the result. */
+async function playToResult(played: Unit) {
+  await press('Bắt đầu học');
+  for (let i = 0; i < played.words.length; i++) await press('Tiếp tục');
+  for (const exercise of played.exercises) {
+    await answer(exercise, true);
+    await press('Tiếp tục');
+  }
+  expect(await screen.findByRole('heading', { name: 'Xong bài học!' })).toBeOnTheScreen();
 }
 
 beforeEach(async () => {
@@ -138,12 +180,7 @@ describe('Lesson screen', () => {
 
   it('offers the track list when the unit is the last one of its track', async () => {
     await openLesson();
-    await press('Bắt đầu học');
-    for (let i = 0; i < unit.words.length; i++) await press('Tiếp tục');
-    for (const exercise of unit.exercises) {
-      await answer(exercise, true);
-      await press('Tiếp tục');
-    }
+    await playToResult(unit);
 
     expect(await screen.findByRole('link', { name: 'Về danh sách bài' })).toHaveProp('href', '/track/everyday');
   });
@@ -193,4 +230,49 @@ describe('Lesson screen', () => {
     expect(await screen.findByText('Không tìm thấy bài học này.')).toBeOnTheScreen();
     expect(screen.getByRole('link', { name: 'Về trang chủ' })).toBeOnTheScreen();
   });
+
+  // Android back from the screen a result leads to must never reopen the finished lesson.
+  describe('leaving the result', () => {
+    it('"Về danh sách bài" returns to the track it was opened from, so back then goes home, not to a second copy of the track', async () => {
+      await openLessonFromTrack('everyday-a0-u1');
+      await playToResult(unit);
+
+      await fireEvent.press(screen.getByRole('link', { name: 'Về danh sách bài' }));
+      expect(routerScreen).toHavePathname('/track/everyday');
+
+      await testRouter.back('/');
+    });
+
+    it('back from the result itself goes to the track under it', async () => {
+      await openLessonFromTrack('everyday-a0-u1');
+      await playToResult(unit);
+
+      await testRouter.back('/track/everyday');
+      expect(await screen.findByTestId('track-stand-in')).toBeOnTheScreen();
+    });
+
+    it('"Học bài tiếp theo" takes the lesson\'s place, so back goes to the track, not the finished lesson', async () => {
+      await openLessonFromTrack('everyday-a0-u1');
+      await playToResult(unit);
+
+      await fireEvent.press(screen.getByTestId('next-unit'));
+      expect(routerScreen).toHavePathname('/lesson/everyday-a0-u2');
+
+      await testRouter.back('/track/everyday');
+    });
+
+    it('the Premium link of a free learner takes the lesson\'s place, so back goes to the track', async () => {
+      const third = getUnit('everyday-a0-u3');
+      if (!third) throw new Error('everyday-a0-u3 is missing');
+      await openLessonFromTrack('everyday-a0-u3');
+      await playToResult(third);
+
+      await fireEvent.press(screen.getByTestId('next-unit'));
+      expect(routerScreen).toHavePathname('/premium');
+      expect(await screen.findByTestId('premium-stand-in')).toBeOnTheScreen();
+
+      await testRouter.back('/track/everyday');
+    });
+  });
 });
+

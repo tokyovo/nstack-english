@@ -1,14 +1,14 @@
 # Verify
 | Check | Speed | Command | Last result |
 |---|---|---|---|
-| typecheck | fast | npm run typecheck | pass (2026-11-28, 15ad710) |
-| lint | fast | npm run lint | pass, 0 warnings (2026-11-28, 15ad710) |
-| unit | fast | npm test | pass, 30 tests (2026-11-28, 15ad710) |
-| server | fast | npm run test:server | pass, 21 tests (2026-11-28, 15ad710) |
-| drive | fast | npm run test:drive | pass, 6 tests (2026-11-28, 15ad710) |
-| e2e | full | npm run e2e | pass, 3 tests (2026-11-28, 15ad710) |
-| drive check | full | npm run drive -- check | pass, 4 screenshots (2026-11-28, 15ad710) |
-| android | full | npm run drive -- android-build && npm run drive -- android-test | build pass (1371 s first run); flows not run: no KVM (needs-human.md) |
+| typecheck | fast | npm run typecheck | pass (2026-11-28, 01e8708) |
+| lint | fast | npm run lint | pass, 0 warnings (2026-11-28, 01e8708) |
+| unit | fast | npm test | pass, 486 tests (2026-11-28, 01e8708) |
+| server | fast | npm run test:server | pass, 128 tests (2026-11-28, 837c791) |
+| drive | fast | npm run test:drive | pass (2026-11-28, 837c791) |
+| e2e | full | npm run e2e | pass, 52 tests (2026-11-28, 01e8708) |
+| drive check | full | npm run drive -- check | pass (2026-11-28, 01e8708) |
+| android | full | npm run drive -- android-build && npm run drive -- android-start && npm run drive -- android-test | build 579 s (x86_64); Maestro lesson + review pass on emulator-5554 (2026-11-28, 01e8708); review waits 10 real minutes, run it alone with a long timeout |
 
 ## Drive
 How an agent runs and uses the app on its own, without touching anyone's data.
@@ -20,7 +20,7 @@ How an agent runs and uses the app on its own, without touching anyone's data.
 - **Evidence:** `drive screens <dir>` (every screen at 1280 and 390 px, light and dark; exits 1 on console errors, page errors or failed same-origin requests)
 - **Health:** `drive check` starts its own instance, seeds, screenshots every screen, stops, deletes the database; exit 0 means this section is true
 - **Clean up:** `drive stop [--dry-run]` stops the recorded pid (checked to be server/main.ts) and deletes the temporary database
-- **Android:** `drive android-build` (expo prebuild + gradlew assembleRelease, 1371 s first run, 4 ABIs), `android-start` (exits 2 without KVM), `android-test [flow]` (adb install -r + Maestro), `android-stop`
+- **Android:** `drive android-build` (expo prebuild + gradlew assembleRelease, x86_64 only, 579 s; `--all-abis` for every ABI), `android-start` (exits 2 without KVM), `android-test [flow]` (adb install -r + Maestro), `android-stop`
 
 ## Features
 | Feature | Reach | Access | Proof | Deny proof |

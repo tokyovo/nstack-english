@@ -644,3 +644,266 @@
 - [x] 3. Act on every finding. builder fixed all six (2c7d6f5), each red then green (review drops an ended Premium's copy online; /profiles due count matches home; next-unit Premium wording; choose_meaning check narrowed; grant refuses empty ref and unmigrated db; 10 s callApi timeout). After merge: jest 475, test:server 117, drive check passed, e2e 52, check-sync ok
 - [x] 4. Review the fixes. round 2 at 1b59129: both pass (general: 1 nit; security: 2 nits), all to backlog
 - [x] Done when: round 2 clean; verify after the fixes (jest 475, server 117, e2e 52, drive check); nits in backlog.
+
+## 2026-11-28 improve
+- Read: improve/SKILL.md c8daf07
+- [x] 1. Gather evidence
+  - [x] 1.1. Broken things. main fast checks pass at 7aae365; CI on main green for PRs #5 and #6 (PR #7 merge run pending)
+  - [x] 1.2. Known problems. gh issue list: none; needs-human: KVM retried (still blocked), payments and pricing open; backlog 59 lines
+  - [x] 1.3. Gaps against the goal. all "Done when" items have passing checks except running on Android (parked: no KVM)
+  - [x] 1.4. Outside demand. research.md is from 2026-11-27 (fresh); remaining needs: daily habit/streak (#8), pronunciation drills (#5); #1 needs payments (parked)
+  - [x] 1.5. Risk. npm audit --omit=dev: 20 moderate, 0 high/critical; review nits on auth (sign-up limit, fixed session life)
+  - [x] 1.6. User experience. drive screens on main (40 shots, /tmp/shots-main); home has no next step; Expo icon/splash still shipped
+  - [x] 1.7. Code health. small duplications only (ActionButton)
+- [x] 2. Score. 32 candidates in backlog.md, sorted by scripts/score; done items removed; 5 rejected with reasons
+- [x] 3. Decide. bar 8: slice hardening planned (scores 12, 10, 10, 10, 9, 9, 9); habit, polish and pronunciation queued as later slices
+- [x] Done when: every source checked, candidates scored or rejected, slice planned.
+
+## 2026-11-28 ship accounts-sync
+- Read: ship/SKILL.md b51cd2a
+- [x] 1. Commit. slice commits on nstack/accounts-sync
+- [x] 2. Sync. merged PR #4's head (real ancestry), then `merge -s ours origin/main`; check-sync ok; verify re-run (jest 394, e2e 33, drive check)
+- [x] 3. Push. nstack/accounts-sync
+- [x] 4. Open the PR. #5
+- [x] 5. Wait for CI. run at 3e43e0e: ubuntu success, iOS success
+- [x] 6. Merge. squash 4fe57cb (tree equal to the PR head)
+- [x] 7. Confirm and clean up. main: typecheck 0, lint 0, jest 394, test:server 64; branch deleted; CI on main success
+- [x] Done when: PR #5 merged, CI green on main.
+
+## 2026-11-28 ship family
+- Read: ship/SKILL.md b51cd2a
+- [x] 1. Commit. slice commits on nstack/family
+- [x] 2. Sync. PR #5 head merged, `-s ours` main; check-sync ok (after teaching it about work-branch merges)
+- [x] 3. Push. nstack/family
+- [x] 4. Open the PR. #6
+- [x] 5. Wait for CI. run at f1c28fa: ubuntu success, iOS success
+- [x] 6. Merge. squash beaa4ca (tree equal to the PR head)
+- [x] 7. Confirm and clean up. main: typecheck 0, jest 451, test:server 92; branch deleted
+- [x] Done when: PR #6 merged.
+
+## 2026-11-28 ship plans
+- Read: ship/SKILL.md b51cd2a
+- [x] 1. Commit. slice commits on nstack/plans
+- [x] 2. Sync. PR #6 head merged, `-s ours` main; check-sync ok (counts resolutions that differ from both parents; still reports the old -X ours revert)
+- [x] 3. Push. nstack/plans
+- [x] 4. Open the PR. #7
+- [x] 5. Wait for CI. run at 471f1af: ubuntu success, iOS success
+- [x] 6. Merge. squash 7aae365 (tree equal to the PR head)
+- [x] 7. Confirm and clean up. main: typecheck 0, lint 0, jest 475, test:server 117, test:drive 6; branch deleted
+- [x] Done when: PR #7 merged, fast checks pass on main.
+
+## 2026-11-28 build T33
+- Read: build/SKILL.md a069840
+- [x] 1. Branch. nstack/hardening
+- [x] 2. Starting state. fast checks pass at 32f107b
+- [x] 3. Dispatch. builder in worktree (parallel with T34-T37)
+- [x] 4. Read the reply. done f96615d; 3 sliding tests red first; mutation (renew every use) red
+- [x] 5. Prove it yourself. merged: test:server pass (below)
+- [x] 6. Record. this entry
+- [x] Done when: committed, items ticked.
+
+## 2026-11-28 build T37
+- Read: build/SKILL.md a069840
+- [x] 1. Branch. nstack/hardening
+- [x] 2. Starting state. fast checks pass at 32f107b
+- [x] 3. Dispatch. builder in worktree
+- [x] 4. Read the reply. done 3f7dae9; 3 lesson nav tests and 1 review test red first; maestro guard test for the back step red; check-syntax 0
+- [x] 5. Prove it yourself. merged; then the track link changed from replace to dismissTo (back from the track went to a second copy of it): test red (1 failed) -> green, lesson-player 12 pass
+- [x] 6. Record. this entry
+- [x] Done when: committed, items ticked.
+
+## 2026-11-28 build T34
+- Read: build/SKILL.md a069840
+- [x] 1. Branch. nstack/hardening
+- [x] 2. Starting state. fast checks pass at 32f107b
+- [x] 3. Dispatch. builder in worktree
+- [x] 4. Read the reply. done d61df9f; concurrent sign-up tests red (19 x 409, 20 x 201) -> green; migration 0005 run twice on a seeded copy: no-op second time, data kept
+- [x] 5. Prove it yourself. merged; per-address default raised to 30 and tests read the constant; test:server 128 pass
+- [x] 6. Record. this entry, backlog
+- [x] Done when: committed, items ticked.
+- Decision: per-address sign-up limit 30 per 15 min (mobile CGNAT in Vietnam puts many people behind one address); per email 5. Socket peer is the address until a TRUST_PROXY setting exists.
+
+## 2026-11-28 build T36
+- Read: build/SKILL.md a069840
+- [x] 1. Branch. nstack/hardening
+- [x] 2. Starting state. fast checks pass at 32f107b
+- [x] 3. Dispatch. builder in worktree
+- [x] 4. Read the reply. done 365d0f8; brand tests red 3/3 (Expo artwork present) -> green; render is byte-identical twice
+- [x] 5. Prove it yourself. merged; looked at /tmp/t36-preview/icons-192.png and splash-dark.png: white "a" on the purple ô-ly grid, legible at 48 px, round/adaptive/monochrome variants correct
+- [x] 6. Record. this entry
+- [x] Done when: committed, items ticked.
+
+## 2026-11-28 build T35
+- Read: build/SKILL.md a069840
+- [x] 1. Branch. nstack/hardening
+- [x] 2. Starting state. fast checks passed at 32f107b (previous session)
+- [x] 3. Dispatch. builder in worktree agent-aae984b5 (previous session; it committed cd7fdaa, 7b91e7a, eec5774 before that session ended)
+- [x] 4. Read the reply. no reply survived the session end; read the three commits instead: native-config test, no-backup plugin, android-build x86_64 with --all-abis and --dry-run, 5 unused deps removed
+- [x] 5. Prove it yourself. merged at 1c001ac: npm ci 0, typecheck 0, lint 0, jest 486 pass (native-config included), test:server pass, test:drive pass; `drive android-build` exit 0 in 579 s (was 1371 s for 4 ABIs); APK installs and the lesson Maestro flow passes on emulator-5554
+- [x] 6. Record. this entry; plan ticked
+- [x] Done when: committed on nstack/hardening, items ticked.
+
+## 2026-11-28 research design bar: leading language-learning apps
+- Read: research/SKILL.md efb9ece
+- [x] 1. Frame the search. English for Vietnamese beginners; focus on visual design bar and audio quality; existing features listed in research.md
+- [x] 2. Gather
+  - [x] 2.1. Communities. Reddit only via search summaries (fetch refused), not used as evidence
+  - [x] 2.2. Hacker News. 12 algolia queries, 6 comments kept
+  - [x] 2.3. Similar products. Duolingo, Busuu, Drops, Lingokids, Memrise, ELSA pages; design press and awards (ADA 2023/2025, Play Best of 2018)
+  - [x] 2.4. n/a: open-source alternatives were covered in the 2026-11-27 round; this round is about look and audio, which they do not lead on
+  - [x] 2.5. Reviews. App Store and Trustpilot via search results
+  - [x] 2.6. n/a: the project has no public feedback
+  - [x] 2.7. Walk through the leading products. Duolingo onboarding + first lesson without account; Busuu to its sign-up wall; Drops, Lingokids, Memrise, ELSA public pages only (app-store links); Babbel skipped: robots.txt blocks AI agents. Shots in .nstack/research/shots/ (gitignored)
+- [x] 3. Synthesize
+  - [x] 3.1. needs 11-15 (natural audio, slow replay, drawn pictures, colour per category, joyful feedback)
+  - [x] 3.2. 3-6 independent sources each
+  - [x] 3.3. all missing or weak
+  - [x] 3.4. all kept (3+ sources)
+- [x] 4. Record. research.md rewritten 2026-11-28 with ## Design bar; 5 candidates appended to backlog.md
+- [x] Done when: needs with sources, 5 kinds tried, walkthroughs of 6 products (2 with flows; the rest stop at store links or sign-up), kept needs in backlog.
+
+## 2026-11-28 plan voices and colour slices
+- Read: plan/SKILL.md e056824
+- [x] 1. Learn the ground truth. src/lesson/speech.ts (expo-speech only), listen-button/word-card/exercise-step call sites, src/content/manifest.ts bundles free units only, e2e/bundle.spec.ts guards premium ids; spike in /tmp/kspike: kokoro-js 1.2.1 renders 2.3-2.6 s clips at 8-18 s each on CPU (q8), needs --onnxruntime-node-install-cuda=skip
+- [x] 2. Interrogate the goal yourself
+  - [x] 2.1. questions: where premium audio lives, how keys avoid leaking premium text, which voices, how CI checks without the model, Python vs Node
+  - [x] 2.2. answered from code: bundle test, manifest pattern, system ffmpeg; no pip on the machine -> Node
+  - [x] 2.3. Decisions in plan.md (bundle all audio keyed by hash; kokoro-js; devDependencies only)
+- [x] 3. Write the spec. voices slice, criteria 1-5
+- [x] 4. Cut tickets. T38 (generation + checks, riskiest), T39 (playback, Needs T38)
+- [x] 5. Check the plan
+  - [x] 5.1. criteria 1-3,5 -> T38 proof; 4 -> T39 proof
+  - [x] 5.2. fresh Plan agent asked 12 questions; all answered in plan.md
+  - [x] 5.3. voices slice written; colour slice waits for the design-bar research (planned in a later plan step)
+- [x] Done when: voices criteria have proofs, questions answered, slice in plan.md.
+- Decision: generated audio is bundled for every unit (~12 MB), keyed by FNV-1a hash of the text, so premium units play offline and the bundle holds no premium text.
+
+## 2026-11-28 build T38
+- Read: build/SKILL.md a069840
+- [x] 1. Branch. nstack/voices from origin/main 7aae365
+- [x] 2. Starting state. main fast checks passed after PR #7 merge (ship plans entry: typecheck 0, lint 0, jest 475, test:server 117, test:drive 6)
+- [x] 3. Dispatch. builder in worktree, Parallel: 2
+- [ ] 4. Read the reply
+- [ ] 5. Prove it yourself.
+- [ ] 6. Record.
+- [ ] Done when: the ticket is committed on the slice's branch with items 1-6 ticked in its log entry, or is parked in `plan.md`.
+
+## 2026-11-28 design direction: owner's taste
+- Read: design/SKILL.md 766d97f
+- [x] 1. Direction
+  - [x] 1.1. Subject. kept; Bar added from research.md (Duolingo, Drops, Lingokids); owner's taste overrides
+  - [x] 1.2. Tokens. brand ink + lotus/ocean/mango tracks with deep and tint, success/danger, neutrals, dark values; white only on -deep (contrast 5.14-10.84 checked with a script); lip depth, Fluent 3D pictures, Lucide icons, feedback, celebration, sounds
+  - [x] 1.3. Generic check. 6 rejections/decisions in design.md; Decision: the 2026-11-27 paper/no-shadow direction is replaced at the owner's request
+- [ ] 2. Build rules (colour slice T40-T46)
+- [ ] 3. Critique (per screen, in the colour slice's verify)
+  - [ ] 3.1. The main content and the primary action are obvious within three seconds.
+  - [ ] 3.2. Spacing follows the scale and edges line up; nothing is crowded or floating.
+  - [ ] 3.3. Text is readable: contrast, size, line length.
+  - [ ] 3.4. Nothing overflows, is cut off, or overlaps.
+  - [ ] 3.5. Empty, error, loading and disabled states look intended, and every destructive actio...
+  - [ ] 3.6. It matches `design.md`, and nothing from the defaults list crept in.
+  - [ ] 3.7. Tabbing through the screen shows a visible focus on every control, in a sensible order.
+  - [ ] 3.8. Copy names actions; there is no placeholder text.
+  - [ ] 3.9. Squint at it: the title, the headings and the primary action still stand out, and ev...
+- [ ] Done when: `design.md` exists, every changed screen has all nine lines passing at both widths, and the axe scan passes.
+
+## 2026-11-28 plan colour slice (continues "plan voices and colour slices")
+- Read: plan/SKILL.md e056824
+- [x] 1. Learn the ground truth. theme.ts tokens, 326 words / 92 with emoji pictures (kids only), avatars stored as emoji (server-checked), MaxContentWidth 480, answer sheet testIDs used by Maestro
+- [x] 2. Interrogate the goal yourself
+  - [x] 2.1. questions: avatars, slow replay speed, dark tints, token enforcement, abstract words, pinning
+  - [x] 2.2. answered from code (child-profile.ts, server/profiles.ts, answer-step.yaml)
+  - [x] 2.3. Decisions in plan.md (Lucide + Fluent 3D PNG; avatars stay emoji keys)
+- [x] 3. Write the spec. colour criteria 1-8
+- [x] 4. Cut tickets. T40, T41 groundwork in parallel; T42-T44 by screen; T45-T46 after voices
+- [x] 5. Check the plan
+  - [x] 5.1. 1-2 T40; 3 T41; 4 T42; 5 T43+T45; 6 T46; 7 T44; 8 every screen ticket + slice verify
+  - [x] 5.2. fresh Plan agent: 12 questions, all answered in plan.md
+  - [x] 5.3. colour slice in plan.md
+- [x] Done when: criteria have proofs, questions answered, slice in plan.md.
+
+## 2026-11-28 build T40
+- Read: build/SKILL.md a069840
+- [x] 1. Branch. nstack/colour from origin/main 7aae365
+- [x] 2. Starting state. main fast checks pass (ship plans entry)
+- [x] 3. Dispatch. builder in worktree, Parallel: 3
+- [x] 4. Read the reply. done 0ea57b2: tokens (brand, tracks base/deep/tint/text/fill/lip, dark), theme.test pairings, Tactile primitive with lip and states, hex scan; theme and Tactile tests red first. Decisions: white text only on fills >= 4.5:1 (track fills use -deep over a darker lip); control borders use muted for 3:1; MaxContentWidth {narrow 480, wide 640}
+- [x] 5. Prove it yourself. merged into nstack/colour (worktree ../nstack-english-colour): ci 0, typecheck 0, lint 0, jest 494, test:server pass, test:drive pass; drive screens 40 shots, but 7 were blank white -> race under load (networkidle before first paint): drive screens now waits for rendered text and reports a blank screen (1b36d41); rerun 40 shots, none blank
+- [x] 6. Record. this entry; backlog: picture sizes as tokens
+- [x] Done when: merged on nstack/colour, items ticked.
+## 2026-11-28 build T41
+- Read: build/SKILL.md a069840
+- [x] 1. Branch. nstack/colour from origin/main 7aae365
+- [x] 2. Starting state. main fast checks pass (ship plans entry)
+- [x] 3. Dispatch. builder in worktree, Parallel: 3
+- [x] 4. Read the reply. done 9c157f7: scripts/pictures.ts (fluentui-emoji 1ffb34c7, 155 PNGs 4.2 MB), Picture component, picture-or-abstract enforced in parseUnit, avatars mapped from emoji keys, emoji scan; red first on missing picture and bad slug; pictures run twice identical
+- [x] 5. Prove it yourself. merged at 1b36d41: ci 0, typecheck 0, lint 0, jest 507, test:server pass. Native reader (fresh agent): problems in 10 words (nurse/doctor confusion, engineer, hungry, sad, friend x2, face, lunch, kitchen, summer, it's o'clock) -> fixer builder dispatched on nstack/colour
+- [x] 6. Record. fixer b7abdf0 merged: 10 words fixed (nurse abstract, doctor health_worker, engineer technologist, sad frowning_face, face neutral_face, lunch cooked_rice, it's o'clock seven_oclock; hungry/kitchen/summer/friend(s) abstract: people_holding_hands is not in the pinned set); content+pictures+emoji tests 109 pass; new pictures viewed (/tmp/newpics.png) and fit. Backlog: breakfast uses `cooking` (same as old kitchen)
+- [x] Done when: merged on nstack/colour, items ticked.
+
+## 2026-11-28 verify hardening
+- Read: verify/SKILL.md adc6a8a
+- [x] 1. Clean tree. 0a81f05 (later commits only .nstack/)
+- [x] 2. Project checks. typecheck 0, lint 0 warnings, jest 486 pass, test:server pass, test:drive pass, e2e 52 passed (1.2 m), drive check passed, android-build 579 s, Maestro lesson + review pass on emulator-5554
+- [x] 3. Every acceptance criterion in scope has a passing check. 1 sliding expiry: server tests; 2 sign-up limits: server tests (concurrent); 3 artwork: brand Jest test + launcher screenshot; 4 replace on results: Jest + Maestro lesson back step; 5 native config: native-config Jest + build; check-features ok
+- [x] 4. Every new check bites. T33/T34/T36/T37 seen red by their builders (build entries); T35: allowBackup flipped -> 1 failed, restored -> 4 pass, tree clean
+- [x] 5. The real thing runs. APK installed and both Maestro flows completed on the emulator; drive check served the web app
+- [x] 6. Every changed screen looks right. /tmp/launcher.png: own "a" ô-ly icon on purple, label "Học Tiếng A..." (1-9 pass: an icon only, no layout); favicon/splash seen in T36 previews; result-screen navigation unchanged visually
+- [x] 7. Nothing got weaker. one test renamed and strengthened ("a session expires after 90 days" -> "an unused session works until 90 days and answers 401 from then on": spec change T33); no skips, ignores or disables added
+- [x] 8. No new warnings or errors. lint 0, e2e no console errors (drive screens exit 0)
+- [x] 9. Access is enforced. check-security exit 0 (12 deny proofs, no secrets in bundle, headers ok, 0 high/critical)
+- [x] Done when: all ticked; Not verified: none.
+
+| Claim | Command | Result |
+|---|---|---|
+| Android flows run | npm run drive -- android-test (lesson; review alone) | lesson Passed 9m06s; review completed, exit 0 |
+| build faster | npm run drive -- android-build | 579 s (was 1371 s) |
+| backup rule bites | allowBackup 'true' in plugin, jest native-config | 1 failed -> restored 4 pass |
+| security | check-security . <drive url> | 4 ok, exit 0 |
+| screens | /tmp/launcher.png | own icon on the launcher |
+
+## 2026-11-28 review hardening
+- Read: review/SKILL.md c151f88
+- [x] 1. Dispatch. reviewer in worktree at 837c791
+- [x] 2. Second reviewer. auth changes (T33, T34): second reviewer, Focus: security and failure modes, in parallel
+- [x] 3. Act on every finding. reviewer 1: pass, nits: verify.md server/drive rows stale (fixed now: test:server 128), per-address 30 vs 5 (logged decision, kept). reviewer 2: important: merged release manifest has USE_BIOMETRIC/USE_FINGERPRINT (androidx.biometric via expo-secure-store) and the introspect test cannot see library manifests -> fixer builder; nit: no test proves counting before scrypt -> same fixer. Fixer aa0fff4/a59a340 merged (6e6333b): new `drive android-permissions` check run by android-build (red on the old manifest: USE_BIOMETRIC, USE_FINGERPRINT), app.json blocks both, APK permissions INTERNET, RECORD_AUDIO and the app's own receiver permission; hash-count test red with scrypt moved first; typecheck 0, lint 0, jest 486, test:server 129, test:drive pass
+- [x] 4. Review the fixes. round 2 at 6e6333b: pass, no findings (mutations: count after hash, renewal off, renew always: all red); lesson flow on the fixed APK exit 0
+- [x] Done when: the latest round has no important findings, `verify` passed after the last fix, and nits are fixed or in `backlog.md`.
+## 2026-11-28 build T42
+- Read: build/SKILL.md a069840
+- [x] 1. Branch. nstack/colour at 1b36d41
+- [x] 2. Starting state. fast checks pass at 1b36d41 (jest 507)
+- [x] 3. Dispatch. builder in worktree, Parallel: 6
+- [ ] 4. Read the reply
+- [ ] 5. Prove it yourself.
+- [ ] 6. Record.
+- [ ] Done when: the ticket is committed on the slice's branch with items 1-6 ticked in its log entry, or is parked in `plan.md`.
+## 2026-11-28 build T43
+- Read: build/SKILL.md a069840
+- [x] 1. Branch. nstack/colour at 1b36d41
+- [x] 2. Starting state. fast checks pass at 1b36d41 (jest 507)
+- [x] 3. Dispatch. builder in worktree, Parallel: 6
+- [ ] 4. Read the reply
+- [ ] 5. Prove it yourself.
+- [ ] 6. Record.
+- [ ] Done when: the ticket is committed on the slice's branch with items 1-6 ticked in its log entry, or is parked in `plan.md`.
+## 2026-11-28 build T44
+- Read: build/SKILL.md a069840
+- [x] 1. Branch. nstack/colour at 1b36d41
+- [x] 2. Starting state. fast checks pass at 1b36d41 (jest 507)
+- [x] 3. Dispatch. builder in worktree, Parallel: 6
+- [ ] 4. Read the reply
+- [ ] 5. Prove it yourself.
+- [ ] 6. Record.
+- [ ] Done when: the ticket is committed on the slice's branch with items 1-6 ticked in its log entry, or is parked in `plan.md`.
+
+## 2026-11-28 ship hardening
+- Read: ship/SKILL.md b51cd2a
+- [x] 1. Commit. slice commits on nstack/hardening
+- [x] 2. Sync. origin/main has nothing new (7aae365 is the base)
+- [x] 3. Push. nstack/hardening
+- [ ] 4. Open the PR
+- [ ] 5. Wait for CI
+- [ ] 6. Merge
+- [ ] 7. Confirm and clean up.
+- [ ] Done when: the PR is merged, CI is green on the default branch, and the fast checks pass there, or the PR is parked with a reason.

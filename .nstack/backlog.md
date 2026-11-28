@@ -1,61 +1,48 @@
 # Backlog
 
-- (unscored) Honest, self-service subscription: clear trial terms, in-app manage/cancel, premium shown immediately, restore purchases after reinstall. Evidence: 4 sources, research.md #1
-- (unscored) Progress and streaks never lost on reinstall, re-login or bugs (durable local save, sync recovery). Evidence: 3 sources (severe: data loss), research.md #2
-- (unscored) Short grammar and usage explanations in Vietnamese inside lessons (articles, tenses, question forms). Evidence: 5 sources, research.md #3
-- (unscored) Free plan that allows real daily learning without per-exercise limits or ad clutter, priced for Vietnam. Evidence: 5 sources, research.md #4
-- (unscored) Pronunciation drills for sounds Vietnamese speakers miss (final consonants, th, s/z, clusters) with forgiving scoring. Evidence: 4 sources, research.md #5
-- (unscored) Practical real-life phrases and focused lessons for adults, minimal animations and gimmicks. Evidence: 4 sources, research.md #6
-- (unscored) Reliability: no crashes, no login loops, layouts that never hide controls on small or large screens. Evidence: 4 sources, research.md #7
-- (unscored) Fair daily streak/goal that motivates without punishing and cannot be lost to a bug. Evidence: 3 sources, research.md #8
-- (unscored) Parent view of each child's progress, several children under one plan. Evidence: 4 sources, research.md #9
-- (unscored) Server HOST setting so a physical phone on the LAN can reach a dev API (emulator uses 10.0.2.2). Evidence: T2 builder
-- (unscored) Triage 3 moderate npm audit advisories (prod deps). Evidence: T2 builder; secure slice check
-- (unscored) Remove template deps nothing uses (expo-device, expo-web-browser, expo-symbols, expo-glass-effect, @expo/ui, expo-image). Evidence: T1 builder
-- (unscored) Replace Expo-branded icon and splash artwork with the app's own. Evidence: T1 builder
-- (unscored) Restore progress from the `.unreadable.<time>` backup key after an app downgrade. Evidence: T7 builder; research need 2
-- (unscored) Add a formatter (prettier) config; style is only enforced by lint. Evidence: T7 builder
-- (unscored) Content test: sanity assertions per track (work, kids), not only everyday ids. Evidence: T10 builder
-- (unscored) Merge lesson ActionButton with the shared button style. Evidence: T8 builder
-- (unscored) Add accepted order "Lan is my name" to everyday-a0-u1 e06 after a native reader check. Evidence: T8 builder, T5 reader
-- (unscored) android-build: build only x86_64 for the emulator (reactNativeArchitectures) to cut the 23 min first build. Evidence: T3 builder
-- (unscored) Jest timeout under CPU load (one flaky failure during gradle). Evidence: T3 builder
-- (unscored) Kids: fewer type_answer items for ages 4-5 (replace with listen_choose or speak). Evidence: native reader 2026-11-28
-- (unscored) Kids colour pictures use one consistent set (hearts vs circles) once older-Android emoji support allows. Evidence: native reader 2026-11-28
-- (unscored) lang="en" on the type_answer English input. Evidence: learn-core fix builder
-- (unscored) android-build: build only x86_64 for the emulator (reactNativeArchitectures) to cut the 23 min first build. Evidence: T3 builder
-- (unscored) Jest timeout under CPU load (one flaky failure during gradle). Evidence: T3 builder
-- (unscored) UI-string checker: options as a function, tabBarLabel, navigation.setOptions titles. Evidence: review fix builder
-- (unscored) Rate-limit signup; prune expired sessions and old signin_failures. Evidence: T16 builder
-- (unscored) expo-secure-store plugin with faceIDPermission false and Android backup rules, so restored backups do not hold undecryptable tokens. Evidence: T18 builder
-- (unscored) Web focus outline draws black over accent/danger input borders (TextField, type-answer); TypeAnswer could reuse TextField. Evidence: T18 builder
-- (unscored) Profiles: move focus into the delete confirmation; arrow keys in the picture picker; refresh summaries while open. Evidence: T21 builder
-- (unscored) Offline notice clears only on the next navigation/foreground; add a network listener. Web offline cannot open route chunks not yet loaded. Evidence: T19 builder
-- (unscored) Lesson intro "completed" badge does not refresh after a pull. Evidence: T19 builder
-- (unscored) Expired/forgotten session (401) keeps the device progress, so the next sign-in on a shared device merges it into another account. Evidence: T19b builder
-- (unscored) Remove unreadable progress backup copies at sign-out. Evidence: T19b builder
-- (unscored) Result screens link to "/" by push, so Android back returns to the finished lesson/review; use replace/dismiss. Evidence: T12 builder
-- (unscored) Share the answer saver and step bar between lesson-player and review-session; share e2e learner helpers. Evidence: T12 builder
-- (unscored) UI-string checker: strings outside JSX that reach the user (Alert.alert, confirm, consts rendered later). Evidence: review round 3
-- (unscored) Prune default Android READ/WRITE_EXTERNAL_STORAGE permissions from the app config. Evidence: T13 builder
-- (unscored) Self-check feedback says "Đúng rồi!" for a self-mark; use wording that fits self-assessment. Evidence: T13 builder
-- (unscored) Progress documents grow without limit (all answers kept): compact old answers before the 1 MB cap. Evidence: T17 builder
-- (unscored) Content test: at least 2 speak items per unit. Evidence: T14 builder
-- (unscored) Review speak phrase: skip words with a placeholder ("My name is ..."). Evidence: T15 builder
-- (unscored) Speech scoring: "12" heard for "One, two" reads as twelve. Evidence: review-speak fix builder
-- (unscored) Deleting a child on /profiles does not clear that child's device copy. Evidence: T22b builder
-- (unscored) Premium unit copies on the device: cleared at sign-out (T25b covers it). Evidence: T25 builder
-- (unscored) /profiles "words due" counts bundled units only (premium words missing). Evidence: T25b builder
-- (unscored) A free learner with a finished premium unit and no copy asks the server (403) on every progress change; remember the refusal. Evidence: T25b builder
-- (unscored) After a forced sign-out, guest answers made before a different account signs in are cleared with the previous account's copy. Evidence: accounts-sync fix builder
-- (unscored) Sessions have a fixed 90-day life: renew on use (sliding expiry) so daily learners are not signed out without warning on day 90. Evidence: accounts-sync review round 2
-- (unscored) Validate lesson records at the server boundary (bestCorrect <= total, ISO times); today nonsense values from the owner's own client are kept forever. Evidence: accounts-sync review round 2
-- (unscored) Passwords over 256 characters get the "at least 8 characters" message; give them their own code and text. Evidence: accounts-sync security review round 2
-- (unscored) Sign-up reveals existing emails (409) with no rate limit. Evidence: accounts-sync security review round 2
-- (unscored) Content test: build_sentence accepted orders are listed by hand; a missed valid order was found twice by readers. Consider checking tile permutations against a small grammar, or flagging units with movable time phrases. Evidence: T27 builder, T5/T10 readers
-- (unscored) Nickname check: blank-rendering letters (Hangul filler U+3164, U+115F/1160) pass as visible. Evidence: family security review round 2
-- (unscored) drive android-build: pass -PreactNativeArchitectures=x86_64 for emulator builds (10.5 min vs 23 min for 4 ABIs) and export ANDROID_HOME. Evidence: 2026-11-28 build
-- (unscored) /profiles fetches finished premium units per profile on each load (one request per unit per profile); cache per session. Evidence: plans fix builder
-- (unscored) grant CLI: a --db file that is not SQLite crashes with a stack trace instead of exit 2. Evidence: plans review round 2
-- (unscored) grant CLI: a grant counts from now, not from the end of current Premium, yet prints the new end date; extend from the current end (or print the real plan end). Evidence: plans security review round 2
-- (unscored) Review waits up to 10 s on a hanging network before using a valid premium copy; use the copy first and refresh in the background. Evidence: plans security review round 2
+- 12 (v4 r4 c4) Sessions have a fixed 90-day life: renew on use (sliding expiry) so daily learners are not signed out without warning on day 90. Evidence: accounts-sync review round 2; research need 2 (progress/login loss, 3 sources)
+- 10 (v4 r3 c3) Replace the Expo-branded app icon and splash artwork with the app's own (looks unfinished on every launch). Evidence: T1 builder; UX pass 2026-11-28
+- 10 (v3 r3 c4) Result screens link to "/" by push, so Android back returns to the finished lesson or review; replace instead. Evidence: T12 builder
+- 10 (v2 r3 c5) Remove template dependencies nothing uses (expo-device, expo-web-browser, expo-symbols, expo-glass-effect, @expo/ui, expo-image) and the default Android READ/WRITE_EXTERNAL_STORAGE permissions (a kids app should ask for nothing it does not use). Evidence: T1, T13 builders
+- 9 (v4 r2 c3) Daily habit: home offers "Học tiếp" (the next unfinished lesson) as its primary action and a fair daily goal/streak that never punishes and survives sync. Evidence: research need 8 (3 sources); UX pass: home has no next step
+- 9 (v2 r3 c4) Rate-limit sign-up per IP and per email (it reveals taken emails and costs a scrypt each). Evidence: T16 builder; accounts-sync security review round 2
+- 9 (v2 r3 c4) expo-secure-store config plugin with faceIDPermission false and Android backup rules, so restored backups never hold undecryptable tokens. Evidence: T18 builder
+- 9 (v2 r2 c5) drive android-build: export ANDROID_HOME and build x86_64 only for the emulator (10.5 min vs 23 min). Evidence: 2026-11-28 build
+- 8 (v4 r2 c2) Pronunciation drills for sounds Vietnamese speakers miss (final consonants, th, s/z, clusters) with forgiving scoring. Evidence: research need 5 (4 sources)
+- 8 (v2 r2 c4) Web focus outline draws black over the accent and danger input borders (TextField, type-answer); TypeAnswer reuses TextField. Evidence: T18 builder
+- 8 (v2 r2 c4) Profiles: move focus into the delete confirmation; arrow keys in the picture picker. Evidence: T21 builder
+- 8 (v2 r1 c5) Self-check feedback says "Đúng rồi!" for a self-mark; use wording that fits self-assessment. Evidence: T13 builder
+- 8 (v2 r2 c4) Speech scoring: "12" heard for "One, two" reads as twelve. Evidence: review-speak fix builder
+- 8 (v3 r2 c3) Kids: fewer type_answer items for ages 4-5 (replace with listen_choose or speak). Evidence: native reader 2026-11-28
+- 7 (v2 r2 c3) Review waits up to 10 s on a hanging network before using a valid premium copy; use the copy first and refresh in the background. Evidence: plans security review round 2
+- 7 (v2 r2 c3) Offline notice clears only on the next navigation or foreground; listen for network changes. Evidence: T19 builder
+- 7 (v2 r2 c3) UI-string checker: strings outside JSX that reach the user (Alert.alert, consts rendered later), options functions, tabBarLabel, setOptions. Evidence: review rounds
+- 7 (v1 r2 c4) Validate lesson records at the server boundary (bestCorrect <= total, ISO times). Evidence: accounts-sync review round 2
+- 7 (v1 r2 c4) A free learner with a finished premium unit and no copy asks the server (403) on every progress change; remember the refusal. Evidence: T25b builder
+- 7 (v1 r1 c5) Passwords over 256 characters get the "at least 8 characters" message. Evidence: accounts-sync security review round 2
+- 7 (v1 r1 c5) lang="en" on the type_answer English input. Evidence: learn-core fix builder
+- 7 (v1 r1 c5) Server HOST setting so a physical phone on the LAN can reach a dev API. Evidence: T2 builder
+- 6 (v1 r2 c3) Triage 20 moderate npm audit advisories in production dependencies. Evidence: npm audit --omit=dev 2026-11-28
+- 6 (v1 r1 c4) grant CLI: a non-SQLite --db crashes with a stack trace; a grant counts from now, not from the end of current Premium, yet prints the new end. Evidence: plans review round 2
+- 6 (v1 r1 c4) Nickname check: blank-rendering letters (Hangul filler) pass as visible. Evidence: family security review round 2
+- 6 (v1 r1 c4) Lesson intro "completed" badge does not refresh after a pull. Evidence: T19 builder
+- 6 (v2 r2 c2) Restore progress from the `.unreadable.<time>` backup after an app downgrade. Evidence: T7 builder
+- 6 (v1 r1 c4) Content test: sanity assertions per track. Evidence: T10 builder
+- 6 (v1 r1 c4) Merge the lesson ActionButton with a shared button style. Evidence: T8 builder
+- 5 (v1 r1 c3) /profiles fetches finished premium units per profile on each load; cache per session. Evidence: plans fix builder
+- 5 (v1 r1 c3) After a forced sign-out, guest answers made before a different account signs in are cleared with the previous account's copy. Evidence: accounts-sync fix builder
+- 5 (v1 r1 c3) Kids colour pictures use one consistent set once older-Android emoji support allows. Evidence: native reader 2026-11-28
+- (unscored) Natural, correct pronunciation audio for every word and phrase (no robotic or spliced TTS, steady speed and loudness). Evidence: research need 11 (6 sources), see research.md
+- (unscored) Slow replay: a second play button (or long press) plays the word or phrase slower for beginners. Evidence: research need 12 (3 sources), see research.md
+- (unscored) A drawn picture on every concrete word in one consistent open-licence style, bundled as images instead of typed emoji. Evidence: research need 13 (5 sources), see research.md
+- (unscored) Colourful redesign to the design bar: one saturated colour per track, tactile 3D buttons and cards, layered surfaces, Vietnamese-first typeface. Evidence: research need 14 (5 sources) and Design bar, see research.md
+- (unscored) Instant answer feedback (green/red sheet, short sound, small bounce) and a short skippable lesson-end celebration, calmer for adult tracks. Evidence: research need 15 (4 sources), see research.md
+
+## Rejected
+- Honest self-service subscription (trial terms, manage/cancel, restore purchases): needs store and card integration, a hard stop parked in needs-human.md. Reconsider if: payments are connected.
+- Progress never lost; grammar notes in Vietnamese; free plan without limits or ads; practical adult phrases; parent view of each child: built (accounts-sync, content, plans, family). Reconsider if: users report gaps.
+- Reliability (crashes, login loops, hidden controls): covered by e2e, axe and screenshot checks on every screen. Reconsider if: a crash or layout report appears.
+- Formatter config: only restyles working code. Reconsider if: style disagreements slow reviews.
+- Done items removed: answer-history growth, expired-session leak, deleted-child copy, premium copies at sign-out, /profiles premium due count, 2 speak items per unit, review template phrases, "Lan is my name", Jest timeout under load, android x86 duplicate.
+- (unscored) TRUST_PROXY setting so the sign-up limit counts the real client behind a reverse proxy. Evidence: T34 builder
+- kids-a2-u9-breakfast picture `cooking` reads as cook/fry; find a clearer breakfast picture (native reader, 2026-11-28). Score later.

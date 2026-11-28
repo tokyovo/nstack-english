@@ -98,12 +98,15 @@ function Intro({ unit, completed, onStart }: { unit: Unit; completed: boolean; o
   );
 }
 
-/** The next unit's button; a premium one sends a free learner to /premium, and says so. */
+/**
+ * The next unit's button; a premium one sends a free learner to /premium, and says so.
+ * Links from the result replace the lesson, so Android back never reopens the finished one.
+ */
 function NextUnitButton({ next }: { next: UnitSummary }) {
   const plan = usePlan();
   const locked = next.access === 'premium' && plan.kind === 'free';
   return (
-    <Link href={locked ? '/premium' : `/lesson/${next.id}`} asChild>
+    <Link href={locked ? '/premium' : `/lesson/${next.id}`} replace asChild>
       <ActionButton
         label={t(locked ? 'lesson.nextUnitPremium' : 'lesson.nextUnit', { title: next.title })}
         testID="next-unit"
@@ -128,7 +131,7 @@ function Result({ unit, correct }: { unit: Unit; correct: number }) {
       </View>
       <View style={styles.footer}>
         {next ? <NextUnitButton next={next} /> : null}
-        <Link href={`/track/${unit.track}`} asChild>
+        <Link href={`/track/${unit.track}`} dismissTo asChild>
           <ActionButton
             label={t('lesson.backToTrack')}
             kind={next ? 'secondary' : 'primary'}

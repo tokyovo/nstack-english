@@ -62,4 +62,12 @@ describe('Maestro flows', () => {
       expect(text).toMatch(/while:\s+notVisible:\s+id: "score"[\s\S]*?- runFlow: steps\/answer-step\.yaml/);
     }
   });
+
+  it('presses Android back after leaving the lesson result, and checks the result does not come back', () => {
+    const text = readFileSync(join(MAESTRO, 'lesson.yaml'), 'utf8');
+    expect(text).toMatch(
+      /- tapOn:\s+id: "back-to-track"[\s\S]*?\n- back\n- assertNotVisible: "Xong bài học!"\n- assertNotVisible:\s+id: "score"/
+    );
+  });
 });
+

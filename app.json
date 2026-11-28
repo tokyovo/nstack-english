@@ -8,16 +8,25 @@
     "scheme": "hocenglish",
     "userInterfaceStyle": "automatic",
     "ios": {
-      "icon": "./assets/expo.icon",
+      "icon": "./assets/images/icon.png",
       "bundleIdentifier": "app.hocenglish"
     },
     "android": {
       "adaptiveIcon": {
-        "backgroundColor": "#F3F6F4",
+        "backgroundColor": "#5B3FA8",
         "foregroundImage": "./assets/images/android-icon-foreground.png",
         "backgroundImage": "./assets/images/android-icon-background.png",
         "monochromeImage": "./assets/images/android-icon-monochrome.png"
       },
+      "permissions": ["android.permission.INTERNET", "android.permission.RECORD_AUDIO"],
+      "blockedPermissions": [
+        "android.permission.READ_EXTERNAL_STORAGE",
+        "android.permission.WRITE_EXTERNAL_STORAGE",
+        "android.permission.SYSTEM_ALERT_WINDOW",
+        "android.permission.VIBRATE",
+        "android.permission.USE_BIOMETRIC",
+        "android.permission.USE_FINGERPRINT"
+      ],
       "predictiveBackGestureEnabled": false,
       "package": "app.hocenglish"
     },
@@ -33,7 +42,7 @@
         {
           "backgroundColor": "#F3F6F4",
           "image": "./assets/images/splash-icon.png",
-          "imageWidth": 76,
+          "imageWidth": 160,
           "dark": {
             "backgroundColor": "#121816",
             "image": "./assets/images/splash-icon.png"
@@ -47,7 +56,9 @@
           "speechRecognitionPermission": "$(PRODUCT_NAME) dùng nhận dạng giọng nói để kiểm tra câu tiếng Anh bạn nói. Giọng nói không được ứng dụng lưu lại.",
           "androidSpeechServicePackages": ["com.google.android.googlequicksearchbox"]
         }
-      ]
+      ],
+      ["expo-secure-store", { "faceIDPermission": false }],
+      "./plugins/with-android-no-backup"
     ],
     "experiments": {
       "typedRoutes": true,

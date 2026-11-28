@@ -23,6 +23,7 @@ const errorCodes = [
   'weak_password',
   'invalid_credentials',
   'too_many_attempts',
+  'too_many_signups',
   'offline',
   'unknown',
 ] as const;

@@ -19,7 +19,7 @@ describe('family profiles', () => {
   before(async () => {
     dir = mkdtempSync(join(tmpdir(), 'profiles-test-'));
     dbPath = join(dir, 'app.sqlite');
-    server = await startServer({ port: 0, dbPath });
+    server = await startServer({ port: 0, dbPath, signupsPerAddress: 1000 });
   });
 
   after(async () => {

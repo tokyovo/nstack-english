@@ -57,6 +57,7 @@ describe('drive tool', () => {
       'check',
       'stop',
       'android-build',
+      'android-permissions',
       'android-start',
       'android-test',
       'android-stop',
@@ -84,6 +85,64 @@ describe('drive tool', () => {
 
     assert.equal(code, 2);
     assert.match(stderr, /KVM not available: see \.nstack\/needs-human\.md/);
+  });
+
+  test('android-build --dry-run builds the emulator ABI only, with ANDROID_HOME set', () => {
+    const { code, stdout, stderr } = drive(stateDir, ['android-build', '--dry-run'], { ANDROID_HOME: '/opt/sdk' });
+
+    assert.equal(code, 0, stderr);
+    assert.match(stdout, /^ANDROID_HOME=\/opt\/sdk$/m);
+    assert.match(stdout, /^npx expo prebuild --platform android --no-install$/m);
+    assert.match(stdout, /^\.\/gradlew assembleRelease -PreactNativeArchitectures=x86_64$/m);
+  });
+
+  test('android-build --all-abis --dry-run leaves the ABIs to the project default', () => {
+    const { code, stdout, stderr } = drive(stateDir, ['android-build', '--all-abis', '--dry-run']);
+
+    assert.equal(code, 0, stderr);
+    assert.match(stdout, /^\.\/gradlew assembleRelease$/m);
+  });
+
+  /** A merged manifest asking for `permissions`. @param {string[]} permissions */
+  function mergedManifest(permissions) {
+    const path = join(stateDir, 'AndroidManifest.xml');
+    const lines = permissions.map((name) => `    <uses-permission android:name="${name}" />`);
+    writeFileSync(path, ['<manifest xmlns:android="http://schemas.android.com/apk/res/android">', ...lines, '</manifest>'].join('\n'));
+    return path;
+  }
+
+  test('android-permissions passes a merged manifest with only the permissions app.json asks for', () => {
+    const manifest = mergedManifest([
+      'android.permission.INTERNET',
+      'android.permission.RECORD_AUDIO',
+      'app.hocenglish.DYNAMIC_RECEIVER_NOT_EXPORTED_PERMISSION',
+    ]);
+
+    const { code, stdout, stderr } = drive(stateDir, ['android-permissions', manifest]);
+
+    assert.equal(code, 0, stderr);
+    assert.match(stdout, /^Permissions: android\.permission\.INTERNET, android\.permission\.RECORD_AUDIO, app\.hocenglish\.DYNAMIC_RECEIVER_NOT_EXPORTED_PERMISSION$/m);
+  });
+
+  test('android-permissions exits 1 naming each permission a library merged in', () => {
+    const manifest = mergedManifest([
+      'android.permission.INTERNET',
+      'android.permission.USE_BIOMETRIC',
+      'android.permission.RECORD_AUDIO',
+      'android.permission.USE_FINGERPRINT',
+    ]);
+
+    const { code, stderr } = drive(stateDir, ['android-permissions', manifest]);
+
+    assert.equal(code, 1);
+    assert.match(stderr, /not allowed: android\.permission\.USE_BIOMETRIC, android\.permission\.USE_FINGERPRINT/);
+  });
+
+  test('android-build --dry-run checks the merged release manifest after building', () => {
+    const { code, stdout, stderr } = drive(stateDir, ['android-build', '--dry-run']);
+
+    assert.equal(code, 0, stderr);
+    assert.match(stdout, /\.\/gradlew assembleRelease.*\n.*drive android-permissions .*merged_manifest\/release\/processReleaseMainManifest\/AndroidManifest\.xml$/m);
   });
 
   test('stop leaves alone a live process that reused the recorded pid', async () => {
