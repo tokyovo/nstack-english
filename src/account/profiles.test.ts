@@ -76,15 +76,18 @@ describe('adding a child profile', () => {
     });
   });
 
-  it('reports an empty nickname against the name field without asking the server', async () => {
-    const fetchMock = await signedInThen();
+  it.each(['   ', '​', '‮\n'])(
+    'reports the nickname %j, with nothing visible, against the name field without asking the server',
+    async (name) => {
+      const fetchMock = await signedInThen();
 
-    expect(await addChild({ name: '   ', picture: '🐱' })).toEqual({
-      ok: false,
-      error: { code: 'invalid_name', field: 'name' },
-    });
-    expect(fetchMock).not.toHaveBeenCalled();
-  });
+      expect(await addChild({ name, picture: '🐱' })).toEqual({
+        ok: false,
+        error: { code: 'invalid_name', field: 'name' },
+      });
+      expect(fetchMock).not.toHaveBeenCalled();
+    }
+  );
 
   it.each([
     [{ status: 400, body: { error: 'invalid_name', field: 'name' } }, { code: 'invalid_name', field: 'name' }],

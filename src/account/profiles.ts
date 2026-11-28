@@ -5,7 +5,7 @@ import { callApi, type ApiReply } from '@/api/client';
 import { units } from '@/content';
 import { createProgressStore, isLessonCompleted } from '@/progress';
 import { parseProgress } from '@/progress/schema';
-import type { ProfilePicture } from '@/profiles/child-profile';
+import { readNickname, type ProfilePicture } from '@/profiles/child-profile';
 import { dueWords } from '@/review/schedule';
 
 /** Everything a child profile holds: a nickname and a picture, nothing else. */
@@ -69,7 +69,7 @@ function profilePath(profileId: string): `/api/${string}` {
 }
 
 async function change(path: `/api/${string}`, method: 'POST' | 'PATCH' | 'DELETE', input?: ChildInput) {
-  if (input && input.name.trim() === '') return failure('invalid_name');
+  if (input && readNickname(input.name) === undefined) return failure('invalid_name');
   const token = await accountToken();
   if (!token) return failure('signed_out');
   const reply = await callApi(path, { method, body: input, token });
