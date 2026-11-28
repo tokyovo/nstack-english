@@ -739,28 +739,28 @@
 - [x] 2. Starting state. fast checks passed at 32f107b (previous session)
 - [x] 3. Dispatch. builder in worktree agent-aae984b5 (previous session; it committed cd7fdaa, 7b91e7a, eec5774 before that session ended)
 - [x] 4. Read the reply. no reply survived the session end; read the three commits instead: native-config test, no-backup plugin, android-build x86_64 with --all-abis and --dry-run, 5 unused deps removed
-- [ ] 5. Prove it yourself.
-- [ ] 6. Record.
-- [ ] Done when: the ticket is committed on the slice's branch with items 1-6 ticked in its log entry, or is parked in `plan.md`.
+- [x] 5. Prove it yourself. merged at 1c001ac: npm ci 0, typecheck 0, lint 0, jest 486 pass (native-config included), test:server pass, test:drive pass; `drive android-build` exit 0 in 579 s (was 1371 s for 4 ABIs); APK installs and the lesson Maestro flow passes on emulator-5554
+- [x] 6. Record. this entry; plan ticked
+- [x] Done when: committed on nstack/hardening, items ticked.
 
 ## 2026-11-28 research design bar: leading language-learning apps
 - Read: research/SKILL.md efb9ece
-- [ ] 1. Frame the search
-- [ ] 2. Gather
-  - [ ] 2.1. Communities.
-  - [ ] 2.2. Hacker News.
-  - [ ] 2.3. Similar products.
-  - [ ] 2.4. Open-source alternatives.
-  - [ ] 2.5. Reviews.
-  - [ ] 2.6. This project's own feedback
-  - [ ] 2.7. Walk through the leading products.
-- [ ] 3. Synthesize
-  - [ ] 3.1. Group findings into needs: one line each, in the user's words ("assign a task to sev...
-  - [ ] 3.2. For each need, count independent sources: different people, different sites. Note da...
-  - [ ] 3.3. Mark each need: missing (we don't have it), weak (we have it but people comp...
-  - [ ] 3.4. Keep a need when it has 3 or more independent sources, or one source describing a se...
-- [ ] 4. Record
-- [ ] Done when: `research.md` lists the needs with sources, at least three kinds of source were tried (or the log says why not), a new product has walkthroughs of at least three leading alternatives, and each kept need is in `backlog.md`.
+- [x] 1. Frame the search. English for Vietnamese beginners; focus on visual design bar and audio quality; existing features listed in research.md
+- [x] 2. Gather
+  - [x] 2.1. Communities. Reddit only via search summaries (fetch refused), not used as evidence
+  - [x] 2.2. Hacker News. 12 algolia queries, 6 comments kept
+  - [x] 2.3. Similar products. Duolingo, Busuu, Drops, Lingokids, Memrise, ELSA pages; design press and awards (ADA 2023/2025, Play Best of 2018)
+  - [x] 2.4. n/a: open-source alternatives were covered in the 2026-11-27 round; this round is about look and audio, which they do not lead on
+  - [x] 2.5. Reviews. App Store and Trustpilot via search results
+  - [x] 2.6. n/a: the project has no public feedback
+  - [x] 2.7. Walk through the leading products. Duolingo onboarding + first lesson without account; Busuu to its sign-up wall; Drops, Lingokids, Memrise, ELSA public pages only (app-store links); Babbel skipped: robots.txt blocks AI agents. Shots in .nstack/research/shots/ (gitignored)
+- [x] 3. Synthesize
+  - [x] 3.1. needs 11-15 (natural audio, slow replay, drawn pictures, colour per category, joyful feedback)
+  - [x] 3.2. 3-6 independent sources each
+  - [x] 3.3. all missing or weak
+  - [x] 3.4. all kept (3+ sources)
+- [x] 4. Record. research.md rewritten 2026-11-28 with ## Design bar; 5 candidates appended to backlog.md
+- [x] Done when: needs with sources, 5 kinds tried, walkthroughs of 6 products (2 with flows; the rest stop at store links or sign-up), kept needs in backlog.
 
 ## 2026-11-28 plan voices and colour slices
 - Read: plan/SKILL.md e056824
@@ -777,3 +777,13 @@
   - [x] 5.3. voices slice written; colour slice waits for the design-bar research (planned in a later plan step)
 - [x] Done when: voices criteria have proofs, questions answered, slice in plan.md.
 - Decision: generated audio is bundled for every unit (~12 MB), keyed by FNV-1a hash of the text, so premium units play offline and the bundle holds no premium text.
+
+## 2026-11-28 build T38
+- Read: build/SKILL.md a069840
+- [x] 1. Branch. nstack/voices from origin/main 7aae365
+- [x] 2. Starting state. main fast checks passed after PR #7 merge (ship plans entry: typecheck 0, lint 0, jest 475, test:server 117, test:drive 6)
+- [x] 3. Dispatch. builder in worktree, Parallel: 2
+- [ ] 4. Read the reply
+- [ ] 5. Prove it yourself.
+- [ ] 6. Record.
+- [ ] Done when: the ticket is committed on the slice's branch with items 1-6 ticked in its log entry, or is parked in `plan.md`.

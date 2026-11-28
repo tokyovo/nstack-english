@@ -20,7 +20,7 @@ Answers for builders (plan check):
 
 - [x] T33 Sliding session expiry. Proof: `npm run test:server`. Access: signed-in. Needs: none
 - [x] T34 Sign-up rate limit. Proof: `npm run test:server` (concurrent test seen failing). Access: public. Needs: none
-- [ ] T35 Native config: unused deps, permissions, secure-store plugin and backup rules, android-build x86_64. Proof: config test, `npm run drive -- android-build` time logged. Needs: none
+- [x] T35 Native config: unused deps, permissions, secure-store plugin and backup rules, android-build x86_64. Proof: config test, `npm run drive -- android-build` time logged. Needs: none
 - [x] T36 Original icon, adaptive icon, splash and favicon from an SVG source and a render script. Proof: asset test, screenshots of the web favicon and splash colours. Needs: none
 - [x] T37 Result screens replace instead of push. Proof: Jest, Maestro flow syntax. Needs: none
 
@@ -57,7 +57,35 @@ Answers for builders (plan check):
 - [ ] T38 Generated audio for every text, manifest, content test, transcription check. Proof: `npm test` (content test red first on a missing file, a stale entry and an orphan), `npm run audio -- generate` twice (second renders 0), `npm run audio -- check --sample 1` exit 0. Content: yes. Needs: none
 - [ ] T39 Play generated audio with device speech as fallback. Proof: Jest (file, no file, error), `npm run e2e` (mp3 200 on Nghe), Android flow taps Nghe on the emulator without a crash. Platforms: web, Android. Needs: T38
 
-Later slices (from the backlog, in order): colour (owner's taste redesign, planned after the design-bar research), habit (Học tiếp on home and a fair daily goal/streak, score 9), polish (score-8 items: focus outlines, profiles focus, self-check wording, "12" scoring, kids type_answer), pronunciation drills (score 8).
+## Slice: colour (branch nstack/colour)
+Owner request 2026-11-28: the app must be colourful and visually attractive like the most beautiful apps: a colour per track, drawn colour icons, a picture on every concrete word, depth and celebratory feedback. Every screen is redesigned to `.nstack/design.md` (direction rewritten 2026-11-28 from research.md "Design bar").
+
+Acceptance criteria:
+1. Tokens in `src/constants/theme.ts` match design.md (brand ink, three track colours each with base/deep/tint, success, danger, neutrals; light and dark); `src/constants/theme.test.ts` checks contrast of every text/background pairing the components use (4.5:1 text, 3:1 large text and control edges). Components use tokens only (existing lint/grep rule extended if one exists, else a Jest test that fails on a hex colour outside theme.ts).
+2. Pressable buttons and cards have the 4 px lip that collapses on press, and every control keeps default, focus-visible, pressed, disabled and loading states (Jest on the primitive's styles per state).
+3. Every word whose thing can be pictured has a `picture` (a Fluent Emoji 3D asset slug); a word without one must say `"abstract": true`; the content test fails otherwise, and on a slug with no file. Files come from `npm run pictures` (pinned commit of microsoft/fluentui-emoji, MIT, 3D PNG resized to 192 px with ffmpeg, idempotent) into `assets/pictures/`, with a generated require map; SOURCES.md lists the set. No emoji character remains in `src/` or `content/` (test scans for Extended_Pictographic).
+4. Home: three track cards, each in its colour with its picture, name, description and progress; the review card. Track: a header band in the track colour with its picture, units grouped by level as tiles with an icon tile, completion and a Lucide lock on premium units.
+5. Lesson: intro in the track colour; word card with picture, the English word in the track deep colour on the tinted ô-ly grid, Vietnamese gloss, Nghe and Nghe chậm (0.75 rate); choices show pictures where their words have one; a progress bar in the track colour; on check a success- or danger-tinted bottom sheet with an icon and Continue; a right choice bounces.
+6. Results (lesson and review): a 1.6 s burst of ô-ly squares in the track colours, a count-up of words learned, a rising sound; correct and wrong answers play short sounds; tap skips; with reduced motion no burst or count-up. Sounds are original, made by `npm run sounds` (ffmpeg synthesis, committed output).
+7. Review session, account, profiles (avatars are pictures), premium, not-found, parent gate and offline notice use the new tokens, Lucide icons on coloured tiles, and an illustrated empty state where a list can be empty.
+8. Each changed screen passes the nine design critique lines at 1280 and 390 px in light and dark (`drive screens`), logged per screen; the axe e2e has no serious or critical violation; all existing e2e and Maestro flows pass (selectors kept or updated with the spec change logged).
+
+Answers for builders:
+- Decision: Lucide via `lucide-react-native` + `react-native-svg` (Expo-supported) for UI icons; Fluent Emoji 3D PNGs (not SVG) for pictures because the 3D style carries the depth the owner asked for and PNG needs no runtime renderer.
+- Decision: the content builder decides which words are abstract (greetings, function words); numbers use Fluent's keycap digit pictures where they exist; the native reader checks that every `abstract: true` word truly has no fitting picture.
+- Animations with react-native-reanimated (already a dependency); respect `useReducedMotion`.
+- Sounds need expo-audio, which arrives with the voices slice (T39): T46 waits until voices is merged into main and nstack/colour is synced with main.
+- Screens tickets keep testIDs and visible strings that e2e and Maestro use; new strings go through `src/i18n/vi.ts`.
+
+- [ ] T40 Tokens, track colours and pressable primitives (lip, states). Proof: Jest theme and primitive tests, `drive screens` at both widths. Needs: none
+- [ ] T41 Pictures: fetch script, require map, `Picture` component, every concrete word pictured in all tracks, emoji removed. Proof: content test (red first on a missing picture and a bad slug), emoji scan test, native reader verdict on picture fit, screenshot of word cards. Content: yes. Needs: none
+- [ ] T42 Home and track screens redesigned. Proof: Jest, e2e tracks/premium, drive screens + critique at 1280/390 light/dark. Needs: T40, T41
+- [ ] T43 Lesson screens redesigned with answer sheet, bounce and progress bar. Proof: Jest lesson-player/exercise-step, e2e lesson, drive screens + critique, Maestro lesson flow on the emulator. Platforms: web, Android. Needs: T40, T41
+- [ ] T44 Review session, account, profiles, premium, not-found, gate, offline notice and empty states redesigned. Proof: Jest, e2e account/profiles/child-mode/review, drive screens + critique, axe e2e. Needs: T40, T41
+- [ ] T45 Nghe chậm (slow replay) on word cards and listen exercises. Proof: Jest (rate 0.75 passed to the player), e2e. Needs: T43, voices merged
+- [ ] T46 Celebration and sounds: result bursts, count-up, answer sounds, `npm run sounds`. Proof: Jest (reduced motion skips the burst), e2e results, Maestro flows, screenshots of the result mid-burst. Platforms: web, Android. Needs: T43, voices merged
+
+Later slices (from the backlog, in order): habit (Học tiếp on home and a fair daily goal/streak, score 9), polish (score-8 items: focus outlines, profiles focus, self-check wording, "12" scoring, kids type_answer), pronunciation drills (score 8).
 
 
 

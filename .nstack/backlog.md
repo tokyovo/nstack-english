@@ -32,6 +32,11 @@
 - 5 (v1 r1 c3) /profiles fetches finished premium units per profile on each load; cache per session. Evidence: plans fix builder
 - 5 (v1 r1 c3) After a forced sign-out, guest answers made before a different account signs in are cleared with the previous account's copy. Evidence: accounts-sync fix builder
 - 5 (v1 r1 c3) Kids colour pictures use one consistent set once older-Android emoji support allows. Evidence: native reader 2026-11-28
+- (unscored) Natural, correct pronunciation audio for every word and phrase (no robotic or spliced TTS, steady speed and loudness). Evidence: research need 11 (6 sources), see research.md
+- (unscored) Slow replay: a second play button (or long press) plays the word or phrase slower for beginners. Evidence: research need 12 (3 sources), see research.md
+- (unscored) A drawn picture on every concrete word in one consistent open-licence style, bundled as images instead of typed emoji. Evidence: research need 13 (5 sources), see research.md
+- (unscored) Colourful redesign to the design bar: one saturated colour per track, tactile 3D buttons and cards, layered surfaces, Vietnamese-first typeface. Evidence: research need 14 (5 sources) and Design bar, see research.md
+- (unscored) Instant answer feedback (green/red sheet, short sound, small bounce) and a short skippable lesson-end celebration, calmer for adult tracks. Evidence: research need 15 (4 sources), see research.md
 
 ## Rejected
 - Honest self-service subscription (trial terms, manage/cancel, restore purchases): needs store and card integration, a hard stop parked in needs-human.md. Reconsider if: payments are connected.

@@ -54,3 +54,6 @@ example
 # Playwright
 /test-results/
 /playwright-report/
+
+# research screenshots
+.nstack/research/shots/

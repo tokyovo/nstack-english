@@ -2,18 +2,34 @@
 Subject: Vietnamese adults (many on budget Android phones, little confidence with apps or with English) and their children, learning their first English words in 5-10 minute sessions on a phone, often daily during a break or before bed. One thing on screen at a time, large Vietnamese-friendly type, calm and encouraging, never childish for adults; the kids track is brighter but uses the same system.
 Kind: learning app (short daily sessions, phone first; web is the same app in a centred phone-width column)
 
+Bar (research.md "Design bar", 2026-11-28): Duolingo (one saturated action colour, a big illustrated card per word, tactile buttons with a darker bottom edge, a coloured answer sheet with a sound), Drops (a saturated colour per topic for tile, header and background, one picture per word), Lingokids (warm, chunky, playful without noise). Owner's taste (goal.md) overrides: colourful, a colour per track, drawn colour pictures, depth, celebration. We match their polish and beat them by being Vietnamese-first: type drawn for Vietnamese, the Vietnamese gloss on every picture card, the ô-ly notebook grid, a natural voice with slow replay.
+
 ## Tokens
-- background #F3F6F4 (cool paper), surface #FFFFFF, text #1B2A26, muted #5A6B66 (metadata only), accent #5B3FA8 ("mực tím", the purple school ink: actions, current state, the English being taught), success #1E7A4C (correct answer), danger #B3261E (wrong answer, destructive), line #D6DED9 (borders, the grid)
-- dark: background #121816, surface #1C2421, text #E8EFEC, muted #A3B2AD, accent #B9A6F2, success #6FD3A0, danger #F2A49E, line #2E3A36
-- type: Be Vietnam Pro (OFL, drawn for Vietnamese diacritics) via @expo-google-fonts/be-vietnam-pro; 400 body, 600 headings and buttons, 700 page titles. Scale ratio 1.2 from 16 px: 13.3, 16, 19.2, 23, 27.6, 33.2; the English word on a card 40. Numbers tabular.
-- space: 4 px base; 4, 8, 12, 16, 24, 32, 48. Radius 12 (controls), 16 (cards). Border 1 px line colour. Shadow: none; surfaces separate by colour and border.
-- touch targets at least 48 px tall; primary button full width at the bottom of the screen (thumb reach).
-- signature: the "vở ô ly" grid. The card that holds the English being taught sits on a faint squared grid like a Vietnamese school notebook, and the English word is written in the purple-ink accent; Vietnamese explanations sit below it in plain text colour.
+Colour (light; every pairing used is checked for contrast in `src/constants/theme.test.ts`):
+- brand: ink #5B3FA8 (purple school ink: the app's own actions, links, focus ring), ink-deep #432C85 (button lip), ink-tint #EEE9FA
+- track everyday "Đời sống": lotus #D9467A, lotus-deep #A82E5A, lotus-tint #FDE8F0
+- track work "Công việc": ocean #2F6FDB, ocean-deep #1F4FA6, ocean-tint #E4EEFC
+- track kids "Trẻ em": mango #F59A12 (fills and pictures only, never under text), mango-deep #A65A00, mango-tint #FFF1D9
+- success #1F9D55, success-deep #15773F, success-tint #E2F6EA; danger #D93636, danger-deep #A82424, danger-tint #FDE6E6
+- background #F5F6FA, surface #FFFFFF, raised #FFFFFF with shadow, text #1A2233, muted #5B6478 (metadata only), line #DDE1EA
+- dark: background #10131A, surface #1A1F2B, raised #222838, text #EDF0F7, muted #A4ACBD, line #2E3546; each colour has a lighter dark-mode value (ink #B9A6F2, lotus #F07BA5, ocean #7FA8F5, mango #FFB84D, success #5FD394, danger #F28B8B) and tints at 18% over surface
+- White text sits only on the -deep values (all >= 4.5:1). Track colour fills the track's header band, icon tile, progress bar and the lesson's primary button; ink is used where no track applies (home, account, profiles, premium).
+Type: Be Vietnam Pro (OFL): 400 body, 600 headings and buttons, 700 titles, 800 the big numbers on result screens. Scale ratio 1.2 from 16 px: 13.3, 16, 19.2, 23, 27.6, 33.2; English word on a card 40; result number 56. Line height 1.4 body, 1.25 headings (room for stacked diacritics).
+Space: 4 px base; 4, 8, 12, 16, 24, 32, 48. Radius 14 controls, 20 cards, 999 pills.
+Depth: two surface levels on every screen. Pressable cards and buttons have a 4 px bottom lip in the -deep colour (line colour for neutral cards) that shrinks to 0 while pressed (the face moves down 4 px); sheets and dialogs use shadow 0 8 24 rgba(26,34,51,0.12); no borders on raised surfaces.
+Icons and pictures: UI icons are Lucide (ISC) drawn in white on a track- or ink-coloured rounded tile, or in ink on neutral surfaces; never typed emoji. Pictures of words, tracks, profile avatars, empty states and milestones are Microsoft Fluent Emoji 3D (MIT) shipped as PNG files at 192 px, one style everywhere. Every concrete word has a picture; abstract words (greetings, function words) may have none and are marked so in content.
+Feedback: on check, a bottom sheet in success-tint or danger-tint slides up (200 ms) with an icon, a short sound, the praise or the right answer with its play button, and Continue in success-deep or danger-deep; a right choice bounces once (scale 1 -> 1.06 -> 1, 180 ms). Progress bar in the track colour with a lighter highlight stripe grows on each right answer. Lesson and review results celebrate: a burst of ô-ly squares and petals in the track colours for 1.6 s, a count-up of words learned, a rising three-note sound; tap skips; with reduced motion, no burst and no count-up, the sound only.
+Sounds: original, synthesised by a script in the repo (correct, wrong, celebrate), under 1 s each, played through expo-audio at media volume; they respect the iOS silent switch (unlike word audio, which plays in silent mode). A sound on/off switch is out of scope.
+Touch targets at least 48 px; primary button full width at the bottom (thumb reach); web is a centred column of 480 px (lesson) to 640 px (home, track grid at 1280 shows two columns).
+Signature: the "vở ô ly" grid. The word card sits on a faint squared grid tinted in the track colour, the English word in the track's deep colour with the picture above it and the Vietnamese gloss below; the celebration bursts ô-ly squares.
 
 ## Generic check
-- Rejected: a bright green owl-style mascot palette with rounded cartoon buttons (the default for language apps); replaced by paper, purple ink and the ô-ly grid that every Vietnamese learner knows from school.
-- Rejected: emoji as UI icons; emoji appear only as pictures of words in the kids track (content, not chrome).
-- Rejected: cards with soft shadows in rows; replaced by bordered list rows with one clear primary action per screen.
+- Rejected: a green owl-style mascot palette (the language-app default); replaced by one colour per track drawn from Vietnamese life (lotus pink, ocean blue, mango) on a purple-ink brand.
+- Rejected: purple-to-blue gradients and gradient text; colours are flat fills with tints and a darker lip.
+- Rejected: emoji typed as text; pictures are Fluent Emoji 3D files and icons are Lucide.
+- Rejected: rows of identical soft-shadow cards; home shows three tall track cards each in its own colour with a picture, the track screen a level path with coloured unit tiles, and lists elsewhere use grouped rows.
+- Rejected: confetti in generic rainbow colours; the burst uses ô-ly squares in the track colours.
+- Decision: the 2026-11-27 "paper, purple ink, no shadows" direction is replaced by this one at the owner's request (colourful, a colour per track, pictures, depth, celebration); ink and the ô-ly grid stay as the brand thread.
 
 ## Content
 ### Learners and levels
@@ -35,7 +51,7 @@ Kind: learning app (short daily sessions, phone first; web is the same app in a 
 - Each unit: 6-10 new words or phrases, one short grammar or usage note in Vietnamese (A1 and up), at least 10 exercises. A word is used in an exercise only in or after the unit that introduces it.
 
 ### Item types (fields)
-- `word`: id, en, vi, audio (English text to speak, defaults to en), example {en, vi} optional, picture (emoji, kids track only) optional
+- `word`: id, en, vi, audio (English text to speak, defaults to en), example {en, vi} optional, picture (a Fluent Emoji 3D asset name, every track) required unless `abstract: true`
 - `choose_meaning`: prompt word id; options are vi meanings (3-4), answer
 - `choose_english`: prompt vi; options en (3-4), answer
 - `listen_choose`: audio en; options en (3-4), answer
@@ -47,7 +63,8 @@ Kind: learning app (short daily sessions, phone first; web is the same app in a 
 ### Sources
 - Lessons, explanations, dialogues, exercises, translations: written originally for this app (`source: original`).
 - Open data only with a commercial-use licence, fetched by a pinned script and recorded in `content/SOURCES.md` (see `research.md` "Content sources").
-- Speech: device text-to-speech (expo-speech; Web Speech API on web) and device speech recognition; no paid APIs, no recorded audio.
+- Speech: audio generated at build time by Kokoro-82M (Apache-2.0, two voices) for every English text, bundled; device text-to-speech only as fallback; device speech recognition for speaking. No paid APIs, no recorded human audio.
+- Pictures: Microsoft Fluent Emoji 3D (MIT), fetched by a pinned script, listed in content/SOURCES.md.
 
 ### Children
 - Decision: kids are 4-10 and use the app with a parent. A parent account owns child profiles; a child profile stores only a nickname and a picture choice (no email, real name, birthday or location); no ads, third-party trackers or chat anywhere in the app. Account, plan and profile management sit behind a parent gate.

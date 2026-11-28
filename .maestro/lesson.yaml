@@ -7,6 +7,10 @@ appId: app.hocenglish
 ---
 - launchApp:
     clearState: true
+# A link sent before the app's JS listens is dropped on a cold start, so wait for home first.
+- extendedWaitUntil:
+    visible: "Chọn chủ đề"
+    timeout: 60000
 - openLink: hocenglish://lesson/everyday-a0-u1
 - assertVisible: "Chào hỏi"
 - assertNotVisible: "Bạn đã học xong bài này."
@@ -39,6 +43,10 @@ appId: app.hocenglish
 - stopApp
 - launchApp:
     clearState: false
+# A link sent before the app's JS listens is dropped on a cold start, so wait for home first.
+- extendedWaitUntil:
+    visible: "Chọn chủ đề"
+    timeout: 60000
 - openLink: hocenglish://lesson/everyday-a0-u1
 - assertVisible: "Bạn đã học xong bài này."
 - assertVisible: "Học lại"
