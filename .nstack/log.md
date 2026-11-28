@@ -381,3 +381,13 @@
 - [x] 5. Prove it yourself. merged: content tests below
 - [x] 6. Record. this entry
 - [x] Done when: committed, items ticked.
+
+## 2026-11-28 build T29
+- Read: build/SKILL.md a069840
+- [x] 1. Branch. nstack/content-a2
+- [x] 2. Starting state. fast checks pass at 848f1f3
+- [x] 3. Dispatch. builder in worktree
+- [x] 4. Read the reply. done fe890d5; native reader "pass with fixes": 8 must-fix (2 grammar notes, 1 missed order, 1 tile ambiguity, 4 typed variants) applied; 11 of 17 optional applied, 3 skipped (untaught words), 3 no change
+- [x] 5. Prove it yourself. merged: jest and typecheck above
+- [x] 6. Record. this entry; T32 planned for checks builders asked for
+- [x] Done when: committed, items ticked.

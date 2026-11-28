@@ -57,9 +57,10 @@ Acceptance criteria:
 2. Each track's batch has a native reader verdict with every problem fixed.
 3. A2 grammar is introduced with contrast to Vietnamese (e.g. past time without verb change in Vietnamese vs -ed / irregular forms; "going to" vs "sẽ").
 
-- [ ] T29 Everyday A2 u11-u15. Proof: content test, native reader verdict. Content: yes. Needs: none
+- [x] T29 Everyday A2 u11-u15. Proof: content test, native reader verdict. Content: yes. Needs: none
 - [x] T30 Work A2 u7-u9. Proof: content test, native reader verdict. Content: yes. Needs: none
 - [x] T31 Kids A2 u9-u10. Proof: content test, native reader verdict. Content: yes. Needs: none
+- [ ] T32 Checks that content builders asked for: the content test requires at least 2 speak items per unit; typed answers ignore commas inside the sentence (so variants need not list them); Jest testTimeout raised for component suites so machine load does not fail correct tests. Proof: content test red on a unit with 1 speak item; answers test red on an inner-comma variant; full npm test. Needs: none
 
 ## Done
 - foundation: T1-T4, PR #1
