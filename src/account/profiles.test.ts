@@ -1,5 +1,8 @@
+import { join } from 'node:path';
+
 import { signIn, signOut } from '@/account';
 import { addChild, deleteChild, loadProgressSummary, updateChild } from '@/account/profiles';
+import { readUnits } from '@/content/files';
 import { createProgressStore } from '@/progress';
 
 jest.mock('@react-native-async-storage/async-storage', () =>
@@ -185,6 +188,21 @@ describe('a profile progress summary', () => {
     // Unit 1 has 9 words; all but "hello" waited past their 10 minutes in box 1.
     expect(await loadProgressSummary('c1', anHourLater)).toEqual({ lessonsCompleted: 1, wordsDue: 8 });
     expect(sent(fetchMock)).toMatchObject({ url: '/api/profiles/c1/progress', authorization: 'Bearer tok-1' });
+  });
+
+  it('counts the due words of a finished premium unit, as home does', async () => {
+    const premiumUnit = readUnits(join(__dirname, '../../content')).find((unit) => unit.id === 'everyday-a0-u4');
+    const finished = progress.lessons['everyday-a0-u1'];
+    await signedInThen(
+      { status: 200, body: { ...progress, lessons: { 'everyday-a0-u4': finished }, answers: {} } },
+      { status: 200, body: { unit: premiumUnit } }
+    );
+
+    // Unit 4 has 10 words, none answered since the lesson a day ago.
+    expect(await loadProgressSummary('c1', new Date('2026-11-21T08:00:00.000Z'))).toEqual({
+      lessonsCompleted: 1,
+      wordsDue: 10,
+    });
   });
 
   it('is nothing learned yet for a new profile', async () => {

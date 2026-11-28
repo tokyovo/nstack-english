@@ -41,6 +41,24 @@ test('a free learner sees units 4 and 5 locked as Premium, and opening one shows
   expect(errors.filter((e) => !/401|403/.test(e))).toEqual([]);
 });
 
+test('a free learner who finishes unit 3 is told the next unit needs Premium', async ({ page }) => {
+  const unit3 = loadUnit('everyday/a0/u3.json');
+  await withoutSpeech(page);
+  await page.goto(`/lesson/${unit3.id}`);
+  await button(page, 'Bắt đầu học').click();
+  for (let i = 0; i < unit3.words.length; i++) await button(page, 'Tiếp tục').click();
+  for (const exercise of unit3.exercises) {
+    await answerRight(page, exercise);
+    await button(page, 'Tiếp tục').click();
+  }
+  await expect(page.getByRole('heading', { name: 'Xong bài học!' })).toBeVisible();
+
+  const next = page.getByTestId('next-unit');
+  await expect(next).toHaveAccessibleName(`Bài tiếp theo cần Premium: ${premiumUnit.title}`);
+  await next.click();
+  await expect(page).toHaveURL(/\/premium$/);
+});
+
 test('the Premium demo account finishes a premium lesson, then opens it again offline', async ({ page, context }) => {
   await withoutSpeech(page);
   await signInAsDemo(page);

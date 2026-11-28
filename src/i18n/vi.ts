@@ -197,6 +197,7 @@ export const vi = {
   'lesson.resultPerfect': 'Tuyệt vời, bạn không sai câu nào.',
   'lesson.resultKeepGoing': 'Học lại bài này bất cứ lúc nào để nhớ lâu hơn.',
   'lesson.nextUnit': 'Học bài tiếp theo: {title}',
+  'lesson.nextUnitPremium': 'Bài tiếp theo cần Premium: {title}',
   'lesson.backToTrack': 'Về danh sách bài',
   'lesson.leave': 'Rời bài học',
   'lesson.leaveLabel': 'Rời bài học, quay lại chủ đề {track}',

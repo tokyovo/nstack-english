@@ -217,6 +217,23 @@ describe('premium words in review', () => {
     expect(await screen.findByText('Từ 1/9')).toBeOnTheScreen();
   });
 
+  it('leaves out the kept copy of a finished premium unit once Premium has ended, online, and drops it', async () => {
+    const server = fakeServer('premium');
+    await signIn(user.email, 'hoc-english-demo');
+    await finishedADayAgo('everyday-a0-u1');
+    expect((await loadPremiumUnit('everyday-a0-u4')).status).toBe('ready');
+    await finishedADayAgo('everyday-a0-u4');
+    server.plan = 'free';
+    await renderApp('/');
+
+    expect(await screen.findByText('9 từ cần ôn')).toBeOnTheScreen();
+
+    await userEvent.press(screen.getByRole('link', { name: 'Ôn tập ngay' }));
+
+    expect(await screen.findByText('Từ 1/9')).toBeOnTheScreen();
+    expect(await AsyncStorage.getItem('hocenglish.premiumUnit.everyday-a0-u4')).toBeNull();
+  });
+
   it('leaves out a finished premium unit with no copy on the device while offline', async () => {
     const server = fakeServer('premium');
     await signIn(user.email, 'hoc-english-demo');

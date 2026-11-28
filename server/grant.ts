@@ -35,12 +35,22 @@ function readInput(argv: string[]): { dbPath: string; input: GrantInput } {
   }
   const source = ENTITLEMENT_SOURCES.find((known) => known === values.source);
   if (!source) throw new UsageError(`source must be one of ${ENTITLEMENT_SOURCES.join(', ')}`);
-  return { dbPath: values.db, input: { email, days, source, ref: values.ref ?? defaultRef(source, email) } };
+  const ref = values.ref?.trim();
+  if (ref === '') throw new UsageError(`--ref must not be empty; leave it out for the default reference.\n${USAGE}`);
+  return { dbPath: values.db, input: { email, days, source, ref: ref ?? defaultRef(source, email) } };
 }
 
 /** Without --ref, rerunning the same grant on the same day stores it once. */
 function defaultRef(source: EntitlementSource, email: string): string {
   return `${source}:${email}:${new Date().toISOString().slice(0, 10)}`;
+}
+
+/** The server migrates its database on start; a file it never ran on has no tables to grant into. */
+function hasSchema(db: DatabaseSync): boolean {
+  const found = db
+    .prepare("SELECT count(*) AS n FROM sqlite_master WHERE type = 'table' AND name IN ('users', 'entitlements')")
+    .get();
+  return found?.n === 2;
 }
 
 function main(argv: string[]): number {
@@ -56,6 +66,10 @@ function main(argv: string[]): number {
   const db = new DatabaseSync(dbPath);
   try {
     db.exec('PRAGMA foreign_keys = ON');
+    if (!hasSchema(db)) {
+      console.error(`Database ${dbPath} is not set up for accounts; start the server on it first.`);
+      return 2;
+    }
     const result = grantPremium(db, input, new Date());
     switch (result.status) {
       case 'unknown_email':
