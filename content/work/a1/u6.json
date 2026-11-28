@@ -23,7 +23,7 @@
       "en": "customer / customers",
       "vi": "khách hàng",
       "audio": "customer, customers",
-      "example": { "en": "This is a customer, Mr. Brown.", "vi": "Đây là một khách hàng, ông Brown." }
+      "example": { "en": "Mr. Brown is a customer.", "vi": "Ông Brown là khách hàng." }
     },
     {
       "id": "work-a1-u6-please-take-a-seat",
@@ -70,8 +70,8 @@
     {
       "id": "work-a1-u6-how-much-is-it",
       "en": "How much is it?",
-      "vi": "Cái này bao nhiêu tiền?",
-      "example": { "en": "Thank you. How much is it?", "vi": "Cảm ơn. Cái này bao nhiêu tiền?" }
+      "vi": "Bao nhiêu tiền ạ?",
+      "example": { "en": "Thank you. How much is it?", "vi": "Cảm ơn. Bao nhiêu tiền ạ?" }
     }
   ],
   "exercises": [
@@ -79,7 +79,7 @@
       "id": "work-a1-u6-e01",
       "type": "choose_meaning",
       "prompt": "work-a1-u6-how-can-i-help-you",
-      "options": ["Tôi có thể giúp gì cho anh/chị?", "Mời anh/chị ngồi", "Cái này bao nhiêu tiền?"],
+      "options": ["Tôi có thể giúp gì cho anh/chị?", "Mời anh/chị ngồi", "Bao nhiêu tiền ạ?"],
       "answer": "Tôi có thể giúp gì cho anh/chị?"
     },
     {
@@ -124,7 +124,7 @@
       "type": "type_answer",
       "prompt": "Xin lỗi",
       "answer": "Sorry",
-      "accepted": ["I'm sorry", "I am sorry"]
+      "accepted": ["I'm sorry", "I am sorry", "Excuse me", "Sorry about that"]
     },
     {
       "id": "work-a1-u6-e08",
@@ -160,7 +160,7 @@
       "type": "type_answer",
       "prompt": "nhà vệ sinh",
       "answer": "toilet",
-      "accepted": ["a toilet", "the toilet", "restroom", "the restroom", "bathroom", "the bathroom", "WC"]
+      "accepted": ["a toilet", "the toilet", "toilets", "restroom", "a restroom", "the restroom", "bathroom", "a bathroom", "the bathroom", "WC"]
     },
     {
       "id": "work-a1-u6-e13",

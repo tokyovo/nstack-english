@@ -9,7 +9,7 @@
     "Có thể nói mình làm việc những ngày nào",
     "Có thể hỏi đồng nghiệp mấy giờ bắt đầu làm việc"
   ],
-  "note_vi": "Thì hiện tại đơn dùng cho việc lặp lại hằng ngày, như giờ làm: “I start work at 8 o'clock.” (Tôi bắt đầu làm việc lúc 8 giờ.) Động từ giữ nguyên sau “I”, “you”, “we”, “they”; sau “he”, “she” hoặc tên một người thì thêm -s: “Lan starts work at 9 o'clock.” Trước giờ dùng “at”: “at 5 o'clock”. Trước thứ dùng “on”: “on Monday”. Để hỏi, thêm “do” trước chủ ngữ: “What time do you start work?” (Mấy giờ anh/chị bắt đầu làm việc?).",
+  "note_vi": "Thì hiện tại đơn dùng cho việc lặp lại hằng ngày, như giờ làm: “I start work at 8 o'clock.” (Tôi bắt đầu làm việc lúc 8 giờ.) Động từ giữ nguyên sau “I”, “you”, “we”, “they”; sau “he”, “she” hoặc tên một người thì thêm -s: “Lan starts work at 9 o'clock.” Trước giờ dùng “at”: “at 5 o'clock”. Trước thứ dùng “on”: “on Monday”. Để hỏi, thêm “do” trước “I”, “you”, “we”, “they”: “What time do you start work?” (Mấy giờ anh/chị bắt đầu làm việc?). Với “he”, “she” hoặc tên một người thì dùng “does” và động từ giữ nguyên: “What time does Lan start work?”",
   "source": "original",
   "words": [
     {
@@ -64,7 +64,7 @@
       "id": "work-a1-u4-what-time-do-you-start-work",
       "en": "What time do you start work?",
       "vi": "Mấy giờ anh/chị bắt đầu làm việc?",
-      "example": { "en": "What time do you start work, Tom?", "vi": "Mấy giờ anh bắt đầu làm việc, anh Tom?" }
+      "example": { "en": "What time do you start work, Tom?", "vi": "Anh Tom, mấy giờ anh bắt đầu làm việc?" }
     },
     {
       "id": "work-a1-u4-i-have-a-meeting",
@@ -101,6 +101,7 @@
       "prompt": "Tôi bắt đầu làm việc lúc 9 giờ.",
       "tiles": ["work", "I", "o'clock", "at", "start", "9", "on"],
       "answer": ["I", "start", "work", "at", "9", "o'clock"],
+      "accepted": [["at", "9", "o'clock", "I", "start", "work"]],
       "hint_vi": "Trước giờ dùng “at”: “at 9 o'clock”."
     },
     {
@@ -129,14 +130,14 @@
       "type": "build_sentence",
       "prompt": "Tôi tan làm lúc 5 giờ.",
       "tiles": ["finish", "at", "5", "I", "work", "o'clock", "start"],
-      "answer": ["I", "finish", "work", "at", "5", "o'clock"]
+      "answer": ["I", "finish", "work", "at", "5", "o'clock"],
+      "accepted": [["at", "5", "o'clock", "I", "finish", "work"]]
     },
     {
       "id": "work-a1-u4-e09",
       "type": "type_answer",
       "prompt": "thứ Hai",
-      "answer": "Monday",
-      "accepted": ["on Monday", "Mon"]
+      "answer": "Monday"
     },
     {
       "id": "work-a1-u4-e10",
@@ -164,8 +165,7 @@
       "id": "work-a1-u4-e13",
       "type": "type_answer",
       "prompt": "thứ Sáu",
-      "answer": "Friday",
-      "accepted": ["on Friday", "Fri"]
+      "answer": "Friday"
     },
     {
       "id": "work-a1-u4-e14",

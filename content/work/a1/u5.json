@@ -9,15 +9,15 @@
     "Có thể nhận lời nhắn khi người đó không có ở đây",
     "Có thể nhờ người khác gọi lại hoặc gửi email"
   ],
-  "note_vi": "“Can” đứng trước động từ để xin phép hoặc nhờ ai làm gì. Xin phép: “Can I speak to Ms. Hoa?” (Cho tôi nói chuyện với chị Hoa được không?). Nhờ: “Can you call me back?” (Anh/chị gọi lại cho tôi được không?). Động từ sau “can” luôn giữ nguyên: không thêm “to”, không thêm -s. Trả lời lịch sự: “Yes, of course.” (Vâng, tất nhiên rồi.) Khi người kia không có mặt, nói “Just a moment.” (Xin chờ một chút.) rồi “He's not here.” (Anh ấy không có ở đây.)",
+  "note_vi": "“Can” đứng trước động từ để xin phép hoặc nhờ ai làm gì. Xin phép: “Can I speak to Ms. Hoa?” (Cho tôi gặp chị Hoa được không?, khi gọi điện). Nhờ: “Can you call me back?” (Anh/chị gọi lại cho tôi được không?). Động từ sau “can” luôn giữ nguyên: không thêm “to”, không thêm -s. Trả lời lịch sự: “Yes, of course.” (Vâng, tất nhiên rồi.) Khi người kia không có mặt, nói “Just a moment.” (Xin chờ một chút.) rồi “He's not here.” (Anh ấy không có ở đây.)",
   "source": "original",
   "words": [
     {
       "id": "work-a1-u5-can-i-speak-to",
       "en": "Can I speak to ...?",
-      "vi": "Cho tôi nói chuyện với ... được không?",
+      "vi": "Cho tôi gặp ... được không?",
       "audio": "Can I speak to",
-      "example": { "en": "Hello. Can I speak to Mr. Brown?", "vi": "Xin chào. Cho tôi nói chuyện với ông Brown được không?" }
+      "example": { "en": "Hello. Can I speak to Mr. Brown?", "vi": "Xin chào. Cho tôi gặp ông Brown được không?" }
     },
     {
       "id": "work-a1-u5-just-a-moment",
@@ -41,7 +41,7 @@
       "id": "work-a1-u5-can-you-call-me-back",
       "en": "Can you call me back?",
       "vi": "Anh/chị gọi lại cho tôi được không?",
-      "example": { "en": "I have a meeting. Can you call me back?", "vi": "Tôi đang có cuộc họp. Anh/chị gọi lại cho tôi được không?" }
+      "example": { "en": "I have a meeting. Can you call me back?", "vi": "Tôi có cuộc họp. Anh/chị gọi lại cho tôi được không?" }
     },
     {
       "id": "work-a1-u5-whats-your-phone-number",
@@ -114,7 +114,7 @@
     {
       "id": "work-a1-u5-e07",
       "type": "build_sentence",
-      "prompt": "Cho tôi nói chuyện với chị Hoa được không?",
+      "prompt": "Cho tôi gặp chị Hoa được không?",
       "tiles": ["speak", "Hoa", "Can", "to", "I", "Ms.", "you"],
       "answer": ["Can", "I", "speak", "to", "Ms.", "Hoa"],
       "hint_vi": "Xin phép: “Can I” + động từ."
@@ -146,6 +146,7 @@
       "prompt": "Anh/chị gửi email cho ông Brown được không?",
       "tiles": ["send", "Can", "email", "an", "Mr.", "you", "to", "Brown", "a"],
       "answer": ["Can", "you", "send", "an", "email", "to", "Mr.", "Brown"],
+      "accepted": [["Can", "you", "send", "Mr.", "Brown", "an", "email"]],
       "hint_vi": "“email” bắt đầu bằng âm nguyên âm nên dùng “an”."
     },
     {
