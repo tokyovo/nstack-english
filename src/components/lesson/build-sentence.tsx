@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { Pressable, StyleSheet, View } from 'react-native';
 
 import { ActionButton } from '@/components/lesson/action-button';
-import { ThemedText } from '@/components/themed-text';
+import { EnglishText, ThemedText } from '@/components/themed-text';
 import { Border, MinTouchTarget, Radius, Space } from '@/constants/theme';
 import type { Exercise } from '@/content';
 import { useTheme } from '@/hooks/use-theme';
@@ -46,9 +46,9 @@ function Tile({ text, placed, disabled, onPress, testID }: TileProps) {
         },
         'focused' in state && state.focused ? { outlineColor: theme.accent, outlineWidth: 2, outlineOffset: 2 } : null,
       ]}>
-      <ThemedText type="lead" accessibilityLanguage="en" style={{ color: theme.accent }}>
+      <EnglishText type="lead" style={{ color: theme.accent }}>
         {text}
-      </ThemedText>
+      </EnglishText>
     </Pressable>
   );
 }

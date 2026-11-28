@@ -19,6 +19,17 @@ export function ThemedText({ style, type = 'body', ...rest }: ThemedTextProps) {
   return <Text style={[{ color: colorOf(type, theme) }, styles[type], style]} {...rest} />;
 }
 
+// react-native-web renders `lang` on the DOM node; React Native's types do not list it.
+const english = { accessibilityLanguage: 'en', lang: 'en' };
+
+/**
+ * The English being taught. Screen readers pronounce it as English, on native through
+ * accessibilityLanguage and on web (page lang "vi") through lang="en".
+ */
+export function EnglishText(props: Omit<ThemedTextProps, 'accessibilityLanguage'>) {
+  return <ThemedText {...props} {...english} />;
+}
+
 // Line heights are generous so Vietnamese stacked diacritics never clip.
 const styles = StyleSheet.create({
   body: {

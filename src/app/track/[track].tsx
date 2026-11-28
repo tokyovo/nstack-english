@@ -1,10 +1,11 @@
-import { Link, Stack, useLocalSearchParams } from 'expo-router';
+import { Stack, useLocalSearchParams } from 'expo-router';
 import { ScrollView, StyleSheet, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
+import { BackLink } from '@/components/back-link';
 import { ListRow } from '@/components/list-row';
 import { ThemedText } from '@/components/themed-text';
-import { Fonts, FontSize, MaxContentWidth, MinTouchTarget, Space } from '@/constants/theme';
+import { Fonts, MaxContentWidth, Space } from '@/constants/theme';
 import { levels, tracks, unitsOf, type Track, type Unit } from '@/content';
 import { useTheme } from '@/hooks/use-theme';
 import { t } from '@/i18n';
@@ -35,15 +36,6 @@ function UnitRow({ unit, progress }: { unit: Unit; progress: ProgressState }) {
         </ThemedText>
       )}
     </ListRow>
-  );
-}
-
-function BackLink() {
-  const theme = useTheme();
-  return (
-    <Link href="/" style={[styles.back, { color: theme.accent }]}>
-      {t('track.back')}
-    </Link>
   );
 }
 
@@ -82,7 +74,7 @@ export default function TrackScreen() {
       <Stack.Screen options={{ title }} />
       <ScrollView contentContainerStyle={styles.scroll}>
         <View style={styles.column}>
-          <BackLink />
+          <BackLink href="/" label={t('track.back')} />
           <ThemedText type="title" role="heading" aria-level={1}>
             {title}
           </ThemedText>
@@ -108,13 +100,6 @@ const styles = StyleSheet.create({
     paddingTop: Space.xl,
     paddingBottom: Space.xxxl,
     gap: Space.xl,
-  },
-  back: {
-    alignSelf: 'flex-start',
-    minHeight: MinTouchTarget,
-    paddingVertical: Space.md,
-    fontFamily: Fonts.semiBold,
-    fontSize: FontSize.body,
   },
   list: {
     gap: Space.md,

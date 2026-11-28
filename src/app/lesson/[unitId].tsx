@@ -2,6 +2,7 @@ import { Link, Stack, useLocalSearchParams } from 'expo-router';
 import { ScrollView, StyleSheet, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
+import { BackLink } from '@/components/back-link';
 import { ActionButton } from '@/components/lesson/action-button';
 import { LessonPlayer } from '@/components/lesson/lesson-player';
 import { ThemedText } from '@/components/themed-text';
@@ -24,8 +25,16 @@ export default function LessonScreen() {
       <ScrollView contentContainerStyle={styles.scroll} keyboardShouldPersistTaps="handled">
         <View style={styles.column}>
           {unit ? (
-            // A new unit starts a new lesson, never the previous one's steps.
-            <LessonPlayer key={unit.id} unit={unit} store={store} />
+            <>
+              {/* Answers are saved as they are given, so leaving mid-lesson loses none. */}
+              <BackLink
+                href={`/track/${unit.track}`}
+                label={t('lesson.leave')}
+                accessibilityLabel={t('lesson.leaveLabel', { track: t(`track.${unit.track}.name`) })}
+              />
+              {/* A new unit starts a new lesson, never the previous one's steps. */}
+              <LessonPlayer key={unit.id} unit={unit} store={store} />
+            </>
           ) : (
             <View style={styles.missing}>
               <ThemedText type="heading" role="heading" aria-level={1}>
@@ -50,7 +59,9 @@ const styles = StyleSheet.create({
     width: '100%',
     maxWidth: MaxContentWidth,
     paddingHorizontal: Space.xl,
-    paddingVertical: Space.xxl,
+    paddingTop: Space.md,
+    paddingBottom: Space.xxl,
+    gap: Space.md,
   },
   missing: { gap: Space.xl },
 });
