@@ -99,6 +99,18 @@
       "answer": "red"
     },
     {
+      "id": "kids-a0-u2-e13",
+      "type": "speak",
+      "text": "A pink pig",
+      "vi": "Một con lợn màu hồng"
+    },
+    {
+      "id": "kids-a0-u2-e14",
+      "type": "speak",
+      "text": "A yellow duck",
+      "vi": "Một con vịt màu vàng"
+    },
+    {
       "id": "kids-a0-u2-e12",
       "type": "choose_english",
       "prompt": "con vịt màu vàng",

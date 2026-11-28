@@ -170,6 +170,12 @@
       "answer": "How are you?"
     },
     {
+      "id": "everyday-a0-u1-e16",
+      "type": "speak",
+      "text": "Nice to meet you.",
+      "vi": "Rất vui được gặp bạn."
+    },
+    {
       "id": "everyday-a0-u1-e14",
       "type": "type_answer",
       "prompt": "Cảm ơn",
