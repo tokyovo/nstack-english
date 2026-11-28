@@ -1,0 +1,165 @@
+{
+  "id": "work-a0-u2",
+  "track": "work",
+  "level": "a0",
+  "number": 2,
+  "title": "Nghề nghiệp",
+  "goals": [
+    "Có thể hỏi một người làm nghề gì",
+    "Có thể nói nghề của mình",
+    "Có thể gọi tên một số nghề thông dụng"
+  ],
+  "note_vi": "Khi nói nghề, tiếng Anh luôn có “a” hoặc “an” trước tên nghề: “I'm a nurse.” (Tôi là y tá.) Dùng “an” khi tên nghề bắt đầu bằng âm nguyên âm (a, e, i, o, u): “I'm an engineer.” Để hỏi nghề, người ta nói “What do you do?” (Anh/chị làm nghề gì?).",
+  "source": "original",
+  "words": [
+    {
+      "id": "work-a0-u2-what-do-you-do",
+      "en": "What do you do?",
+      "vi": "Anh/chị làm nghề gì?",
+      "example": { "en": "Hello, Anna. What do you do?", "vi": "Chào Anna. Chị làm nghề gì?" }
+    },
+    {
+      "id": "work-a0-u2-im-a",
+      "en": "I'm a ... / I'm an ...",
+      "vi": "Tôi là (một) ...",
+      "audio": "I'm a",
+      "example": { "en": "I'm a teacher.", "vi": "Tôi là giáo viên." }
+    },
+    {
+      "id": "work-a0-u2-teacher",
+      "en": "teacher",
+      "vi": "giáo viên",
+      "example": { "en": "This is my colleague, Lan. Lan is a teacher.", "vi": "Đây là chị Lan, đồng nghiệp của tôi. Chị Lan là giáo viên." }
+    },
+    {
+      "id": "work-a0-u2-doctor",
+      "en": "doctor",
+      "vi": "bác sĩ",
+      "example": { "en": "Nam is a doctor.", "vi": "Anh Nam là bác sĩ." }
+    },
+    {
+      "id": "work-a0-u2-nurse",
+      "en": "nurse",
+      "vi": "y tá",
+      "example": { "en": "I'm a nurse.", "vi": "Tôi là y tá." }
+    },
+    {
+      "id": "work-a0-u2-engineer",
+      "en": "engineer",
+      "vi": "kỹ sư",
+      "example": { "en": "I'm an engineer.", "vi": "Tôi là kỹ sư." }
+    },
+    {
+      "id": "work-a0-u2-accountant",
+      "en": "accountant",
+      "vi": "kế toán",
+      "example": { "en": "Ms. Hoa is an accountant.", "vi": "Chị Hoa là kế toán." }
+    },
+    {
+      "id": "work-a0-u2-driver",
+      "en": "driver",
+      "vi": "tài xế",
+      "example": { "en": "Tom is a driver.", "vi": "Tom là tài xế." }
+    },
+    {
+      "id": "work-a0-u2-cook",
+      "en": "cook",
+      "vi": "đầu bếp",
+      "example": { "en": "I'm a cook.", "vi": "Tôi là đầu bếp." }
+    }
+  ],
+  "exercises": [
+    {
+      "id": "work-a0-u2-e01",
+      "type": "choose_meaning",
+      "prompt": "work-a0-u2-teacher",
+      "options": ["giáo viên", "bác sĩ", "tài xế"],
+      "answer": "giáo viên"
+    },
+    {
+      "id": "work-a0-u2-e02",
+      "type": "choose_english",
+      "prompt": "y tá",
+      "options": ["doctor", "nurse", "cook"],
+      "answer": "nurse"
+    },
+    {
+      "id": "work-a0-u2-e03",
+      "type": "listen_choose",
+      "audio": "engineer",
+      "options": ["engineer", "accountant", "teacher"],
+      "answer": "engineer"
+    },
+    {
+      "id": "work-a0-u2-e04",
+      "type": "choose_meaning",
+      "prompt": "work-a0-u2-what-do-you-do",
+      "options": ["Anh/chị làm nghề gì?", "Rất vui được gặp anh/chị", "Tôi là (một) ..."],
+      "answer": "Anh/chị làm nghề gì?"
+    },
+    {
+      "id": "work-a0-u2-e05",
+      "type": "build_sentence",
+      "prompt": "Tôi là bác sĩ.",
+      "tiles": ["doctor", "a", "I'm", "an"],
+      "answer": ["I'm", "a", "doctor"]
+    },
+    {
+      "id": "work-a0-u2-e06",
+      "type": "build_sentence",
+      "prompt": "Tôi là kế toán.",
+      "tiles": ["an", "accountant", "a", "I'm"],
+      "answer": ["I'm", "an", "accountant"],
+      "hint_vi": "“accountant” bắt đầu bằng nguyên âm “a”, nên dùng “an”."
+    },
+    {
+      "id": "work-a0-u2-e07",
+      "type": "choose_english",
+      "prompt": "tài xế",
+      "options": ["driver", "engineer", "nurse", "cook"],
+      "answer": "driver"
+    },
+    {
+      "id": "work-a0-u2-e08",
+      "type": "listen_choose",
+      "audio": "What do you do?",
+      "options": ["What do you do?", "Nice to meet you", "See you tomorrow"],
+      "answer": "What do you do?"
+    },
+    {
+      "id": "work-a0-u2-e09",
+      "type": "choose_meaning",
+      "prompt": "work-a0-u2-cook",
+      "options": ["kế toán", "đầu bếp", "kỹ sư"],
+      "answer": "đầu bếp"
+    },
+    {
+      "id": "work-a0-u2-e10",
+      "type": "build_sentence",
+      "prompt": "Anh Nam là y tá.",
+      "tiles": ["is", "nurse", "Nam", "a", "I'm"],
+      "answer": ["Nam", "is", "a", "nurse"]
+    },
+    {
+      "id": "work-a0-u2-e11",
+      "type": "type_answer",
+      "prompt": "giáo viên",
+      "answer": "teacher",
+      "accepted": ["a teacher"]
+    },
+    {
+      "id": "work-a0-u2-e12",
+      "type": "listen_choose",
+      "audio": "I'm an engineer.",
+      "options": ["I'm an engineer.", "I'm a teacher.", "I'm a driver."],
+      "answer": "I'm an engineer."
+    },
+    {
+      "id": "work-a0-u2-e13",
+      "type": "type_answer",
+      "prompt": "bác sĩ",
+      "answer": "doctor",
+      "accepted": ["a doctor"]
+    }
+  ]
+}

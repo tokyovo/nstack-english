@@ -111,6 +111,14 @@ describe('findUiStringLiterals', () => {
     expect(check('const A = () => <Text>{t("greet", { who: "Bạn" })}</Text>;')).toEqual(['Bạn']);
   });
 
+  it('treats a computed message key in t() as a key, not text', () => {
+    expect(check('const A = () => <Text>{t(`track.${id}.name`)}{`Còn ${n} bài`}</Text>;')).toEqual(['Còn ${…} bài']);
+  });
+
+  it('ignores live-region politeness and variant props', () => {
+    expect(check('const A = () => <View aria-live="polite" accessibilityLiveRegion="polite"><B kind="secondary" /></View>;')).toEqual([]);
+  });
+
   it('reports object values under keys that are only allowlisted as props', () => {
     expect(check('const A = () => <Text>{t("greet", { name: "Bạn", type: "Lỗi" })}<F data={{ name: "Họ và tên" }} /></Text>;')).toEqual(['Bạn', 'Lỗi', 'Họ và tên']);
   });

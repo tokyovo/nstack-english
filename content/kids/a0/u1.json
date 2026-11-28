@@ -1,0 +1,117 @@
+{
+  "id": "kids-a0-u1",
+  "track": "kids",
+  "level": "a0",
+  "number": 1,
+  "title": "Con vật",
+  "goals": [
+    "Con gọi được tên tám con vật quen thuộc",
+    "Con nói được “It's a ...” khi nhìn một con vật"
+  ],
+  "note_vi": "Bố mẹ cùng con chỉ vào hình và nói to tên con vật. “It's a cat.” nghĩa là “Đó là con mèo.”",
+  "source": "original",
+  "words": [
+    { "id": "kids-a0-u1-cat", "en": "cat", "vi": "con mèo", "picture": "🐱" },
+    { "id": "kids-a0-u1-dog", "en": "dog", "vi": "con chó", "picture": "🐶" },
+    { "id": "kids-a0-u1-bird", "en": "bird", "vi": "con chim", "picture": "🐦" },
+    { "id": "kids-a0-u1-fish", "en": "fish", "vi": "con cá", "picture": "🐟" },
+    { "id": "kids-a0-u1-duck", "en": "duck", "vi": "con vịt", "picture": "🦆" },
+    { "id": "kids-a0-u1-cow", "en": "cow", "vi": "con bò", "picture": "🐮" },
+    { "id": "kids-a0-u1-pig", "en": "pig", "vi": "con lợn (con heo)", "picture": "🐷" },
+    { "id": "kids-a0-u1-chicken", "en": "chicken", "vi": "con gà", "picture": "🐔" },
+    {
+      "id": "kids-a0-u1-its-a",
+      "en": "It's a ...",
+      "vi": "Đó là con ...",
+      "audio": "It's a",
+      "picture": "👉",
+      "example": { "en": "It's a dog.", "vi": "Đó là con chó." }
+    }
+  ],
+  "exercises": [
+    {
+      "id": "kids-a0-u1-e01",
+      "type": "choose_meaning",
+      "prompt": "kids-a0-u1-cat",
+      "options": ["con mèo", "con chó", "con cá"],
+      "answer": "con mèo"
+    },
+    {
+      "id": "kids-a0-u1-e02",
+      "type": "listen_choose",
+      "audio": "dog",
+      "options": ["dog", "duck", "cow"],
+      "answer": "dog"
+    },
+    {
+      "id": "kids-a0-u1-e03",
+      "type": "choose_english",
+      "prompt": "con chim",
+      "options": ["fish", "bird", "pig"],
+      "answer": "bird"
+    },
+    {
+      "id": "kids-a0-u1-e04",
+      "type": "choose_meaning",
+      "prompt": "kids-a0-u1-duck",
+      "options": ["con gà", "con vịt", "con chim"],
+      "answer": "con vịt"
+    },
+    {
+      "id": "kids-a0-u1-e05",
+      "type": "listen_choose",
+      "audio": "pig",
+      "options": ["cat", "pig", "fish"],
+      "answer": "pig"
+    },
+    {
+      "id": "kids-a0-u1-e06",
+      "type": "choose_english",
+      "prompt": "con bò",
+      "options": ["cow", "dog", "chicken"],
+      "answer": "cow"
+    },
+    {
+      "id": "kids-a0-u1-e07",
+      "type": "build_sentence",
+      "prompt": "Đó là con mèo.",
+      "tiles": ["a", "cat", "It's", "dog"],
+      "answer": ["It's", "a", "cat"]
+    },
+    {
+      "id": "kids-a0-u1-e08",
+      "type": "choose_meaning",
+      "prompt": "kids-a0-u1-chicken",
+      "options": ["con gà", "con lợn (con heo)", "con bò"],
+      "answer": "con gà"
+    },
+    {
+      "id": "kids-a0-u1-e09",
+      "type": "listen_choose",
+      "audio": "It's a fish.",
+      "options": ["It's a fish.", "It's a duck.", "It's a bird."],
+      "answer": "It's a fish."
+    },
+    {
+      "id": "kids-a0-u1-e10",
+      "type": "type_answer",
+      "prompt": "con mèo",
+      "answer": "cat",
+      "accepted": ["a cat"]
+    },
+    {
+      "id": "kids-a0-u1-e11",
+      "type": "build_sentence",
+      "prompt": "Đó là con vịt.",
+      "tiles": ["duck", "It's", "a", "cow"],
+      "answer": ["It's", "a", "duck"]
+    },
+    {
+      "id": "kids-a0-u1-e12",
+      "type": "type_answer",
+      "prompt": "con chó",
+      "answer": "dog",
+      "accepted": ["a dog"]
+    }
+  ]
+}
