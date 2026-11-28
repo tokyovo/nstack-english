@@ -579,5 +579,5 @@
 - [x] 1. Dispatch. reviewer at 043bf20: fix-needed, 1 important: a deleted child's device copy survives sign-out (sign-out clears only listed profiles and removes the owner mark, so the next account's claim does not clear it)
 - [x] 2. Second reviewer. focus security and failure modes, at 043bf20: fix-needed, the same important finding; nits: owner profile accepts a name/picture by PATCH; nicknames accept invisible and control characters; T20 unticked in plan (fixed)
 - [x] 3. Act on every finding. builder fixed all (da25f8e): sign-out clearAll red -> green; delete clears the child's copy red -> green; owner PATCH 400 red -> green; nickname control/bidi rule red -> green (shared readNickname). Synced with main (PR #5 head; -s ours main; check-sync ok after counting work-branch merges). jest 451, test:server 92, drive check passed, e2e 44, check-features 0
-- [ ] 4. Review the fixes. round 2: two reviewers dispatched
-- [ ] Done when: the latest round has no important findings, verify passed after the last fix, and nits are fixed or in backlog.md.
+- [x] 4. Review the fixes. round 2 at 26ded27: both reviewers pass (general: no findings; security: 1 nit to backlog)
+- [x] Done when: round 2 clean, verify passed after the fixes (jest 451, server 92, e2e 44), nit in backlog.

@@ -50,3 +50,4 @@
 - (unscored) Passwords over 256 characters get the "at least 8 characters" message; give them their own code and text. Evidence: accounts-sync security review round 2
 - (unscored) Sign-up reveals existing emails (409) with no rate limit. Evidence: accounts-sync security review round 2
 - (unscored) Content test: build_sentence accepted orders are listed by hand; a missed valid order was found twice by readers. Consider checking tile permutations against a small grammar, or flagging units with movable time phrases. Evidence: T27 builder, T5/T10 readers
+- (unscored) Nickname check: blank-rendering letters (Hangul filler U+3164, U+115F/1160) pass as visible. Evidence: family security review round 2
