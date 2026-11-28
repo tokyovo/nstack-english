@@ -1,0 +1,3 @@
+# Needs human
+- [ ] 2026-11-27 Give the agent's user access to /dev/kvm so the Android emulator (AVD nstack35) can run: `sudo usermod -aG kvm tokyovo_assistant` (then a new login session), or `sudo setfacl -m u:tokyovo_assistant:rw /dev/kvm`. nstack may not change machine permissions itself (the attempt was refused). Until then Android flows are unverified. Check: `test -w /dev/kvm && echo ok`
+- [ ] 2026-11-27 Confirm the free/premium split (now: units 1-3 of each track free) and the premium price for Vietnam (research: buyers want low local prices, a usable free plan). Not blocking: one config value. Check: `grep -n FREE_UNITS -r src server`

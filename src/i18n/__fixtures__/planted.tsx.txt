@@ -1,0 +1,26 @@
+// A screen with untranslated literals planted in it: the UI-string test must
+// report every one. Kept as .txt so it is never bundled, linted or type-checked.
+import { Stack, Tabs } from 'expo-router';
+import { Pressable, Text, View } from 'react-native';
+
+import { t } from '@/i18n';
+
+export default function Planted({ count, name }: { count: number; name: string }) {
+  return (
+    <View testID="planted">
+      <Stack.Screen options={{ title: 'Trang chủ' }} />
+      <Text>{t('app.name')}</Text>
+      <Text>Chào mừng bạn</Text>
+      <Pressable accessibilityLabel="Bắt đầu học" />
+      <Text>{`Còn ${count} bài`}</Text>
+      <Text>{'Xin chào ' + name}</Text>
+      <Stack screenOptions={{ title: 'Bài học' }} />
+      <Stack.Screen name="next" options={() => ({ headerTitle: 'Tiếp' })} />
+      <Stack.Screen name="profile" options={{ 'title': 'Hồ sơ' }} />
+      <Tabs.Screen name="learn" options={{ tabBarLabel: 'Học' }} />
+      <Text>{'Chào' as string}</Text>
+      <Text>{['bạn']}</Text>
+      <Pressable aria-label={(`Đóng`)} />
+    </View>
+  );
+}
