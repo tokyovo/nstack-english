@@ -1,0 +1,148 @@
+{
+  "id": "kids-a1-u6",
+  "track": "kids",
+  "level": "a1",
+  "number": 6,
+  "title": "Gia đình",
+  "goals": [
+    "Con gọi được tên những người trong gia đình",
+    "Con giới thiệu được người thân: “This is my mom.”"
+  ],
+  "note_vi": "“This is my ...” nghĩa là “Đây là ... của con”. “My” (của con) đứng trước người được nói tới: “my dad” là bố của con. “Brother” là anh trai hoặc em trai, “sister” là chị gái hoặc em gái. Bố mẹ chỉ vào ảnh gia đình và cùng con nói: “This is my grandma.”",
+  "source": "original",
+  "words": [
+    {
+      "id": "kids-a1-u6-mom",
+      "en": "mom",
+      "vi": "mẹ",
+      "picture": "👩",
+      "example": { "en": "This is my mom.", "vi": "Đây là mẹ của con." }
+    },
+    {
+      "id": "kids-a1-u6-dad",
+      "en": "dad",
+      "vi": "bố (ba)",
+      "picture": "👨",
+      "example": { "en": "This is my dad.", "vi": "Đây là bố của con." }
+    },
+    { "id": "kids-a1-u6-brother", "en": "brother", "vi": "anh trai, em trai", "picture": "👦" },
+    { "id": "kids-a1-u6-sister", "en": "sister", "vi": "chị gái, em gái", "picture": "👧" },
+    { "id": "kids-a1-u6-baby", "en": "baby", "vi": "em bé", "picture": "👶" },
+    { "id": "kids-a1-u6-grandma", "en": "grandma", "vi": "bà", "picture": "👵" },
+    { "id": "kids-a1-u6-grandpa", "en": "grandpa", "vi": "ông", "picture": "👴" },
+    { "id": "kids-a1-u6-family", "en": "family", "vi": "gia đình", "picture": "👪" },
+    {
+      "id": "kids-a1-u6-this-is-my",
+      "en": "This is my ...",
+      "vi": "Đây là ... của con",
+      "audio": "This is my",
+      "picture": "🙋",
+      "example": { "en": "This is my sister.", "vi": "Đây là chị của con." }
+    },
+    {
+      "id": "kids-a1-u6-i-love-you",
+      "en": "I love you.",
+      "vi": "Con yêu bố mẹ.",
+      "picture": "💕"
+    }
+  ],
+  "exercises": [
+    {
+      "id": "kids-a1-u6-e01",
+      "type": "choose_meaning",
+      "prompt": "kids-a1-u6-mom",
+      "options": ["mẹ", "bà", "em bé"],
+      "answer": "mẹ"
+    },
+    {
+      "id": "kids-a1-u6-e02",
+      "type": "listen_choose",
+      "audio": "dad",
+      "options": ["dad", "baby", "mom"],
+      "answer": "dad"
+    },
+    {
+      "id": "kids-a1-u6-e03",
+      "type": "choose_english",
+      "prompt": "em bé",
+      "options": ["baby", "sister", "brother"],
+      "answer": "baby"
+    },
+    {
+      "id": "kids-a1-u6-e04",
+      "type": "choose_meaning",
+      "prompt": "kids-a1-u6-grandpa",
+      "options": ["ông", "bà", "bố (ba)"],
+      "answer": "ông"
+    },
+    {
+      "id": "kids-a1-u6-e05",
+      "type": "listen_choose",
+      "audio": "This is my sister.",
+      "options": ["This is my sister.", "This is my brother.", "This is my grandma."],
+      "answer": "This is my sister."
+    },
+    {
+      "id": "kids-a1-u6-e06",
+      "type": "build_sentence",
+      "prompt": "Đây là bố của con.",
+      "tiles": ["is", "dad", "This", "my", "mom"],
+      "answer": ["This", "is", "my", "dad"],
+      "hint_vi": "“my” đứng trước “dad”: “my dad” là bố của con."
+    },
+    {
+      "id": "kids-a1-u6-e07",
+      "type": "choose_english",
+      "prompt": "bà",
+      "options": ["grandpa", "grandma", "mom"],
+      "answer": "grandma"
+    },
+    {
+      "id": "kids-a1-u6-e08",
+      "type": "choose_meaning",
+      "prompt": "kids-a1-u6-family",
+      "options": ["em bé", "gia đình", "ông"],
+      "answer": "gia đình"
+    },
+    {
+      "id": "kids-a1-u6-e09",
+      "type": "listen_choose",
+      "audio": "brother",
+      "options": ["sister", "baby", "brother"],
+      "answer": "brother"
+    },
+    {
+      "id": "kids-a1-u6-e10",
+      "type": "build_sentence",
+      "prompt": "Đây là gia đình của con.",
+      "tiles": ["my", "This", "family", "is", "baby"],
+      "answer": ["This", "is", "my", "family"]
+    },
+    {
+      "id": "kids-a1-u6-e11",
+      "type": "type_answer",
+      "prompt": "mẹ",
+      "answer": "mom",
+      "accepted": ["mum", "mommy", "mummy", "mother"]
+    },
+    {
+      "id": "kids-a1-u6-e12",
+      "type": "speak",
+      "text": "I love you.",
+      "vi": "Con yêu bố mẹ."
+    },
+    {
+      "id": "kids-a1-u6-e13",
+      "type": "speak",
+      "text": "My baby sister.",
+      "vi": "Em gái nhỏ của con."
+    },
+    {
+      "id": "kids-a1-u6-e14",
+      "type": "choose_english",
+      "prompt": "anh trai, em trai",
+      "options": ["brother", "dad", "grandpa"],
+      "answer": "brother"
+    }
+  ]
+}

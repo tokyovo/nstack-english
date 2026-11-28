@@ -13,6 +13,9 @@ import kidsA0U2 from '../../content/kids/a0/u2.json';
 import kidsA0U3 from '../../content/kids/a0/u3.json';
 import kidsA0U4 from '../../content/kids/a0/u4.json';
 import kidsA0U5 from '../../content/kids/a0/u5.json';
+import kidsA1U6 from '../../content/kids/a1/u6.json';
+import kidsA1U7 from '../../content/kids/a1/u7.json';
+import kidsA1U8 from '../../content/kids/a1/u8.json';
 
 import { inTeachingOrder } from './check';
 import { parseUnit, tracks, type Track, type Unit, type Word } from './schema';
@@ -34,6 +37,9 @@ const files: unknown[] = [
   kidsA0U3,
   kidsA0U4,
   kidsA0U5,
+  kidsA1U6,
+  kidsA1U7,
+  kidsA1U8,
 ];
 
 function load(data: unknown): Unit {
