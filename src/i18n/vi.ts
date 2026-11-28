@@ -9,6 +9,8 @@ export const vi = {
   'home.signedIn': 'Đã đăng nhập: {email}',
   'home.accountLabel': '{title}. {state}',
 
+  'sync.offline': 'Đang ngoại tuyến, tiến độ sẽ được đồng bộ sau',
+
   'account.title': 'Tài khoản',
   'account.back': 'Về trang chủ',
   'account.loading': 'Đang tải tài khoản...',
