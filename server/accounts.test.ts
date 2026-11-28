@@ -3,7 +3,7 @@ import { mkdtempSync, rmSync } from 'node:fs';
 import { tmpdir } from 'node:os';
 import { join } from 'node:path';
 import { DatabaseSync } from 'node:sqlite';
-import { after, before, describe, test } from 'node:test';
+import { after, before, beforeEach, describe, test } from 'node:test';
 
 import { startServer, type RunningServer } from './server.ts';
 
@@ -28,7 +28,8 @@ describe('accounts', () => {
   before(async () => {
     dir = mkdtempSync(join(tmpdir(), 'accounts-test-'));
     dbPath = join(dir, 'app.sqlite');
-    server = await startServer({ port: 0, dbPath, now: () => new Date(clock) });
+    // Every test here signs up from 127.0.0.1; the per-address limit has its own suite below.
+    server = await startServer({ port: 0, dbPath, now: () => new Date(clock), signupsPerAddress: 1000 });
   });
 
   after(async () => {
@@ -278,6 +279,48 @@ describe('accounts', () => {
     });
   });
 
+  describe('sign-up rate limit per email', () => {
+    test('20 sign-ups for one email at once: 5 are counted (one account, four 409), the rest answer 429', async () => {
+      const email = freshEmail();
+
+      const responses = await Promise.all(
+        Array.from({ length: 20 }, () => post('/api/auth/signup', { email, password: 'correct horse' })),
+      );
+
+      const statuses = responses.map((response) => response.status);
+      assert.equal(statuses.filter((status) => status === 201).length, 1);
+      assert.equal(statuses.filter((status) => status === 409).length, 4);
+      assert.equal(statuses.filter((status) => status === 429).length, 15);
+      const limited = responses[statuses.indexOf(429)];
+      assert.deepEqual(await limited?.json(), { error: 'too_many_signups' });
+    });
+
+    test('attempts that fail validation count too, whatever the email case', async () => {
+      const email = freshEmail();
+      const usersBefore = countRows('users');
+      for (let i = 0; i < 5; i += 1) {
+        const response = await post('/api/auth/signup', { email: email.toUpperCase(), password: 'short' });
+        assert.equal(response.status, 400, `attempt ${i + 1}`);
+      }
+
+      const response = await post('/api/auth/signup', { email, password: 'correct horse' });
+
+      assert.equal(response.status, 429);
+      assert.equal(countRows('users'), usersBefore);
+    });
+
+    test('attempts older than 15 minutes no longer count', async () => {
+      const email = freshEmail();
+      for (let i = 0; i < 5; i += 1) await post('/api/auth/signup', { email, password: 'short' });
+      clock += 15 * MINUTE - 1;
+      assert.equal((await post('/api/auth/signup', { email, password: 'correct horse' })).status, 429);
+
+      clock += 1;
+
+      assert.equal((await post('/api/auth/signup', { email, password: 'correct horse' })).status, 201);
+    });
+  });
+
   describe('POST /api/auth/signout', () => {
     test('ends that session only, and answers 204', async () => {
       const { email, password, token } = await signUp();
@@ -394,5 +437,64 @@ describe('accounts', () => {
       clock = start + 150 * DAY - 1;
       assert.equal((await plan(child)).status, 200);
     });
+  });
+});
+
+describe('sign-up rate limit per client address', () => {
+  let dir: string;
+  let server: RunningServer;
+  let clock = Date.parse('2026-11-28T09:00:00Z');
+  let emailCounter = 0;
+
+  before(async () => {
+    dir = mkdtempSync(join(tmpdir(), 'signup-limit-test-'));
+    server = await startServer({ port: 0, dbPath: join(dir, 'app.sqlite'), now: () => new Date(clock) });
+  });
+
+  after(async () => {
+    await server.close();
+    rmSync(dir, { recursive: true, force: true });
+  });
+
+  // Each test starts in a fresh 15-minute window.
+  beforeEach(() => {
+    clock += 16 * MINUTE;
+  });
+
+  function signUp(body: string) {
+    return fetch(`${server.url}/api/auth/signup`, {
+      method: 'POST',
+      headers: { 'content-type': 'application/json' },
+      body,
+    });
+  }
+
+  function freshSignUp() {
+    emailCounter += 1;
+    return signUp(JSON.stringify({ email: `newcomer${emailCounter}@example.com`, password: 'correct horse' }));
+  }
+
+  test('20 sign-ups from one address at once, each a new email: 5 accounts, the rest answer 429', async () => {
+    const responses = await Promise.all(Array.from({ length: 20 }, () => freshSignUp()));
+
+    const statuses = responses.map((response) => response.status);
+    assert.equal(statuses.filter((status) => status === 201).length, 5);
+    assert.equal(statuses.filter((status) => status === 429).length, 15);
+  });
+
+  test('bodies that are not JSON count too', async () => {
+    for (let i = 0; i < 5; i += 1) assert.equal((await signUp('{not json')).status, 400, `attempt ${i + 1}`);
+
+    assert.equal((await freshSignUp()).status, 429);
+  });
+
+  test('after 15 minutes the address may sign up again', async () => {
+    for (let i = 0; i < 5; i += 1) assert.equal((await freshSignUp()).status, 201, `sign-up ${i + 1}`);
+    clock += 15 * MINUTE - 1;
+    assert.equal((await freshSignUp()).status, 429);
+
+    clock += 1;
+
+    assert.equal((await freshSignUp()).status, 201);
   });
 });

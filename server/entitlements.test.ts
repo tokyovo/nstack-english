@@ -24,7 +24,7 @@ describe('plans and entitlements', () => {
   before(async () => {
     dir = mkdtempSync(join(tmpdir(), 'entitlements-test-'));
     dbPath = join(dir, 'app.sqlite');
-    server = await startServer({ port: 0, dbPath, now: () => new Date(clock) });
+    server = await startServer({ port: 0, dbPath, now: () => new Date(clock), signupsPerAddress: 1000 });
   });
 
   after(async () => {

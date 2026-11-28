@@ -19,8 +19,16 @@ import { unitRoutes } from './units.ts';
  * `webDir`: the exported web app, served on every non-API path.
  * `now`: the clock (tests move it); defaults to the system clock.
  * `contentDir`: the unit files; defaults to the repo's content/.
+ * `signupsPerAddress`: sign-ups allowed from one client address per 15 minutes; defaults to 5.
  */
-export type ServerConfig = { port: number; dbPath: string; webDir?: string; now?: () => Date; contentDir?: string };
+export type ServerConfig = {
+  port: number;
+  dbPath: string;
+  webDir?: string;
+  now?: () => Date;
+  contentDir?: string;
+  signupsPerAddress?: number;
+};
 export type RunningServer = { url: string; close: () => Promise<void> };
 
 const MIGRATIONS_DIR = join(import.meta.dirname, 'migrations');
@@ -32,7 +40,13 @@ export function readConfig(env: Record<string, string | undefined>): ServerConfi
     dbPath: env.DB_PATH || './data/dev.sqlite',
   };
   if (env.WEB_DIR) config.webDir = env.WEB_DIR;
+  if (env.SIGNUPS_PER_ADDRESS) config.signupsPerAddress = parseCount('SIGNUPS_PER_ADDRESS', env.SIGNUPS_PER_ADDRESS);
   return config;
+}
+
+function parseCount(name: string, value: string): number {
+  if (!/^[1-9]\d*$/.test(value)) throw new Error(`${name} must be a whole number above 0, got ${JSON.stringify(value)}`);
+  return Number(value);
 }
 
 function parsePort(value: string): number {
@@ -63,7 +77,7 @@ function createApp(db: DatabaseSync, config: ServerConfig, units: readonly Unit[
   app.use(secureHeaders({ xFrameOptions: 'DENY', contentSecurityPolicy }));
   app.get('/api/health', (c) => c.json({ ok: true }));
   const now = config.now ?? (() => new Date());
-  app.route('/api', accountRoutes(db, now));
+  app.route('/api', accountRoutes(db, now, config.signupsPerAddress));
   app.route('/api', progressRoutes(db, now, units));
   app.route('/api', profileRoutes(db, now));
   app.route('/api', unitRoutes(db, now, units));

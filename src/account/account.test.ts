@@ -92,6 +92,12 @@ describe('signing up and in', () => {
     expect(await signIn(demo.email, demo.password)).toEqual({ ok: false, error: { code: 'offline' } });
     expect(await signIn(demo.email, demo.password)).toEqual({ ok: false, error: { code: 'unknown' } });
   });
+
+  it('reports too many sign-ups for the whole form', async () => {
+    serverReplies({ status: 429, body: { error: 'too_many_signups' } });
+
+    expect(await signUp(demo.email, demo.password)).toEqual({ ok: false, error: { code: 'too_many_signups' } });
+  });
 });
 
 describe('the saved account', () => {
