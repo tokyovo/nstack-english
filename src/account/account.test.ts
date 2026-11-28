@@ -46,7 +46,7 @@ describe('signing up and in', () => {
 
     const result = await signUp(demo.email, demo.password);
 
-    expect(result).toEqual({ ok: true, user: signedInBody.user });
+    expect(result).toEqual({ ok: true, user: signedInBody.user, profiles: signedInBody.profiles });
     const [url, init] = fetchMock.mock.calls[0];
     expect(url).toBe('/api/auth/signup');
     expect(init?.method).toBe('POST');

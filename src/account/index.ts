@@ -28,7 +28,7 @@ export type AccountErrorCode = (typeof errorCodes)[number];
 /** `field` names the input that caused the error; without it the error is about the whole form. */
 export type AccountError = { code: AccountErrorCode; field?: AccountField };
 
-export type AccountResult = { ok: true; user: User } | { ok: false; error: AccountError };
+export type AccountResult = { ok: true; user: User; profiles: Profile[] } | { ok: false; error: AccountError };
 
 type Session = { token: string; user: User; profiles: Profile[] };
 
@@ -79,7 +79,7 @@ async function startSession(path: `/api/${string}`, email: string, password: str
   const session = reply.status === 200 || reply.status === 201 ? parseSession(reply.body) : undefined;
   if (!session) return { ok: false, error: errorOf(reply) };
   await writeSession(JSON.stringify(session));
-  return { ok: true, user: session.user };
+  return { ok: true, user: session.user, profiles: session.profiles };
 }
 
 function errorOf(reply: ApiReply): AccountError {
