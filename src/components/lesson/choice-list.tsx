@@ -4,6 +4,7 @@ import { Pressable, StyleSheet, View } from 'react-native';
 import { EnglishText, ThemedText } from '@/components/themed-text';
 import { Border, MinTouchTarget, Radius, Space } from '@/constants/theme';
 import { useTheme } from '@/hooks/use-theme';
+import { shuffled } from '@/lesson/shuffle';
 
 type Props = {
   options: string[];
@@ -11,11 +12,17 @@ type Props = {
   /** The options are English (choose_english, listen_choose) or Vietnamese (choose_meaning). */
   english: boolean;
   onCheck: (correct: boolean) => void;
+  /** Orders the options; Math.random unless a test passes a seeded source. */
+  random?: () => number;
 };
 
-/** Options as bordered rows; the first tap is the answer, then the right one is marked. */
-export function ChoiceList({ options, answer, english, onCheck }: Props) {
+/**
+ * Options as bordered rows; the first tap is the answer, then the right one is marked.
+ * Shuffled once per showing, since the content often lists the answer first.
+ */
+export function ChoiceList({ options, answer, english, onCheck, random }: Props) {
   const theme = useTheme();
+  const [shown] = useState(() => shuffled(options, random));
   const [chosen, setChosen] = useState<string | null>(null);
 
   function choose(option: string) {
@@ -36,7 +43,7 @@ export function ChoiceList({ options, answer, english, onCheck }: Props) {
 
   return (
     <View style={styles.list}>
-      {options.map((option, index) => (
+      {shown.map((option, index) => (
         <Pressable
           key={option}
           role="button"

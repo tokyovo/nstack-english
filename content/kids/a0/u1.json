@@ -107,6 +107,18 @@
       "answer": ["It's", "a", "duck"]
     },
     {
+      "id": "kids-a0-u1-e13",
+      "type": "speak",
+      "text": "It's a cat.",
+      "vi": "Đó là con mèo."
+    },
+    {
+      "id": "kids-a0-u1-e14",
+      "type": "speak",
+      "text": "It's a duck.",
+      "vi": "Đó là con vịt."
+    },
+    {
       "id": "kids-a0-u1-e12",
       "type": "type_answer",
       "prompt": "con chó",

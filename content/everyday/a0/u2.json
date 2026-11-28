@@ -165,6 +165,18 @@
       "answer": "nine"
     },
     {
+      "id": "everyday-a0-u2-e15",
+      "type": "speak",
+      "text": "One, two, three.",
+      "vi": "Một, hai, ba."
+    },
+    {
+      "id": "everyday-a0-u2-e16",
+      "type": "speak",
+      "text": "Eight, nine, ten.",
+      "vi": "Tám, chín, mười."
+    },
+    {
       "id": "everyday-a0-u2-e14",
       "type": "listen_choose",
       "audio": "Thank you",

@@ -70,7 +70,7 @@ describe('parseUnit', () => {
         'everyday-a0-u1-e01: answer "Cảm ơn" is not among the options',
         'everyday-a0-u1-e02.options: needs 3 to 4 items, has 2',
         'everyday-a0-u1-e03: options repeat "Hello"',
-        'everyday-a0-u1-e04.type: must be one of choose_meaning, choose_english, listen_choose, build_sentence, type_answer',
+        'everyday-a0-u1-e04.type: must be one of choose_meaning, choose_english, listen_choose, build_sentence, type_answer, speak',
         'everyday-a0-u1-e05: answer tile "Lan" is not among the tiles',
         'everyday-a0-u1-e06: at most 2 distractor tiles, has 3',
         'everyday-a0-u1-e07.audio: missing or empty',
@@ -88,6 +88,24 @@ describe('parseUnit', () => {
   it('reports an alternative build_sentence order that uses a tile not among the tiles', () => {
     const result = parseUnit(withAccepted([['Lan', 'is', 'my', 'name']]));
     expect(result.ok ? [] : result.errors).toEqual(['everyday-a0-u9-e04: accepted tile "my" is not among the tiles']);
+  });
+
+  it('reads a speak item: the English to say and its Vietnamese meaning', () => {
+    const unit = validUnit();
+    const speak = { id: 'everyday-a0-u9-e11', type: 'speak', text: "I'm fine, thank you.", vi: 'Tôi khỏe, cảm ơn bạn.' };
+    const result = parseUnit({ ...unit, exercises: [...unit.exercises, speak] });
+    expect(result.ok ? result.unit.exercises[10] : result.errors).toEqual(speak);
+  });
+
+  it('reports a speak item without its English or its Vietnamese meaning', () => {
+    const unit = validUnit();
+    const speak = { id: 'everyday-a0-u9-e11', type: 'speak', text: ' ', answer: 'Hello' };
+    const result = parseUnit({ ...unit, exercises: [...unit.exercises, speak] });
+    expect(result.ok ? [] : [...result.errors].sort()).toEqual([
+      'everyday-a0-u9.exercises.10.answer: unknown field',
+      'everyday-a0-u9-e11.text: missing or empty',
+      'everyday-a0-u9-e11.vi: missing or empty',
+    ].sort());
   });
 
   it('requires a Vietnamese usage note from A1 up', () => {

@@ -23,7 +23,11 @@ async function answerRight(page: Page, exercise: Exercise) {
       const input = page.getByLabel('Câu trả lời bằng tiếng Anh');
       await input.fill(exercise.answer);
       await input.press('Enter');
+      return;
     }
+    case 'speak':
+      // withoutSpeech removes recognition, so the learner repeats aloud and marks themselves.
+      await button(page, 'Tôi nói được rồi').click();
   }
 }
 
