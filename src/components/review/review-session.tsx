@@ -38,9 +38,10 @@ type Props = {
   random?: () => number;
 };
 
+/** Goes back down to home instead of stacking it on the review, so Android back never reopens the review. */
 function HomeButton() {
   return (
-    <Link href="/" asChild>
+    <Link href="/" dismissTo asChild>
       <ActionButton label={t('lesson.home')} testID="home" />
     </Link>
   );

@@ -1,7 +1,7 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { act, fireEvent, within } from '@testing-library/react-native';
 import { Stack } from 'expo-router';
-import { renderRouter, screen } from 'expo-router/testing-library';
+import { renderRouter, screen, testRouter } from 'expo-router/testing-library';
 
 import HomeScreen from '@/app/index';
 import ReviewScreen from '@/app/review';
@@ -191,6 +191,24 @@ describe('Review (/review)', () => {
     const progress = await createProgressStore().load(LOCAL_PROFILE_ID);
     expect(progress.answers[unit.words[last].id]).toHaveLength(1);
     expect(Object.keys(progress.answers)).toHaveLength(unit.words.length);
+  });
+
+  // Android back from home must never reopen the finished review.
+  it('goes back down to home from the result, leaving nothing to go back to', async () => {
+    await finishLessonAgo(DAY);
+    await openApp('/');
+    await testRouter.push('/review');
+    for (const word of unit.words) {
+      await screen.findByText(new RegExp(`^Từ \\d+/${unit.words.length}$`));
+      await answerRight(word);
+      await press('Tiếp tục');
+    }
+    expect(await screen.findByRole('heading', { name: 'Xong phần ôn tập!' })).toBeOnTheScreen();
+
+    await fireEvent.press(screen.getByRole('link', { name: 'Về trang chủ' }));
+
+    expect(screen).toHavePathname('/');
+    expect(testRouter.canGoBack()).toBe(false);
   });
 });
 
