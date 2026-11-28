@@ -27,3 +27,5 @@
 - (unscored) Rate-limit signup; prune expired sessions and old signin_failures. Evidence: T16 builder
 - (unscored) expo-secure-store plugin with faceIDPermission false and Android backup rules, so restored backups do not hold undecryptable tokens. Evidence: T18 builder
 - (unscored) Web focus outline draws black over accent/danger input borders (TextField, type-answer); TypeAnswer could reuse TextField. Evidence: T18 builder
+- (unscored) Offline notice clears only on the next navigation/foreground; add a network listener. Web offline cannot open route chunks not yet loaded. Evidence: T19 builder
+- (unscored) Lesson intro "completed" badge does not refresh after a pull. Evidence: T19 builder

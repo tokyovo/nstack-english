@@ -238,3 +238,13 @@
 - [x] 6. Record. this entry, backlog
 - [x] Done when: committed, items ticked.
 - Decision: expo-secure-store config plugin not added (it adds a Face ID usage string); Android backup rules for it go to the backlog.
+
+## 2026-11-28 build T19
+- Read: build/SKILL.md a069840
+- [x] 1. Branch. nstack/accounts-sync
+- [x] 2. Starting state. fast checks pass at 9bc8447
+- [x] 3. Dispatch. builder in worktree
+- [x] 4. Read the reply. done dd66e89; sync Jest red vs stub; sync e2e red with PUT disabled
+- [x] 5. Prove it yourself. merged: typecheck 0, lint 0, jest 192, test:server 60, e2e 25 passed
+- [x] 6. Record. this entry, backlog; shared-device sign-out leak becomes ticket T19b (below)
+- [x] Done when: committed, items ticked.
