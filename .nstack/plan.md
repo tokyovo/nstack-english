@@ -77,6 +77,20 @@ Answers for builders:
 - Sounds need expo-audio, which arrives with the voices slice (T39): T46 waits until voices is merged into main and nstack/colour is synced with main.
 - Screens tickets keep testIDs and visible strings that e2e and Maestro use; new strings go through `src/i18n/vi.ts`.
 
+- Fresh reader's questions, answered:
+  1. Profile avatars stay emoji keys in stored and synced data (no migration; server and `src/profiles/child-profile.ts` unchanged) and are drawn as Fluent PNGs through a key -> slug map; the emoji scan allows emoji only in those two data-key files. Content pictures change to slugs (content is not stored user data).
+  2. Nghe chậm plays the MP3 at playback rate 0.75 with pitch correction (about 0.64 of normal speech overall: intended); the device-speech fallback uses rate 0.6.
+  3. No fallback plan: T45 and T46 wait for voices to merge; they do not add expo-audio themselves.
+  4. Dark mode: lips and white-text fills use the light -deep values (same contrast); dark tints are fixed hex values (18% of the base over #1A1F2B) stored in theme.ts.
+  5. theme.ts exports the list of text/background pairings components may use; theme.test.ts checks every pair in it. mango-deep text on mango-tint is allowed (4.61:1); mango itself never carries text.
+  6. A Jest scan of every .ts/.tsx under src/ except theme.ts fails on `#rgb`/`#rrggbb` and `rgb(`/`rgba(` literals; the shadow colour moves into theme.ts.
+  7. Colour words use Fluent's coloured circle or square of that colour; clock times use Fluent clock faces; numbers above 10, prices and days are `abstract: true` unless a clearly fitting picture exists; the native reader judges fit.
+  8. The builder pins the current fluentui-emoji commit SHA in the script; resized PNGs and the require map are committed; CI only runs the content test.
+  9. Result and answer-sheet states are reached by an e2e that plays a unit through (it already exists for lesson and review); it saves screenshots when `SCREENS_DIR` is set, including one 600 ms into the burst; the critique uses those.
+  10. Yes: web proof is the sound request answering 200 with no console error; Android proof is the Maestro flows passing without a crash.
+  11. testIDs `feedback` and `continue` stay; the sheet appears only after check and covers the bottom of the screen, never the options before an answer; a tap on a result cuts the burst and count-up only.
+  12. Widths: lesson, review session, account, profiles and premium 480 px; home and track 640 px (`MaxContentWidth` gains a `wide` value).
+
 - [ ] T40 Tokens, track colours and pressable primitives (lip, states). Proof: Jest theme and primitive tests, `drive screens` at both widths. Needs: none
 - [ ] T41 Pictures: fetch script, require map, `Picture` component, every concrete word pictured in all tracks, emoji removed. Proof: content test (red first on a missing picture and a bad slug), emoji scan test, native reader verdict on picture fit, screenshot of word cards. Content: yes. Needs: none
 - [ ] T42 Home and track screens redesigned. Proof: Jest, e2e tracks/premium, drive screens + critique at 1280/390 light/dark. Needs: T40, T41

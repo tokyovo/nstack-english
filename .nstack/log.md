@@ -787,3 +787,37 @@
 - [ ] 5. Prove it yourself.
 - [ ] 6. Record.
 - [ ] Done when: the ticket is committed on the slice's branch with items 1-6 ticked in its log entry, or is parked in `plan.md`.
+
+## 2026-11-28 design direction: owner's taste
+- Read: design/SKILL.md 766d97f
+- [x] 1. Direction
+  - [x] 1.1. Subject. kept; Bar added from research.md (Duolingo, Drops, Lingokids); owner's taste overrides
+  - [x] 1.2. Tokens. brand ink + lotus/ocean/mango tracks with deep and tint, success/danger, neutrals, dark values; white only on -deep (contrast 5.14-10.84 checked with a script); lip depth, Fluent 3D pictures, Lucide icons, feedback, celebration, sounds
+  - [x] 1.3. Generic check. 6 rejections/decisions in design.md; Decision: the 2026-11-27 paper/no-shadow direction is replaced at the owner's request
+- [ ] 2. Build rules (colour slice T40-T46)
+- [ ] 3. Critique (per screen, in the colour slice's verify)
+  - [ ] 3.1. The main content and the primary action are obvious within three seconds.
+  - [ ] 3.2. Spacing follows the scale and edges line up; nothing is crowded or floating.
+  - [ ] 3.3. Text is readable: contrast, size, line length.
+  - [ ] 3.4. Nothing overflows, is cut off, or overlaps.
+  - [ ] 3.5. Empty, error, loading and disabled states look intended, and every destructive actio...
+  - [ ] 3.6. It matches `design.md`, and nothing from the defaults list crept in.
+  - [ ] 3.7. Tabbing through the screen shows a visible focus on every control, in a sensible order.
+  - [ ] 3.8. Copy names actions; there is no placeholder text.
+  - [ ] 3.9. Squint at it: the title, the headings and the primary action still stand out, and ev...
+- [ ] Done when: `design.md` exists, every changed screen has all nine lines passing at both widths, and the axe scan passes.
+
+## 2026-11-28 plan colour slice (continues "plan voices and colour slices")
+- Read: plan/SKILL.md e056824
+- [x] 1. Learn the ground truth. theme.ts tokens, 326 words / 92 with emoji pictures (kids only), avatars stored as emoji (server-checked), MaxContentWidth 480, answer sheet testIDs used by Maestro
+- [x] 2. Interrogate the goal yourself
+  - [x] 2.1. questions: avatars, slow replay speed, dark tints, token enforcement, abstract words, pinning
+  - [x] 2.2. answered from code (child-profile.ts, server/profiles.ts, answer-step.yaml)
+  - [x] 2.3. Decisions in plan.md (Lucide + Fluent 3D PNG; avatars stay emoji keys)
+- [x] 3. Write the spec. colour criteria 1-8
+- [x] 4. Cut tickets. T40, T41 groundwork in parallel; T42-T44 by screen; T45-T46 after voices
+- [x] 5. Check the plan
+  - [x] 5.1. 1-2 T40; 3 T41; 4 T42; 5 T43+T45; 6 T46; 7 T44; 8 every screen ticket + slice verify
+  - [x] 5.2. fresh Plan agent: 12 questions, all answered in plan.md
+  - [x] 5.3. colour slice in plan.md
+- [x] Done when: criteria have proofs, questions answered, slice in plan.md.
