@@ -1,4 +1,5 @@
-# Completes everyday A0 u1 on Android, restarts the app, and sees the lesson completed.
+# Completes everyday A0 u1 on Android, leaves the result for the track list, presses back without
+# reopening the finished lesson, restarts the app, and sees the lesson completed.
 # Run: MAESTRO_CLI_NO_ANALYTICS=1 npm run drive -- android-test .maestro/lesson.yaml
 # Each word card and exercise is answered by steps/answer-step.yaml, whatever its kind and place,
 # so the flow does not change when the unit's content does.
@@ -22,6 +23,16 @@ appId: app.hocenglish
 
 - assertVisible: "Xong bài học!"
 - assertVisible:
+    id: "score"
+
+# Leave the result for the track list, then press Android back: the finished lesson stays closed.
+- tapOn:
+    id: "back-to-track"
+- assertVisible:
+    id: "unit-everyday-a0-u1"
+- back
+- assertNotVisible: "Xong bài học!"
+- assertNotVisible:
     id: "score"
 
 # Close and open the app again: the lesson stays completed.
