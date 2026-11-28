@@ -21,6 +21,7 @@ export type ExerciseType = (typeof exerciseTypes)[number];
 
 export const MIN_WORDS = 6;
 export const MIN_EXERCISES = 10;
+export const MIN_SPEAK = 2;
 
 export type Word = {
   id: string;
@@ -319,6 +320,8 @@ export function parseUnit(data: unknown): ParseResult {
   if (exercises.length < MIN_EXERCISES) {
     r.fail(at, `needs at least ${MIN_EXERCISES} exercises, has ${exercises.length}`);
   }
+  const speaks = unit.exercises.filter((e) => e.type === 'speak').length;
+  if (speaks < MIN_SPEAK) r.fail(at, `needs at least ${MIN_SPEAK} speak items, has ${speaks}`);
 
   return r.errors.length === 0 ? { ok: true, unit } : { ok: false, errors: r.errors };
 }
