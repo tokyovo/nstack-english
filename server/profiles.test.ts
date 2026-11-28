@@ -287,4 +287,118 @@ describe('family profiles', () => {
       assert.equal(response.status, 404);
     });
   });
+
+  describe('POST /api/profiles/:id/session and child-scoped tokens', () => {
+    async function childSession(parent: Parent, child: Profile): Promise<string> {
+      const response = await request('POST', `/api/profiles/${child.id}/session`, parent.token);
+      assert.equal(response.status, 201);
+      const body = (await response.json()) as { token: string; profile: Profile };
+      assert.deepEqual(body.profile, child);
+      assert.match(body.token, /^[A-Za-z0-9_-]{43}$/);
+      return body.token;
+    }
+
+    async function family() {
+      const parent = await signUp();
+      const child = await addChild(parent, 'Bé Na', '🐱');
+      const sibling = await addChild(parent, 'Bin', '🐶');
+      for (const profile of [parent.owner, sibling]) {
+        const saved = await request('PUT', `/api/profiles/${profile.id}/progress`, parent.token, progressDocument(profile.id));
+        assert.equal(saved.status, 200);
+      }
+      return { parent, child, sibling, childToken: await childSession(parent, child) };
+    }
+
+    test("a child's token reads and saves that child's progress", async () => {
+      const { parent, child, childToken } = await family();
+
+      const saved = await request('PUT', `/api/profiles/${child.id}/progress`, childToken, progressDocument(child.id));
+      assert.equal(saved.status, 200);
+      const read = await request('GET', `/api/profiles/${child.id}/progress`, childToken);
+
+      assert.equal(read.status, 200);
+      assert.deepEqual(await read.json(), progressDocument(child.id));
+      const asParent = await request('GET', `/api/profiles/${child.id}/progress`, parent.token);
+      assert.deepEqual(await asParent.json(), progressDocument(child.id));
+    });
+
+    test("a child's token gets 404 for the owner's and a sibling's progress, and changes neither", async () => {
+      const { parent, sibling, childToken } = await family();
+      const empty = (id: string) => ({ schemaVersion: 1, profileId: id, lessons: {}, answers: {} });
+
+      for (const profile of [parent.owner, sibling]) {
+        const path = `/api/profiles/${profile.id}/progress`;
+        const read = await request('GET', path, childToken);
+        assert.equal(read.status, 404);
+        assert.deepEqual(await read.json(), { error: 'not_found' });
+        const write = await request('PUT', path, childToken, { ...empty(profile.id), lessons: { 'work-a0-u1': {} } });
+        assert.equal(write.status, 404);
+        assert.deepEqual(await (await request('GET', path, parent.token)).json(), progressDocument(profile.id));
+      }
+    });
+
+    test("a child's token is refused with 403 by the account and profile endpoints, which change nothing", async () => {
+      const { parent, child, childToken } = await family();
+      const profilesBefore = await profilesOf(parent);
+      const sessionsBefore = countRows('SELECT count(*) AS n FROM sessions');
+
+      const refused = [
+        await request('GET', '/api/me', childToken),
+        await request('POST', '/api/profiles', childToken, { name: 'Em', picture: '🐼' }),
+        await request('PATCH', `/api/profiles/${child.id}`, childToken, { name: 'Boss' }),
+        await request('PATCH', `/api/profiles/${parent.owner.id}`, childToken, { name: 'Boss' }),
+        await request('DELETE', `/api/profiles/${child.id}`, childToken),
+        await request('POST', `/api/profiles/${child.id}/session`, childToken),
+      ];
+
+      for (const response of refused) {
+        assert.equal(response.status, 403, response.url);
+        assert.deepEqual(await response.json(), { error: 'forbidden' });
+      }
+      assert.deepEqual(await profilesOf(parent), profilesBefore);
+      assert.equal(countRows('SELECT count(*) AS n FROM sessions'), sessionsBefore);
+    });
+
+    test("deleting the child ends its token; signing the child out leaves the parent's", async () => {
+      const { parent, child, childToken } = await family();
+      const secondToken = await childSession(parent, child);
+
+      const signedOut = await request('POST', '/api/auth/signout', secondToken);
+      assert.equal(signedOut.status, 204);
+      assert.equal((await request('GET', `/api/profiles/${child.id}/progress`, secondToken)).status, 401);
+      assert.equal((await request('GET', '/api/me', parent.token)).status, 200);
+
+      assert.equal((await request('DELETE', `/api/profiles/${child.id}`, parent.token)).status, 204);
+      assert.equal((await request('GET', `/api/profiles/${child.id}/progress`, childToken)).status, 401);
+    });
+
+    test('the owner profile gets no child session: 400', async () => {
+      const parent = await signUp();
+
+      const response = await request('POST', `/api/profiles/${parent.owner.id}/session`, parent.token);
+
+      assert.equal(response.status, 400);
+      assert.deepEqual(await response.json(), { error: 'owner_profile' });
+    });
+
+    test("another user's child answers 404 and starts no session", async () => {
+      const { child } = await family();
+      const stranger = await signUp();
+      const sessionsBefore = countRows('SELECT count(*) AS n FROM sessions');
+
+      const response = await request('POST', `/api/profiles/${child.id}/session`, stranger.token);
+
+      assert.equal(response.status, 404);
+      assert.deepEqual(await response.json(), { error: 'not_found' });
+      assert.equal(countRows('SELECT count(*) AS n FROM sessions'), sessionsBefore);
+    });
+
+    test('signed out answers 401', async () => {
+      const { child } = await family();
+
+      const response = await request('POST', `/api/profiles/${child.id}/session`);
+
+      assert.equal(response.status, 401);
+    });
+  });
 });

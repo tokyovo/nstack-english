@@ -4,7 +4,7 @@ import type { DatabaseSync } from 'node:sqlite';
 import { Hono, type Context } from 'hono';
 import { bodyLimit } from 'hono/body-limit';
 
-import { profileOf, requireAccountMiddleware, type AuthEnv, type Profile } from './accounts.ts';
+import { profileOf, requireAccountMiddleware, startProfileSession, type AuthEnv, type Profile } from './accounts.ts';
 
 /** The pictures a child profile may have: animal emoji only, never an upload or a photo. */
 export const PROFILE_PICTURES = ['🐱', '🐶', '🐰', '🐻', '🐼', '🦊', '🐯', '🐨'] as const;
@@ -70,6 +70,15 @@ export function profileRoutes(db: DatabaseSync, now: () => Date) {
     // The schema's ON DELETE CASCADE removes the child's progress and sessions with it.
     db.prepare('DELETE FROM profiles WHERE id = ?').run(profile.id);
     return c.body(null, 204);
+  });
+
+  /** Hands the phone to a child: a token that reaches only this child's progress. */
+  app.post('/profiles/:id/session', requireAccount, (c) => {
+    const user = c.get('user');
+    const profile = profileOf(db, user.id, c.req.param('id'));
+    if (!profile) return c.json(notFound, 404);
+    if (profile.kind === 'owner') return c.json({ error: 'owner_profile' } satisfies ErrorBody, 400);
+    return c.json({ token: startProfileSession(db, user, profile.id, now()), profile }, 201);
   });
 
   return app;
