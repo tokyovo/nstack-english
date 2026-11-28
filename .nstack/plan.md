@@ -37,6 +37,18 @@ Acceptance criteria:
 - [ ] T18 App sign-up/sign-in/sign-out: API client, token storage, `/account` screen, home account state, drive seed demo account. Proof: Jest, e2e `e2e/account.spec.ts`. Access: public. Needs: T16
 - [ ] T19 Sync: local-first store pushes and pulls for the signed-in profile, first-sign-in merge, offline notice. Proof: Jest, two-context e2e `e2e/sync.spec.ts`. Needs: T17, T18
 
+## Slice: content-a1 (branch nstack/content-a1)
+Learners who finish the Bắt đầu units continue at A1 in every track: everyday u6-u10, work u4-u6, kids u6-u8 (11 units, from the unit list in design.md ## Content). Every A1 unit carries a short Vietnamese usage note (research need 3: grammar explained in Vietnamese: present simple, questions with do/does, a/an/the, prepositions of time and place, can, there is/are). All are Premium under the current split (first 3 units per track free).
+
+Acceptance criteria:
+1. The 11 unit files exist and pass the content test (schema, translations, ids, answers among options, word order across units, no template asked to be spoken or typed, at least 6 words and 10 exercises, 2 speak items, note_vi present, sources in SOURCES.md).
+2. Each track's batch has a native reader verdict with every problem fixed (log).
+3. A1 vocabulary stays within A1 (CEFR-J A1 used as a guide where useful; original writing).
+
+- [ ] T26 Everyday A1 u6-u10. Proof: content test, native reader verdict. Content: yes. Needs: none
+- [ ] T27 Work A1 u4-u6. Proof: content test, native reader verdict. Content: yes. Needs: none
+- [ ] T28 Kids A1 u6-u8. Proof: content test, native reader verdict. Content: yes. Needs: none
+
 ## Done
 - foundation: T1-T4, PR #1
 - learn-core: T5-T10, PR #2
