@@ -238,12 +238,25 @@ describe('plans and entitlements', () => {
       assert.equal(existsSync(missing), false);
     });
 
+    test('refuses, with a clear message, a database the server has not set up', () => {
+      const bare = join(dir, 'bare.sqlite');
+      new DatabaseSync(bare).close();
+
+      const result = runGrant('--db', bare, 'parent1@example.com', '30');
+
+      assert.equal(result.status, 2);
+      assert.match(result.stderr, /Database .*bare\.sqlite is not set up for accounts; start the server on it first\./);
+      assert.doesNotMatch(result.stderr, /at .*\.ts:\d+/);
+    });
+
     test('rejects bad days, an unknown source and an unknown email with a non-zero exit', () => {
       const cases = [
         { args: ['parent1@example.com', '0'], message: /days must be a whole number from 1 to 3650/ },
         { args: ['parent1@example.com', '2.5'], message: /days must be a whole number/ },
         { args: ['parent1@example.com', '30', '--source', 'paypal'], message: /source must be one of manual, app_store, google_play, card/ },
         { args: ['parent1@example.com'], message: /Usage/ },
+        { args: ['parent1@example.com', '30', '--ref', ''], message: /--ref must not be empty/ },
+        { args: ['parent1@example.com', '30', '--ref', '   '], message: /--ref must not be empty/ },
       ];
       for (const { args, message } of cases) {
         const result = runGrant('--db', dbPath, ...args);
